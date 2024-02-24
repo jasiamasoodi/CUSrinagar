@@ -1,0 +1,213 @@
+﻿@model List<CUSrinagar.Models.AttendanceSheetForm>
+@{
+    ViewBag.Title = "Download Admit Cards ";
+    string currentYear = DateTime.Now.Year + "";
+}
+<style>
+    .required {
+        color: black;
+    }
+</style>
+@if (ViewBag.PrintProgrammeOption != null)
+{
+    <div class="page-wrapper pager-table-text">
+        <div class="page-content">
+            <div class="row page-row">
+                <div class="col-md-12 jsTableContent">
+
+                    <div class="panel panel-primary js-pager-table">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Download all Admit Cards
+                                <span class="filter-btn pull-right" data-toggle="tooltip">
+                                    <a href="/CUSrinagarAdminPanel/SemesterCenters/Centers"><i class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp;Back</a>
+                                </span>
+                            </h3>
+                        </div>
+                        <div class="panel-body admitcards">
+
+                            <div class="col-sm-12 search-box">
+                                <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span>Regular Batch@*<span id="YearValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>*@
+                                    <div>
+                                        @Html.TextBox("Year", DateTime.Now.Year.ToString(), new { @required = "required", @class = " required form-control jsfilterelement", @data_column = "Year", @data_operator = "EqualTo" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span>Programme<span id="ProgrammeIdValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                    <div class="jsDDLContainer">
+                                        @Html.DropDownList("ProgrammeId", new SelectList(ViewBag.PrintProgrammeOption, "Value", "Text"),
+           "--Select--", new { @class = "form-control required jsPrintProgrammeDDL", @data_scope = "row1", @data_column = "ProgrammeId", @data_operator = "EqualTo", @title = "Students of College" })
+                                    </div>
+                                </div>
+
+
+                                <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span>Std. of College<span id="CollegeIDValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                    <div class="jsDDLContainer">
+                                        @Html.DropDownList("College_ID", new SelectList(ViewBag.Colleges, "Value", "Text"),
+           "--Select--", new { @class = "form-control  required jsCollegeDDL", @data_scope = "row1", @data_column = "College_ID", @data_operator = "EqualTo", data_ddltype = "Course", @data_ddlchildtype = "Semester" })
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span>Course<span id="CourseIDalidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                    <div id="Course" class="jsDDLContainer">
+                                        @Html.DropDownList("CourseID", new SelectList(ViewBag.CourseList, "Value", "Text"),
+                "--Select--", new { @class = "form-control jsCourseDDL", @data_scope = "row1", @data_defaulttextvalue = "ALL,", @data_column = "printProgramme", @data_operator = "EqualTo", @data_ddltype = "Semester" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span>Semester<span id="SemesterValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                    <div id="Semester">
+                                        @Html.DropDownList("Semester", new SelectList(ViewBag.SemesterList, "Value", "Text"),
+                 "--Select--", new { @class = "required chosen-select tag-input-style ", @data_scope = "row1", @data_column = "Semester", @data_operator = "EqualTo" })
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-1 " style="padding-top: 17px;">
+                                    <a href="button" class="btn btn-primary JSDownloadBtn"><i class="fa fa-card"></i>&nbsp;View Admit Cards</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="panel panel-primary js-pager-table">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Download Student Admit Card &amp; Attendance Sheet
+                                <span class="filter-btn pull-right" data-toggle="tooltip">
+                                    <a href="/CUSrinagarAdminPanel/SemesterCenters/Centers/"><i class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp;Back</a>
+                                </span>
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <form action="/CUSrinagarAdminPanel/SemesterCenters/DownloadAdmitCardAndAttendanceSheet/" method="get" target="_blank">
+                                <div class="col-sm-12 search-box">
+                                    <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                        <span style="color:red">*</span>Exam FormNo
+                                        <div>
+                                            @Html.TextBox("ExamFormNo", "", new { @class = "form-control", @required = "required", @maxlength = "40" })
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                        <span style="color:red">*</span>Programme
+                                        <div>
+                                            @Html.DropDownList("printProgramme", new SelectList(ViewBag.PrintProgrammeOption, "Value", "Text"),
+                                             new { @class = "form-control required" })
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-8" style="padding-top: 17px;">
+                                        <button type="submit" class="btn btn-primary"><i class="fa fa-pdf-o"></i>&nbsp;Print Preview</button>
+                                        <a href="/CUSrinagarAdminPanel/SemesterCenters/Individual/" target="_blank" class="pull-right btn btn-success">
+                                            <i class="fa fa-user"></i>&nbsp;Assign RollNo &amp; Center to Individual
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-primary js-pager-table">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Download all Attendance Sheets
+                                <span class="filter-btn pull-right" data-toggle="tooltip">
+                                    <a href="/CUSrinagarAdminPanel/SemesterCenters/Centers/"><i class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp;Back</a>
+                                </span>
+                            </h3>
+                        </div>
+                        <div class="panel-body attsheets">
+                            <div class="col-sm-12 search-box">
+                                <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span>Exam Year
+                                    <div>
+                                        @Html.TextBox("Year", DateTime.Now.Year.ToString(), new { @class = " required form-control jsfilterelement", @data_column = "Year", @data_operator = "EqualTo" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span>Center College<span  id="colValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                    <div class="">
+                                        @Html.DropDownList("College_ID", new SelectList(ViewBag.Colleges, "Value", "Text"),
+           "--Select--", new { @class = "form-control required", @data_scope = "row1", @data_column = "College_ID", @data_operator = "EqualTo", data_ddltype = "Course", @data_ddlchildtype = "" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span>Programme<span id="ProgrammeIdValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                    <div>
+                                        @Html.DropDownList("ProgrammeId", new SelectList(ViewBag.PrintProgrammeOption, "Value", "Text"),
+           "--Select--", new { @class = "form-control SearchDDL required", @data_column = "ProgrammeId", @data_operator = "EqualTo", data_ddltype = "Course", @data_ddlchildtype = "Semester" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span>Course<span id="CourseIDValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                    <div id="Course">
+                                        @Html.DropDownList("CourseID", new SelectList(ViewBag.CourseList, "Value", "Text"),
+                "--Select--", new { @class = "form-control SearchDDL jsfilterelement required ", @data_column = "printProgramme", @data_operator = "EqualTo", @data_ddltype = "Semester" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span>Semester<span id="SemesterValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                    <div id="Semester">
+                                        @Html.DropDownList("Semester", new SelectList(ViewBag.SemesterList, "Value", "Text"),
+                 "--Select--", new { @class = "required jsfilterelement chosen-select tag-input-style ", @data_column = "Semester", @data_operator = "EqualTo" })
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span>Center Code<span id="" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                    <div id="Center_IDs">
+                                        @Html.DropDownList("Center_ID", new SelectList(ViewBag.Centers, "Value", "Text"),
+                 "--All--", new { @class = "jsfilterelement chosen-select tag-input-style ", @data_column = "Center_ID", @data_operator = "EqualTo" })
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 search-box center">
+                                <div class="col-sm-12" style="padding-top: 17px;">
+                                    <a href="button" class="btn btn-primary JSDownloadBtn"><i class="fa fa-eye"></i>&nbsp;Download Attendance Sheets</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <h1 class="quadraText">
+        The process of downloading Admit Cards is either closed or will be allowed soon.
+    </h1>
+}
+
+@section PageSpecificJS{
+    <script>
+        var gridPathWithParam = '@Url.Action("DownloadAdmitCardsPreview", "SemesterCenters", new {area = "CUSrinagarAdminPanel" })';
+        var gridasPathWithParam = '@Url.Action("AttendanceSheetsPreview", "SemesterCenters", new {area = "CUSrinagarAdminPanel" })';
+           var CenterListPath = '@Url.Action("_GetCenterList", "SemesterCenters", new {area = "CUSrinagarAdminPanel" })';
+        var chilDDLPath = '@Url.Action("_GetChildDDL", "SemesterCenters", new {area = "CUSrinagarAdminPanel" })';
+         var controllerName = "SemesterCenters";
+    </script>
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSSemesterCenters/BulkAdmitCardsAndAttsheets.js")"></script>
+    <script>
+        $(document).ready(function () {
+            $(".e3").addClass("active");
+            $("#SemesterCentersSection").addClass("active open");
+        });
+    </script>
+}
+@section PageSpecificStyle{
+    <style>
+        .filter-btn a {
+            color: white !important
+        }
+    </style>
+}
+
+
+
+

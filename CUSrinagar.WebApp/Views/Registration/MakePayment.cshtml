@@ -1,0 +1,103 @@
+﻿
+@using CUSrinagar.Models
+
+@model ARGReprint
+
+@{
+    ViewBag.Title = $"Online Payment-{DateTime.UtcNow.Year} - ";
+}
+
+<div class="page-header">
+    <h1>
+        Online Payment
+    </h1>
+</div>
+<div id="response">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+</div>
+@if (ViewBag.PrintProgrammeOption != null)
+{
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-7" style="border:2px solid #cacaca;border-radius:6px;">
+            <br />
+
+            @using (Html.BeginForm("MakePayment", "Registration", FormMethod.Post, new { @class = "rnd5", @id = "frmLaterPayment" }))
+            {
+                @Html.AntiForgeryToken()
+
+                @*------------------------------------Print Section-----------------------------------*@
+                <div class="col-lg-2">    </div>
+                <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                    <div class="content-wrapper">
+
+                        <label class="col-sm-7 lbl bigger-120 no-padding-right">
+                            Form Number Or CUS Registration No.
+                            <span class="required">
+                                *
+                                @Html.ValidationMessageFor(model => model.FormNo)
+                            </span><br />
+                            @Html.TextBoxFor(model => model.FormNo, new { @class = "form-control jsfilterelement", @maxlength = "150", @autocomplete = "off", @onkeypress = "return forAdmissionRollNo(event);" })
+                        </label>
+
+                    </div>
+                </div>
+
+
+                <div class="col-lg-2">    </div>
+                <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                    <div class="content-wrapper">
+                        <label class="col-sm-7 lbl bigger-120 no-padding-right">
+                            @Html.LabelFor(model => Model.EnteredDOB, new { @class = "small-70" })
+                            <span class="required">
+                                *
+                                @Html.ValidationMessageFor(model => model.EnteredDOB)
+                            </span><br />
+                            @Html.TextBoxFor(model => model.EnteredDOB, new { @class = "form-control dateDDMMYYY", @maxlength = "10", placeholder = "dd-mm-yyyy" })
+                        </label>
+                    </div>
+                </div>
+
+
+
+                <div class="col-lg-2">    </div>
+                <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                    <div class="content-wrapper">
+                        <label class="col-sm-7 lbl bigger-120 no-padding-right">
+                            @Html.LabelFor(model => Model.PrintProgrammeOption, new { @class = "small-70" })
+                            <span class="required">
+                                *
+                                @Html.ValidationMessageFor(model => model.PrintProgrammeOption)
+                            </span><br />
+                            @Html.DropDownListFor(model => model.PrintProgrammeOption, (IEnumerable<SelectListItem>)ViewBag.PrintProgrammeOption, string.Empty, new { @class = "form-control" })
+                        </label>
+                    </div>
+                </div>
+                <br />
+                <p class="text-center">
+                    <span id="hideButtons6">
+                        <button type="submit" id="jsLaterPayment" class="btn btn-success"><i class="fa fa-money"></i> Make Payment Online</button>
+                    </span>
+                </p>
+
+                @*------------------------------------End Print Section-----------------------------------*@
+
+            }
+        </div>
+        <div class="col-md-3"></div>
+
+        <div class="col-lg-12"><br /><br /><br /><br /></div>
+    </div>
+}
+else
+{
+    <h1 class="quadraText">
+        The process of making payment online is either closed or will be allowed soon.
+    </h1>
+}
+@section PageSpecificJS{
+    @Scripts.Render("~/bundles/Libraries/jqueryval", "~/bundles/Libraries/jqueryregMP")
+}

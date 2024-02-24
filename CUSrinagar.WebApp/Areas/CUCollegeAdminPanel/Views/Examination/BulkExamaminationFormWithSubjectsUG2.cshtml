@@ -1,0 +1,199 @@
+﻿@model IEnumerable<CUSrinagar.Models.ARGPersonalInformation>
+@using CUSrinagar.Models
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Examination Form</title>
+    <link href="~/Content/ThemePublic/Libraries/plugins/news-ticker/assets/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/ThemePublic/Libraries/css/printer-frndly.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        ol li {
+            line-height: 31px;
+        }
+    </style>
+</head>
+<body class="A4 middle">
+    @if (Model != null)
+    {
+        foreach (CUSrinagar.Models.ARGPersonalInformation item in Model)
+        {
+            <section class="sheet padding-5mm">
+                <div class="page-content ">
+                    <div class="">
+                        <div class="col-sm-12">
+                            <div class="row panel panel-body well">
+                                <div class="">
+                                    <div class="text-center">
+                                        <img src="@Url.Content("~/Content/ThemePublic/Libraries/images/cus-logo1.svg")" width="400" height="40" />
+                                        <center><b><u class="text-success">Examination Form Sem-II</u></b>- Class Roll No.<b>@item.ClassRollNo</b>  - Form No.<b>@item.StudentFormNo</b></center>
+                                    </div>
+
+                                    <div class="table-bordered" style="">
+                                        <table class="table no-margin-bottom">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Course:<b> @(item.SelectedCombinations.First().CourseID )</b> </td>
+                                                    <td>College: <b>@item.AcceptCollegeID</b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Registration Number:<b> @item.CUSRegistrationNo</td>
+                                                    <td>Mobile No (Working) : ....................................... </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Name:<b> @item.FullName </b> </td>
+                                                    <td>Parentage:<b> @item.FathersName </b></td>
+                                                </tr>
+                                                <tr></tr>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <b>Ist Sem Subjects</b>:
+                                                        <small>
+                                                            @if (item.SelectedCombinations.FirstOrDefault(x => x.Semester == 1) != null)
+                                                            {
+                                                                foreach (ADMSubjectMaster itemsubject in item.SelectedCombinations.FirstOrDefault(x => x.Semester == 1).Subjects.OrderBy(x => x.SubjectType))
+                                                                {
+                                                                    <span><b>@itemsubject.SubjectFullName</b></span><span>(</span><span>@itemsubject.SubjectType.ToString()</span><span>),</span>
+                                                                }
+                                                            }
+                                                        </small>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <b>Subjects opted in Sem-II</b><br /><br />
+                                                        AE I: Communicative English-II<br /><br />
+                                                        AE II: Environmental Studies-II
+                                                        
+                                                    </td>
+                                                    <td>
+                                                        Core-I : .............................................................<br /><br />
+                                                        Core-II: .............................................................<br /><br />
+                                                        @if (item.SelectedCombinations.First().CourseID.Contains("Med"))
+                                                        {<span>Core-III: .............................................................</span>}
+                                                        else
+                                                        {<span>MIL: .............................................................</span>}
+
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <center>
+                                                            <b><small>Verified by college coordinator</small> </b><br /><br />
+                                                            ______________________________________
+                                                        </center>
+                                                    </td>
+                                                    <td><br />
+                                                        <span style="float:right;">
+                                                            Amount to be paid : <strong>Rs.1900/-</strong>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="clearfix"></div>
+                                <div class="col-md-12">
+                                    <p><b>Important: </b><span>This form should be submitted in your respective college for verification of selected subjects & fee.</span> </p>
+                                    <b>WARNING!</b><span>Candidates who have not appeared in internal/continous assesment shall not be allowed to appear in examination and their forms will be cancelled.</span>
+                                </div>
+                                <p><small>............................................................................................... cut here .......................................................................................</small></p>
+                                <div class="text-center">
+                                    <img src="~/Content/ThemePublic/PrintImages/CUSLogo.png" height="35" />
+                                    <img src="@Url.Content("~/Content/ThemePublic/Libraries/images/cus-logo1.svg")" width="300" height="35" />
+                                    <center><b>Student Copy</b></center>
+                                </div>
+                                <div class="table-bordered" style="">
+                                    <table class="table no-margin-bottom">
+                                        <tbody>
+                                            <tr>
+                                                <td>Registration No: @item.CUSRegistrationNo</td>
+                                                <td>Course: @(item.SelectedCombinations.First().CourseID )</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Name: @item.FullName</td>
+                                                <td>Father's Name: @item.FathersName</td>
+                                            </tr>
+                                            <tr>
+                                                <td><b>Account No: 0005040500047778</b></td>
+                                                <td>Amount Paid: <b>1900/-</b></td>
+
+                                            </tr>
+                                            <tr>
+                                                <td><br />Dated:..........................</td>
+                                                <td>
+                                                    Signature of dealing Officer<br /><br /><br />
+                                                    __________________________________
+
+                                                </td>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <p><small>............................................................................................... cut here .......................................................................................</small></p>
+                                <div class="text-center">
+                                    <img src="~/Content/ThemePublic/PrintImages/CUSLogo.png" height="35" />
+                                    <img src="@Url.Content("~/Content/ThemePublic/Libraries/images/cus-logo1.svg")" width="300" height="35" />
+                                    <center><b>Bank Copy</b></center>
+                                </div>
+                                <div class="table-bordered" style="">
+                                    <table class="table no-margin-bottom">
+                                        <tbody>
+                                            <tr>
+                                                <td>Registration No: @item.CUSRegistrationNo</td>
+                                                <td>Course: @(item.SelectedCombinations.First().CourseID )</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Name: @item.FullName</td>
+                                                <td>Father's Name: @item.FathersName</td>
+                                            </tr>
+                                            <tr>
+                                                <td><b>Account No: 0005040500047778</b></td>
+                                                <td>Amount Paid: <b>1900/-</b></td>
+                                            </tr>
+                                            <tr>
+                                                <td><br /> Dated:..........................</td>
+                                                <td>
+                                                    Signature of dealing Officer<br /><br /><br />
+                                                    __________________________________
+                                                </td>
+
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        }
+
+
+        <div class="noneOnPrint print-download-strip">
+            <a style="color: #ffffff;background-color: #080808;border-color: #59f908;" href="@Url.Action("BulkExamaminationForm", "Examination")" class="btn btn-default">Back</a>
+            <button style="color: #ffffff;background-color: #080808;border-color: #59f908;" href="#" class="btn btn-default" onclick="window.print();"><b>Download / Print Examination Form </b></button>
+        </div>
+    }
+    else
+    {
+        <section class="sheet padding-5mm">
+            <hr />
+            <hr />
+            <h1 class="center">No Form Found.</h1>
+            <hr />
+            <hr />
+        </section>
+    }
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+﻿@model List<CUSrinagar.Models.SubjectsCount>
+@{
+    Layout = null;
+}
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th>S.No.</th>
+            <th data-property="CourseFullName">Course</th>
+            <th data-property="Semester">Semester</th>
+            <th data-property="SubjectFullName">Subject</th>
+            <th data-property="AssignedStudentCount">
+                Count
+            </th>
+
+
+        </tr>
+    </thead>
+    @if (Model == null || !(Model.Any()))
+    {
+        <tbody>
+            <tr>
+                <th colspan="6" class="center">No Subject found</th>
+            </tr>
+        </tbody>
+    }
+    else
+    {
+        <tbody>
+            @{ int sno = ViewBag.RecordCount;}
+            @foreach (var subject in Model)
+            {
+                sno++;
+                <tr>
+                    <td>@sno</td>
+                    <th title="Course">@subject.CourseFullName</th>
+                    <th title="Semester">@subject.Semester</th>
+                    <th title="Subject">
+                        @subject.SubjectFullName - @subject.SubjectType
+                        @Html.HiddenFor(x => subject.Subject_ID)
+                    </th>
+                    <th title="Count">@subject.AssignedStudentCount</th>
+                </tr>
+            }
+        </tbody>
+    }
+</table>
+

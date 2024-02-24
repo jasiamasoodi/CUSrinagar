@@ -1,0 +1,145 @@
+﻿
+
+
+@model CUSrinagar.Models.MigrationPI
+@{CUSrinagar.Enums.MigrationE paymentModuleType = ViewBag.FormTypeIs;}
+@Html.HiddenFor(model => model.Student_ID)
+@Html.HiddenFor(model => model.FormType, paymentModuleType)
+<div class="table-responsive panel">
+    <table class="table">
+        <tbody>
+            <tr>
+                <td class="text-success" colspan="2"> @Html.ValidationMessage("CusRegistrationNo", new { @class = "red" })@Html.ValidationMessageFor(model => model.Student_ID, "", new { @class = "red" })</td>
+
+            </tr>
+            <tr>
+                <td class="text-success"> 1. Name of the Applicant:</td>
+                <td>
+                    @Html.DisplayFor(model => model.FullName)
+                </td>
+            </tr>
+            <tr>
+                <td class="text-success"> 2. Father's Name</td>
+                <td>@Html.DisplayFor(model => model.FathersName)</td>
+            </tr>
+            <tr>
+                <td class="text-success"> 3. Registration Number</td>
+                <td>@Html.DisplayFor(model => model.CUSRegistrationNo)</td>
+            </tr>
+            <tr>
+                <td class="text-success"> 4. Mobile Number</td>
+                <td>@Html.DisplayFor(model => model.StudentAddress.Mobile)</td>
+            </tr>
+            <tr>
+                <td class="text-success">5. Name of the Class/Semester the applicant is still reading</td>
+                <td>Semester @Html.DisplayFor(model => model.CurrentSemesterOrYear)</td>
+            </tr>
+            <tr>
+                <td class="text-success"> 6. Address for dispatch of the migration certificate</td>
+                <td>@Html.DisplayFor(model => model.StudentAddress.PermanentAddress), Pin Code:@Html.DisplayFor(model => model.StudentAddress.PinCode), Tehsil:@Html.DisplayFor(model => model.StudentAddress.Tehsil), District:@Html.DisplayFor(model => model.StudentAddress.District)</td>
+            </tr>
+            <tr>
+                <td class="text-success"> 7. Current College</td>
+                <td>@Html.DisplayFor(model => model.AcceptCollegeID)</td>
+            </tr>
+            @if (paymentModuleType == CUSrinagar.Enums.MigrationE.IntraCollegeMigration)
+            {
+                <tr>
+                    <td class="text-success"> 8. College To Which Transfer Is Sought</td>
+                    <td>
+                        @Html.DropDownListFor(model => model.NewCollege, new SelectList(ViewBag.CollegeList, "Value", "Text"), new { @style = "width: 443px", @class = "form-control" }) <span>@Html.ValidationMessageFor(model => model.NewCollege, "", new { @class = "red" })</span>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td class="text-success"> 8. College To Which Transfer Is Sought</td>
+                    <td>
+                        @Html.TextBoxFor(model => model.NewCollege, new { @style = "width: 443px",@onkeypress= "return forNameOnly(event)", @maxlength = "30" }) @Html.ValidationMessageFor(model => model.NewCollege, "", new { @class = "red" })
+                    </td>
+                </tr>
+            }
+
+            <tr>
+                <td class="text-success"> 9. Reason Why Transfer Is Sought</td>
+                <td>
+                    @Html.TextAreaFor(model => model.Remarks, new { rows = 3, cols = 60, @onkeypress = "return forNameOnly(event)",@maxlength="30" }) @Html.ValidationMessageFor(model => model.Remarks, "", new { @class = "red" })
+                </td>
+            </tr>
+            <tr>
+                <td class="text-success"> 10. Subjects to be offered now</td>
+                <td>
+                    @Html.TextBoxFor(model => model.NewSubjects, new { @style = "width: 443px", @onkeypress = "return forNameOnly(event)", @maxlength = "30" }) @Html.ValidationMessageFor(model => model.NewSubjects, "", new { @class = "red" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="text-success">
+                        11. Mail
+                    </span> @Html.TextBoxFor(model => model.Email, new { @style = "width: 223px" }) @Html.ValidationMessageFor(model => model.Email, "", new { @class = "red" })
+                </td>
+                <td>
+                    <span class="text-success">12. Mobile  </span>@Html.TextBoxFor(model => model.Mobile) @Html.ValidationMessageFor(model => model.Mobile, "", new { @class = "red" })
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+
+<h4>8. Last Examination appeared (passed/failed)</h4>
+<div class="table-responsive panel">
+    <table class="table">
+        <tbody>
+            @if (Model != null && Model.SemesterModel != null)
+            {
+                var RollNumber = string.Empty;
+                var totalMarks = 0;
+                var Year = 0;
+                foreach (var item in Model.SemesterModel)
+                {
+                    RollNumber = item.ExamRollNumber;
+                    totalMarks += (int)((item.ExternalMarks > 0 ? item.ExternalMarks : 0) + (item.ExternalAttendance_AssessmentMarks > 0 ? item.ExternalAttendance_AssessmentMarks : 0) + (item.InternalMarks > 0 ? item.InternalMarks : 0) + (item.InternalAttendance_AssessmentMarks > 0 ? item.InternalAttendance_AssessmentMarks : 0));
+                    Year = item.Year;
+
+                }
+                <tr>
+                    <th class="text-success">Examination  </th>
+                    <th class="text-success">Semester </th>
+                    <th class="text-success">Year </th>
+                    <th class="text-success">Roll No  </th>
+                    <th class="text-success">Marks Obtained </th>
+                    @*<th class="text-success">Result </th>*@
+                </tr>
+                <tr>
+                    <td>@Model.CourseFullName</td>
+                    <td>@ViewBag.LastSemester</td>
+                    <td>@Year</td>
+                    <td>@RollNumber</td>
+                    <td>@totalMarks</td>
+                    @*<td>
+                            <select class=" form-control" name="resultstatus" id="resultstatus">
+                                <option value="@CUSrinagar.Enums.ResultStatus.Pass">@CUSrinagar.Enums.ResultStatus.Pass.ToString()</option>
+                                <option value="@CUSrinagar.Enums.ResultStatus.Fail">@CUSrinagar.Enums.ResultStatus.Fail.ToString()</option>
+                                <option value="@CUSrinagar.Enums.ResultStatus.ReAppear">@CUSrinagar.Enums.ResultStatus.ReAppear.ToString()</option>
+                                <option value="@CUSrinagar.Enums.ResultStatus.NotAvailable">@CUSrinagar.Enums.ResultStatus.NotAvailable.ToString()</option>
+                            </select>
+                        </td>*@
+                </tr>
+
+            }
+        </tbody>
+    </table>
+</div>
+<div class="col-lg-12 col-md-12 ">
+    <p style="text-align:center;">
+        <span id="btn">
+            <input type="submit" value="Submit Form" class="btn btn-theme" style="color:white !important" />
+        </span>
+    </p>
+</div>
+

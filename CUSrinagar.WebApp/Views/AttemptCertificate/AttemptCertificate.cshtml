@@ -1,0 +1,119 @@
+﻿
+
+
+@model CUSrinagar.Models.AttemptCertificate
+@using (Html.BeginForm("SaveDetails", "AttemptCertificate", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.Certificate_ID)
+    @Html.HiddenFor(model => model.personalInformationCompact.Student_ID)
+    @Html.HiddenFor(model => model.personalInformationCompact.PrintProgramme)
+    <div class="table-responsive panel">
+        <table class="table">
+            <tbody>
+
+                <tr>
+                    <td class="text-success"> 1. Name of the Applicant:</td>
+                    <td>
+                        @Html.DisplayFor(model => model.personalInformationCompact.FullName) @Html.HiddenFor(model => model.personalInformationCompact.FullName)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-success"> 2. Father's Name</td>
+                    <td>@Html.DisplayFor(model => model.personalInformationCompact.FathersName) @Html.HiddenFor(model => model.personalInformationCompact.FathersName)</td>
+                </tr>
+                <tr>
+                    <td class="text-success"> 3. University Registration No.</td>
+                    <td>@Html.DisplayFor(model => model.personalInformationCompact.CUSRegistrationNo) @Html.HiddenFor(model => model.personalInformationCompact.CUSRegistrationNo)</td>
+                </tr>
+                <tr>
+                    <td class="text-success">4. Name of the Class/Semester the applicant is still reading</td>
+                    <td>Semester @Html.DisplayFor(model => model.personalInformationCompact.CurrentSemesterOrYear) @Html.HiddenFor(model => model.personalInformationCompact.CurrentSemesterOrYear)</td>
+                </tr>
+
+                <tr>
+                    <td class="text-success"> 5. Current College</td>
+                    <td>@Html.DisplayFor(model => model.personalInformationCompact.CollegeFullName) @Html.HiddenFor(model => model.personalInformationCompact.CollegeFullName)</td>
+                </tr>
+
+                <tr>
+                    <td class="text-success"> 6. Reason for Issuance</td>
+                    <td>@Html.TextAreaFor(model => model.ReasonforIssuance)@Html.ValidationMessageFor(model => model.ReasonforIssuance, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+    <h4>8. Backlog Summary Record</h4>
+    <div class="table-responsive panel">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th>Sem</th>
+                    <th>Expected Year of Passing</th>
+                    <th>Actual Year of Passing</th>
+                    <th>No. of Re-appears Subjects</th>
+                    <th>Re-appears subject</th>
+                    <th>No. of Attempts to Clear Re-appears</th>
+                    <th>Remarks</th>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        @Html.ValidationMessage("ExpectedYearPassing", "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+                        @Html.ValidationMessage("ActualYearPassing", "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                    </td>
+                </tr>
+                @{ var track = 0;}
+                @foreach (var item in Model.AttemptCertificateDetailsList)
+                {
+                    @Html.HiddenFor(model => model.AttemptCertificateDetailsList[track].Details_ID)
+            <tr>
+                <td>
+                    @item.Semester
+                    @Html.HiddenFor(model => model.AttemptCertificateDetailsList[track].Semester)
+                </td>
+                <td>
+
+                    @Html.TextBoxFor(model => model.AttemptCertificateDetailsList[track].ExpectedYearPassing, new { @class = "form-control width100 ", @onkeypress = "return numbersOnly(event);", @required = "required" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.AttemptCertificateDetailsList[track].ActualYearPassing, new { @class = "form-control width100 ", @onkeypress = "return numbersOnly(event);" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.AttemptCertificateDetailsList[track].NoOfReappearSubjects, new { @class = "form-control width100 ", @onkeypress = "return numbersOnly(event);" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.AttemptCertificateDetailsList[track].ReapperSubjects, new { @class = "form-control width100 " })
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.AttemptCertificateDetailsList[track].NoOfAttemptsToClear, new { @class = "form-control width100 ", @onkeypress = "return numbersOnly(event);" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.AttemptCertificateDetailsList[track].Remarks, new { @class = "form-control width100 " })
+                </td>
+            </tr>
+                    track++;
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-12 col-md-12 ">
+        <p style="text-align:center;">
+            <span id="btn">
+                <input type="submit" value="Submit Form" class="btn btn-theme" style="color:white !important" />
+            </span>
+        </p>
+    </div>
+
+}@section PageSpecificJS{
+
+    @Scripts.Render("~/bundles/Libraries/jqueryval")
+
+}

@@ -1,0 +1,52 @@
+﻿@model List<CUSrinagar.Models.ResultNotificationList>
+
+<table class="table  table-bordered table-hover">
+    <thead>
+        <tr>
+            <th class="text-center">S.No. </th>
+            <th data-property="Batch">Batch</th>
+            <th data-property="PrintProgramme">Programme</th>
+            <th data-property="Semester">Semester</th>
+            <th class="">Description</th>
+            <th  data-property="Dated">Date</th>
+            <th title="Result imported to master table">Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td class="text-center">
+                        <span class="js-sno"></span>
+                        @Html.HiddenFor(model=>item.ResultNotification_ID)
+                    </td>
+                    <td>@item.Batch</td>
+                    <td>@item.PrintProgramme</td>
+                    <td>@item.Semester</td>
+                    <td>@item.Title</td>
+                    <td>@item.Dated.ToString("dd-MMM-yyyy")</td>
+                    <td>
+                        @if (item.ImportedToMasterTable)
+                        {
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-success btn-white btn-round" title="Imported">
+                                    <i class="ace-icon fa fa-check bigger-110 green"></i> Imported
+                                </button>
+                            </div>
+                        }
+                        else
+                        {
+                            <button class="btn btn-sm btn-danger btn-white btn-round jsImportToMasterTable" title="Not imported yet">
+                                @*<i class="ace-icon fa fa-times bigger-110 red2"></i>*@ Import Now
+                            </button>
+                        }
+                    </td>
+                    <td></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

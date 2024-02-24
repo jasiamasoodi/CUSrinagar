@@ -1,0 +1,474 @@
+﻿@model CUSrinagar.Models.ARGPersonalInformation
+@using CUSrinagar.Extensions
+@{
+    ViewBag.Title = "Student Info ";
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index", "Dashboard", new { area = "CUStudentZone" })">Home</a>
+        </li>
+        <li>
+            <a href="#" class="active">Student Profile</a>
+        </li>
+    </ul>
+}
+<div id="response">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+</div>
+<div class="page-content no-padding no-margin no-border">
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="col-lg-10 col-md-10">
+                <div id="accordion" class="accordion-style1 panel-group no-padding no-margin">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true">
+                                    <i class="bigger-110 ace-icon fa fa-angle-down" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                    &nbsp;University Info
+                                </a>
+                            </h4>
+                        </div>
+
+                        <div class="panel-collapse collapse in " id="collapseOne" aria-expanded="true" style="">
+                            <div class="panel-body no-padding no-margin">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-user"></i> Form No.</td>
+                                                <td>@Model.StudentFormNo</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-user"></i> CUS Registration No</td>
+                                                <td>@Model.CUSRegistrationNo</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-book"></i> Course</td>
+                                                <td>@Model.CourseFullName</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-group"></i> Class Roll No &amp; Section</td>
+                                                <td>@Model.ClassRollNo</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-calendar"></i> DOB</td>
+                                                <td>@Model.DOB.ToString("dd-MMMM-yyyy")</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-calendar"></i> Board Registration No.</td>
+                                                <td>@Model.BoardRegistrationNo</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-calendar"></i> Admitted Batch</td>
+                                                <td>@Model.Batch</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-calendar"></i> Current Semester</td>
+                                                <td>@Model.CurrentSemesterOrYear</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-university"></i> College</td>
+                                                <td>
+                                                    @Model.AcceptCollegeID
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-university"></i> ABC ID</td>
+                                                <td>
+                                                    @(string.IsNullOrWhiteSpace(Model.ABCID)?"": string.Join("-", Enumerable.Range(0, Model.ABCID.Length / 3).Select(i => Model.ABCID.Substring(i * 3, 3))))
+                                                </td>
+                                            </tr>
+                                            @if (Model.IsLateralEntry)
+                                            {
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-empire"></i> Lateral Entry</td>
+                                                    <td>
+                                                        Yes
+                                                    </td>
+                                                </tr>
+                                            }
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-thumbs-up"></i> Status</td>
+                                                <td>@Model.FormStatus</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-thumbs-up"></i> Is Passout</td>
+                                                <td>@{var stst = Model.IsPassout ? "YES" : "NO"; }@stst</td>
+
+                                            </tr>
+
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false">
+                                    <i class="bigger-110 ace-icon fa fa-angle-right" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                    &nbsp;Personal Info
+                                </a>
+                            </h4>
+                        </div>
+
+                        <div class="panel-collapse collapse" id="collapseTwo" aria-expanded="false" style="height: 0px;">
+                            <div class="panel-body no-padding no-margin">
+                                <div class="table-responsive panel">
+                                    <table class="table">
+                                        <tbody>
+
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-user"></i> Full Name</td>
+                                                <td>@Model.FullName</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-user"></i> Father's Name</td>
+                                                <td>@Model.FathersName</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-user"></i> Mother's Name</td>
+                                                <td>@Model.MothersName</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-user"></i> Gender</td>
+                                                <td>@Model.Gender</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-user"></i> Religion</td>
+                                                <td>@Model.Religion</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-user"></i> Category</td>
+                                                <td>@(Model.Category==null?"":Model.Category)</td>
+                                            </tr>
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false">
+                                    <i class="bigger-110 ace-icon fa fa-angle-right" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                    &nbsp;Contact Detail
+                                </a>
+                            </h4>
+                        </div>
+
+                        <div class="panel-collapse collapse" id="collapseThree" aria-expanded="false" style="height: 0px;">
+                            <div class="panel-body no-padding no-margin">
+                                <div class="table-responsive panel">
+                                    @if (Model.StudentAddress != null)
+                                    {
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-envelope-o"></i> Email ID</td>
+                                                    <td><a href="mailto:@Model.StudentAddress.Email ?subject=Cluster University">@Model.StudentAddress.Email</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="glyphicon glyphicon-phone"></i> Mobile Number</td>
+                                                    <td><a class="phone" href="tel: @Model.StudentAddress.Mobile">@Model.StudentAddress.Mobile</a></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-home"></i> Address</td>
+                                                    <td colspan="4">@Model.StudentAddress.PermanentAddress</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa "></i>Pincode</td>
+                                                    <td colspan="2">@Model.StudentAddress.PinCode</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa "></i>Block</td>
+                                                    <td>@Model.StudentAddress.Block</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa "></i>Tehsil</td>
+                                                    <td colspan="2">@Model.StudentAddress.Tehsil</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa "></i>Assembly Constituency</td>
+                                                    <td colspan="2">@Model.StudentAddress.AssemblyConstituency</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa "></i>Parliamentary Constituency</td>
+                                                    <td>@Model.StudentAddress.ParliamentaryConstituency</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa "></i>District</td>
+                                                    <td>@Model.StudentAddress.District</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-flag"></i> State</td>
+                                                    <td colspan="2">@Model.StudentAddress.State</td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @if (Model.AcademicDetails != null)
+                    {
+                        <div class="panel panel-default">
+
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false">
+                                        <i class="bigger-110 ace-icon fa fa-angle-right" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                        &nbsp;Academic Detail
+                                    </a>
+                                </h4>
+                            </div>
+
+                            <div class="panel-collapse collapse" id="collapseFour" aria-expanded="false" style="height: 0px;">
+                                <div class="panel-body no-padding no-margin">
+                                    <div class="table-responsive panel">
+                                        <table class="table">
+                                            <tbody>
+
+                                                @foreach (var item in Model.AcademicDetails)
+                                                {
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-university"></i> Last School</td>
+                                                        <td>@item.ExamBody</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-book"></i> Stream</td>
+                                                        <td>@item.Stream</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-list-ol"></i> Subjects</td>
+                                                        <td>@item.Subjects</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-calendar"></i> Roll Number</td>
+                                                        <td>@item.RollNo </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-calendar"></i>Session / Academic Year</td>
+                                                        <td>@item.Session /  @item.Year</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success">Marks </td>
+                                                        <td>@item.MarksObt.ToString()  /  @item.MaxMarks.ToString() =  @item.Percentage %</td>
+                                                    </tr>
+                                                }
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @if ((HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()) ||
+                        HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Registrar.ToString())))//&& Model.FormStatus == CUSrinagar.Enums.FormStatus.Selected
+                    {
+                        <div class="panel panel-default">
+
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false">
+                                        <i class="bigger-110 ace-icon fa fa-angle-right" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                        &nbsp;Migration Status
+                                    </a>
+                                </h4>
+                            </div>
+
+                            <div class="panel-collapse collapse" id="collapseFive" aria-expanded="false" style="height: 0px;">
+                                <div class="panel-body no-padding no-margin">
+                                    <div class="table-responsive panel">
+                                        <table class="table">
+                                            <tbody>
+                                                @if (!Model.IsPassout && !(Model.FormStatus == CUSrinagar.Enums.FormStatus.CancelRegistration) && !(Model.FormStatus == CUSrinagar.Enums.FormStatus.AutoAdmissionCancel))
+                                                {
+                                                    if (Model.AcceptCollege_ID != null)
+                                                    {
+                                                        <tr>
+                                                            <td class="text-success"><i class="fa fa-university"></i> Cancel Admission</td>
+                                                            <td>
+                                                                <button class="btn btn-danger btn-sm" id="btnCancelAdmission" value="CancelAdmission">Cancel</button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                    <tr>
+                                                        <td class="text-success">
+                                                            <i class="fa fa-university"></i> Intra College Migration (Within University)
+                                                            @Html.DropDownList("MigrationCollegeID", new SelectList(ViewBag.MigrationCollege, "Value", "Text"),
+                                                                             new { @class = "chosen-select tag-input-style " })
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-primary btn-sm" id="btnIntraMigration" value="IntraMigration">Intra Migration</button>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-university"></i> Inter College Migration after completion of degree</td>
+                                                        <td>
+                                                            <button class="btn btn-primary btn-sm" id="btnInterMigration" value="InterMigration">Inter Migration</button>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                @if (Model.IsPassout || Model.FormStatus == CUSrinagar.Enums.FormStatus.CancelRegistration)
+                                                {
+                                                    <tr>
+                                                        <td class="text-success">
+                                                            <i class="fa fa-university"></i> Migration Certificate(PassOut / Cancel Registration)
+                                                        </td>
+                                                        @if (Model.MigrationIssued == CUSrinagar.Enums.MigrationIssueStatus.NotIssued)
+                                                        {
+                                                            <td>
+                                                                <button class="btn btn-primary btn-sm" id="btnIssueMigration" value="IssueMigration">Issue Migration</button>
+                                                            </td>
+                                                        }
+                                                        else if (Model.MigrationIssued == CUSrinagar.Enums.MigrationIssueStatus.Issued)
+                                                        {
+                                                            <td>
+                                                                @Model.MigrationIssued.GetEnumDescription()
+                                                                <button class="btn btn-primary btn-sm" id="btnIssueMigration" value="IssueMigration">Issue Duplicate Migration</button>
+                                                            </td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>
+                                                                <span style="color:black">
+                                                                    @Model.MigrationIssued.GetEnumDescription()
+                                                                    @if (Model.CurrentSemesterOrYear < Model.Duration && Model.IsPassout)
+                                                                    {<span style="color:black">/ Exit </span>}
+                                                                    else if (Model.FormStatus == CUSrinagar.Enums.FormStatus.CancelRegistration)
+                                                                    {
+                                                                        <span style="color:black">/ Cancel Registration </span>
+                                                                    }
+                                                                </span>
+
+                                                            </td>
+                                                        }
+
+                                                    </tr>
+                                                }
+                                                else if (Model.FormStatus == CUSrinagar.Enums.FormStatus.AutoAdmissionCancel)
+                                                {
+                                                    <tr>
+                                                        <td class="text-success">
+                                                            <i class="fa fa-university"></i> Migration Certificate(PassOut / Cancel Registration)
+                                                        </td>
+                                                        @if (Model.MigrationIssued == CUSrinagar.Enums.MigrationIssueStatus.NotIssued)
+                                                        {
+                                                            <td>
+                                                                <button class="btn btn-primary btn-sm" id="btnIssueMigration" value="IssueMigration">Issue Migration</button>
+                                                            </td>
+                                                        }
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+                        //------------------------ Other university Migration issued ---------------------
+
+                        if (((ViewBag.PrintProgramme != CUSrinagar.Enums.PrintProgramme.UG && ViewBag.PrintProgramme != CUSrinagar.Enums.PrintProgramme.IH)
+                            || Model.IsLateralEntry == true
+                            || (Model.CourseFullName ?? "").ToLower().Contains("b.ed"))
+                            && Model.AcceptCollege_ID != Guid.Parse("9D03A374-4398-4A48-BE2A-FD9911EC6F82")
+                            && (Model.PreviousUniversityRegnNo ?? "").ToLower().Contains("cus") == false) //GCET college id
+                        {
+                            <div class="panel panel-default">
+
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapsesix" aria-expanded="false">
+                                            <i class="bigger-110 ace-icon fa fa-angle-right" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                            &nbsp;Other University Migration Status
+                                        </a>
+                                    </h4>
+                                </div>
+
+                                <div class="panel-collapse collapse" id="collapsesix" aria-expanded="false" style="height: 0px;">
+                                    <div class="panel-body no-padding no-margin">
+                                        <div class="table-responsive panel">
+                                            <table class="table">
+                                                <tbody>
+                                                    <tr>
+                                                        @if (Model.OtherUnivMigrationReceivedOn == null)
+                                                        {
+                                                            <td class="text-success">
+                                                                <i class="fa fa-university"></i> Migration Certificate of other university Received
+                                                            </td>
+                                                            <td>
+                                                                <button class="btn btn-primary btn-sm" id="btnReceiveMigration" value="ReceiveMigration">Receive Migration</button>
+                                                            </td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>
+                                                                Origional Migration Certificate of other university Received
+                                                            </td>
+                                                            <td>
+                                                                On @Model.OtherUnivMigrationReceivedOn.Value.ToLongDateString() at
+                                                                @Model.OtherUnivMigrationReceivedOn.Value.ToString("hh:mm tt")
+                                                            </td>
+                                                        }
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    }
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2">
+                <div style="text-align:center;font-weight:bold;padding:5px 10px 5px 10px" class="left padding-top-10">
+                    <img src="@Url.Content(Model.Photograph)" class="img-responsive img-thumbnail">
+                    <p class="quadraTextSuccess">Students having any discrepancy in the details should visit the Admission Section of their respective colleges.</p>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+

@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "WhiteListed Applications";
+}
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUSrinagarAdminPanel"})">Home</a>
+            </li>
+            <li class="active">WhiteListed Applications</li>
+        </ul><!-- /.breadcrumb -->
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12 jsTableContent">
+        <div class="panel panel-primary js-pager-table" data-otherparam1="@CUSrinagar.Enums.PrintProgramme.UG">
+            <div class="panel-heading">               
+            </div>
+            <div class="panel-body">
+                <div class="search-box">
+                    <form class="form-inline" action="@Url.Action("SubjectWise","Result")">                        
+                        
+                        <div class="form-group">
+                            <label>Choose Semester</label><br />
+                            <div class="jsDDLContainer">
+                                <select class="jsfilterelement form-control" data-column="Semester" data-operator="EqualTo" id="SemesterDDL">
+                                    <option selected="selected" value="1">Semester 1</option>
+                                    <option value="2">Semester 2</option>
+                                    <option value="3">Semester 3</option>
+                                    <option value="4">Semester 4</option>
+                                    <option value="5">Semester 5</option>
+                                    <option value="6">Semester 6</option>
+                                    <option value="7">Semester 7</option>
+                                    <option value="8">Semester 8</option>
+                                </select>
+                            </div>
+                        </div>                       
+                        <div class="form-group">
+                            <label>Registration Number</label><br />
+                            <input type="text" placeholder="Registration Number" name="SearchRegNo" class="form-control jsfilterelement" data-column="CUSRegistrationNo" data-operator="EqualTo" />
+                        </div>
+                        <div class="form-group">
+                            <label class="invisible">for styling purpose</label><br />
+                            <button type="button" class="btn btn-primary btn-sm fa-search-btn js-search"><i class="fa fa-search"></i>&nbsp;Search</button>
+                            <div class="btn-group">
+                                <button data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle">
+                                    Action
+                                    <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-default dropdown-info">
+                                    <li>
+                                        <a href="javascript:void(0)" class="js-exportToCSV" data-url="@Url.Action("CSV","ExaminationWhiteList",new { area="CUSrinagarAdminPanel"})" data-otherparam1="printProgramme=@CUSrinagar.Enums.PrintProgramme.UG">
+                                            Download Excel(CSV)
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)" class="js-exportToCSV" data-url="@Url.Action("PrintGazette","ExaminationWhiteList",new { area="CUSrinagarAdminPanel"})" data-otherparam1="printProgramme=@CUSrinagar.Enums.PrintProgramme.UG">
+                                            Print
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="js-table-content" data-url=@Url.Action("ApplicationsList") data-DefaultOrderByColumn="Student_ID">
+            </div>
+            @{Html.RenderPartial("_JSPagerTableFooter");}
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJS{
+   
+}

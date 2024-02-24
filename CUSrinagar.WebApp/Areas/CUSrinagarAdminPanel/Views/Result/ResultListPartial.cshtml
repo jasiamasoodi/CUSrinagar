@@ -1,0 +1,94 @@
+﻿@using CUSrinagar.Models;
+@using CUSrinagar.Enums;
+@using CUSrinagar.Extensions
+@model IEnumerable<CUSrinagar.Models.ResultCompact>
+
+<table class="table table-hover table-bordered ">
+    <thead>
+        <tr>
+            <th>S.No</th>
+            <th data-property="CourseFullName">Course</th>
+            <th data-property="ClassRollNo" title="ClassRollNo">Class No</th>
+            <th data-property="ExamRollNumber" title="Examination Roll Number">Exam No</th>
+            <th data-property="CUSRegistrationNo" class="wd-200">Registration No</th>
+            <th data-property="">Full Name</th>
+            <th>Subjects</th>
+            @*<th title="Total Practical Marks">Internal</th>
+                <th title="Total Theory Marks">External</th>*@
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var itemSTD in Model)
+            {
+                decimal? TotalInternalMarks = 0;
+                decimal? TotalExternalMarks = 0;
+                var _SubjectString = "";
+                <tr>
+                    <td class="js-sno"></td>
+                    <td>@itemSTD.CourseFullName</td>
+                    <td>@itemSTD.ClassRollNo</td>
+                    <td>@itemSTD.ExamRollNumber</td>
+                    <td>@itemSTD.CUSRegistrationNo</td>
+                    <td>@itemSTD.FullName</td>
+                    <td>
+                        @if (itemSTD.SubjectResults != null)
+                        {
+                            foreach (SubjectResult item in itemSTD.SubjectResults)
+                            {
+                                if (!item.HasResult) { continue; }
+                                _SubjectString += item.SubjectFullName + "(";
+                                if (item.InternalStatus != ResultStatus.NotApplicable)
+                                {
+                                    if (item.TotalInternalMarksObtained.HasValue)
+                                    {
+                                        _SubjectString += $"<span title='Internal'>{@item.TotalInternalMarksObtained.Value.ToString("f0")}</span>";
+                                        //if (item.InternalStatus == ResultStatus.P)
+                                        //{ _SubjectString += $"<sup title='Pass'>P,</sup>"; }
+                                        //else
+                                        { _SubjectString += $"<sup title='" + Helper.GetEnumDescription<ResultStatus>(item.InternalStatus.Value) + $"'>{item.InternalStatus.ToString()},</sup>"; }
+                                    }
+                                    else
+                                    { _SubjectString += $"<span title=''>N.A,</span>"; }
+                                }
+
+                                if (item.HasExternalComponent && item.ExternalStatus != ResultStatus.NotApplicable)
+                                {
+                                    if (item.TotalExternalMarksObtained.HasValue)
+                                    {
+                                        _SubjectString += $"<span title='External'>{@item.TotalExternalMarksObtained.Value.ToString("f0")}</span>";
+                                        //if (item.ExternalStatus == ResultStatus.P)
+                                        //{ _SubjectString += $"<sup title='Pass'>P</sup>"; }
+                                        //else
+                                        { _SubjectString += $"<sup title='" + Helper.GetEnumDescription<ResultStatus>(item.ExternalStatus.Value) + $"'>{item.ExternalStatus.ToString()}</sup>"; }
+                                    }
+                                    else
+                                    { _SubjectString += $"<span title=''>N.A</span>"; }
+                                }
+                                _SubjectString += $") | ";
+
+                                TotalInternalMarks += item.TotalInternalMarksObtained.HasValue ? item.TotalInternalMarksObtained.Value : 0;
+                                TotalExternalMarks += item.TotalExternalMarksObtained.HasValue ? item.TotalExternalMarksObtained.Value : 0;
+                            }
+                            <span>@Html.Raw(_SubjectString.TrimEnd(' ').TrimEnd('|').TrimEnd(' '))</span>
+                        }
+                    </td>
+                    @*<td title="Total Internal Marks Obtained">@( TotalInternalMarks.HasValue ? TotalInternalMarks.Value.ToString("f0") : "N.A")</td>
+                        <td title="Total External Marks Obtained">@(TotalExternalMarks.HasValue ? TotalExternalMarks.Value.ToString("f0") : "N.A")</td>*@
+                <td>
+                    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()))
+                    {
+                        <a target="_blank" title="Edit student result" href="@Url.Action("Edit", "Result", new { @area = "CUSrinagarAdminPanel", @PrintProgramme = itemSTD.PrintProgramme, @Semester = itemSTD.Semester, @Student_ID = itemSTD.Student_ID })" class=""><i class="fa fa-edit fa-lg"></i> </a>
+                    }
+                        @*<a title="Semester Marks Card" target="_blank" href="@Url.Action("SemesterMarksCards", "MarksCard", new { @area = "", @PrintProgramme = itemSTD.PrintProgramme, @Semester = itemSTD.Semester, @Student_ID = itemSTD.Student_ID })" class=""><i class="fa fa-print"></i> </a>*@
+
+                        <a title="Marks Sheet" target="_blank" href="@Url.Action("PrintMarksSheet", "Result", new { @area = "CUSrinagarAdminPanel", @PrintProgramme = itemSTD.PrintProgramme, @Semester = itemSTD.Semester, @Student_ID = itemSTD.Student_ID })" class=""><i class="fa fa-print fa-lg"></i> </a>
+
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

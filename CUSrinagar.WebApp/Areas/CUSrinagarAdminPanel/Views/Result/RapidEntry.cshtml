@@ -1,0 +1,307 @@
+﻿@{
+    ViewBag.Title = "CUS::Result Rapid Entry";
+}
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUSrinagarAdminPanel"})">Home</a>
+            </li>
+            <li class="active">Subject Wise Result List</li>
+        </ul><!-- /.breadcrumb -->
+    </div>
+    <div class="col-md-7">
+        @*<h2 class="no-margins">
+                Result Reports
+            </h2>*@
+    </div>
+    <div class="col-md-4">
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12 jsTableContent">
+        <div class="panel panel-primary js-pager-table js-rapid-entry" data-otherparam1="@CUSrinagar.Enums.PrintProgramme.UG">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Result
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        List of Subjects
+                    </small>
+                    <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                        <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                    </span>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="search-box">
+                    <form class="form-inline" action="@Url.Action("SubjectWise","Result")" id="SubjectWiseFormFilters">
+                        <div class="form-group">
+                            <label>Batch</label><br />
+                   
+                            <div class="jsDDLContainer wd-150">
+                                @Html.DropDownList("BatchDDL", new SelectList(ViewBag.Batches, "Value", "Text"), "--All--",
+                               new
+                               {
+                                   @class = "chosen-select jsfilterelement jsBatchDDL",
+                                   @data_column = "SemesterBatch",
+                                   @data_operator = "EqualTo",
+                                    @data_scope = "row1"
+                               })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Choose College</label><br />
+                            <div class="jsDDLContainer wd-150">
+                                @Html.DropDownList("CollegeDDL", new SelectList(ViewBag.College, "Value", "Text"), "--All--",
+                               new
+                               {
+                                   @class = "chosen-select jsfilterelement jsCollegeDDL",
+                                   @data_column = "AcceptCollege_ID",
+                                   @data_operator = "EqualTo",
+                                   @data_tablealias = "S",
+                                   @data_scope ="row1"
+                               })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Programme</label><br />
+                            <div class="wd-140 jsDDLContainer">
+                                @Html.DropDownList("ProgrammeDDL", new SelectList(ViewBag.Programmes, "Value", "Text", (short)CUSrinagar.Enums.Programme.UG), null,
+                                           new
+                                           {
+                                               @class = "form-control chosen-select jsProgrammeDDL jsfilterelement",
+                                               @data_column = "Programme",
+                                               @data_operator = "EqualTo",
+                                               @data_tablealias= "Course",
+                                               @data_scope = "row1"
+                                           })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Choose Course</label><br />
+                            <div class="jsDDLContainer  wd-200">
+                                @Html.DropDownList("Course", new SelectList(ViewBag.Courses, "Value", "Text", (short)CUSrinagar.Enums.Programme.UG), " -- All Courses --",
+                                           new
+                                           {
+                                               @class = "form-control chosen-select jsCourseDDL jsfilterelement",
+                                               @data_column = "Course_ID",
+                                               @data_operator = "EqualTo",
+                                               @data_tablealias = "Course",
+                                               @data_defaulttextvalue = " -- All Courses --,",
+                                               @data_scope="row1"
+                                           })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Choose Semester</label><br />
+                            <div class="jsDDLContainer">
+                                @Html.DropDownList("Semester", new SelectList(ViewBag.Semesters, "Value", "Text"),
+                                          new
+                                          {
+                                              @class = "form-control chosen-select jsSemesterDDL jsfilterelement",
+                                              @data_column = "Semester",
+                                              @data_operator = "EqualTo",
+                                              @data_tablealias = "Comb",
+                                              @data_scope="row1"
+                                          })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Choose Subjects</label><br />
+                            <div class="jsDDLContainer wd-200">
+                                <select required id="SubjectDDL" data-tablealias="SM" class="jsfilterelement chosen-select form-control jsVWSCSubjectDDL" data-column="Subject_ID" data-operator="EqualTo" data-defaulttextvalue="All Subjects," data-scope="row1">
+                                    <option value="" selected>All Subjects</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <select class="jsChangeFilterColumn" data-scope="row1">
+                                    <option value="ClassRollNo" selected="selected">Search by ClassRollNo</option>
+                                    <option value="CUSRegistrationNo">Search by RegistrationNo</option>
+                                    <option value="ExamRollNumber">Search by ExamRollNumber</option>
+                                </select>
+                            </label>
+                            <br />
+                            <input type="text" value="" data-tablealias="" placeholder="ClassRollNo" name="SearchRegNo"
+                                   class="form-control jsfilterelement" data-column="ClassRollNo" data-operator="EqualTo" data-scope="row1" />
+                        </div>
+                        <div class="form-group">
+                            <label class="invisible">for styling purpose</label><br />
+                            <button type="button" class="btn btn-primary btn-sm fa-search-btn js-search"><i class="fa fa-search"></i>&nbsp;Search</button>
+                            <div class="btn-group">
+                                <button data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle">
+                                    Action
+                                    <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-default dropdown-info">
+                                    <li>
+                                        <a href="javascript:void(0)" class="js-exportToCSV" data-url="@Url.Action("RapidEntryListCSV","Result",new { area="CUSrinagarAdminPanel"})" data-otherparam1="printProgramme=@CUSrinagar.Enums.PrintProgramme.UG">
+                                            Download Excel(CSV)
+                                        </a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a href="javascript:void(0)" id="jsShowFileDialog">
+                                            Update From Excel
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <form class="jsMainForm" name="ResultRapidEntryForm" style="font-size:12px;">
+                <div class="js-table-content" data-url=@Url.Action("RapidEntryListPartial", "Result", new { area = "CUSrinagarAdminPanel" }) data-DefaultOrderByColumn="CUSRegistrationNo" data-afterappendingrows="validateRows">
+                </div>
+            </form>
+            @{Html.RenderPartial("_JSPagerTableFooter");}
+        </div>
+    </div>
+</div>
+
+@*MODAL DIALOG START*@
+<div class="modal" id="jsFileDialog" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered wd-650">
+        @using (Html.BeginForm("FromFileUpdator", "Result", FormMethod.Post,
+                                     new
+                                     {
+                                         @class = "jsMainForm form-horizontal",
+                                         @enctype = "multipart/form-data",
+                                         @name = "FromFileUpdator",
+                                         @id = "FromFileUpdator"
+                                     }))
+        {
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Update Result</h4>
+                </div>
+                <div class="modal-body padding-0-10">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4 control-label text-primary">Programme :</label>
+                        <div class="col-sm-8">
+                            @Html.Hidden("FileOfPrintProgramme", "")
+                            <label id="lblDailogPrintProgramme"></label>
+                        </div>
+                    </div>
+                    <hr class="no-margin-top no-margin-bottom" />
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4 control-label text-primary">Semester :</label>
+                        <div class="col-sm-8">
+                            @Html.Hidden("FileOfSemester", "")
+                            <label id="lblDailogSemester"></label>
+                        </div>
+                    </div>
+                    <hr class="no-margin-top no-margin-bottom" />
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4 control-label text-primary">Batch :</label>
+                        <div class="col-sm-8">
+                            @Html.Hidden("FileOfBatch", "")
+                            <label id="lblDailogBatch"></label>
+                        </div>
+                    </div>
+                    <hr class="no-margin-top no-margin-bottom" />
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4 control-label text-primary">College :</label>
+                        <div class="col-sm-8">
+                            @Html.Hidden("FileOfCollege_ID", "")
+                            <label id="lblDailogCollege_ID"></label>
+                        </div>
+                    </div>
+                    <hr class="no-margin-top no-margin-bottom" />
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4 control-label text-primary">Course :</label>
+                        <div class="col-sm-8">
+                            @Html.Hidden("FileOfCourse_ID", "")
+                            <label id="lblDailogCourse_ID"></label>
+                        </div>
+                    </div>
+                    <hr class="no-margin-top no-margin-bottom" />
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4 control-label text-primary">Subject :</label>
+                        <div class="col-sm-8">
+                            @Html.Hidden("FileOfSubject_ID", "")
+                            <label id="lblDailogSubject_ID"></label>
+                        </div>
+                    </div>
+                    <hr class="no-margin-top no-margin-bottom" />
+                    @*<div class="form-group">
+                        <label for="name" class="col-sm-4 control-label text-primary">Result Notification :</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" type="text" name="ResultNotification_ID">
+                        </div>
+                    </div>
+                    <hr class="no-margin-top no-margin-bottom" />
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4 control-label text-primary">Update Result Notification :</label>
+                        <div class="col-sm-8">
+                            <input class="ace checkbox checkbox-inline" type="checkbox" name="UpdateResultNotification" value="False"><span class="lbl"></span>
+                        </div>
+                    </div>
+                    <hr class="no-margin-top no-margin-bottom" />*@
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4 control-label text-primary">Update :</label>
+                        <div class="col-sm-8">
+                            <div class="radio radio-inline">
+                                <label>
+                                    <input name="UpdateField" type="radio" class="ace" value="External">
+                                    <span class="lbl"> External</span>
+                                </label>
+                            </div>
+
+                            <div class=" radio-inline">
+                                <label>
+                                    <input name="UpdateField" type="radio" class="ace" value="Internal" checked="checked">
+                                    <span class="lbl"> Internal</span>
+                                </label>
+                            </div>
+
+                            <div class="radio radio-inline">
+                                <label>
+                                    <input name="UpdateField" type="radio" class="ace" value="Both">
+                                    <span class="lbl"> Both</span>
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+                    <hr class="no-margin-top no-margin-bottom" />
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4 control-label text-primary">File Format:Strictly follow this format</label>
+                        <div class="col-sm-8">
+                            <b>
+                                <small>
+                                    S.No|CUSRegistrationNo|ExamRollNo|ClassRollNo<br />ExternalMarks|InternalMarks<br />InternalAttend_Assesment|ExternalAttend_Assesment<br />SubjectFullName|Status
+                                </small>
+                            </b>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4 control-label text-primary">File :</label>
+                        <div class="col-sm-8">
+                            <input type="file" name="File" id="File" accept=".xls,.xlsx" class="form-control" required />
+                        </div>
+                    </div>
+                    <hr class="no-margin-top no-margin-bottom" />
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" name="jsDialogSubmitBtn" id="jsDialogSubmitBtnk">Update</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@*MODAL DIALOG END*@
+
+@section PageSpecificJS{
+    <script src="~/Content/ThemeAdmin/Content/Scripts/Pages/result-rapid-entry.js"></script>
+
+}

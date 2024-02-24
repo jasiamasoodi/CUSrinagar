@@ -1,0 +1,105 @@
+﻿@{
+    ViewBag.Title = "CUS :: Student List";
+    string currentYear = DateTime.Now.Year + "";
+
+}
+<style>
+    .required {
+        color: black;
+    }
+</style>
+<div class="page-wrapper pager-table-text">
+
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Library Forms
+                            <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                            </span>
+
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="col-sm-12 search-box">
+                            <div class="col-sm-1 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span>Batch<span id="YearValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+
+                                <div>
+                                    @Html.TextBox("Year", DateTime.Now.Year, new { @class = " required form-control jsfilterelement", @data_column = "Year", @data_operator = "EqualTo" })
+                                </div>
+                            </div>
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span>Programme<span id="ProgrammeIdValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div>
+                                    @Html.DropDownList("ProgrammeId", new SelectList(ViewBag.ProgrammeList, "Value", "Text"),
+                                      "--Select--", new { @class = "form-control SearchDDL  required", @data_column = "ProgrammeId", @data_operator = "EqualTo", data_ddltype = "Course", @data_ddlchildtype = "Semester", @data_ddlsubchildtype = "Combination" })
+                                </div>
+                            </div>
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span>Course<span id="CourseIDValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div id="Course">
+                                    @Html.DropDownList("CourseID", new SelectList(ViewBag.CourseList, "Value", "Text"),
+                                           "--Select--", new { @class = "form-control  SearchDDL jsfilterelement required ", @data_column = "CourseID", @data_operator = "EqualTo", @data_ddltype = "Semester", @data_ddlchildtype = "Combination" })
+                                </div>
+                            </div>
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span>Semester<span id="SemesterValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div id="Semester">
+                                    @Html.DropDownList("Semester", new SelectList(ViewBag.SemesterList, "Value", "Text"),
+                                            "--Select--", new { @class = "required SearchDDL jsfilterelement chosen-select tag-input-style ", @data_column = "Semester", @data_operator = "EqualTo", @data_ddltype = "Combination", @data_ddlchildtype = "", @data_ddlsubchildtype = "" })
+
+                                </div>
+                            </div>
+                            <div class="col-sm-4 lbl bigger-120 no-padding-right">
+                                Combination
+                                <div id="Combination">
+                                    @Html.DropDownList("CombinationID", new SelectList(ViewBag.CombinationList, "Value", "Text"), "--Select--", new { @class = "chosen-select form-control jsfilterelement", @data_column = "Combination", @data_operator = "EqualTo" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-1 " style="padding-top: 17px;">
+                                @*<button type="button" class="btn btn-primary fa-search-btn"><i class="fa fa-search"></i>&nbsp;Search</button>*@
+                                <a href="button" class="btn btn-primary JSDownloadBtn"><i class="fa fa-eye"></i>&nbsp;View Form</a>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="js-table-content" data-url=@Url.Action("StudentList", "Library", new {area ="CUCollegeAdminPanel"}) data-DefaultOrderByColumn="FullName">
+
+                    </div>
+                    @*  @{Html.RenderPartial("_JSPagerTableFooter");}*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script>
+        var chilDDLPath = '@Url.Action("_GetChildDDL", "Library", new {area = "CUCollegeAdminPanel" })';
+         var gridPathWithParam= '@Url.Action("LibraryForm", "Library", new {area = "CUCollegeAdminPanel" })';
+        var controllerName = "Library";
+    </script>
+
+    <script src="@Url.Content("~/Scripts/JSChosen.js")"></script>
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSLibrary/Students.js")"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".lf").addClass("active");
+        });</script>
+}
+<style>
+    .filter-btn a {
+        color: white !important
+    }
+</style>
+
+
+
+

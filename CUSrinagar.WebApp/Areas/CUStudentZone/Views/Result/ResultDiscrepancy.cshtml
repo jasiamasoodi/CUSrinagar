@@ -1,0 +1,124 @@
+﻿@model CUSrinagar.Models.ARGPersonalInformation
+@{
+    ViewBag.Title = "Result Discrepancy";
+    CUSrinagar.Models.SubjectResultDiscrepancy _discrepancy = ViewBag.StudentResultDiscrepancy;
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area= "CUSrinagarAdminPanel" })">Home</a>
+        </li>
+        <li>
+            <a href="@Url.Action("","",new { area= "" })" class="">Result Discrepancy</a>
+        </li>
+    </ul>
+}
+
+    <div class="row page-content">
+        @if (1 == 0)
+        {
+            if (ViewBag.ErrorMessage == null && _discrepancy != null)
+            {
+                using (Html.BeginForm("ResultDiscrepancy", "Result", FormMethod.Post, new { @class = "jsMainForm form-horizontal", @id = "" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("Student_ID", _discrepancy.Student_ID)
+                    @Html.Hidden("Semester", _discrepancy.Semester)
+                    @Html.Hidden("SubjectFullName", _discrepancy.SubjectFullName)
+                    @Html.Hidden("Subject_ID", _discrepancy.Subject_ID)
+                    @Html.Hidden("Dated", _discrepancy.Dated)
+
+                    <div class="col-sm-12">
+                        <div class="col-sm-12">
+                            <div class="col-sm-8">
+                                <p>
+                                    <h3>
+                                        Apply for re-assessment of Economics Subject of U.G 5th Semester
+                                    </h3>
+                                </p>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <hr class="no-margin-top" />
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="name" class="col-sm-3 control-label">Registration No:</label>
+                                <div class="col-sm-9">@Model.CUSRegistrationNo</div>
+                            </div>
+
+                            <hr class="no-margin-top" />
+                            <div class="form-group">
+                                <label for="name" class="col-sm-3 control-label">Full Name:</label>
+                                <div class="col-sm-9">@Model.FullName</div>
+                            </div>
+
+                            <hr class="no-margin-top" />
+                            <div class="form-group">
+                                <label for="name" class="col-sm-3 control-label">Semester:</label>
+                                <div class="col-sm-9">@_discrepancy.Semester</div>
+                            </div>
+
+                            <hr class="no-margin-top" />
+                            <div class="form-group">
+                                <label for="name" class="col-sm-3 control-label">Subject:</label>
+                                <div class="col-sm-9">@_discrepancy.SubjectFullName</div>
+                            </div>
+
+                            <hr class="no-margin-top" />
+                            <div class="form-group">
+                                <label for="name" class="col-sm-3 control-label">Remark:</label>
+                                <div class="col-sm-9">
+                                    <textarea name="Remark" id="Remark" class="form-control" maxlength="50" placeholder="Enter your remark here">@_discrepancy.Remark</textarea>
+                                </div>
+                            </div>
+                            <hr class="no-margin-top" />
+                            @if (_discrepancy.SubjectResultDiscrepancy_ID == Guid.Empty)
+                            {
+                                <div class="form-group">
+                                    <label for="name" class="col-sm-3 control-label"></label>
+                                    <div class="col-sm-9 pull-text-right pull-right">
+                                        <button type="submit" value="True" name="CreateNew" id="submitForm" class="btn btn-primary pull-right">Apply</button>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-group">
+                                    <label for="name" class="col-sm-3 control-label"></label>
+                                    <div class="col-sm-9">
+                                        <p class="text-success bold">
+                                            Request done
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <h1 class="text-danger">
+                    @ViewBag.ErrorMessage
+                </h1>
+            }
+        }
+        else
+        {
+            <h1 class="text-danger">
+                Process has been closed
+            </h1>
+        }
+    </div>
+
+@section PageSpecificJSFiles{
+
+}
+
+
+

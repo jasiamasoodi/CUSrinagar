@@ -1,0 +1,173 @@
+﻿
+@using CUSrinagar.Models
+
+@model ARGReprint
+
+@{
+    ViewBag.Title = $"Certificate Courses Registration-{DateTime.UtcNow.Year} ";
+    var currentTab = ViewBag.CurrentTab != null ? ViewBag.CurrentTab : "";
+    string selectedtab = Convert.ToString(ViewBag.SelectedTab + "").ToLower();
+    string mail = $"admission{DateTime.UtcNow.Year}@cusrinagar.edu.in";
+}
+
+<div class="tabbed-info page-row">
+    @if (TempData["response"] != null)
+    {
+        <br />
+        @Html.Raw(TempData["response"])
+    }
+    <ul class="nav nav-tabs">
+        <li class='@(string.IsNullOrEmpty(selectedtab) ? "active" : "")'><a href="#tab1" data-toggle="tab" style="color: black !important;">Instructions</a></li>
+        <li class='@(selectedtab == "reprint" ? "active" : "")'><a href="#PrintTab" id="#PrintTabLink" data-toggle="tab" style="color: black !important;">Re-Print Form / Make Payment</a></li>
+        <li><a href="#tab3" data-toggle="tab" style="color: black !important;">Notifications</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane @( string.IsNullOrEmpty(selectedtab) ? "active" : "")" id="tab1" style="font-size:1.1em;">
+            <h4 class="font-medium nospace">
+                <i class="fa fa-university" aria-hidden="true"></i>
+                Important instructions For Online <strong>Certificate Courses Registration @DateTime.UtcNow.Year</strong>
+            </h4>
+            <p>
+                For any issues / queries you can drop an email at <a href="mailto:@mail">@mail</a>
+                or Call us on <a href="0194-2311340">0194-2311340</a> during office Hours (10:00am - 4:00pm)
+            </p>
+            <hr />
+
+            <p style="font-weight:bold;">
+                <i class="fa fa-arrow-rigcht" aria-hidden="true"></i>
+                Please read and follow the instructions, shown below carefully before filling-up
+                the relevant fields/columns of the application form :
+                <br /><br />
+                <span style="color:red;" class=""><i class="fa fa-arrow-rigcht" aria-hidden="true"></i>Note that no change is allowed after the form is successfully submitted.</span>
+            </p>
+            <ol>
+                <li>
+                    <i class="fa fa-arrow-rigcht" aria-hidden="true"></i>
+                    Applicants are advised to check the eligibility criteria thoroughly before
+                    applying for any Course.
+                </li>
+                <li>
+                    <i class="fa fa-arrow-rigcht" aria-hidden="true"></i>
+                    Applicants are required to have a valid email ID and personal/guardian mobile
+                    number which should be working during the admission process, to enable
+                    University to send alerts, important communications etc.
+                </li>
+                <li>
+                    <i class="fa fa-arrow-rigcht" aria-hidden="true"></i>
+                    <span>Detailed notification(s) can be found or downloaded in the Notifications tab shown above.</span>
+                </li>
+                <li><i class="fa fa-arrow-rigcht" aria-hidden="true"></i>Keep ready a digital passport size photograph (<strong>White Background</strong>) ".jpg", ".bmp" , ".jpeg" or ".png" format of size between 20-70KB, for uploading in prescribed space in the application form.</li>
+            </ol>
+
+            <p class="text-center">
+                <a href="/CertificateCourses/Apply" class="btn btn-success center" style="font-weight:bold;font-size:20px;">
+                    <i class="fa fa-wpforms"></i> Apply Now
+                </a>
+            </p>
+        </div>
+
+        @*---------------- Re-Print / Make Payment -------------------*@
+        <div class="tab-pane @(selectedtab=="reprint"?"active":"")" id="PrintTab">
+            @using (Html.BeginForm("Instructions", "CertificateCourses", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+
+                @*------------------------------------Print Section-----------------------------------*@
+                <div class="col-lg-4">    </div>
+                <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                    <div class="content-wrapper">
+                        <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                            Board Regn No.
+                            <span class="required">
+                                *
+                                @Html.ValidationMessageFor(model => model.FormNo)
+                            </span><br />
+                            @Html.TextBoxFor(model => model.FormNo, new { @class = "form-control jsfilterelement", @maxlength = "150", @autocomplete = "off", @onkeypress = "return forAdmissionRollNo(event);" })
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-lg-4"> </div>
+                <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                    <div class="content-wrapper">
+                        <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                            Batch (Applied On)
+                            <span class="required">
+                                *
+                                @Html.ValidationMessageFor(model => model.Batch)
+                            </span><br />
+                            @Html.TextBoxFor(model => model.Batch, new { @type = "number", @class = "form-control", @min = "2016", @max = "9999",placeholder="yyyy" })
+                        </label>
+                    </div>
+                </div>
+                <div class="col-lg-4">    </div>
+                <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                    <div class="content-wrapper">
+                        <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                            Options
+                            <span class="required">
+                                *
+                            </span><br />
+                            @Html.DropDownList("Options", (IEnumerable<SelectListItem>)ViewBag.Options, string.Empty, new { @class = "form-control", required = "required" })
+                        </label>
+                    </div>
+                </div>
+
+                <br />
+                <p style="text-align:center;">
+                    <span id="hideButtons6">
+                        <input type="submit" id="jsReprint" value=" Proceed " class="btn btn-success" style="font-size:18px;"/>
+                    </span>
+                </p>
+            }
+
+        </div>
+
+        @*-------------------- Notifications --------------------------*@
+        <div class="tab-pane" id="tab3">
+            <h4 class="font-medium nospace">
+                <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp; Notifications
+            </h4><hr />
+
+            @*------------------------ default instructions --------------------*@
+            <ol>
+                @if (ViewBag.ADMNotifications != null)
+                {
+                    foreach (var item in (List<Notification>)ViewBag.ADMNotifications)
+                    {
+                        <li>
+                            <span style="font-size:20px">
+                                @if (item.IsLink)
+                                {
+                                    <a href="http://@item.Link.ToLower().Replace("http://","").Replace("https://","")" target="_blank">@item.Description</a>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Content("~" + item.Link)" target="_blank">@item.Description</a>
+                                }
+                            </span>
+                        </li>
+                    }
+                }
+            </ol>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificCSS{
+    <style>
+        .tabbed-info li {
+            padding: 5px;
+        }
+    </style>
+}
+@section PageSpecificJS{
+    @Scripts.Render("~/bundles/Libraries/jqueryval")
+    <script src="@Url.Content("~/Content/ThemePublic/Libraries/disableBack.js")"></script>
+    <script type="text/javascript">
+    if ('@currentTab' != '') {
+        $('.nav-tabs a[href="#@currentTab"]').trigger('click');
+        }
+        window.oncontextmenu = function () { return false; }
+    </script>
+}

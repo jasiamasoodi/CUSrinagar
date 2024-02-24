@@ -1,0 +1,143 @@
+﻿@model List<CUSrinagar.Models.ARGCoursesApplied>
+
+@using CUSrinagar.Models
+@using CUSrinagar.Extensions
+
+@{
+    ViewBag.Title = $"PG Registration Form {DateTime.UtcNow.Year}- ";
+    ARGFormNoMaster formNoMaster = ViewBag.FormNoMater;
+    int courseCount = ((List<DropDownOptLabelGeneral>)ViewBag.Courses ?? new List<DropDownOptLabelGeneral>()).Count;
+    courseCount = courseCount >= Model.Count ? Model.Count : courseCount;
+}
+
+<div class="row">
+
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped" style="width: 20%">
+            <a href="#" style="color:white">Personal Info</a>
+        </div>
+        <div class="progress-bar progress-bar-striped" style="width: 20%">
+            <a href="#" style="color:white">Academic Qualification</a>
+        </div>
+        <div class="progress-bar progress-bar-striped" style="width: 20%">
+            <a href="#" style="color:white">Stream Preference</a>
+        </div>
+        <div class="progress-bar" style="width: 20%;background-color:whitesmoke;">
+            <span class="text-primary">Documents</span>
+        </div>
+        <div class="progress-bar" style="width: 20%;background-color:whitesmoke;">
+            <span class="text-primary">Payment</span>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="col-sm-12">
+
+                @using (Html.BeginForm("SubjectPreference", "NEPPG", FormMethod.Post, new { @class = "" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" name="programme" value="2" />
+
+                    <div class="row">
+                        <h3>@CUSrinagar.Enums.NEPProgrammesAdmTitle.Post_Graduation_Programmes.GetEnumDescription() Preferences - Step 3</h3>
+                        <div id="response">
+                            @if (ViewBag.ErrorMessage != null)
+                            {
+                                @Html.Raw(ViewBag.ErrorMessage)
+                            }
+                            @if (ViewBag.SuccessMessage != null)
+                            {
+                                <div class="alert alert-success alert-dismissible active" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <strong>Success!</strong> @ViewBag.SuccessMessage
+                                </div>
+                            }
+                        </div>
+                        <hr class="no-margin-top" />
+
+                        @for (int index = 0; index < courseCount; index++)
+                        {
+                            ARGCoursesApplied model = Model[index];
+                            <div class="form-group col-sm-6">
+                                @Html.HiddenFor(model => model[index].Student_ID)
+                                @Html.HiddenFor(model => model[index].Preference)
+                                @Html.HiddenFor(model => model[index].PrintProgramme)
+                                @Html.HiddenFor(model => model[index].Programme)
+                                <label for="ExamName">
+                                    Programme Preference No. <span style="font-size:18px">@(index+1)</span>
+                                    <span class="required">
+                                        @if (index == 0)
+                                        {
+                                            <text>*</text>
+                                        }
+
+                                        @Html.ValidationMessageFor(model => model[index].Course_ID)
+                                    </span>
+                                </label>
+                                @if (index == 0)
+                                {
+                                    @Html.DropDownList("[" + index + "].Course_ID", new SelectList(ViewBag.Courses, "Value", "Text", model.Course_ID), "Choose here", new { @class = "optGroupddl form-control", @required = "required" })
+                                }
+                                else
+                                {
+                                    @Html.DropDownList("[" + index + "].Course_ID", new SelectList(ViewBag.Courses, "Value", "Text", model.Course_ID), "Choose here", new { @class = "optGroupddl form-control moreprefselected", @data_percentile_score_class = $"pscore{index}" })
+                                }
+
+                            </div>
+                            if (formNoMaster.AllowNonCUET == false)
+                            {
+                                <div class="form-group col-sm-3">
+                                    @Html.LabelFor(model => model[index].CUETEntrancePoints)
+
+                                    <span style="font-size:20px" class="required">
+                                        @if (index == 0)
+                                        {
+                                            <text>*</text>
+                                        }
+                                    </span>
+                                    <span class="required">
+                                        @Html.ValidationMessageFor(model => model[index].CUETEntrancePoints)
+                                    </span>
+                                    @if (index == 0)
+                                    {
+                                        @Html.TextBoxFor(model => model[index].CUETEntrancePoints, new { @type = "Number", @class = "form-control", @required = "required" })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(model => model[index].CUETEntrancePoints, new { @type = "Number", @class = $"form-control pscore{index}" })
+                                    }
+
+                                </div>
+                            }
+                            <div class="clearfix margin-bottom-15"></div>
+                        }
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            @if (Model.IsNotNullOrEmpty() && Model.Any(x => x.Student_ID != Guid.Empty) && ViewBag.HasDBCourse)
+                            {
+                                <a href="@Url.Action("DocumentUpload", new {r = Model.First(x=>x.Student_ID!=Guid.Empty).Student_ID.ToString().EncryptCookieAndURLSafe() })" class="btn btn-lg btn-theme pull-right">Next</a>
+                            }
+                            <button type="submit" class="btn btn-lg btn-success pull-right" style="margin-right:10px;margin-left:10px;">Save & Next</button>
+
+                            <a href="@Url.Action("PreviousQualification", new {r = Model.First(x=>x.Student_ID!=Guid.Empty).Student_ID.ToString().EncryptCookieAndURLSafe()})" class="btn btn-lg btn-theme pull-right">Previous</a>
+
+                        </div>
+                    </div>
+                    <br />
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJS{
+    @Scripts.Render("~/bundles/Libraries/jqueryval", "~/bundles/Libraries/jqueryregNEPPG")
+}
+

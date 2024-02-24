@@ -1,0 +1,46 @@
+﻿
+
+@{
+    ViewBag.Title = "UserList";
+    string id = (ViewBag.ProfessorCRClasses_ID).ToString();
+}
+
+<div class="page-wrapper pager-table-text">
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="col-md-12 ">
+                <div class="panel panel-primary js-pager-table" data-otherparam1="@id">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Class List
+                            <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                            </span>
+
+                        </h3>
+                    </div>
+
+
+                    <div class="js-table-content" data-url="@Url.Action("SubjectClassDetailTable", "ProfessorStatistics", new { area = "CUSrinagarAdminPanel" })" data-DefaultOrderByColumn="ProfessorCRClasses_ID">
+
+                    </div>
+                    @{Html.RenderPartial("_JSPagerTableFooter");}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var $pagertable = $(".js-pager-table");
+
+        loadpagertable();
+    });
+</script>
+
+
+
+
+
+
+

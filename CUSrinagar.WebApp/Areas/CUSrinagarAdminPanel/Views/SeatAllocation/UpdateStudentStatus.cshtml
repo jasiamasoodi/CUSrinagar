@@ -1,0 +1,170 @@
+﻿@model CUSrinagar.Models.UpdateStudentStatus
+
+@{
+    ViewBag.Title = "Update Student Status - CUSrinagar";
+}
+<div class="page-wrapper pager-table-text">
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8"></div>
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    @if (TempData["response"] != null)
+                    {
+                        @Html.Raw(TempData["response"])
+                    }
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <i class="fa fa-send"></i> Update Student Status
+                        </h3>
+                    </div>
+                    @using (Html.BeginForm("UpdateStudentStatus", "SeatAllocation", FormMethod.Post, new { @id = "JsForm", @class = "form-horizontal" }))
+                    {
+                        @Html.AntiForgeryToken()
+                    <div class="panel-body">
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right">
+                                <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Programme)
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.DropDownListFor(x => x.Programme, (IEnumerable<SelectListItem>)ViewBag.Programme, string.Empty, new { @class = "chosen-select" })
+                                @Html.ValidationMessageFor(x => x.Programme)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right">
+                                <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Batch)
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(x => x.Batch, new { @type = "number", @maxlength = "4", Value = DateTime.UtcNow.Year })
+                                @Html.ValidationMessageFor(x => x.Batch)
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right">
+                                <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Course_ID)
+                            </label>
+                            <div class="col-sm-8 jsDDLContainer">
+                                <span id="CourseIDDiv">
+                                    @Html.DropDownListFor(x => x.Course_ID, (IEnumerable<SelectListItem>)ViewBag.Courses, new { @class = "chosen-select", @style = "width:80%;", })
+                                </span>
+                                @Html.ValidationMessageFor(x => x.Course_ID)
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right">
+                                <span class="red bigger-110">*</span> @Html.LabelFor(model => model.RollNos)
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.TextAreaFor(x => x.RollNos, new { @style = "width:80%;height:130px;" })
+                                @Html.ValidationMessageFor(x => x.RollNos)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right">
+                                <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Course_ID)
+                            </label>
+                            <div class="col-sm-8 jsDDLContainer">
+                                    @Html.DropDownListFor(x => x.StudentSelectionStatus, (IEnumerable<SelectListItem>)ViewBag.SelectionStatus, new { @class = "chosen-select", @style = "width:80%;", })
+                                 @Html.ValidationMessageFor(x => x.StudentSelectionStatus)
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right">
+
+                            </label>
+                            <div class="col-sm-6 ">
+                                <div class="col-sm-1" style="padding-top: 17px;">
+                                    <button type="submit" class="btn btn-primary ">&nbsp; Update</button>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificStyle{
+    <style>
+        .filter-btn a {
+            color: white !important
+        }
+
+        .required {
+            color: black;
+        }
+
+        .field-validation-error {
+            color: red !important;
+        }
+
+        input[type='text'] {
+            width: 300px !important;
+        }
+
+        .multiselect-container {
+            max-height: 300px !important;
+        }
+
+        @@media screen and (max-width: 600px) {
+            .multiselect-container {
+                max-width: 200% !important;
+            }
+
+            #SMSRegarding, #OtherPhoneNo, #Message {
+                width: 100% !important;
+            }
+        }
+    </style>
+}
+@section PageSpecificJS
+{
+    @Scripts.Render("~/bundles/Libraries/jqueryval")
+    @*  <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/SMS/JSSMS.js")"></script>*@
+    <script>
+        $("body").on("change", "#JsForm #Programme", function () {
+            var programmeElement = $("#JsForm #Programme");
+            var batchElement = $("#JsForm #Batch");
+
+            var prog = programmeElement.val();
+            var batch = batchElement.val();
+            $.ajax({
+                async: true,
+                url: "/CUSrinagarAdminPanel/SeatAllocation/_GetCoursesDDL",
+                type: "POST",
+                data: JSON.stringify({
+                    Programme: prog,
+                }),
+                datatype: "html",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    $("#CourseIDDiv").empty().html(response);
+                    ChosenStyle();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('status code: ' + jqXHR.status + '\n Please check your internet connection or refresh and try again.');
+                }
+            });
+            $("#RollNos").focusout(function () {
+                var rollno = $(this).val();
+                $(this).val('').val(rollno.replace(/(\r\n|\n|\r|\s)/gm, ""));
+            });
+
+        });
+    </script>
+}  

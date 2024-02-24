@@ -1,0 +1,113 @@
+﻿@{
+    Layout = null;
+}
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th>Services</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody style="font-size:16px">
+        <tr>
+            <td>Application Form for Issuing of Degree Certificate for passout batches Only</td>
+            <td><a class="btn btn-primary" tabindex="1" href='@Url.Action( "SearchStudent","ApplicationForms", new { area = string.Empty })'>Apply Now</a></td>
+        </tr>
+        <tr>
+            <td>Format for Subject Structure/Creating New Subjects as per NEP-2020</td>
+            <td><a class="btn btn-primary" tabindex="1" href='@Url.Content("~/foldermanager/Downloads/NEP-SubjectFormat.xlsx")' title="Click here to download as excel">Download</a></td>
+        </tr>
+        <tr>
+            <td>Format for Subject Structure/Creating New Subjects</td>
+            <td><a class="btn btn-primary" tabindex="1" href='@Url.Content("~/foldermanager/Downloads/nCUSSubjectStructureFormat.xlsx")' title="Click here to download as excel">Download</a></td>
+        </tr>
+        <tr>
+            <td>Application form for CORRECTION in Name/Parentage/Sub-Caste/DOB</td>
+            <td><a class="btn btn-primary" tabindex="2" href="@Url.Action( "SearchForCorrection","ApplicationForms", new { area = string.Empty })">Apply Now</a></td>
+        </tr>
+        <tr>
+            <td>
+                Application form for issuance of DUPLICATE/ GRADE TRANSCRIPT
+            <td><a class="btn btn-primary" tabindex="2" download="duplicate_transcript" href='@Url.Content("~/FolderManager/Downloads/duplicate transcript.pdf")' title="Click here to download">Download</a></td>
+        </tr>
+        <tr>
+            <td>
+                Application form for issuing of DEGREE Certificate (In-Advance) / DUPLICATE DEGREE Certificate
+            <td>
+                <a class="btn btn-primary" tabindex="2" download="Degree_Certificate_Form_CUS" href='@Url.Content("~/foldermanager/notification/degreecertificateform.pdf")' title="Click here to download">Download</a>
+            </td>
+        </tr>
+        @*<tr>
+            <td>
+                Regulations Governing 4-Year Under-Graduate Programmes as per NEP-2020
+            <td>
+                <a class="btn btn-primary" tabindex="2" download="Regulations Governing 4-yr UG NEP CUS" href='@Url.Content("~/foldermanager/Downloads/Regulations Governing 4-yr UG NEP CUS.pdf")' title="Click here to download">Download</a>
+            </td>
+        </tr>*@
+        <tr>
+            <td>
+                Job Application refund form
+            <td>
+                <a class="btn btn-primary" tabindex="2" download="Fee_Refund_Form_CUS" href='@Url.Content("~/foldermanager/Downloads/JobFeeRefundformcuSrinagar.pdf")' title="Click here to download">Download</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Admission Fee Refund Policy of the Cluster University of Srinagar
+            <td>
+                <a class="btn btn-primary" tabindex="2" download="adm_Fee_Refund_Policy_CUS" href='https://www.cusrinagar.edu.in/foldermanager/notification/newdoc0825202214.35.pdf' title="Click here to download">Download</a>
+            </td>
+        </tr>
+        <tr>
+            <td>Application for inter-University Migration/Copy of entries from the Register of Students </td>
+            <td><a class="btn btn-primary" tabindex="1" href='@Url.Action( "Form","Migration", new { area = string.Empty })'>Apply Now</a></td>
+        </tr>
+        <tr>
+            <td>Application for issuance of Attempt Certificate</td>
+            <td><a class="btn btn-primary" tabindex="1" href='@Url.Action( "Index","AttemptCertificate", new { area = string.Empty })'>Apply Now</a></td>
+        </tr>
+        <tr>
+            <td>Application for Verification of Academic Certificates</td>
+            <td><a class="btn btn-primary" tabindex="1" href='@Url.Action( "Search","ApplicationForms", new { area = string.Empty })'>Apply Now</a></td>
+        </tr>
+        <tr>
+            <td>General / Open Elective choice filling form</td>
+            <td><a class="btn btn-primary" tabindex="2" download="Choice-Filling-Form" href='@Url.Content("~/FolderManager/Downloads/Choice filling Form Generic and Open Elective Courses.pdf")' title="Click here to download">Download</a></td>
+        </tr>
+        <tr>
+            <td>Cluster University Prospectus - 2019 </td>
+            <td><a class="btn btn-primary" tabindex="2" download="Prospectus-Cus" href='@Url.Content("~/FolderManager/Downloads/Prospectus.pdf")' title="Click here to download">Download</a></td>
+        </tr>
+        <tr>
+            <td>Application form for appointment as Assistant Professor/Teaching Assistant for Academic Session- @(DateTime.Now.Year + 1)</td>
+            <td><a class="btn btn-primary" target="_blank" tabindex="2" download="Contractual-form" href='https://jobs.cusrinagar.edu.in/'>Apply Here</a></td>
+        </tr>
+        <tr>
+            <td>
+                Student Refund Application form
+            <td>
+                <a class="btn btn-primary" tabindex="2" download="Fee_Refund_Form_CUS" href='@Url.Content("~/foldermanager/Downloads/StudentRefundForm.pdf")' title="Click here to download">Download</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Application for early EXIT from 5-Year Integrated Programme
+            <td>
+                <a class="btn btn-primary" tabindex="2" download="CUS_ExitFormOfIntegrated" href='@Url.Content("~/foldermanager/Downloads/ExitFormOfIntegrated.pdf")' title="Click here to download">Download</a>
+            </td>
+        </tr>
+        @*<tr>
+                <td>Application form for Non-Teaching Posts</td>
+                <td><a class="btn btn-primary" tabindex="2" download="Non-Teaching-Form" href='@Url.Content("~/FolderManager/Downloads/AppForm-NonTeaching.pdf")' title="Click here to download">Download</a></td>
+            </tr>
+            <tr>
+                <td>Application form for the post of Controller Examinations</td>
+                <td><a class="btn btn-primary" tabindex="2" download="CoE-Form" href='@Url.Content("~/FolderManager/Downloads/CoE-Form.pdf")' title="Click here to download">Download</a></td>
+            </tr>
+            <tr>
+                <td>Application form for the post of Vice Chancellor</td>
+                <td><a class="btn btn-primary" tabindex="2" download="VC Application Form" href='@Url.Content("~/FolderManager/Downloads/Application-Format-VC-CUS.pdf")' title="Click here to download">Download</a></td>
+            </tr>*@
+    </tbody>
+</table>

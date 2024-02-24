@@ -1,0 +1,141 @@
+﻿
+@model  CUSrinagar.Models.ResultAnomalies
+@{
+    ViewBag.Title = "CUS :: Result Anomalies";
+
+}
+<div class="row">
+    <div class="col-md-12">
+
+        <hr class="no-margin-top" />
+
+        <!--External section-->
+        <div class="page-content">
+            <div class="row page-row">
+                <div class="content-wrapper col-md-10 col-sm-7 jsSingleContent"></div>
+                <div class="col-md-12 jsTableContent">
+                    <div class="panel panel-primary js-pager-table">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Result Anomalies
+
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="search-box">
+
+                                @using (Html.BeginForm("ResultAnomaly", "Result", FormMethod.Post, new { enctype = "multipart/form-data", @name = "validation-form", @id = "validation-form", @class = "form-horizontal", @role = "form" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.HiddenFor(model => model.Student_ID, new
+                                                                   {
+                                                                       @class = "form-control jsfilterelement",
+                                                                       required = "required",
+                                                                       @data_column = "Student_ID",
+                                                                       @data_operator = "EqualTo"
+                                                                   });
+                                    @Html.HiddenFor(model => model.Subject_Id, new
+                                                                   {
+                                                                       @class = "form-control jsfilterelement",
+                                                                       required = "required",
+                                                                       @data_column = "Subject_Id",
+                                                                       @data_operator = "EqualTo"
+                                                                   });
+                                    @Html.HiddenFor(model => model.ResultNotification_Id);
+                                    @Html.HiddenFor(model => model.ExamForm_Id, new
+                                                                   {
+                                                                       @class = "form-control jsfilterelement",
+                                                                       required = "required",
+                                                                       @data_column = "ExamForm_Id",
+                                                                       @data_operator = "EqualTo"
+                                                                   });
+                                    @Html.HiddenFor(model => model.Result_Id);
+                                    @Html.HiddenFor(model => model.PrintProgramme);
+                                    @Html.HiddenFor(model => model.Semester);
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label no-padding-right">
+                                            <span class="red bigger-110">*</span> @Html.LabelFor(model => model.AnomalyType)
+
+                                        </label>
+                                        <div class="col-sm-6 ">
+
+                                            @Html.DropDownListFor(model => model.AnomalyType, new SelectList(ViewBag.ResultAnomalys, "Value", "Text"),
+                                                        "--Select--", new { @class = "chosen-select tag-input-style  width-100" })
+
+
+
+
+                                        </div>
+                                        <div class="col-sm-2">
+                                            @Html.ValidationMessageFor(model => model.AnomalyType, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label no-padding-right">
+                                            <span class="red bigger-110">*</span> @Html.LabelFor(model => model.TimeSpan)
+
+                                        </label>
+                                        <div class="col-sm-6 ">
+
+                                            @Html.TextBoxFor(model => model.TimeSpan, new { @class = "width-100" })
+
+
+
+                                        </div>
+                                        <div class="col-sm-2">
+                                            @Html.ValidationMessageFor(model => model.TimeSpan, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label no-padding-right">
+                                            <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Reason)
+
+                                        </label>
+                                        <div class="col-sm-6 ">
+
+                                            @Html.TextAreaFor(x => x.Reason, new { @class = "width-100" })
+
+
+                                        </div>
+                                        <div class="col-sm-2">
+                                            @Html.ValidationMessageFor(model => model.Reason, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label no-padding-right"></label>
+                                        <div class="col-sm-8">
+                                            <button type="submit" class="btn btn-sm btn-primary save-button">
+                                                <i class="ace-icon fa fa-check"></i>
+                                                Save
+                                            </button>
+
+                                            <a id="cData1" href="/CUSrinagarAdminPanel/Result/Edit?PrintProgramme=@CUSrinagar.Enums.PrintProgramme.IH&&Semester=2&&Student_ID=@Model.Student_ID" class="fm-button ui-state-default ui-corner-all fm-button-icon-left btn btn-sm btn-danger">
+                                                <i class="ace-icon fa fa-times"></i>Close
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="js-table-content" data-url=@Url.Action("ResultAnomalyList", "Result", new { area = "CUSrinagarAdminPanel" }) data-DefaultOrderByColumn="CreatedOn">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section PageSpecificJSFiles{
+    <script>
+        $(document).ready(function ($) {
+            var $pagertable = $(".js-pager-table");
+            filtergrid($pagertable);
+        });
+    </script>
+}
+

@@ -1,0 +1,84 @@
+﻿@using CUSrinagar.Extensions
+
+@model List<CUSrinagar.Models.StudentPayment>
+@{
+    ViewBag.Title = "Student Info ";
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+
+        <li>
+            <a href="#" class="active">Admission Forms</a>
+        </li>
+    </ul>
+}
+<div class="page-content">
+    <div class="row panel panel-success ">
+        <div class="col-lg-12 col-md-12">
+            <div class="tab-pane ">
+                @{ int i = 1; int prevsem = 0;}
+                <div class="table-responsive panel">
+                    <table class="table">
+                        <tbody>
+
+                            <tr>
+                                <td class="text-success"> S.No</td>
+                                <td class="text-success"> Semester</td>
+                                <td class="text-success"> Type</td>
+                                <td class="text-success"> Amount</td>
+                                <td class="text-success"> Payment Date</td>
+                                <td class="text-success"> PaymentType</td>
+                                <td class="text-success"> Txn Reference No</td>
+                            </tr>
+                            @foreach (var admissionForm in Model.OrderBy(x => x.Semester).ThenBy(x => x.PaymentOn))
+                            {
+                                if (admissionForm.Semester != (CUSrinagar.Enums.Semester)prevsem)
+                                {
+                                    <tr class="tdd"><td class="tdd" colspan="7" style="background-color:#f5f5f5"></td></tr>
+                                    <tr class="tdd"><td class="tdd" colspan="7" style="background-color:#f5f5f5"></td></tr>
+                                }
+
+                                <tr>
+                                    <td>@i</td>
+                                    @if ((short)(admissionForm?.Semester ?? 0) <= 0)
+                                    {
+                                        <td></td>
+                                    }
+                                    else if (admissionForm.ModuleType == (int)CUSrinagar.Enums.PaymentModuleType.SemesterAdmission)
+                                    {
+                                        <td>@admissionForm.Semester &amp; @((short)(admissionForm.Semester) + 1)</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@admissionForm.Semester</td>
+                                    }
+                                    <td>@{string mtype = ((CUSrinagar.Enums.PaymentModuleType)admissionForm.ModuleType).ToString();} @mtype</td>
+                                    <td>@admissionForm.Amount</td>
+                                    <td>@admissionForm.PaymentOn</td>
+                                    <td>@admissionForm.PaymentType.GetEnumDescription()</td>
+                                    <td>@admissionForm.TxnReferenceNo</td>
+                                </tr>
+                                prevsem = (int)admissionForm.Semester;
+                                i++;
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+<style>
+    .tdd {
+        border: none !important;
+    }
+</style>
+
+
+
+

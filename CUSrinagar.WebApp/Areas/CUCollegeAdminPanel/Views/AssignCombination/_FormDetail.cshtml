@@ -1,0 +1,404 @@
+﻿@model CUSrinagar.Models.ARGPersonalInformation
+
+@using CUSrinagar.Extensions
+
+<div style="margin:0 auto;width:909px;padding:10px 10px">
+    <div class="center">
+        <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" style="width:90px;height:68px;" />
+        <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+        <br />
+        @{int year = Model.CreatedOn.Year == 1 ? DateTime.UtcNow.Year : Model.CreatedOn.Year;}
+        @if (Model.StudentFormNo.ToLower() != "preview")
+        {
+            <strong style="font-size:20px;">
+                Registration Form For Admission @year &nbsp;&nbsp;&nbsp;(@ViewBag.AppliedFor)
+            </strong>
+        }
+        else
+        {
+            <strong style="color:red;">
+                This is a preview. Please do not print this Form.<br />Go to previous browser tab to final submit the form or make corrections (if required)
+            </strong>
+        }
+    </div>
+    <table>
+        <tr>
+            <td colspan="3">
+                @if ((ViewBag.AppliedFor + "").ToLower().Contains("integrated") || (ViewBag.AppliedFor + "").ToLower().Trim() == "graduation")
+                {
+                    <strong>
+                        Is Provisional Admission :
+                        @{var prov = (Model.IsProvisional ?? false) ? "YES" : "NO";}
+                        @prov
+                    </strong>
+                }
+                else
+                {
+                    <text>Previous University Regn. No. : </text>
+                    @Model.PreviousUniversityRegnNo
+                }
+            </td>
+            <td colspan="3"><b style="float:right !important;">Form No. : @Model.StudentFormNo</b></td>
+        </tr>
+        <tr>
+            <td colspan="4">Board Registration No.: @Model.BoardRegistrationNo</td>
+
+            <td rowspan="5" class="center">
+                <img class="img-responsive" src="@Url.Content(Model.Photograph)" width="150" />
+            </td>
+        </tr>
+        <tr>
+            <td>Name</td>
+            <td>@Model.FullName</td>
+            <td>Gender</td>
+            <td>@Model.Gender</td>
+        </tr>
+        <tr>
+            <td>Father's Name</td>
+            <td>@Model.FathersName</td>
+            <td>Religion</td>
+            <td>@Model.Religion</td>
+
+        </tr>
+        <tr>
+            <td>Mother's Name</td>
+            <td>@Model.MothersName</td>
+            <td>Mobile</td>
+            <td>@Model.StudentAddress.Mobile</td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td>@Model.StudentAddress.Email</td>
+
+            <td>Category</td>
+            <td>@Model.Category</td>
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td colspan="2">@Model.StudentAddress.PermanentAddress</td>
+            <td>DOB</td>
+            <td><b>@Model.DOB.ToString("dd-MM-yyyy")</b> </td>
+        </tr>
+        <tr>
+            <td>Pincode</td>
+            <td>@Model.StudentAddress.PinCode</td>
+            <td>Block</td>
+            <td colspan="2">@Model.StudentAddress.Block</td>
+        </tr>
+        <tr>
+            <td>Tehsil</td>
+            <td>@Model.StudentAddress.Tehsil</td>
+            <td>District</td>
+            <td colspan="2">@Model.StudentAddress.District</td>
+        </tr>
+        <tr>
+            <td>Assembly Constituency</td>
+            <td colspan="2">@Model.StudentAddress.AssemblyConstituency</td>
+            <td>Parliamentary Constituency</td>
+            <td>@Model.StudentAddress.ParliamentaryConstituency</td>
+        </tr>
+        <tr>
+            @if (!string.IsNullOrWhiteSpace(Model.Preference))
+            {
+                <td>State</td>
+                <td colspan="2">@Model.StudentAddress.State</td>
+                <td>Course Preference</td>
+                <td colspan="2"><strong>@Model.Preference</strong></td>
+            }
+            else
+            {
+                <td>State</td>
+                <td colspan="4">@Model.StudentAddress.State</td>
+            }
+        </tr>
+    </table>
+
+    @if (Model.AcademicDetails.IsNotNullOrEmpty())
+    {
+        <h3>Academic Details</h3>
+        <table>
+            <tr>
+                <th>Exam Name</th>
+                <th>Stream</th>
+                <th>Session</th>
+                <th>Year</th>
+                <th>Roll No</th>
+                <th>Max Marks</th>
+                <th>Marks Obt</th>
+                <th>%age</th>
+            </tr>
+            @if (Model.AcademicDetails != null)
+            {
+                foreach (var item in Model.AcademicDetails)
+                {
+                    <tr>
+                        <td rowspan="2">@item.ExamName</td>
+                        <td>@item.Stream</td>
+                        <td>@item.Session</td>
+                        <td>@item.Year</td>
+                        <td>@item.RollNo</td>
+                        <td>@item.MaxMarks</td>
+                        <td>@item.MarksObt</td>
+                        <td>@item.Percentage</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"><b>Subject(s)</b>: @item.Subjects</td>
+                        <td colspan="3"><b>Board/University</b>: @item.ExamBody</td>
+                    </tr>
+                }
+            }
+        </table>
+    }
+
+    <div>
+        <h3>Courses Applied</h3>
+        <table>
+            <tr>
+                <th>
+                    S.No.
+                </th>
+                <th>
+                    Course Code
+                </th>
+                <th>
+                    Course Name
+                </th>
+            </tr>
+
+            <tbody>
+
+                @{int sno = 0;}
+                @foreach (var item in Model.CoursesApplied ?? new List<CUSrinagar.Models.ARGCoursesApplied>())
+                {
+                    <tr class="dontbreakInside">
+                        <td> @(sno + 1).</td>
+                        <td><b> @item.CourseCode</b></td>
+                        <td> @item.CourseName</td>
+                        @{sno++;}
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+        <br />
+    </div>
+    <div class="dontbreakInside" style="width:100% !important">
+        <h3>Declaration by the Applicant</h3>
+        <p style="width:100%;text-align:justify">
+            I hereby declare that all statements made in this application form are true and the copies of the testimonials
+
+            enclosed are genuine to the best of my knowledge, and in case the above information or my eligibility is found incorrect at any
+
+            stage my Admission & Application Form shall be rejected summarily without any notice in this regard..
+
+            <br /><br />
+            <span class="pull-left ">Place:<br />Dated :</span>
+
+            <strong class="pull-right">
+                <br />
+                Signature of the Applicant
+            </strong>
+        </p>
+    </div>
+    <br />
+    <p class="breakpagehere"></p>
+    @{int Fee = Model.TotalFee; string FeeInWords = "";}
+    @if (Model.StudentFormNo.ToLower() != "preview")
+    {
+        FeeInWords = Fee.ToText(Language.English).ToUpper() + " RUPEES ONLY";
+
+        <div class="blankspace"></div>
+        <div class="dontbreakInside" style="border:1px solid black;padding:10px;">
+            <div class="center">
+                <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" style="width:90px;height:68px;" />
+                <img src="~/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                <h3>Admission / Registration @year (@ViewBag.AppliedFor)</h3>
+                <span style="text-align:center;">Acknowledgement Slip</span>
+            </div>
+            <hr />
+
+            <p>
+                Printed on : <strong>@DateTime.UtcNow.ToLongDateString()</strong>
+                <span style="float:right">Form No. : <strong>@Model.StudentFormNo</strong></span>
+
+            </p>
+            <hr />
+            <p>
+                Received an application form from Mr/Ms <strong style="word-break:break-all !important;">@Model.FullName </strong> .
+                <br /><br /><br /><br />
+                Dated :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/@DateTime.Now.Year
+                <strong style="float:right;">Signature of Dealing Assistant or Officer</strong>
+            </p>
+
+        </div>
+        <p class="breakpagehere"></p>
+
+        if (Fee != 0)
+        {
+            <div class="dontbreakInside">
+                <div class="center">
+                    <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                    <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" class="pull-left" style="width:90px;height:68px;" />
+                    <img src="/Content/ThemePublic/PrintImages/JKB.jpg" class="pull-right" style="width:180px;height:60px;" />
+                    <h3 style="margin:0 !important;padding-bottom:0 !important">University Copy</h3>
+                    <strong style="text-align:center">Admission / Registration @year (@ViewBag.AppliedFor)</strong>
+                </div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Form No.</td>
+                            <td>@Model.StudentFormNo</td>
+                            <td>Account No.</td>
+                            <td><b>0005040500047778</b></td>
+                        </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td>@Model.FullName</td>
+                            <td>Parentage</td>
+                            <td>@Model.FathersName</td>
+                        </tr>
+
+                        <tr>
+                            <td>No. Of Courses</td>
+                            <td>@Model.CoursesApplied.Count()</td>
+                            <td>Contact</td>
+                            <td>@Model.StudentAddress.Mobile</td>
+                        </tr>
+                        <tr>
+                            <td>Amount</td>
+                            <td>&#8377; @Fee</td>
+                            <td>Amount in words</td>
+                            <td>@FeeInWords</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="center">
+                                <br />
+                                Signature of Applicant
+                            </td>
+                            <td colspan="2" class="center">
+                                <br />
+                                Bank Seal and Sign
+                            </td>
+                        </tr>
+                    </tbody>
+
+
+                </table>
+            </div>
+            <br />
+            <fieldset class="center" style="border:0;border-top:1px dashed black;">
+                <legend>Cut here</legend>
+            </fieldset>
+
+            <div class="dontbreakInside">
+                <div class="center">
+                    <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                    <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" class="pull-left" style="width:90px;height:68px;" />
+                    <img src="/Content/ThemePublic/PrintImages/JKB.jpg" class="pull-right" style="width:180px;height:60px;" />
+                    <h3 style="margin:0 !important;padding-bottom:0 !important">Student Copy</h3>
+                    <strong style="text-align:center">Admission / Registration @year (@ViewBag.AppliedFor)</strong>
+                </div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Form No.</td>
+                            <td>@Model.StudentFormNo</td>
+                            <td>Account No.</td>
+                            <td><b>0005040500047778</b></td>
+                        </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td>@Model.FullName</td>
+                            <td>Parentage</td>
+                            <td>@Model.FathersName</td>
+                        </tr>
+
+                        <tr>
+                            <td>No. Of Courses</td>
+                            <td>@Model.CoursesApplied.Count()</td>
+                            <td>Contact</td>
+                            <td>@Model.StudentAddress.Mobile</td>
+                        </tr>
+                        <tr>
+                            <td>Amount</td>
+                            <td>&#8377; @Fee</td>
+                            <td>Amount in words</td>
+                            <td>@FeeInWords</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="center">
+                                <br />
+                                Signature of Applicant
+                            </td>
+                            <td colspan="2" class="center">
+                                <br />
+                                Bank Seal and Sign
+                            </td>
+                        </tr>
+                    </tbody>
+
+
+                </table>
+            </div>
+            <br />
+            <fieldset class="center" style="border:0;border-top:1px dashed black;">
+                <legend>Cut here</legend>
+            </fieldset>
+
+            <div class="dontbreakInside">
+                <div class="center">
+                    <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                    <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" class="pull-left" style="width:90px;height:68px;" />
+                    <img src="/Content/ThemePublic/PrintImages/JKB.jpg" class="pull-right" style="width:180px;height:60px;" />
+                    <h3 style="margin:0 !important;padding-bottom:0 !important">Bank Copy</h3>
+                    <strong style="text-align:center">Admission / Registration @year (@ViewBag.AppliedFor)</strong>
+                </div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Form No.</td>
+                            <td>@Model.StudentFormNo</td>
+                            <td>Account No.</td>
+                            <td><b>0005040500047778</b></td>
+                        </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td>@Model.FullName</td>
+                            <td>Parentage</td>
+                            <td>@Model.FathersName</td>
+                        </tr>
+
+                        <tr>
+                            <td>No. Of Courses</td>
+                            <td>@Model.CoursesApplied.Count()</td>
+                            <td>Contact</td>
+                            <td>@Model.StudentAddress.Mobile</td>
+                        </tr>
+                        <tr>
+                            <td>Amount</td>
+                            <td>&#8377; @Fee</td>
+                            <td>Amount in words</td>
+                            <td>@FeeInWords</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="center">
+                                <br />
+                                Signature of Applicant
+                            </td>
+                            <td colspan="2" class="center">
+                                <br />
+                                Bank Seal and Sign
+                            </td>
+                        </tr>
+                    </tbody>
+
+
+                </table>
+            </div>
+        }
+        <br />
+        <br />
+    }
+</div>

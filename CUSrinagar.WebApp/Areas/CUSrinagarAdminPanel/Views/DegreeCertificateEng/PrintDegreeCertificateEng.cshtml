@@ -1,0 +1,247 @@
+﻿@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@using CUSrinagar.Models
+
+@model List<DegreeCertificate>
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Degree Certificate</title>
+    <style type="text/css">
+        @@media print {
+            .noneOnPrint {
+                display: none;
+            }
+
+            @@page {
+                size: A4 portrait;
+            }
+        }
+    </style>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=AR+One+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=AR+One+Sans&family=Young+Serif&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
+
+</head>
+<body style="background: #e0e0e0;margin: auto;vertical-align: middle;display: table;">
+    @if (Model.IsNotNullOrEmpty())
+    {
+        foreach (var item in Model)
+        {
+            @*if (((ViewBag.PrintProgramme != CUSrinagar.Enums.PrintProgramme.UG && ViewBag.PrintProgramme != CUSrinagar.Enums.PrintProgramme.IH)
+                || item.IsLateralEntry == true
+                || item.CourseFullName.ToLower().Contains("b.ed"))
+                && item.CollegeFullName.ToLower().Contains("engineering") == false
+                && (item.PreviousUniversityRegnNo ?? "").ToLower().Contains("cus") == false)
+                {
+                    if (item.OtherUnivMigrationReceivedOn == null)
+                    {
+                        <div class="noneOnPrint" style="text-align:center;background: white;padding:0;margin: 0;overflow: hidden;box-sizing: border-box;width: 210mm;height: 10mm;position:relative;page-break-after: always;">
+                            <strong>@item.CUSRegistrationNo has not submitted his/her other University Migration Certificate</strong>
+                        </div>
+                        continue;
+                    }*@
+            //}
+
+            var base64 = Convert.ToBase64String(item.QRCode);
+            var QRImgSrc = $"data:image/png;base64,{base64}";
+            <section style="background: white;padding:0;margin: 0;overflow: hidden;box-sizing: border-box;width: 210mm;height: 297mm;position:relative;page-break-after: always;">
+                @if (item.IsValidated)
+                {
+                }
+                else
+                {
+                    <ol>
+                        <li style="color:red;font-size:large">Degree Certificate not validated.</li>
+                        <li style="color:red;font-size:large;">Please check whether all the details are correct like Name, Course, CGPA, Registration, ExamRollNumber, College, date of passing.</li>
+                        <li style="color:red;font-size:large">Check QR Code details using QR Code scanners.</li>
+
+                    </ol>
+                }
+                @if (item.IsPrinted)
+                {
+                    <ol>
+                        <li style="color:red;font-size:large">Already Printed On @(item.PrintedOn.Value.ToString("dd-MMM-yyyy")).</li>
+                    </ol>
+                }
+                <div style="margin:0mm;margin-right: 9.5mm;margin-left: 9.5mm;margin-top:13mm;font-family: monospace;">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td style="font-family:'Gandhara Suls Regular';text-align:right;font-size:7mm;width:130mm;color:#648d1b;line-height:7mm;">
+                                    <strong>
+                                        <span>کلسٹر</span><br />
+                                        <span>یونورسٹِی</span><br />
+                                        <span>سِرینگر</span>
+                                    </strong>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <!---Header Sign Section Begins-->
+                    <center>
+                        <table border="0" class="" style="margin-top:5mm;font-size:3.4mm;">
+                            <tbody>
+                                <tr>
+                                    <td style="width:107mm;text-align:left;">
+                                        <b>Sr.No.:- @item.DispatchNumber.ToUpper()</b><span style="font-size:4.7mm">/</span>
+                                        <b title="issue number / stamp count number/ certificate count number">@item.IssueNumber.ToString("D5")</b><span style="font-size:4.6mm">/</span>
+                                        <b title="serial number">@item.SerialNumber.ToString("D5")</b>
+                                    </td>
+                                    <td style="width:72mm;text-align:right;">
+                                        <b>@item.ExamRollNumber/@item.CUSRegistrationNo.ToUpper()</b>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr style="margin:0mm;margin-top:0.3mm;margin-bottom: 0mm;width:180mm;" />
+                    </center>
+                    <!---Footer Sign Section Ends-->
+                    <!--General Info Section Begins-->
+                    <center>
+                        <table border="0" style="text-align:center;line-height:11.5mm;">
+                            <tbody style="">
+                                <tr style="line-height:15mm;">
+                                    <td style="font-size: 6.00mm;">on the recommendation of the Academic Council</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <img src="https://www.cusrinagar.edu.in/@Url.Content(item.Photograph)" style="width:53mm;height:48mm" data-rotation="0" title="click to rotate image">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="        font-size: @((item.FullName?.Length ?? 0) > 23 ? "7mm" : "8mm"); font-family: 'Roboto Slab', serif; color: #8b0000;">
+                                        <span style="text-transform: capitalize">
+                                            @(string.IsNullOrEmpty(item.FullName)
+        ? "$ ############## $" : item.FullName.ToLower())
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr><td style="letter-spacing: 0mm; font-size: 6mm; padding-top: 2.5mm;">is admitted to the</td></tr>
+                                <tr>
+                                    <td style="font-size: 8mm; letter-spacing: 0.5mm; font-family: 'AR One Sans', sans-serif; font-family: 'Young Serif', serif; color: #8b0000;">
+                                        Degree of @(string.IsNullOrEmpty(item.DegreeCourseTitle) ? "$ ############## $" : item.DegreeCourseTitle)
+                                    </td>
+                                </tr>
+
+                                @if (!string.IsNullOrEmpty(item.DegreeCourseTitle) && item.DegreeCourseTitle.ToLower().Contains("education") && !item.DegreeCourseTitle.ToLower().Contains("master"))
+                                {
+                                    <tr>
+                                        <td style="font-size: 6mm;letter-spacing: 0.2mm;">
+                                            with grade<b> "@item.CGPA_Type1_Grade"</b> <b>(CGPA </b>of<b> @(item.CGPA_Type1 < 0 ? 0 : item.CGPA_Type1))</b> in Theory
+                                            & grade<b> "@item.CGPA_Type2_Grade"</b> <b>(CGPA </b>of<b> @(item.CGPA_Type2 < 0 ? 0 : item.CGPA_Type2))</b> in Practice of Teaching
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr style="line-height:10mm;"><td style="font-size: 7mm;letter-spacing: 0.2mm;">secured <b> @(item.Eng_Division)</b></td></tr>
+                                }
+                                <tr style="line-height:8mm;"><td style="font-size: 6.6mm;letter-spacing: 0.2mm;">(<span style="font-family: 'AR One Sans', sans-serif;">@item.Mode Mode</span>)</td></tr>
+                                <tr style="line-height:11mm;"><td style="font-size: 6mm;">through</td></tr>
+                                <tr><td style="font-size: 7.7mm; letter-spacing: 0.1mm; font-family: 'AR One Sans', sans-serif; font-family: 'Young Serif', serif;">@(item.CollegeFullName)</td></tr>
+                                <tr style="line-height:11mm;"><td style="font-size:5.3mm; letter-spacing: 0.2mm; font-family: 'AR One Sans', sans-serif;"><b>@(item.CollegeAddress)</b></td></tr>
+                                <tr style="line-height:10mm;"><td style="font-size: 6mm;letter-spacing: 0.3mm;">on <b>@Html.Raw(item.DegreeCompletionDate.GetDegreeCompletionDateFormat())</b> </td></tr>
+                                <tr></tr>
+                            </tbody>
+                        </table>
+                    </center>
+                    <!---General Info Section Ends-->
+                    <br />
+                    <br />
+                    <center>
+                        @* -----------------------  QR code--------------------------- *@
+                        <table border="0" class="" style="position:relative;text-align:center;top:-10mm">
+                            <tbody>
+                                <tr>
+                                    <td style="width:64mm;">
+                                    </td>
+                                    <td style="width:45mm;">
+                                        <img style="width:45mm;position:relative;" src="@QRImgSrc" />
+                                    </td>
+                                    <td style="width:55mm;">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        @* -------------------- signs-------------------------------------- *@
+                        <table border="0" class="" style="position:absolute;bottom:10mm;text-align:center">
+                            <tbody>
+                                <tr>
+                                    <td style="width:80mm;">
+                                        <br /><br />
+                                        <h2 style="font-size:6mm;font-family: 'Great Vibes', cursive;letter-spacing: 0.3mm;">Controller of Examinations</h2>
+                                    </td>
+                                    <td style="width:47mm;">
+                                    </td>
+                                    <td style="width:54mm;">
+                                        <br /><br />
+                                        <h2 style="font-size:6mm;font-family: 'Great Vibes', cursive;letter-spacing: 0.3mm;">Vice Chancellor</h2>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" style="width:180mm;">
+                                        <address>
+                                            <small>
+                                                Gogji-Bagh, Srinagar
+                                                Jammu & Kashmir, India, 190008
+                                            </small>
+                                        </address>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!---Footer Sign Section Ends-->
+                    </center>
+                </div>
+            </section>
+        }
+    }
+    <div class="noneOnPrint" style="opacity:0.6;margin-left:-420px;height:40px;background-color:lightslategrey;width:100%;position:fixed;bottom:0;z-index:100;text-align:center;padding-top:10px">
+        @if (Model.Count == 1 && !Model.First().IsValidated)
+        {
+            <button value="@Model.First().Student_ID" style="height: 32px;" href="#" class="btn btn-success jsValidated" type="button"><b>Validate-Good</b></button>
+        }
+        @if (Model.Count == 1 && !Model.First().IsPrinted)
+        {
+            <button value="@Model.First().Student_ID" style="height: 32px;" href="#" class="btn btn-success jsPrinted" type="button"><b>Printed</b></button>
+        }
+        @if (Model.Count == 1 && !Model.First().IsHandedOver)
+        {
+            <button value="@Model.First().Student_ID" style="height: 32px;" href="#" class="btn btn-success jsHandedOver" type="button"><b>Handed Over</b></button>
+        }
+        <button style="height: 32px;" href="#" class="btn btn-theme" onclick="window.print();"><b>Download or Print</b></button>
+    </div>
+    
+    @*@else
+    {
+    <section class="sheet padding-5mm">
+        <p>Result Not Found .... </p>
+    </section>
+    }*@
+    <script src="~/Content/ThemeAdmin/Content/Scripts/Libraries/jquery-3.2.1.min.js"></script>
+    <script src="~/Scripts/General/general.js"></script>
+    <script src="~/Scripts/Pages/admin-degree-certificate.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("img").click(function () {
+                var angle = $(this).attr("data-rotation");
+                angle = Number(angle) + 90;
+                $(this).css("transform", "rotate(" + angle + "deg)");
+                $(this).removeAttr("data-rotation");
+                $(this).attr("data-rotation", angle);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,2153 @@
+
+--------------------- batch change --------------------
+UPDATE dbo.ARGSelectedCombination_UG SET SemesterBatch=2020 WHERE Student_ID IN(
+SELECT Student_ID FROM dbo.ARGPersonalInformation_UG WHERE CUSRegistrationNo IN ('Cus-19-gwc-11762 ')
+) AND Semester=5
+
+------------------ match board data -------------------------
+SELECT FullName,ARGStudentPreviousQualifications_IH.MaxMarks,MarksObt,BoardRegistrationNo,NAME
+,TOTMARKS,JKBose.MAXMARKS,
+'UPDATE dbo.ARGStudentPreviousQualifications_IH SET MarksObt='+TOTMARKS+' ,MaxMarks='+JKBose.MAXMARKS+' WHERE Qualification_ID='''+CAST(Qualification_ID AS VARCHAR(200))+''''
+ FROM dbo.ARGPersonalInformation_IH
+JOIN dbo.ARGStudentPreviousQualifications_IH ON ARGStudentPreviousQualifications_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+JOIN dbo.JKBose ON BoardRegistrationNo=REGNO
+WHERE Batch=2022 AND FormStatus=10 AND AcceptCollege_ID IS NULL
+AND MarksObt<>TOTMARKS
+
+
+----- Visual studio fix process is already being used while running project ----------------
+net stop winnat
+net start winnat
+
+--------------------------- check transaction no -------------------------------------------
+SELECT * FROM (
+SELECT TxnReferenceNo,Entity_ID,Semester FROM dbo.PaymentDetails_IH
+UNION
+SELECT TxnReferenceNo,Entity_ID,Semester FROM dbo.PaymentDetails_PG
+UNION
+SELECT TxnReferenceNo,Entity_ID,Semester FROM dbo.PaymentDetails_UG
+) s WHERE s.TxnReferenceNo IN('QAXG7348660370','WAX60278749453')
+
+---------------------------- insert back for Supplementary RR --------------------------------
+
+INSERT INTO ARGPersonalInformation_UG ([Student_ID], [StudentFormNo], [BoardRegistrationNo], [CUSRegistrationNo], [PreviousUniversityRegnNo], [FullName], [FathersName], [MothersName], [Gender], [DOB], [Religion], [Category], [AcceptCollege_ID], [AcceptedBy_ID], [IsPassout], [Photograph], [IsProvisional], [FormStatus], [CreatedOn], [CreatedBy], [UpdatedOn], [UpdatedBy], [TotalFee], [EntranceRollNo], [CurrentSemesterOrYear], [Batch], [ClassRollNo], [CATEntrancePoints], [MarksCardSerialNo], [IsLateralEntry], [MigrationIssued])
+
+
+GO
+INSERT INTO ARGStudentAddress_UG ([Address_ID], [Student_ID], [PinCode], [Mobile], [Email], [PermanentAddress], [AssemblyConstituency], [ParliamentaryConstituency], [Block], [Tehsil], [District], [State], [CreatedOn], [CreatedBy], [UpdatedOn], [UpdatedBy])
+
+
+GO
+INSERT INTO PaymentDetails_UG ([Payment_ID], [Entity_ID], [TxnReferenceNo], [BankReferenceNo], [TxnAmount], [BankID], [BankMerchantID], [TxnType], [CurrencyName], [ItemCode], [SecurityType], [SecurityID], [TxnDate], [AuthStatus], [SettlementType], [ErrorStatus], [ErrorDescription], [ModuleType], [PaymentType], [Email], [PhoneNumber], [Semester])
+
+
+GO
+INSERT INTO ARGStudentPreviousQualifications_UG ([Qualification_ID], [Student_ID], [ExamName], [Stream], [Subjects], [Session], [Year], [RollNo], [MaxMarks], [MarksObt], [ExamBody], [CreatedOn], [CreatedBy], [UpdatedOn], [UpdatedBy], [OverAllCGPA])
+
+
+GO
+INSERT INTO ARGCoursesApplied_UG ([Student_ID], [Course_ID], [Preference], [SubjectEntrancePoints], [AppearedInEntrance], [SelfFinancedPayment_ID], [StudentSelectionStatus], [SelectionAgaintListNo], [IsActive], [SubjectCGPA])
+
+
+DECLARE @cus VARCHAR(MAX)
+SET @cus='CUS-UG-'
+SELECT * FROM dbo.ARGPersonalInformation_UG WHERE Student_ID IN (SELECT TOP 1 Student_ID FROM dbo.ARGPersonalInformation_UG WHERE StudentFormNo=@cus)
+SELECT * FROM dbo.ARGStudentAddress_UG WHERE Student_ID IN (SELECT TOP 1 Student_ID FROM dbo.ARGPersonalInformation_UG WHERE StudentFormNo=@cus)
+SELECT * FROM dbo.PaymentDetails_UG WHERE Entity_ID IN (SELECT TOP 1 Student_ID FROM dbo.ARGPersonalInformation_UG WHERE StudentFormNo=@cus)
+SELECT * FROM dbo.ARGStudentPreviousQualifications_UG WHERE Student_ID IN (SELECT TOP 1 Student_ID FROM dbo.ARGPersonalInformation_UG WHERE StudentFormNo=@cus)
+SELECT * FROM dbo.ARGCoursesApplied_UG WHERE Student_ID IN (SELECT TOP 1 Student_ID FROM dbo.ARGPersonalInformation_UG WHERE StudentFormNo=@cus)
+
+--------------- Important queries -------------------------
+SELECT  Semester,TxnAmount,Batch,Student_ID,TxnReferenceNo FROM dbo.VWStudentCourse 
+JOIN dbo.PaymentDetails_IH ON Entity_ID=dbo.VWStudentCourse.Student_ID AND Semester IN (1)
+WHERE Course_ID='FC32E138-4EE2-4DA2-9453-5C8368180BC3'--ig b.ed-M.ed
+AND Batch IN(2021) --AND TxnAmount='52425' 
+ORDER BY Student_ID,TxnAmount
+
+-------- restore student after archive archive --------------
+DECLARE @cus VARCHAR(MAX)
+SET @cus='CUS-UG-'
+SELECT * FROM dbo.ARGPersonalInformation_UG WHERE Student_ID IN (SELECT TOP 1 Student_ID FROM dbo.ARGPersonalInformation_UG WHERE StudentFormNo=@cus)
+SELECT * FROM dbo.ARGStudentAddress_UG WHERE Student_ID IN (SELECT TOP 1 Student_ID FROM dbo.ARGPersonalInformation_UG WHERE StudentFormNo=@cus)
+SELECT * FROM dbo.PaymentDetails_UG WHERE Entity_ID IN (SELECT TOP 1 Student_ID FROM dbo.ARGPersonalInformation_UG WHERE StudentFormNo=@cus)
+SELECT * FROM dbo.ARGStudentPreviousQualifications_UG WHERE Student_ID IN (SELECT TOP 1 Student_ID FROM dbo.ARGPersonalInformation_UG WHERE StudentFormNo=@cus)
+SELECT * FROM dbo.ARGCoursesApplied_UG WHERE Student_ID IN (SELECT TOP 1 Student_ID FROM dbo.ARGPersonalInformation_UG WHERE StudentFormNo=@cus)
+
+---------- student details for merit lists ----------------
+SELECT DISTINCT CourseFullName,StudentFormNo,FullName,FathersName,Category,Mobile,ExamName,
+Stream,ExamBody,SubjectCGPA,MaxMarks,MarksObt,(MarksObt/MaxMarks)*100 [Percentage],OverAllCGPA,'https://www.cusrinagar.edu.in'+Certificate.CertificateUrl MarksCardFileName,
+CASE WHEN dbo.ARGPersonalInformation_IH.Category<>'OM' THEN
+'https://www.cusrinagar.edu.in'+s.CertificateUrl 
+ELSE
+''
+END CategoryFileName
+FROM dbo.ARGPersonalInformation_IH
+    JOIN dbo.ARGCoursesApplied_IH
+        ON ARGCoursesApplied_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+		JOIN dbo.ARGStudentPreviousQualifications_IH ON ARGStudentPreviousQualifications_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+		JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = ARGCoursesApplied_IH.Course_ID
+		JOIN dbo.ARGStudentAddress_IH ON ARGStudentAddress_IH.Student_ID = ARGPersonalInformation_IH.Student_ID		
+		JOIN dbo.Certificate ON Certificate.Student_ID = ARGPersonalInformation_IH.Student_ID AND CertificateType IN(4)
+		LEFT JOIN dbo.Certificate s ON s.Student_ID = ARGPersonalInformation_IH.Student_ID AND s.CertificateType IN(5)
+WHERE Batch = 2021 AND IsLateralEntry=1
+      AND FormStatus = 10  AND ExamName='graduation' AND SelfFinancedPayment_ID IS NOT NULL --AND CourseFullName LIKE '%physics%'
+	  ORDER BY CourseFullName, OverAllCGPA DESC;
+
+----------------- sTUDENT LATERAL ENTRY Btech ----------------
+
+SELECT DISTINCT CourseFullName,StudentFormNo,FullName,FathersName,Category,Mobile,ExamName,
+Stream,ExamBody,MaxMarks,MarksObt,(MarksObt/MaxMarks)*100 [Percentage],'https://www.cusrinagar.edu.in'+Certificate.CertificateUrl MarksCardFileName,
+CASE WHEN dbo.ARGPersonalInformation_IH.Category<>'OM' THEN
+'https://www.cusrinagar.edu.in'+s.CertificateUrl 
+ELSE
+''
+END CategoryFileName
+FROM dbo.ARGPersonalInformation_IH
+    JOIN dbo.ARGCoursesApplied_IH
+        ON ARGCoursesApplied_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+		JOIN dbo.ARGStudentPreviousQualifications_IH ON ARGStudentPreviousQualifications_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+		JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = ARGCoursesApplied_IH.Course_ID
+		JOIN dbo.ARGStudentAddress_IH ON ARGStudentAddress_IH.Student_ID = ARGPersonalInformation_IH.Student_ID		
+		JOIN dbo.Certificate ON Certificate.Student_ID = ARGPersonalInformation_IH.Student_ID AND CertificateType IN(4)
+		LEFT JOIN dbo.Certificate s ON s.Student_ID = ARGPersonalInformation_IH.Student_ID AND s.CertificateType IN(5)
+WHERE Batch = 2021 AND IsLateralEntry=1
+      AND FormStatus = 10 AND EntranceRollNo IS NOT NULL AND ExamName='Diploma/B.Sc' AND CourseFullName LIKE '%Engineering%'
+	  ORDER BY CourseFullName, [Percentage] DESC; --AND SelfFinancedPayment_ID IS NOT NULL 
+
+	  --------------------------------------------------------------
+SELECT DISTINCT CourseFullName,StudentFormNo,EntranceRollNo,FullName,FathersName,Category,Mobile,ExamName,Subjects,
+ExamBody,MaxMarks,MarksObt,(MarksObt/MaxMarks)*100 [Percentage],SubjectEntrancePoints,'https://www.cusrinagar.edu.in'+Certificate.CertificateUrl MarksCardFileName,
+CASE WHEN dbo.ARGPersonalInformation_IH.Category<>'OM' THEN
+'https://www.cusrinagar.edu.in'+s.CertificateUrl 
+ELSE
+''
+END CategoryFileName
+FROM dbo.ARGPersonalInformation_IH
+    JOIN dbo.ARGCoursesApplied_IH
+        ON ARGCoursesApplied_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+		JOIN dbo.ARGStudentPreviousQualifications_IH ON ARGStudentPreviousQualifications_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+		JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = ARGCoursesApplied_IH.Course_ID
+		JOIN dbo.ARGStudentAddress_IH ON ARGStudentAddress_IH.Student_ID = ARGPersonalInformation_IH.Student_ID		
+		JOIN dbo.Certificate ON Certificate.Student_ID = ARGPersonalInformation_IH.Student_ID AND CertificateType IN(4)
+		LEFT JOIN dbo.Certificate s ON s.Student_ID = ARGPersonalInformation_IH.Student_ID AND s.CertificateType IN(5)
+WHERE Batch = 2021 AND IsLateralEntry=1
+      AND FormStatus = 10 AND EntranceRollNo IS NOT NULL AND ExamName='Diploma/B.Sc' AND CourseFullName LIKE '%Engineering%'
+	  AND ARGCoursesApplied_IH.AppearedInEntrance=1
+	  ORDER BY CourseFullName, SubjectEntrancePoints DESC, Category; --AND SelfFinancedPayment_ID IS NOT NULL 
+
+----------------------- Query for list 2022 -------------------------------------------
+SELECT DISTINCT StudentFormNo,FullName,FathersName,Category,Mobile,ExamName,
+Stream,ExamBody,MaxMarks,MarksObt,(MarksObt/MaxMarks)*100 [Percentage],'https://www.cusrinagar.edu.in'+Certificate.CertificateUrl MarksCardFileName,
+'https://www.cusrinagar.edu.in'+pv.CertificateUrl ProvisionalCertificate,
+CASE WHEN dbo.ARGPersonalInformation_IH.Category<>'OM' THEN
+'https://www.cusrinagar.edu.in'+s.CertificateUrl 
+ELSE
+''
+END CategoryFileName
+FROM dbo.ARGPersonalInformation_IH
+		--JOIN dbo.ARGCoursesApplied_IH
+        --ON ARGCoursesApplied_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+		JOIN dbo.ARGStudentPreviousQualifications_IH ON ARGStudentPreviousQualifications_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+		--JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = ARGCoursesApplied_IH.Course_ID
+		JOIN dbo.ARGStudentAddress_IH ON ARGStudentAddress_IH.Student_ID = ARGPersonalInformation_IH.Student_ID		
+		JOIN dbo.Certificate ON Certificate.Student_ID = ARGPersonalInformation_IH.Student_ID AND Certificate.CertificateType IN(4)
+		LEFT JOIN dbo.Certificate s ON s.Student_ID = ARGPersonalInformation_IH.Student_ID AND s.CertificateType IN(5)
+		LEFT JOIN dbo.Certificate pv ON pv.Student_ID = ARGPersonalInformation_IH.Student_ID AND pv.CertificateType IN(1)
+WHERE Batch = 2022 --AND IsLateralEntry=1
+      AND FormStatus = 10  AND ExamName='12th' --AND SelfFinancedPayment_ID IS NOT NULL --AND CourseFullName LIKE '%physics%'
+	  ORDER BY FullName ASC;
+
+
+
+
+	  ----------------------------- IG GROUP BY --------------------
+
+SELECT * FROM (SELECT
+DENSE_RANK() OVER(ORDER BY y.FullName ASC) SNO,
+* FROM  
+(SELECT DISTINCT CourseFullName,ARGCoursesApplied_IH.Preference, StudentFormNo,FullName,FathersName,Category,Mobile,ExamName,
+Stream,ExamBody,MaxMarks,MarksObt,(MarksObt/MaxMarks)*100 [Percentage],'https://www.cusrinagar.edu.in'+Certificate.CertificateUrl MarksCardFileName,
+'https://www.cusrinagar.edu.in'+pv.CertificateUrl ProvisionalCertificate,
+CASE WHEN dbo.ARGPersonalInformation_IH.Category<>'OM' THEN
+'https://www.cusrinagar.edu.in'+s.CertificateUrl 
+ELSE
+''
+END CategoryFileName
+FROM dbo.ARGPersonalInformation_IH
+		JOIN dbo.ARGCoursesApplied_IH
+        ON ARGCoursesApplied_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+		JOIN dbo.ARGStudentPreviousQualifications_IH ON ARGStudentPreviousQualifications_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+		JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = ARGCoursesApplied_IH.Course_ID
+		JOIN dbo.ARGStudentAddress_IH ON ARGStudentAddress_IH.Student_ID = ARGPersonalInformation_IH.Student_ID		
+		JOIN dbo.Certificate ON Certificate.Student_ID = ARGPersonalInformation_IH.Student_ID AND Certificate.CertificateType IN(4)
+		LEFT JOIN dbo.Certificate s ON s.Student_ID = ARGPersonalInformation_IH.Student_ID AND s.CertificateType IN(5)
+		LEFT JOIN dbo.Certificate pv ON pv.Student_ID = ARGPersonalInformation_IH.Student_ID AND pv.CertificateType IN(1)
+WHERE Batch = 2022 
+      AND FormStatus = 10  AND ExamName='12th'
+	   AND CAST(ARGPersonalInformation_IH.CreatedOn AS DATE) <='2022-3-12' --AND CourseFullName LIKE '%physics%'
+	  ) y)S ORDER BY S.FullName,S.Preference
+
+------------------------ compare JKBose DATA 2022 ---------------------
+SELECT 
+P.FullName,B.FNAME,P.FathersName,B.FNAME,
+Q.MaxMarks,B.MAXMARKS,Q.MarksObt,B.TOTMARKS,
+
+'UPDATE dbo.ARGStudentPreviousQualifications_UG SET MaxMarks='''
++CAST(B.MAXMARKS AS VARCHAR(20))+''',MarksObt='''+CAST(B.TOTMARKS AS VARCHAR(20))
++''' WHERE Qualification_ID='''+CAST(Q.Qualification_ID AS VARCHAR(50))+';' AS UpdateQuery
+
+FROM dbo.JKBOSEDATA2022 B
+JOIN dbo.ARGPersonalInformation_UG P 
+ON B.REGNO=P.BoardRegistrationNo AND P.Batch=2022
+JOIN dbo.ARGStudentPreviousQualifications_UG Q ON Q.Student_ID = P.Student_ID AND Q.ExamName='12TH'
+WHERE (B.MAXMARKS<>Q.MaxMarks OR B.TOTMARKS<>Q.MarksObt)
+
+---------------------------------------------------------------------------------
+
+
+SELECT DISTINCT FullName,PhoneNumber,Mobile,ARGSelectedCombination_IH.Semester,CourseFullName,Programme FROM dbo.ARGPersonalInformation_IH
+JOIN dbo.ARGStudentAddress_IH ON ARGStudentAddress_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+LEFT JOIN dbo.PaymentDetails_IH ON Entity_ID=ARGPersonalInformation_IH.Student_ID
+JOIN dbo.ARGSelectedCombination_IH ON ARGSelectedCombination_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+AND SemesterBatch>2017 AND ARGSelectedCombination_IH.Semester>=6
+JOIN dbo.ADMCombinationMaster ON ADMCombinationMaster.Combination_ID = ARGSelectedCombination_IH.Combination_ID
+JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = ADMCombinationMaster.Course_ID
+WHERE (CourseFullName LIKE '%Computer%' OR CourseFullName LIKE '%technology%')
+ORDER BY Programme,ARGSelectedCombination_IH.Semester,FullName
+
+----------------------- amount semester admission ------------------
+SELECT 
+CASE WHEN PaymentDetails_IH.Semester=1 THEN
+'Semester 1 & 2'
+ WHEN PaymentDetails_IH.Semester=3 THEN
+'Semester 3 & 4'
+ WHEN PaymentDetails_IH.Semester=5 THEN
+'Semester 5 & 6'
+ WHEN PaymentDetails_IH.Semester=7 THEN
+'Semester 7 & 8'
+ WHEN PaymentDetails_IH.Semester=9 THEN
+'Semester 9 & 10'
+ELSE
+CAST(PaymentDetails_IH.Semester AS VARCHAR(10))
+END Semester,
+       SemesterBatch,
+	   CollegeFullName,
+       COUNT(Entity_ID) TotalStudents,
+       SUM(TxnAmount) Amount,
+       CourseFullName,
+       CASE
+           WHEN dbo.PaymentDetails_IH.PaymentType = 1 or dbo.PaymentDetails_IH.PaymentType = 3 THEN
+               'Online'
+           WHEN dbo.PaymentDetails_IH.PaymentType = 2 THEN
+               'offline'
+			   ELSE
+               'offline'
+       END PaymentType
+FROM dbo.ARGPersonalInformation_IH
+    JOIN dbo.PaymentDetails_IH
+        ON Entity_ID = Student_ID
+    JOIN dbo.ARGSelectedCombination_IH
+        ON ARGSelectedCombination_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+    JOIN dbo.ADMCombinationMaster
+        ON ADMCombinationMaster.Combination_ID = ARGSelectedCombination_IH.Combination_ID
+		AND ARGSelectedCombination_IH.SEMESTER=PaymentDetails_IH.SEMESTER
+    JOIN dbo.ADMCourseMaster
+        ON ADMCourseMaster.Course_ID = ADMCombinationMaster.Course_ID
+		JOIN dbo.ADMCollegeMaster ON ADMCollegeMaster.College_ID = ADMCombinationMaster.College_ID
+WHERE ModuleType = 6 
+GROUP BY CollegeFullName,CourseFullName,
+         PaymentDetails_IH.Semester,
+         SemesterBatch,
+         PaymentType
+ORDER BY CollegeFullName,CourseFullName,
+         PaymentDetails_IH.Semester,
+         SemesterBatch,
+         PaymentType;
+
+
+		 SELECT 
+CASE WHEN PaymentDetails_PG.Semester=1 THEN
+'Semester 1 & 2'
+ WHEN PaymentDetails_PG.Semester=3 THEN
+'Semester 3 & 4'
+ WHEN PaymentDetails_PG.Semester=5 THEN
+'Semester 5 & 6'
+ WHEN PaymentDetails_PG.Semester=7 THEN
+'Semester 7 & 8'
+ WHEN PaymentDetails_PG.Semester=9 THEN
+'Semester 9 & 10'
+ELSE
+CAST(PaymentDetails_PG.Semester AS VARCHAR(10))
+END Semester,
+       SemesterBatch,
+	   CollegeFullName,
+       COUNT(Entity_ID) TotalStudents,
+       SUM(TxnAmount) Amount,
+       CASE WHEN Programme=1 THEN 'UG'
+	    WHEN Programme=2 THEN 'PG'
+	    WHEN Programme=3 THEN 'IG'
+	    WHEN Programme=4 THEN 'Honors'
+	    WHEN Programme=6 THEN 'Professional'
+	    WHEN Programme=5 THEN 'Engineering'
+		END AS programmes
+FROM dbo.ARGPersonalInformation_PG
+    JOIN dbo.PaymentDetails_PG
+        ON Entity_ID = Student_ID
+    JOIN dbo.ARGSelectedCombination_PG
+        ON ARGSelectedCombination_PG.Student_ID = ARGPersonalInformation_PG.Student_ID
+    JOIN dbo.ADMCombinationMaster
+        ON ADMCombinationMaster.Combination_ID = ARGSelectedCombination_PG.Combination_ID
+		AND ARGSelectedCombination_PG.SEMESTER=PaymentDetails_PG.SEMESTER
+    JOIN dbo.ADMCourseMaster
+        ON ADMCourseMaster.Course_ID = ADMCombinationMaster.Course_ID
+		JOIN dbo.ADMCollegeMaster ON ADMCollegeMaster.College_ID = ADMCombinationMaster.College_ID
+WHERE ModuleType = 6 
+GROUP BY CollegeFullName,Programme,
+         PaymentDetails_PG.Semester,
+         SemesterBatch
+ORDER BY CollegeFullName,Programme,
+         PaymentDetails_PG.Semester,
+         SemesterBatch;
+
+----------------------------- payment year --------------------
+SELECT 
+CASE WHEN PaymentDetails_PG.Semester=1 THEN
+'Semester 1 & 2'
+ WHEN PaymentDetails_PG.Semester=3 THEN
+'Semester 3 & 4'
+ WHEN PaymentDetails_PG.Semester=5 THEN
+'Semester 5 & 6'
+ WHEN PaymentDetails_PG.Semester=7 THEN
+'Semester 7 & 8'
+ WHEN PaymentDetails_PG.Semester=9 THEN
+'Semester 9 & 10'
+ELSE
+CAST(PaymentDetails_PG.Semester AS VARCHAR(10))
+END Semester,
+       YEAR(TxnDate) [year of payment],
+	   CollegeFullName,
+       COUNT(Entity_ID) TotalStudents,
+       SUM(TxnAmount) Amount,
+       CASE WHEN Programme=1 THEN 'UG'
+	    WHEN Programme=2 THEN 'PG'
+	    WHEN Programme=3 THEN 'IG'
+	    WHEN Programme=4 THEN 'Honors'
+	    WHEN Programme=6 THEN 'Professional'
+	    WHEN Programme=5 THEN 'Engineering'
+		END AS programmes
+FROM dbo.ARGPersonalInformation_PG
+    JOIN dbo.PaymentDetails_PG
+        ON Entity_ID = Student_ID
+    JOIN dbo.ARGSelectedCombination_PG
+        ON ARGSelectedCombination_PG.Student_ID = ARGPersonalInformation_PG.Student_ID
+    JOIN dbo.ADMCombinationMaster
+        ON ADMCombinationMaster.Combination_ID = ARGSelectedCombination_PG.Combination_ID
+		AND ARGSelectedCombination_PG.SEMESTER=PaymentDetails_PG.SEMESTER
+    JOIN dbo.ADMCourseMaster
+        ON ADMCourseMaster.Course_ID = ADMCombinationMaster.Course_ID
+		JOIN dbo.ADMCollegeMaster ON ADMCollegeMaster.College_ID = ADMCombinationMaster.College_ID
+WHERE ModuleType = 6 
+GROUP BY CollegeFullName,Programme,
+         PaymentDetails_PG.Semester,
+         YEAR(TxnDate)
+ORDER BY CollegeFullName,Programme,
+         PaymentDetails_PG.Semester,
+         YEAR(TxnDate);
+-------------------------------------------------------------
+		 SELECT * FROM (
+SELECT TxnReferenceNo,Entity_ID,Semester FROM dbo.PaymentDetails_IH
+UNION
+SELECT TxnReferenceNo,Entity_ID,Semester FROM dbo.PaymentDetails_PG
+UNION
+SELECT TxnReferenceNo,Entity_ID,Semester FROM dbo.PaymentDetails_UG
+) s WHERE s.TxnReferenceNo IN('QAXG7348660370','WAX60278749453')
+
+
+------------------ CHECK DUPLICATE EXAM ROLL NO ---------------
+--STEP 1    
+SELECT pif.Student_ID, count(pif.Student_ID) FROM (SELECT DISTINCT Student_ID,ExamRollNumber FROM ARGStudentExamForm_PG WHERE ExamRollNumber IS NOT null) pif 
+GROUP BY student_id 
+HAVING count(pif.Student_ID)>1
+
+
+-- STEP 2 
+SELECT *,'UPDATE ARGStudentExamForm_PG SET ExamRollNumber='''+S.ExamRollNumber+''' WHERE Student_ID='''+CAST(S.Student_ID AS VARCHAR(800))+''' AND ExamRollNumber IS NOT NULL AND ExamRollNumber<>'''+S.ExamRollNumber+''';' FROM (SELECT ROW_NUMBER() OVER(PARTITION BY Student_ID ORDER BY Student_ID,Semester DESC,CreatedOn ASC) SNO ,Student_ID,Semester,ExamRollNumber FROM ARGStudentExamForm_PG
+WHERE ExamRollNumber is NOT NULL  and  Student_ID 
+IN
+(
+--STEP 1 STUDENT_idS
+)) S WHERE S.SNO=1
+
+
+
+
+--------------- UG open NEP admission------------------------
+UPDATE dbo.ADMCourseMaster SET RegistrationOpen=1 WHERE Course_ID IN
+(
+'{e01e77f5-801c-4dc9-91d3-06d78fde60cf}',
+'{707294cf-b480-48c8-afbb-07324a95a523}',
+'{d5e7c8c8-2236-43f1-a5ac-18af4aed1349}',
+'{cad09e7a-6929-4587-aef9-219a5e5d3143}',
+'{a15b7c6f-7c70-4017-9c31-2a5d7197513c}',
+'{baeacbe5-1ad0-45d4-bf78-2bd6aebbc234}',
+'{8ae4c466-ee18-45de-8439-358da08c5a7f}',
+'{29392be2-cd03-4392-b020-361b3da3f87c}',
+'{9c52ac42-be01-4298-a329-46a3ba2d6761}',
+'{7a7a5c1f-df58-409a-a978-4a61b7422bed}',
+'{92735cd1-789b-4d80-82e3-52e0d2c81683}',
+'{1c53582b-9861-42ca-b634-5d78401ffc79}',
+'{95e87af4-88d5-4db9-8820-5f8d2f096bea}',
+'{a14174fe-7a41-4044-8589-64eea252a261}',
+'{6274c268-7a78-4b75-8105-6a40ba1661d3}',
+'{eb753e2b-3dea-46dc-9a66-6b1b1ffd4673}',
+'{ffc176d2-5c33-4b77-9f11-7d0f8efe3bc6}',
+'{6a02c55b-3429-4deb-bb65-7d3d70480f24}',
+'{268bb48f-9b8c-42a0-8d8c-7faec3c421e6}',
+'{fd05bf1b-6cae-4748-bf5e-7fd843afa124}',
+'{1aa9bfe0-0826-47d9-b1ea-870c347c9ef3}',
+'{773d99b5-bd38-4bd6-b984-8d1551999b27}',
+'{7ebbc065-feeb-4473-9cd2-93deb3280003}',
+'{239fdf07-d5bf-42dc-8a76-a4026d807c23}',
+'{41b3fcae-5637-4123-89f2-ac6d2a7ad44d}',
+'{a24a6b37-c491-474b-b49e-af19e826a77c}',
+'{f42a6663-4cce-42fc-8975-bb45f3650bd7}',
+'{634f61f6-0c7a-4621-b6bd-bda0ca5e4a9c}',
+'{998a44bf-0b7c-42dc-b9d9-c22e80534f49}',
+'{bc6eee6a-2a3f-40f1-b117-c456caee95f1}',
+'{ae3f1b78-672e-42e8-86b5-e67c31e12066}',
+'{83f32be2-781c-4ec6-b969-e7c230414f84}',
+'{3937015d-f62c-47db-9620-ee557a3e79e0}',
+'{228dc359-d3ea-46e1-bcaf-f4e9ddc235d0}',
+'{d87ca618-cfce-4882-9068-fa498e2d3875}',
+'{39ab4d01-16ef-40dd-9dc7-faa14c7801b6}',
+'{389a6ffb-de48-40e7-8a46-fb8693216a3c}'
+)
+--------------- IG open NEP admission------------------
+UPDATE dbo.ADMCourseMaster SET RegistrationOpen=1 WHERE Course_ID IN
+(
+'{32996ce4-5613-4a2d-a565-030390d7f496}',
+'{84031e11-2b57-4a3b-86a1-172b0c68046b}',
+'{700a0226-6668-4e71-b350-3ae2a8800ba1}',
+'{805f0ace-2761-49e1-a240-3ecf296476a8}',
+'{dc9595e4-b4dc-41e3-aeb9-446c0b990bcf}',
+'{8368eeef-8f08-4077-aabe-48b348c1f85b}',
+'{7ae0f1ab-c0d2-43e4-9e86-5130e33f0316}',
+'{123eb3ab-fe88-4b8a-80b1-528d9284c5ad}',
+'{5e91dce8-a294-43f6-9189-75f19a53ac2f}',
+'{43ee98d3-b69e-48b5-8e3e-8352012024e5}',
+'{3df5801e-5707-41cd-b059-86af8071f3cd}',
+'{030fe395-7256-4fce-9af6-91f1dc70b289}',
+'{58144c9c-319b-4aa1-b335-bf77b0fd1c24}',
+'{fa853451-1b13-447b-a0f2-e6d5a4ed9ab5}',
+'{cc753977-8ce1-4095-a07f-ea928f6aa621}',
+'{653aa86c-4900-484e-b566-ef49fd4e8313}'
+)
+
+
+-------------------- check marks obtained ------------------
+SELECT BoardRegistrationNo,StudentFormNo,
+       ARGPersonalInformation_IH.Student_ID,
+       Qualification_ID,
+       MarksObt,
+       MaxMarks,
+       ExamName,
+       ExamBody
+
+FROM dbo.ARGPersonalInformation_IH
+    JOIN dbo.ARGStudentPreviousQualifications_IH
+        ON ARGStudentPreviousQualifications_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+WHERE MaxMarks = MarksObt AND Batch=2022 --AND FormStatus=10 --AND ExamBody='JKBOSE' 
+ORDER BY ExamBody DESC;
+
+UPDATE ARGStudentPreviousQualifications_IH SET MaxMarks=500 WHERE Qualification_ID 
+
+-------------------------- Query for Subjects of all Constituent Colleges -------------------------------
+
+		SELECT DISTINCT Batch,ADMCollegeMaster.CollegeFullName,SubjectFullName,Semester,dbo.FNSubjectTypeDescription(SubjectType) AS SubjectType FROM dbo.VWStudentWithDetail
+JOIN dbo.ADMCollegeMaster ON ADMCollegeMaster.College_ID = VWStudentWithDetail.AcceptCollege_ID AND IsConstituentCollege=1
+ORDER BY CollegeFullName,Batch,Semester,SubjectFullName,SubjectType
+
+------------------------ unemployed passout data -------------------------
+SELECT * FROM (SELECT DISTINCT FullName Name,
+       FathersName Parentage,
+       PermanentAddress,
+       ExamName [ACADEMIC Qualification],
+       DOB,
+       ISNULL(PerusingHigherEduInAndProgramme,'Not applied for degree certificate yet') [Perusing Higher Edu],
+	   EmploymentStatus [Employment Status],
+	   Mobile ContactNo,
+	   Email [e-mail]
+FROM dbo.ARGPersonalInformation_UG
+   left JOIN dbo.IssuingOfDegreeCertificate
+        ON IssuingOfDegreeCertificate.Student_ID = ARGPersonalInformation_UG.Student_ID   
+    LEFT JOIN dbo.ARGStudentAddress_UG
+        ON ARGStudentAddress_UG.Student_ID = ARGPersonalInformation_UG.Student_ID
+    LEFT JOIN dbo.ARGStudentPreviousQualifications_UG
+        ON ARGStudentPreviousQualifications_UG.Student_ID = ARGPersonalInformation_UG.Student_ID
+WHERE Batch IN ( 2017, 2018 ) AND AcceptCollege_ID='67C52693-7029-486F-AA46-798F69A95AFB'--aaa
+      AND IsPassout = 1 
+	  UNION
+SELECT DISTINCT FullName Name,
+FathersName Parentage,
+       PermanentAddress,
+       ExamName [ACADEMIC Qualification],
+       DOB,
+       PerusingHigherEduInAndProgramme [Perusing Higher Edu],
+	   EmploymentStatus [Employment Status],
+	   Mobile ContactNo,
+	   Email [e-mail]
+FROM dbo.ARGPersonalInformation_IH
+    LEFT JOIN dbo.IssuingOfDegreeCertificate
+        ON IssuingOfDegreeCertificate.Student_ID = ARGPersonalInformation_IH.Student_ID
+    JOIN dbo.MSCGPA
+        ON MSCGPA.Student_ID = ARGPersonalInformation_IH.Student_ID
+    LEFT JOIN dbo.ARGStudentAddress_IH
+        ON ARGStudentAddress_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+    LEFT JOIN dbo.ARGStudentPreviousQualifications_IH
+        ON ARGStudentPreviousQualifications_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+WHERE Batch IN ( 2017, 2018 ) AND AcceptCollege_ID='67C52693-7029-486F-AA46-798F69A95AFB'--aaa
+      AND IsPassout = 1 ) s ORDER BY s.Name
+
+
+------------------------------------- General merit list with course IG---------------------
+SELECT CourseFullName [Course Applied],StudentFormNo CUSFormNo,
+FullName [Applicant Name],
+Category,
+ISNULL(CAST(MarksObt AS VARCHAR(200)), '12th Result Awaited') [Marks Obtained],
+ISNULL(CAST(MaxMarks AS VARCHAR(200)), '12th Result Awaited') [Max Marks],
+ISNULL(CAST((MarksObt / MaxMarks * 100 ) AS VARCHAR(200)), '0') [%age],ExamBody
+FROM dbo.ARGPersonalInformation_IH
+JOIN dbo.ARGCoursesApplied_IH
+ON ARGCoursesApplied_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = ARGCoursesApplied_IH.Course_ID
+LEFT JOIN dbo.ARGStudentPreviousQualifications_IH
+ON ARGStudentPreviousQualifications_IH.Student_ID = ARGPersonalInformation_IH.Student_ID AND FormStatus = 10 AND AcceptCollege_ID IS NULL
+WHERE Programme IN(3,4,6) AND Batch=2022 AND FormStatus = 10 AND AcceptCollege_ID IS NULL
+ORDER BY ARGCoursesApplied_IH.Course_ID ASC,[%age] DESC
+
+------------------------------------- General merit list without course UG ---------------------
+
+SELECT CourseFullName [Course Applied],StudentFormNo CUSFormNo,
+FullName [Applicant Name],
+Category,
+ISNULL(CAST(MarksObt AS VARCHAR(200)), '12th Result Awaited') [Marks Obtained],
+ISNULL(CAST(MaxMarks AS VARCHAR(200)), '12th Result Awaited') [Max Marks],
+ISNULL(CAST((MarksObt / MaxMarks * 100 ) AS VARCHAR(200)), '0') [%age],ExamBody [Board]
+FROM dbo.ARGPersonalInformation_UG
+JOIN dbo.ARGCoursesApplied_UG
+ON ARGCoursesApplied_UG.Student_ID = ARGPersonalInformation_UG.Student_ID
+JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = ARGCoursesApplied_UG.Course_ID
+LEFT JOIN dbo.ARGStudentPreviousQualifications_UG
+ON ARGStudentPreviousQualifications_UG.Student_ID = ARGPersonalInformation_UG.Student_ID 
+AND FormStatus = 10 AND AcceptCollege_ID IS NULL
+WHERE Programme IN(1) AND Batch=2022 AND CourseFullName NOT IN ('B.ed') 
+AND FormStatus = 10 AND AcceptCollege_ID IS NULL
+ORDER BY ARGCoursesApplied_UG.Course_ID ASC,[%age] DESC
+
+
+-------------------- Exam form count -------------------------------
+SELECT COUNT(StudentExamForm_ID) TotalStudents,exm.Semester,
+CASE WHEN ADMCourseMaster.PrintProgramme=1 then
+'UG'
+WHEN ADMCourseMaster.PrintProgramme=2 THEN
+'PG'
+WHEN  ADMCourseMaster.PrintProgramme=3 THEN
+'Integrated / Honors / Professional / Engineering'
+WHEN  ADMCourseMaster.PrintProgramme=5 THEN
+'B.ed'
+ELSE
+''
+END programme,exm.Year,CollegeFullName  FROM dbo.VWStudentCourse
+JOIN (SELECT Student_ID,Year,Status,StudentExamForm_ID,Semester FROM dbo.ARGStudentExamForm_IH
+UNION
+SELECT Student_ID,Year,Status,StudentExamForm_ID,Semester FROM dbo.ARGStudentExamForm_UG
+UNION
+SELECT Student_ID,Year,Status,StudentExamForm_ID,Semester FROM dbo.ARGStudentExamForm_PG) exm
+ON exm.Student_ID = VWStudentCourse.Student_ID
+JOIN dbo.ADMCourseMaster ON dbo.VWStudentCourse.Course_ID=dbo.ADMCourseMaster.Course_ID
+WHERE exm.Status=4 AND exm.Semester>0 AND exm.Year IN (2018,2019)
+GROUP BY exm.Semester,ADMCourseMaster.PrintProgramme,exm.Year,CollegeFullName
+ORDER BY exm.YEAR,CollegeFullName,ADMCourseMaster.PrintProgramme,exm.Semester
+
+-------------------- Data Subject Structure-------------------------------
+
+SELECT DISTINCT
+    dbo.FNProgrammeDescription(ADMSubjectMaster.Programme) AS [Programme],
+    ADMSubjectMaster.Semester,
+    ADMCourseMaster.CourseFullName AS Course,
+    ADMCourseMaster.CourseCode,
+    DepartmentFullName AS Department,
+    Trim(ADMSubjectMaster.SubjectFullName) AS SubjectTitle,
+    SubjectCode,
+    dbo.FNSubjectTypeDescription(ADMSubjectMaster.SubjectType) AS [Subject-Type]
+FROM dbo.ADMSubjectMaster
+    JOIN dbo.ADMCourseMaster
+        ON ADMCourseMaster.Course_ID = ADMSubjectMaster.Course_ID
+    LEFT JOIN dbo.Department
+        ON Department.Department_ID = ADMSubjectMaster.Department_ID
+    JOIN dbo.VWStudentDetailforMS
+        ON VWStudentDetailforMS.Subject_ID = ADMSubjectMaster.Subject_ID
+WHERE dbo.ADMSubjectMaster.Status = 1
+      AND Batch = '2019'
+ORDER BY Course,
+         ADMSubjectMaster.Semester,
+         [Subject-Type],
+         SubjectTitle,
+         Department;
+
+
+-------------------- Data Subject Structure-------------------------------
+
+SELECT DISTINCT
+    dbo.FNProgrammeDescription(ADMSubjectMaster.Programme) AS [Programme],
+    ADMSubjectMaster.Semester,
+    ADMCourseMaster.CourseFullName AS Course,
+    ADMCourseMaster.CourseCode,
+    DepartmentFullName AS Department,
+    Trim(ADMSubjectMaster.SubjectFullName) AS SubjectTitle,
+    SubjectCode,
+    dbo.FNSubjectTypeDescription(ADMSubjectMaster.SubjectType) AS [Subject-Type]
+FROM dbo.ADMSubjectMaster
+    JOIN dbo.ADMCourseMaster
+        ON ADMCourseMaster.Course_ID = ADMSubjectMaster.Course_ID
+    LEFT JOIN dbo.Department
+        ON Department.Department_ID = ADMSubjectMaster.Department_ID
+    JOIN dbo.VWStudentDetailforMS
+        ON VWStudentDetailforMS.Subject_ID = ADMSubjectMaster.Subject_ID
+WHERE dbo.ADMSubjectMaster.Status = 1
+      AND Batch = '2017'
+      AND
+      (
+          ADMSubjectMaster.Semester = 7
+          OR ADMSubjectMaster.Semester = 8
+      )
+ORDER BY Course,
+         ADMSubjectMaster.Semester,
+         [Subject-Type],
+         SubjectTitle,
+         Department;
+
+
+         ---------------Duplicate Migration---------------
+         
+							UPDATE ARGPersonalInformation_UG SET AcceptCollege_ID='67C52693-7029-486F-AA46-798F69A95AFB',CurrentSemesterOrYear=1,FormStatus=9
+							WHERE Student_ID='Student_ID'
+
+							UPDATE PaymentDetails_UG
+							SET ModuleType=9999
+							WHERE TxnReferenceNo='TXNNO'
+
+							UPDATE MigrationDetail SET FormStatus=1 WHERE Student_ID='Student_ID'
+		
+----------------------------------- combination wise subjects --------------
+SELECT DISTINCT
+       'Cluster University Srinagar' [University],
+       CollegeFullName [Name of college],
+       CASE
+           WHEN Batch = 2020 THEN
+               '2020-21'
+           ELSE
+               '2021-22'
+       END Session,
+       CourseFullName [Name OF Stream],
+       Semester,
+	   CombinationCode Combination,
+       SubjectFullName Subjects
+FROM dbo.VWStudentWithDetail
+WHERE Batch IN ( 2020, 2021 )
+      AND CurrentSemesterOrYear <= 4
+ORDER BY Session,
+         Semester,
+         CollegeFullName,
+         CourseFullName,
+CombinationCode,
+         SubjectFullName;
+
+---------------------------------------Professional Census Queiries for Hamid sir.--------------------------------------------------------------
+
+SELECT CollegeFullName,CourseFullName,COUNT(ARGPersonalInformation_IH.Student_ID) AS Count,ARGPersonalInformation_IH.Gender,MAX('Professional') P  FROM dbo.ARGPersonalInformation_IH 
+JOIN dbo.ARGSelectedCombination_IH ON ARGSelectedCombination_IH.Student_ID = ARGPersonalInformation_IH.Student_ID AND ARGSelectedCombination_IH.Semester=1
+JOIN dbo.ADMCombinationMaster ON ADMCombinationMaster.Combination_ID = ARGSelectedCombination_IH.Combination_ID
+JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = ADMCombinationMaster.Course_ID
+JOIN dbo.ADMCollegeMaster ON ADMCollegeMaster.College_ID = ADMCombinationMaster.College_ID
+WHERE ARGPersonalInformation_IH.IsPassout=0 AND ARGPersonalInformation_IH.AcceptCollege_ID IS NOT NULL AND (CourseFullName LIKE '%BBA%' OR CourseFullName LIKE '%bca%'
+ OR CourseFullName LIKE '%ENGINEE%'OR CourseFullName LIKE '%Integrated B.Ed%'OR CourseFullName LIKE '%Integrated Informa%')
+GROUP BY ARGPersonalInformation_IH.Gender,ADMCollegeMaster.CollegeFullName,ADMCourseMaster.CourseFullName
+ORDER BY ADMCollegeMaster.CollegeFullName,ADMCourseMaster.CourseFullName,COUNT(ARGPersonalInformation_IH.Student_ID)
+
+
+
+
+SELECT CollegeFullName,CourseFullName,COUNT(ARGPersonalInformation_UG.Student_ID) AS Count,ARGPersonalInformation_UG.Gender,MAX('Professional') P  FROM dbo.ARGPersonalInformation_UG 
+JOIN dbo.ARGSelectedCombination_UG ON ARGSelectedCombination_UG.Student_ID = ARGPersonalInformation_UG.Student_ID AND ARGSelectedCombination_UG.Semester=1
+JOIN dbo.ADMCombinationMaster ON ADMCombinationMaster.Combination_ID = ARGSelectedCombination_UG.Combination_ID
+JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = ADMCombinationMaster.Course_ID
+JOIN dbo.ADMCollegeMaster ON ADMCollegeMaster.College_ID = ADMCombinationMaster.College_ID
+WHERE ARGPersonalInformation_UG.IsPassout=0 AND ARGPersonalInformation_UG.AcceptCollege_ID IS NOT NULL AND (CourseFullName LIKE '%.Ed%')
+GROUP BY ARGPersonalInformation_UG.Gender,ADMCollegeMaster.CollegeFullName,ADMCourseMaster.CourseFullName
+ORDER BY ADMCollegeMaster.CollegeFullName,ADMCourseMaster.CourseFullName,COUNT(ARGPersonalInformation_UG.Student_ID)
+
+
+SELECT * FROM (
+SELECT ADMCollegeMaster.CollegeFullName,COUNT(Per.Student_ID) AS Count,Per.Gender,MAX('IG') P FROM dbo.ARGPersonalInformation_IH Per 
+JOIN dbo.ADMCollegeMaster ON ADMCollegeMaster.College_ID = Per.AcceptCollege_ID 
+JOIN dbo.VWStudentWithDetail VW ON VW.Student_ID = Per.Student_ID AND VW.AcceptCollege_ID = Per.AcceptCollege_ID
+WHERE Per.IsPassout=0 
+GROUP BY Per.Gender,ADMCollegeMaster.CollegeFullName
+UNION 
+SELECT CollegeFullName,COUNT(Per.Student_ID) AS Count,Per.Gender,MAX('UG') P FROM dbo.ARGPersonalInformation_UG Per 
+JOIN dbo.ADMCollegeMaster ON ADMCollegeMaster.College_ID = Per.AcceptCollege_ID 
+WHERE Per.IsPassout=0
+GROUP BY Per.Gender,CollegeFullName
+UNION
+SELECT CollegeFullName,COUNT(Per.Student_ID) AS Count,Per.Gender,MAX('PG') P FROM dbo.ARGPersonalInformation_PG Per 
+JOIN dbo.ADMCollegeMaster ON ADMCollegeMaster.College_ID = Per.AcceptCollege_ID 
+WHERE Per.IsPassout=0
+GROUP BY Per.Gender,CollegeFullName) F ORDER BY F.P,F.CollegeFullName,F.Gender
+
+-------------------- download selection list full ------------------
+
+SELECT ROW_NUMBER() OVER(PARTITION BY Course_ID ORDER BY CourseFullName, (MarksObt/MaxMarks)*100.0 DESC) sno,CourseFullName Course,
+StudentFormNo formNo,FullName,FathersName,Category,
+(MarksObt/MaxMarks)*100.0 _MeritObtained,SeatAllocationMatrix_IH.PreferenceOfCourse Preference,ExamBody 
+ FROM  dbo.SeatAllocationMatrix_IH
+JOIN dbo.ADMCourseMaster ON Course_IdAssigned=Course_ID
+JOIN dbo.ARGPersonalInformation_IH ON ARGPersonalInformation_IH.Student_ID = SeatAllocationMatrix_IH.Student_Id
+JOIN dbo.ARGStudentPreviousQualifications_IH ON ARGStudentPreviousQualifications_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+
+SELECT ROW_NUMBER() OVER(PARTITION BY Course_ID ORDER BY CourseFullName, (MarksObt/MaxMarks)*100.0 DESC) sno,CourseFullName Course,
+StudentFormNo formNo,FullName,FathersName,Category,
+(MarksObt/MaxMarks)*100.0 _MeritObtained,SeatAllocationMatrix_IH.PreferenceOfCourse Preference,ExamBody,
+CASE WHEN (ISFinallySelected=1 AND  SelectionListNo=2) then 'joined/upgraded' 
+when  ISFinallySelected=1  THEN 'joined'
+ ELSE '' END status
+ FROM  dbo.SeatAllocationMatrix_IH
+JOIN dbo.ADMCourseMaster ON Course_IdAssigned=Course_ID
+JOIN dbo.ARGPersonalInformation_IH ON ARGPersonalInformation_IH.Student_ID = SeatAllocationMatrix_IH.Student_Id
+JOIN dbo.ARGStudentPreviousQualifications_IH ON ARGStudentPreviousQualifications_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+WHERE (ISFinallySelected=1 or  SelectionListNo=2)
+
+
+--------------------------- passouts -----------------------
+SELECT  CollegeFullName,CourseFullName,ARGPersonalInformation_IH.Batch,ARGPersonalInformation_IH.CUSRegistrationNo,ARGPersonalInformation_IH.FullName FROM dbo.VWStudentCourse 
+JOIN dbo.ARGPersonalInformation_IH ON ARGPersonalInformation_IH.Student_ID = VWStudentCourse.Student_ID
+JOIN dbo.DegreeCertificate ON DegreeCertificate.Student_ID = VWStudentCourse.Student_ID
+WHERE CourseFullName LIKE '%honor''s' AND IsPassout=1
+ORDER BY ARGPersonalInformation_IH.Batch,CollegeFullName,CourseFullName
+
+
+--------------- pool fund query -----------------
+SELECT CollegeFullName,
+cast(PaymentDetails_IH.Semester AS VARCHAR(20)) +' & ' +cast((dbo.PaymentDetails_IH.Semester+1) AS VARCHAR(20)) Semesters 
+,COUNT(CollegeFullName) totalStudents,'1050' [University Pool Fund],COUNT(CollegeFullName)*1050 Amount
+FROM (
+SELECT DISTINCT Student_ID,
+       CUSRegistrationNo,
+       Batch,
+       CollegeFullName,
+       AcceptCollege_ID,
+       Course_ID
+	   FROM VWStudentWithDetail 
+) s
+JOIN dbo.PaymentDetails_IH ON Entity_ID=Student_ID
+WHERE ModuleType=6 AND YEAR(TxnDate)=2022 
+GROUP BY CollegeFullName,YEAR(TxnDate),PaymentDetails_IH.Semester
+ORDER BY CollegeFullName
+
+
+-------------------------------------------------Pass-Out Query-------------------------
+
+
+ 
+
+
+	SELECT CollegeFullName,DegreeCourseTitle,Batch,COUNT(ARGPersonalInformation_UG.Student_ID)AS NoofStudents FROM dbo.ARGPersonalInformation_UG 	
+	JOIN dbo.ADMCollegeMaster ON ADMCollegeMaster.College_ID = ARGPersonalInformation_UG.AcceptCollege_ID
+	JOIN dbo.ARGSelectedCombination_UG ON ARGSelectedCombination_UG.Student_ID = ARGPersonalInformation_UG.Student_ID
+	JOIN dbo.ADMCombinationMaster ON ADMCombinationMaster.Combination_ID = ARGSelectedCombination_UG.Combination_ID
+	JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = ADMCombinationMaster.Course_ID	 AND ARGSelectedCombination_UG.Semester=4
+	WHERE IsPassout=1 AND Batch IN ('2017','2018','2019') 
+	GROUP BY CollegeFullName,DegreeCourseTitle,Batch
+	union	 
+	SELECT  CollegeFullName,DegreeCourseTitle,Batch,COUNT(ARGPersonalInformation_IH.Student_ID)AS NoofStudents FROM dbo.ARGPersonalInformation_IH	
+	JOIN dbo.ADMCollegeMaster ON ADMCollegeMaster.College_ID = ARGPersonalInformation_IH.AcceptCollege_ID
+	JOIN dbo.ARGSelectedCombination_IH ON ARGSelectedCombination_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+	JOIN dbo.ADMCombinationMaster ON ADMCombinationMaster.Combination_ID = ARGSelectedCombination_IH.Combination_ID
+	JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = ADMCombinationMaster.Course_ID
+	--JOIN dbo.MSCGPA ON MSCGPA.Student_ID = ARGPersonalInformation_IH.Student_ID
+	WHERE IsPassout=1 AND Batch = '2017' AND ARGSelectedCombination_IH.Semester=6
+	GROUP BY CollegeFullName,DegreeCourseTitle,Batch 
+	UNION
+	SELECT DISTINCT CollegeFullName,DegreeCourseTitle,Batch,COUNT(ARGPersonalInformation_PG.Student_ID)AS NoofStudents FROM dbo.ARGPersonalInformation_PG	
+	JOIN dbo.ADMCollegeMaster ON ADMCollegeMaster.College_ID = ARGPersonalInformation_PG.AcceptCollege_ID
+	JOIN dbo.ARGSelectedCombination_PG ON ARGSelectedCombination_PG.Student_ID = ARGPersonalInformation_PG.Student_ID
+	JOIN dbo.ADMCombinationMaster ON ADMCombinationMaster.Combination_ID = ARGSelectedCombination_PG.Combination_ID
+	JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = ADMCombinationMaster.Course_ID
+	WHERE IsPassout=1 AND Batch IN ('2017','2018','2019','2020') AND ARGSelectedCombination_PG.Semester=4
+	GROUP BY CollegeFullName,DegreeCourseTitle,Batch
+	ORDER BY CollegeFullName,DegreeCourseTitle,Batch
+
+
+
+
+    ------------ get student total credits lateral entry -----------------
+SELECT SUM(TotalCredit) TotalCredit,CourseFullName,ARGPersonalInformation_IH.CUSRegistrationNo,(COUNT(ADMSubjectMaster.Subject_ID)+COUNT(AdditionalSubject_ID)) totalsubjects FROM dbo.VWStudentWithDetail 
+JOIN dbo.ARGPersonalInformation_IH ON ARGPersonalInformation_IH.Student_ID = VWStudentWithDetail.Student_ID
+JOIN dbo.ADMSubjectMaster ON ADMSubjectMaster.Subject_ID = VWStudentWithDetail.Subject_ID
+LEFT JOIN dbo.ARGStudentAdditionalSubjects_IH ON ARGStudentAdditionalSubjects_IH.Student_ID = VWStudentWithDetail.Student_ID
+AND ADMSubjectMaster.Subject_ID = ARGStudentAdditionalSubjects_IH.Subject_ID
+JOIN dbo.MSSubjectMarksStructure ON MSSubjectMarksStructure.SubjectMarksStructure_ID = ADMSubjectMaster.SubjectMarksStructure_ID
+WHERE IsLateralEntry=1 AND CourseFullName LIKE '%integrated %' AND VWStudentWithDetail.Semester=7
+GROUP BY ARGPersonalInformation_IH.CUSRegistrationNo,CourseFullName
+ 
+ ----------------------------- Btech lateral 2022 --------------
+ SELECT DISTINCT CourseFullName,ARGCoursesApplied_IH.Preference,SubjectEntrancePoints,StudentFormNo,FullName,FathersName,Category,Mobile,
+Stream PreviousExamPassed,MaxMarks,MarksObt,(MarksObt/MaxMarks)*100 [Percentage]
+FROM dbo.ARGPersonalInformation_IH
+    JOIN dbo.ARGCoursesApplied_IH
+        ON ARGCoursesApplied_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+		LEFT JOIN dbo.ARGStudentPreviousQualifications_IH ON ARGStudentPreviousQualifications_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+		JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = ARGCoursesApplied_IH.Course_ID
+		JOIN dbo.ARGStudentAddress_IH ON ARGStudentAddress_IH.Student_ID = ARGPersonalInformation_IH.Student_ID		
+		
+WHERE Batch = 2022 AND IsLateralEntry=1 AND ARGCoursesApplied_IH.Preference=1
+      AND FormStatus = 10 AND EntranceRollNo IS NOT NULL AND ExamName='Diploma/B.Sc' AND CourseFullName LIKE '%Engineering%'
+	  ORDER BY CourseFullName,ARGCoursesApplied_IH.Preference ASC, SubjectEntrancePoints DESC;
+	  
+	  
+	   --AND SelfFinancedPayment_ID IS NOT NULL 
+
+       ----------------------- IG lateral entry ---------------------------
+
+SELECT CourseFullName [Course Applied],ARGCoursesApplied_IH.Preference,StudentFormNo CUSFormNo,
+FullName [Applicant Name],
+Category,ExamName,
+ISNULL(CAST(MarksObt AS VARCHAR(200)), 'Result Awaited') [Marks Obtained],
+ISNULL(CAST(MaxMarks AS VARCHAR(200)), 'Result Awaited') [Max Marks],
+ISNULL(CAST((MarksObt / MaxMarks * 100) AS VARCHAR(200)), '0') [%age],ExamBody [Board]
+FROM dbo.ARGPersonalInformation_IH
+JOIN dbo.ARGCoursesApplied_IH
+ON ARGCoursesApplied_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = ARGCoursesApplied_IH.Course_ID
+LEFT JOIN dbo.ARGStudentPreviousQualifications_IH
+ON ARGStudentPreviousQualifications_IH.Student_ID = ARGPersonalInformation_IH.Student_ID 
+AND FormStatus = 10 AND AcceptCollege_ID IS NULL
+WHERE Programme IN(3) AND Batch=2022 AND IsLateralEntry=1 AND CourseFullName NOT LIKE '%Engineering%' 
+AND FormStatus = 10 AND AcceptCollege_ID IS NULL AND ARGCoursesApplied_IH.Preference<=2 
+ORDER BY ARGCoursesApplied_IH.Course_ID ASC,[%age] DESC
+
+--------------------- applied for sem adm------------------
+SELECT COUNT(CourseFullName) [Total Students Applied IN Sem 7 & 8th],CourseFullName
+ FROM dbo.VWStudentCourse WHERE  Student_ID IN(
+SELECT DISTINCT
+       Entity_ID
+FROM dbo.ARGPersonalInformation_IH
+    JOIN dbo.PaymentDetails_IH
+        ON Entity_ID = Student_ID		
+WHERE ModuleType = 6 AND dbo.PaymentDetails_IH.Semester=7
+AND TxnDate>='2022-01-01'
+) 
+GROUP BY CourseFullName
+----------------------------- daily lecture feedback ----------------------
+SELECT CollegeFullName,s.FullName,SubjectFullName,
+       FacultyName,
+       CASE WHEN FacultyType=1 THEN 'Academic Arrangement' ELSE 'Permanent' END FacultyType,
+       CASE WHEN ModeOfTeaching=1 THEN 'Online' ELSE 'Offline' END ModeOfTeaching,
+       LectureDateTime,
+       LectureTopic,
+       CASE WHEN FacultyArrivesOnTime=1 THEN 'YES' ELSE 'NO' END FacultyArrivesOnTime,     
+       CASE WHEN FacultyBehaviour=1 THEN 'ExtremelyPoor' 
+	   WHEN FacultyBehaviour=2 THEN 'VeryPoor' 
+	   WHEN FacultyBehaviour=3 THEN 'POOR' 
+	   WHEN FacultyBehaviour=4 THEN 'SomehowTolerable' 
+	   WHEN FacultyBehaviour=5 THEN 'Moderate' 
+	   WHEN FacultyBehaviour=6 THEN 'ModeratelyGood' 
+	   WHEN FacultyBehaviour=7 THEN 'GOOD' 
+	   WHEN FacultyBehaviour=8 THEN 'VeryGood' 
+	   ELSE 'ExtremelyGood' END FacultyBehaviour,
+       CASE WHEN FacultyLeavessOnTime=1 THEN 'YES' ELSE 'NO' END FacultyLeavessOnTime,
+       CASE WHEN MaterialProvided=1 THEN 'NO'
+	   WHEN MaterialProvided=2 THEN 'PPT'
+	   WHEN MaterialProvided=3 THEN 'PHOTOSTATE'
+	   WHEN MaterialProvided=4 THEN 'PDF'
+	   WHEN MaterialProvided=5 THEN 'DOC'
+	   WHEN MaterialProvided=6 THEN 'EXCEL'
+	   WHEN MaterialProvided=7 THEN 'IMAGES'
+	    ELSE 'Written Notes' END MaterialProvided,
+       AnyRemarks,
+       DailyLectureFeedBack.CreatedOn SubmittedOn,
+       Semester FROM dbo.DailyLectureFeedBack
+JOIN dbo.ADMSubjectMaster ON ADMSubjectMaster.Subject_ID = DailyLectureFeedBack.Subject_ID
+JOIN (
+SELECT Student_ID,FullName,AcceptCollege_ID FROM dbo.ARGPersonalInformation_IH
+UNION
+SELECT Student_ID,FullName,AcceptCollege_ID FROM dbo.ARGPersonalInformation_UG
+UNION
+SELECT Student_ID,FullName,AcceptCollege_ID FROM dbo.ARGPersonalInformation_PG
+) s ON s.Student_ID = DailyLectureFeedBack.Student_ID
+JOIN dbo.ADMCollegeMaster ON s.AcceptCollege_ID=ADMCollegeMaster.College_ID
+ORDER BY CollegeFullName,Semester,SubjectFullName,FacultyName
+
+------------------------------------------ joined --------------------------
+
+SELECT ROW_NUMBER() OVER(PARTITION BY Course_ID ORDER BY CourseFullName, (MarksObt/MaxMarks)*100.0 DESC) sno,CourseFullName Course,
+StudentFormNo formNo,FullName,FathersName,Category,
+(MarksObt/MaxMarks)*100.0 _MeritObtained,SeatAllocationMatrix_IH.PreferenceOfCourse Preference,ExamBody,
+CASE WHEN (ISFinallySelected=1 AND  SelectionListNo=2) then 'joined/upgraded' 
+when  ISFinallySelected=1  THEN 'joined'
+ ELSE 'not joined' END status
+ FROM  dbo.SeatAllocationMatrix_IH
+JOIN dbo.ADMCourseMaster ON Course_IdAssigned=Course_ID
+JOIN dbo.ARGPersonalInformation_IH ON ARGPersonalInformation_IH.Student_ID = SeatAllocationMatrix_IH.Student_Id
+JOIN dbo.ARGStudentPreviousQualifications_IH ON ARGStudentPreviousQualifications_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+
+
+------------------------ subject structure ---------------------------
+SELECT '' [SNo.],COALESCE(CollegeFullName, 'All Colleges') College,
+       Semester,CourseFullName [Course],
+       SubjectFullName,
+       dbo.FNSubjectTypeDescription(SubjectType) subjectType,
+       TotalCredit,
+       InternalMaxMarks [Practical/Internal],
+       InternalAttendance_AssessmentMaxMarks [Practical cont. assessment],
+       ExternalAttendance_AssessmentMaxMarks [Theory cont. assessment],
+       ExternalMaxMarks [External / Theory],
+	   '' Remarks,CASE when GroupName IS NULL AND (CourseFullName='b.a' OR CourseFullName='Journalism & Mass Communication') THEN
+             'Arts & Humanities'
+			 WHEN GroupName IS NULL AND CourseFullName LIKE 'b.sc.%' THEN
+             'Science'
+			 ELSE
+             CourseFullName
+			 END
+             [Stream]
+FROM dbo.ADMSubjectMaster
+    JOIN dbo.MSSubjectMarksStructure
+        ON MSSubjectMarksStructure.SubjectMarksStructure_ID = ADMSubjectMaster.SubjectMarksStructure_ID
+    LEFT JOIN dbo.ADMCollegeMaster
+        ON ADMCollegeMaster.College_ID = ADMSubjectMaster.College_ID
+	LEFT JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = ADMSubjectMaster.Course_ID
+WHERE Remarks LIKE '%nep%'
+      AND Semester = 1
+ORDER BY GroupName,[CourseFullName],
+         subjectType,
+         SubjectFullName,TotalCredit DESC;
+
+         ------------------------------ ig bedmed ma med semester admission ---------------------
+         UPDATE dbo.ADMSemesterAdmissionSettings 
+SET AllowUptoBatch=2021,Status=1,ClosingDate='2023-01-06 23:59:00.000'
+WHERE Course_ID IN
+(
+'{cbced3ef-afe6-4c23-bd67-6c0a78b1eea1}',
+'{c23dd7f4-a933-4deb-ba8e-f933830bccf8}',
+'FC32E138-4EE2-4DA2-9453-5C8368180BC3'
+)
+AND Semester=3
+
+
+--------------------- ARCHIVE CENTER SEM-------------------
+ SELECT ARGCentersAllotmentMaster.Center_ID,CenterCode FROM dbo.ARGStudentExamForm_UG 
+ JOIN dbo.ARGCentersAllotmentMaster ON Entity_ID=StudentExamForm_ID
+ JOIN dbo.ARGEntranceCentersMaster ON ARGEntranceCentersMaster.Center_ID = ARGCentersAllotmentMaster.Center_ID
+ WHERE Semester=2 AND Year=2023
+ ORDER BY CenterCode DESC
+
+GO
+DELETE FROM dbo.ARGCentersAllotmentMaster WHERE Center_ID IN(
+SELECT Center_ID FROM dbo.ARGEntranceCentersMaster
+ WHERE IsEntrance=0
+ AND CenterCode 
+ IN
+())
+
+ GO
+ DELETE FROM dbo.ARGEntranceCentersMaster
+ WHERE IsEntrance=0
+ AND CenterCode 
+ IN
+()
+
+ ------------- open rev ----------------------
+ UPDATE  dbo.ReEvaluationSetting SET AllowDownloadForm=1,ValidateByExaminationForm=1
+,StartDate='2023-01-08 10:00:00.000',EndDate='2023-01-12 23:59:00.000'
+ WHERE  
+CourseCategory=3 AND IsReEvaluation=1
+
+
+UPDATE  dbo.ReEvaluationSetting SET AllowDownloadForm=1,ValidateByExaminationForm=1
+,StartDate='2023-01-08 10:00:00.000',EndDate='2023-01-12 23:59:00.000'
+ WHERE  
+CourseCategory=3 AND IsReEvaluation=0
+
+
+----------------------stranded students----------------------------
+SELECT Exmfrm.Student_ID  FROM ARGPersonalInformation_UG Pinfo JOIN ARGSelectedCombination_UG  SC ON SC.Student_ID = Pinfo.Student_ID AND Pinfo.CurrentSemesterOrYear=sc.Semester JOIN ARGStudentExamForm_UG Exmfrm ON Exmfrm.Student_ID = Pinfo.Student_ID AND Exmfrm.Semester = SC.Semester WHERE SC.SemesterBatch<=2020 AND  Exmfrm.CreatedOn<'2020-01-01' AND Pinfo.FormStatus=9 
+AND Exmfrm.Student_ID NOT in
+(SELECT Exmfrm.Student_ID FROM ARGPersonalInformation_UG Pinfo JOIN ARGStudentExamForm_UG Exmfrm ON Exmfrm.Student_ID = Pinfo.Student_ID 
+WHERE Batch<=2020 AND  Exmfrm.CreatedOn>='2020-01-01' AND Pinfo.FormStatus=9)
+--ORDER BY Batch
+
+UNION
+
+SELECT Exmfrm.Student_ID  FROM ARGPersonalInformation_IH Pinfo JOIN ARGSelectedCombination_IH  SC ON SC.Student_ID = Pinfo.Student_ID AND Pinfo.CurrentSemesterOrYear=sc.Semester JOIN ARGStudentExamForm_IH Exmfrm ON Exmfrm.Student_ID = Pinfo.Student_ID AND Exmfrm.Semester = SC.Semester WHERE SC.SemesterBatch<=2020 AND  Exmfrm.CreatedOn<'2020-01-01' AND Pinfo.FormStatus=9 
+AND Exmfrm.Student_ID NOT in
+(SELECT Exmfrm.Student_ID FROM ARGPersonalInformation_IH Pinfo JOIN ARGStudentExamForm_IH Exmfrm ON Exmfrm.Student_ID = Pinfo.Student_ID 
+WHERE Batch<=2020 AND  Exmfrm.CreatedOn>='2020-01-01' AND Pinfo.FormStatus=9) 
+--ORDER BY Batch
+
+union
+
+SELECT Exmfrm.Student_ID FROM ARGPersonalInformation_PG Pinfo JOIN ARGSelectedCombination_PG  SC ON SC.Student_ID = Pinfo.Student_ID AND Pinfo.CurrentSemesterOrYear=sc.Semester JOIN ARGStudentExamForm_UG Exmfrm ON Exmfrm.Student_ID = Pinfo.Student_ID AND Exmfrm.Semester = SC.Semester WHERE SC.SemesterBatch<=2020 AND  Exmfrm.CreatedOn<'2020-01-01' AND Pinfo.FormStatus=9
+AND Exmfrm.Student_ID NOT in
+(SELECT Exmfrm.Student_ID FROM ARGPersonalInformation_PG Pinfo JOIN ARGStudentExamForm_PG Exmfrm ON Exmfrm.Student_ID = Pinfo.Student_ID 
+WHERE Batch<=2020 AND  Exmfrm.CreatedOn>='2020-01-01' AND Pinfo.FormStatus=9)
+--ORDER BY Batch
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------
+SELECT 
+CASE WHEN PaymentDetails_IH.Semester=1 THEN
+'Semester 1 & 2 Admission'
+ WHEN PaymentDetails_IH.Semester=3 THEN
+'Semester 3 & 4 Admission'
+ WHEN PaymentDetails_IH.Semester=5 THEN
+'Semester 5 & 6 Admission'
+ WHEN PaymentDetails_IH.Semester=7 THEN
+'Semester 7 & 8 Admission'
+ WHEN PaymentDetails_IH.Semester=9 THEN
+'Semester 9 & 10 Admission'
+ELSE
+CAST(PaymentDetails_IH.Semester AS VARCHAR(10))
+END Semester,
+       SemesterBatch Batch,
+	   CollegeFullName,
+	   StudentFormNo,FullName,
+       TxnAmount,
+	   TxnDate,
+       CourseFullName,
+       CASE
+           WHEN dbo.PaymentDetails_IH.PaymentType = 1 or dbo.PaymentDetails_IH.PaymentType = 3 THEN
+               'Online'
+           WHEN dbo.PaymentDetails_IH.PaymentType = 2 THEN
+               'offline'
+			   ELSE
+               'offline'
+       END PaymentType
+FROM dbo.ARGPersonalInformation_IH
+    JOIN dbo.PaymentDetails_IH
+        ON Entity_ID = Student_ID
+    JOIN dbo.ARGSelectedCombination_IH
+        ON ARGSelectedCombination_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+    JOIN dbo.ADMCombinationMaster
+        ON ADMCombinationMaster.Combination_ID = ARGSelectedCombination_IH.Combination_ID
+		AND ARGSelectedCombination_IH.SEMESTER=PaymentDetails_IH.SEMESTER
+    JOIN dbo.ADMCourseMaster
+        ON ADMCourseMaster.Course_ID = ADMCombinationMaster.Course_ID
+		JOIN dbo.ADMCollegeMaster ON ADMCollegeMaster.College_ID = ADMCombinationMaster.College_ID
+WHERE ModuleType = 6 --AND PaymentDetails_IH.SEMESTER<3
+ORDER BY CollegeFullName,CourseFullName,
+         PaymentDetails_IH.Semester,
+         SemesterBatch,
+         PaymentType,TxnAmount;
+
+         ------------------------------------
+         SELECT CourseFullName,
+       CUSRegistrationNo,
+       FullName,
+       [Skill],
+       [AE],
+       [Value Added Courses],
+       [Major],
+       [Minor Inter Disciplinary],
+       [Multi Disciplinary]
+FROM
+(
+    SELECT CourseFullName,
+           CUSRegistrationNo,
+           FullName,
+           SubjectFullName,
+           dbo.FNSubjectTypeDescription(SubjectType) st
+    FROM dbo.VWStudentWithDetail
+    WHERE Batch = 2022 AND (CourseFullName not LIKE 'honor''s%' and CourseFullName NOT  LIKE 'integrated%')
+          AND AcceptCollege_ID = '90AE5E98-3A8F-4B15-A652-7EAE5A203C42'
+          AND CUSRegistrationNo IS NOT NULL AND Semester=1
+) t
+PIVOT
+(
+    MAX(SubjectFullName)
+    FOR st IN ([Skill], [AE], [Value Added Courses], [Major], [Minor Inter Disciplinary], [Multi Disciplinary])
+) s
+ORDER BY s.CUSRegistrationNo DESC;
+---------------------------------------------------------------------------------------------
+SELECT CASE
+           WHEN dbo.ARGPersonalInformation_IH.FormStatus = 9 THEN
+               'currently enrolled'
+           ELSE
+               'Admission Cacelled'
+       END [student Status],
+       Semester,
+       CollegeFullName,
+       StudentFormNo,
+       FullName,
+       TxnAmount,
+       TxnDate,
+       CASE
+           WHEN dbo.PaymentDetails_IH.PaymentType = 1
+                OR dbo.PaymentDetails_IH.PaymentType = 3 THEN
+               'Online'
+           WHEN dbo.PaymentDetails_IH.PaymentType = 2 THEN
+               'offline'
+           ELSE
+               'offline'
+       END PaymentMode,
+       CASE
+           WHEN dbo.PaymentDetails_IH.ModuleType = 1 THEN
+		   'Registration Fee(Admission)'
+           WHEN dbo.PaymentDetails_IH.ModuleType = 2 THEN
+               'ReEvaluation Forms'
+           WHEN dbo.PaymentDetails_IH.ModuleType = 3 THEN
+               'Examination Forms'
+           WHEN dbo.PaymentDetails_IH.ModuleType = 4 THEN
+               'Xerox Forms'
+           WHEN dbo.PaymentDetails_IH.ModuleType = 5 THEN
+               'Registration Fee(Self Finance)'
+           WHEN dbo.PaymentDetails_IH.ModuleType = 6 THEN
+               'Semester Admission'
+           WHEN dbo.PaymentDetails_IH.ModuleType = 8 THEN
+               'Migration '
+           WHEN dbo.PaymentDetails_IH.ModuleType = 9 THEN
+               'Add More Admission Courses (Registration Fee)'
+           WHEN dbo.PaymentDetails_IH.ModuleType = 10 THEN
+               'Certificate Courses Admission'
+           WHEN dbo.PaymentDetails_IH.ModuleType = 12 THEN
+               'AttemptCertificate'
+           WHEN dbo.PaymentDetails_IH.ModuleType = 13 THEN
+               'CertificateVerification'
+           WHEN dbo.PaymentDetails_IH.ModuleType = 14 THEN
+               'NEP Registration Fee'
+           WHEN dbo.PaymentDetails_IH.ModuleType = 15 THEN
+               'Issuing of Degree Certificate'
+           ELSE
+               'OTHER'
+       END [Payment done for]
+FROM dbo.ARGPersonalInformation_IH
+    LEFT JOIN dbo.ADMCollegeMaster
+        ON ADMCollegeMaster.College_ID = AcceptCollege_ID
+    JOIN dbo.PaymentDetails_IH
+        ON Entity_ID = Student_ID
+WHERE PaymentType IN ( 1, 2, 3 ) AND TxnAmount>0
+ORDER BY CollegeFullName,
+         PaymentDetails_IH.Semester,
+         PaymentType,
+         TxnAmount;
+         -------------------------------------------------------------------------
+         SELECT PostName,NotificationNo,NotificationDated,TxnReferenceNo,TxnAmount,TxnDate,'Recruitment Online Registration Fee' [Type] FROM dbo.PaymentDetails
+JOIN dbo.RSFormPersonalDetails ON Entity_ID=Form_ID
+JOIN dbo.RSPosts ON RSPosts.Post_ID = RSFormPersonalDetails.Post_ID
+ORDER BY RSFormPersonalDetails.Post_ID,TxnDate DESC
+
+
+
+
+
+----------------------- Query For Copying Skill Users-----------------------------------
+
+INSERT INTO dbo.AppUsers
+		SELECT NEWID(),* FROM(SELECT DISTINCT
+		    'Ext_'+CAST(UserName AS VARCHAR(100)) UserName,
+		    AppUsers.College_ID College_ID,
+		    FullName,
+		    'Ext_'+CAST(Email AS VARCHAR(100)) Email, 
+		     EmailConfirmed,
+		    Password,
+		    PhoneNumber,
+		    AccessFailedCount,
+		    LockoutEndDateUtc,
+		    LockoutEnabled,
+		    SecurityStamp,
+		    AppUsers.Status,
+		    Designation,
+		    NULL Photograph,
+		    PhotographType,
+		    PasswordResetToken,
+		    TokenIssuedOn,
+		    GETDATE() CreatedOn,
+		    AppUsers.CreatedBy,
+		    NULL UpdatedOn,
+		    NULL UpdatedBy,
+		    'Eval2023' Evaluator_Id,
+		   GETDATE() LastPasswordResetDate,
+		    ShowBacklog
+		FROM dbo.AppUsers JOIN dbo.AppUserRoles
+		ON AppUserRoles.User_ID = AppUsers.User_ID
+		JOIN dbo.AppUserProfessorSubjects ON AppUserProfessorSubjects.User_ID = AppUsers.User_ID
+		JOIN dbo.ADMSubjectMaster ON ADMSubjectMaster.Subject_ID = AppUserProfessorSubjects.Subject_ID
+		WHERE ADMSubjectMaster.Semester=3 AND SubjectType=3 AND ADMSubjectMaster.Status=1 AND AppUsers.Status=1 
+		 ) AS TT
+
+
+ 	INSERT INTO dbo.AppUserEvaluatorSubjects
+	SELECT 
+	    NEWID(),
+	    dbo.AppUserProfessorSubjects.Semester,
+	    Ext.User_ID,
+	    AppUserProfessorSubjects.Subject_ID,
+	    AppUserProfessorSubjects.Status,
+	    GETDATE(),
+	    AppUserProfessorSubjects.CreatedBy,
+	    null,
+	    AppUserProfessorSubjects.UpdatedBy,
+	   null,
+	  NULL,
+	    null,
+	   NULL,
+	   NULL 	 
+	 
+	FROM dbo.AppUsers Internal 
+		
+		JOIN dbo.AppUserProfessorSubjects ON AppUserProfessorSubjects.User_ID = Internal.User_ID
+		JOIN dbo.ADMSubjectMaster ON ADMSubjectMaster.Subject_ID = AppUserProfessorSubjects.Subject_ID		
+		JOIN dbo.AppUsers Ext ON Ext.FullName = Internal.FullName 
+		LEFT JOIN dbo.AppUserRoles ON AppUserRoles.User_ID = Ext.User_ID AND RoleID=NULL
+		WHERE ADMSubjectMaster.Semester=3 AND SubjectType=3 AND ADMSubjectMaster.Status=1 AND Internal.Status=1  AND Ext.UserName LIKE 'Ext%'
+		ORDER BY Internal.UserName
+
+
+	   INSERT INTO dbo.AppUserRoles
+		select
+		    AppUsers.User_ID,
+		    11,
+		    'University_Evaluator',
+		    GETDATE(),
+		    dbo.AppUsers.CreatedBy,
+		    null,
+		    null
+		FROM dbo.AppUsers left JOIN dbo.AppUserRoles
+		ON AppUserRoles.User_ID = AppUsers.User_ID
+		WHERE RoleID IS NULL
+        
+        
+        -------------------------------------------------Status 0 For Subjects Semester-1----------------------------------------------------------------------------
+
+        UPDATE dbo.AppUserEvaluatorSubjects SET Status=0 WHERE Subject_ID 
+IN
+(
+'{77562249-7a21-4f31-9604-00d90c4e4233}',
+'{3cb7ee50-70ec-409b-b2ba-014a4538b1fb}',
+'{3d79550d-df89-473f-8720-028d240150e6}',
+'{e6c9b934-b5f6-455a-aed2-02b24f684467}',
+'{d6f0bef9-30e4-44fe-b7cb-030d90dc11ee}',
+'{0dff3e91-70d4-40e2-a91a-031260cc2458}',
+'{b8c06b8b-fd07-49b2-b27a-03da91ad92dd}',
+'{93d87215-9665-400b-81e6-0447b3e610c8}',
+'{f0432ac8-4df7-48aa-9662-04ae50c349d7}',
+'{fe824197-4989-438d-8f62-057b974da165}',
+'{ec76f55c-a6eb-4266-b66d-05eea58393e4}',
+'{7aa2b133-d3fa-44ea-a88c-0761e908dc9e}',
+'{7fff5699-34f0-4613-a326-087aedbb10c9}',
+'{ab35e8e2-7373-403b-9a35-09799653c7d0}',
+'{38c4a0d9-8505-4239-9d29-098f2bfc4513}',
+'{25167259-d374-4647-abed-0a4bb1d8dfee}',
+'{a3644fd9-4d1d-4f0b-bf7f-0acaf61ca5f3}',
+'{9163838a-b765-4271-8a5a-0b22fa3cac15}',
+'{1a73b4f2-87f1-4647-a1e5-0bb4433bd759}',
+'{cb3475ab-cac1-4466-a634-0bebc56c256a}',
+'{b5387557-173d-4808-b3b9-0beed617cdf3}',
+'{cbd3d328-d35f-420c-bb24-0caabcb8e618}',
+'{52a217af-b746-474b-bff2-0d12ef723af4}',
+'{76e42771-dc6b-4f1f-b4e3-0d305fba8bd7}',
+'{b84f760d-7f17-4002-bedb-0d5a90dc1e51}',
+'{bfae52b8-5328-4ab2-9c22-0ffc6c18f479}',
+'{649bdd9f-c280-421f-a475-10253b738dd3}',
+'{343ddeca-4907-4642-b427-115d8bf39a95}',
+'{bced7f1c-89bf-496a-8c61-1193f0125e24}',
+'{be0b691e-98b5-41f6-a001-137185506a95}',
+'{9fa44301-3119-4cd6-990f-14000da3a455}',
+'{199748df-6b09-4b9f-b341-14d2ca093d57}',
+'{c504ac94-3650-44c2-ba61-15d5f295d373}',
+'{abbdd68c-40bf-4446-b8a7-16e96a0242de}',
+'{36ee13c1-59d6-43ba-b3a9-170e82e33072}',
+'{3c56f9df-b53d-4e50-8f82-1769b1f674dd}',
+'{ffbe587f-1fa5-436a-8e64-17887b7ebf1f}',
+'{e00cb12f-1a07-4a74-b52b-19b4fec1a6cb}',
+'{72897ebf-a827-469e-bcd8-19e8d8735472}',
+'{71a8fcfd-b51c-4320-b480-1a01fa7cab1a}',
+'{691528cd-2e2d-4013-bfec-1a336d39232b}',
+'{d21f6e04-8784-44de-a618-1a65623cb256}',
+'{3c3c5be5-1fc5-40f6-b222-1a990a7b2a76}',
+'{047255c2-7604-428d-a842-1ae3be9ef118}',
+'{6276be13-f81b-447c-b661-1aecb5731b5f}',
+'{97e58216-2cc1-4631-bfea-1b3e4d259afe}',
+'{6c9950ae-2fa8-4754-9ac5-1c2e318b00c8}',
+'{ed9caa67-190e-4cc6-9dac-1cb0077a7280}',
+'{1f3eeca0-5efd-4d1b-8d17-1e26a1b5e975}',
+'{12020447-b8cd-4d21-a50d-1e390015a228}',
+'{b99a93ee-ca67-476a-aaa8-1f521dbe9e4a}',
+'{2603378d-e8a6-4e4d-8e38-1f803b881a1a}',
+'{623e357b-c2a3-43fd-a49c-20297447aab7}',
+'{c8f16052-cf6c-4df3-98f2-203d965aae5c}',
+'{5ee6c46d-3968-4997-b9f5-219e974d0076}',
+'{ff564f81-72ca-49d2-a69e-22bb0b23974f}',
+'{8d0951a2-2001-42ba-b52a-24a24f0a5b28}',
+'{0338c2b5-b27c-4f92-84df-24ebe8f13734}',
+'{05369410-8b5f-45aa-8739-25bf11133dbe}',
+'{ba396278-edb3-4d67-af51-265051cd223d}',
+'{6264e978-f50a-4cec-a742-269170a00c8d}',
+'{0b190b22-8817-40a1-9046-28085a30ceb8}',
+'{a11437c2-a784-40bd-a76d-2884f8616fb2}',
+'{b63167a1-93ab-45a2-8bbb-289baa5c1e33}',
+'{d81b5c3c-9528-4538-a7d0-2aed5c3c1542}',
+'{eddc632d-490b-4516-8b93-2bc20c9aa13a}',
+'{2f3ff6ff-5d27-4542-92fc-2c0833d8c610}',
+'{9fb9f095-86ab-41d8-a0a3-2d03db80228d}',
+'{8145c3fd-be1d-4802-b8ce-2de03ede3b74}',
+'{446f704c-8d63-4d44-8c4a-2e489b00a76d}',
+'{fb3b5a16-8ce4-460a-99e1-2eaf362616d0}',
+'{b8124cac-dfdb-44e7-beef-2f38f27abbc4}',
+'{f18e41e9-3dc2-47ab-af9a-2f806aac1be6}',
+'{407a2be0-48ed-4307-b2cf-2fcf0b55310f}',
+'{6f86795f-d86e-4ca6-a1be-2fd65781fafe}',
+'{38c102a0-f41c-448a-af72-2ff6f834baf0}',
+'{71cc92c9-d6d0-4927-b629-304453bf955b}',
+'{abe702af-0243-4522-a4e4-305db91c691b}',
+'{323426d3-f573-455a-836e-310b128b6567}',
+'{1bbf50af-c298-46ca-b69a-314c81090956}',
+'{0286d80d-da62-4323-968a-31e2dc1a16ec}',
+'{0947bd1c-2708-4a12-a39a-31ebfb0ba507}',
+'{650a93b4-0776-4e28-b79c-3255b79e2c27}',
+'{950871ec-48e7-4af5-a15c-33308210f545}',
+'{2897964e-58b5-4ae2-84b7-3404ac9ec7c6}',
+'{a84190ed-d777-4d1d-b9ee-3438bfd2bf03}',
+'{fd72f866-118e-498f-bbbc-352fafdf1d21}',
+'{f0221a88-2bb7-4a02-a372-3669607676af}',
+'{051331e2-210b-4965-a299-3714537bbba5}',
+'{f6c6ccac-5d69-408e-bf41-37f118a42140}',
+'{c4e12b47-68c0-4a86-bc59-399d6f617183}',
+'{3484ce94-fd6f-411c-8b78-3a25188a5f04}',
+'{c96168bb-6151-40c3-a9d8-3b3327bb69db}',
+'{0e2e0c2f-0788-4e73-9f08-3bfd4c50ee0a}',
+'{e2a61335-6a57-4f77-82df-3c1afa998b3c}',
+'{ca432c61-b3d8-4693-a6a6-3c2072f2e2ba}',
+'{5fa87da8-146d-4259-84d1-3c289151c0e5}',
+'{3fff6fdc-5b80-45a3-b034-3c51843e228a}',
+'{cf1b4c93-eb70-46c8-9973-3c8fba1ad4de}',
+'{5e859f6c-2f19-4b8f-a308-3e15fa7074c9}',
+'{22ea1c79-7e91-4885-aa3a-3f4e4215ffa9}',
+'{60e8e261-0a15-47cd-86ed-3f55da8c0f54}',
+'{6a2c9f26-c2db-4cc3-be7b-400811d4036e}',
+'{1313fa49-c55f-4c73-aafc-4086bc9e72a2}',
+'{85777549-63ef-4e3f-b89f-412ece4f7de9}',
+'{0f39718f-9418-4924-8c3d-4165b9e23e70}',
+'{fe8544fd-a4cd-4aaf-9a7e-4242294cd911}',
+'{fd841773-5e31-4b88-840e-42c53f71da8a}',
+'{ce4191d9-2bb7-4e42-9a50-43466df99022}',
+'{35bdf509-4cf1-4089-96a7-439d3e68a0c7}',
+'{05cb3b92-4485-4132-8b6b-44a0e56b1b09}',
+'{51d25cd2-c626-4e2d-802b-44c1f6b8604c}',
+'{a15c90fd-0b40-4f82-814a-45401c0e5c90}',
+'{d27e85ee-55bf-434d-af25-47046d8d75ed}',
+'{e68377cd-ef30-42f8-a6a3-47495e89f719}',
+'{f16ef22f-bebd-4168-a0df-488b5f53370d}',
+'{7b63ea70-5a90-41fc-b82d-49c28f603961}',
+'{1d48b53d-d462-4aa7-b36b-49fd556a0e8d}',
+'{09ba6bab-01ce-4c2b-a6fe-4adb1045ca97}',
+'{1ea969cf-9bab-4d0b-a853-4afa34868df3}',
+'{d4fc09e2-32f0-4c7a-a5cd-4e9f2f036403}',
+'{02a9d23a-785f-4db0-8448-4ef9f47f3586}',
+'{543990d0-3f51-4eac-8813-4f1940bb486c}',
+'{16b87048-159c-4b6d-bcb0-4fc5499fc8e5}',
+'{c5524e2f-e720-47a0-80ab-5057f320bd9b}',
+'{28e4923c-5c13-489f-b69c-50de1f9676ea}',
+'{07582b5b-958f-428b-a988-51331321c2fa}',
+'{4de309d5-82a4-40c6-a218-51ec134fa664}',
+'{2fcbbc89-ea4c-45ec-ae23-51f8bd670a5a}',
+'{f1d2db18-0fef-40eb-b98b-52a95790842e}',
+'{07e05357-9456-4d16-9ac5-52ae3707a855}',
+'{87ea3add-6a9a-4175-a4c6-52e111d65504}',
+'{d2a7fcf3-1af9-413b-aa36-53db01ab0d6d}',
+'{28e52b47-57ef-4952-a26b-54540916b7aa}',
+'{d5580f75-072a-4661-b798-547407a8f372}',
+'{8cbfed30-bf18-4b18-bacd-54c9f5e7701e}',
+'{b2a00541-0ec3-4782-9e42-5547eb3d7905}',
+'{a9b37551-120d-45f1-8588-555f26786d74}',
+'{0477479b-e720-4b9c-bc30-55de065c3db5}',
+'{f44d2c88-0421-46ef-8ff0-56254f61b797}',
+'{8e0499f4-48da-4dc4-968a-5afadbc18710}',
+'{df1352f3-d0e5-469d-bd79-5b37cded2ae2}',
+'{293d4bc5-3fcb-4e8b-aa5e-5c402b5ec6df}',
+'{535e0c70-a40f-4e14-9d14-5c7233890659}',
+'{ff5c2c34-abed-437f-bcac-5c92ea50430b}',
+'{058589ce-89c8-4bd1-8284-5cad16ec44ac}',
+'{62c6cd9e-16a0-4684-a0fc-5cb8c0b285e1}',
+'{30614305-d505-4847-a474-5ce0a3b9d86a}',
+'{e2fafeb7-0afa-4bfe-ac5c-5dd604a16381}',
+'{44de3ca8-713e-4843-b412-5f5a2e364629}',
+'{4c330104-6de6-4c93-ab1c-5fd381d3e60c}',
+'{570dc7fc-ad74-4373-bbdf-60afd8f4765f}',
+'{a423f227-27ce-4b38-b839-60dc1ecfe66a}',
+'{7812062c-d924-412b-a8b5-6134d64e7a0e}',
+'{d0b683cd-328a-4c92-8739-614640ef1086}',
+'{ece43c0f-ee68-4301-b2c6-61c79890fd8e}',
+'{ffaa45a9-ac0a-4c2e-b097-623c36a1be2f}',
+'{a056709e-7a78-40e0-b158-63347323a89e}',
+'{025f6eec-cddc-4a85-9c50-63c2e87eb0ef}',
+'{883a11b0-1302-4b59-a735-63ef5d0b56f6}',
+'{177579a4-b7af-4ffc-ad18-64ed3996719d}',
+'{88edf603-36c4-4066-a54f-6505611f2061}',
+'{4dc06c80-5a2a-4d9e-816e-6566b29140cc}',
+'{cbeb905f-8095-4a06-b827-65a44935582c}',
+'{19adb556-ba6a-4f31-8397-65dc4d6a2246}',
+'{e2e98252-d78b-47c7-9045-67c21e28bd4b}',
+'{02f6f828-df1e-41de-b6af-682ce99d28d5}',
+'{13899077-2d01-4665-82a9-6890086bc161}',
+'{6f782fb4-2142-4fd9-aaa0-68940c1a1436}',
+'{26835176-6f27-4cb5-8de2-6a26a9b8e3e5}',
+'{d64fe31b-5533-4def-ae59-6a2fde343bd5}',
+'{18acfd10-2237-476b-b741-6a59d463e9ed}',
+'{f13da46d-f80c-446e-8d24-6a77ea4a380c}',
+'{f54366cc-820d-4773-97ab-6bcf3aafcda1}',
+'{d87fe395-5794-47c4-8e89-6bd2d7bcc3fa}',
+'{74439bfa-116f-4c92-b872-6bfde67140a9}',
+'{66822e67-6517-4c0c-afea-6dc19c0aca22}',
+'{75440e35-82bf-4ba5-bf59-6dea2810d95b}',
+'{7933d689-3d17-42fb-aab5-700ef33ab76d}',
+'{02191d7d-33b3-4eef-8229-702838c8ca45}',
+'{ac206b66-6da1-4201-baf0-70e5bbb32fc8}',
+'{eba641e8-b515-40bb-84c7-7345afe3e4bb}',
+'{1208b1fc-c2e8-4bfe-b919-734f22b84dd5}',
+'{8d93061d-456a-4065-8ef0-73a2a2437df4}',
+'{87d31cc7-3fb0-4978-99ce-73f3807ec74a}',
+'{0c793ce1-5f27-43cd-967c-73fb643dc268}',
+'{fcf0464f-72b7-45d1-93d6-747416128909}',
+'{fcb6c656-cb8f-4ff7-a6eb-74f380650419}',
+'{11874f3d-2d2d-4a60-81a6-75a8a8a22ac1}',
+'{36a486e6-ff42-47d1-92de-75fde4594a8d}',
+'{8f41a073-5b36-4013-89d2-766a7b7f9c23}',
+'{8aa856ca-d706-49e8-b918-76b934c76978}',
+'{0714039e-6af8-4cec-8e23-76e0528c9539}',
+'{a2323a3e-a92f-4900-b8cd-7728a761bbfd}',
+'{ac722802-405c-4544-b7f6-7773e3a2ea95}',
+'{0676cb13-daaf-40ee-a10a-77a93c208abd}',
+'{9bc5d433-e082-4fb8-bc21-794a9db3b4e0}',
+'{bc28e023-5d36-4f93-82d7-7a37238fc480}',
+'{8670a5fa-934a-4534-b143-7af6389950bb}',
+'{1bc36c1b-adbd-476c-afef-7ba80156a351}',
+'{882c84be-b020-437e-aac0-7d0e733e9e56}',
+'{99b6100c-e7fb-4418-b548-7d417d225c03}',
+'{5c72b6e3-d65c-4942-a7b4-7d6facfe4298}',
+'{78c3488b-5e36-49a0-8dea-7fe024b0800f}',
+'{2a29f315-f505-4ef1-a481-805c10c979ab}',
+'{c633fc22-b9bb-42e5-ab9a-8285f41df6cf}',
+'{d024408b-5e87-4400-aa7f-8364c599cd9d}',
+'{600ef232-e486-46ae-9a10-836711fbe8cd}',
+'{5923a5f2-9526-49c0-af4e-84bdc38978d3}',
+'{d3f7bee2-eff6-4ab1-b6e7-84f8d7a146da}',
+'{e188a364-149e-42d7-8e29-850fd40334af}',
+'{f5f6e724-54fb-4884-95f8-855bd51e1f85}',
+'{a8f4e86b-670d-446f-b3e7-858faae5fed9}',
+'{dcb40532-c472-4270-9695-859578ff7fc3}',
+'{f729ad16-d807-49a6-b0e2-8599afd508c4}',
+'{d28cd751-e457-429a-b6d0-860faf0899bd}',
+'{576a19b3-8da2-415b-b935-862e07cb89be}',
+'{68c61dc8-5063-4c5d-82e0-86561f9de554}',
+'{3e7b9417-f79c-4111-aee0-86d15c84f594}',
+'{9ecf1847-8899-4016-865a-878c65a4e535}',
+'{81c00783-638c-4835-910c-88948da501cf}',
+'{51d2022e-04b6-41df-968b-88a3efc07218}',
+'{61c7da31-abab-40fe-848b-88aab4804aad}',
+'{c349f297-c7f0-4d76-a10c-8948a1054956}',
+'{af5c173e-83a5-44f3-b9a1-8999eecb6556}',
+'{99d1dbec-e969-46af-86e4-89c682223b2f}',
+'{fb5f67d6-6e0d-4651-95d0-8a8971106885}',
+'{dda3c831-3918-442c-90cc-8b119e4ec388}',
+'{8ee700fe-e464-403c-9e9d-8c1f17df58b1}',
+'{0b277587-6882-413e-86a4-8c57d3cde6f7}',
+'{6fac13cf-af49-4098-9ff3-8d35bb4bfc5b}',
+'{403a8541-03c7-4d57-ad56-8dde29f107f3}',
+'{d1a77384-1f2d-4492-9d59-8f53702e309f}',
+'{b9eccfb3-04f6-4164-9798-906c15db12e0}',
+'{cdbeda6a-bf89-4df7-b218-90c8b72399d1}',
+'{47b11a3b-ff30-4a7f-8416-912fdb90f86a}',
+'{b9b47fc3-1fce-454e-b57b-91510413fc46}',
+'{8d6e9215-815d-4fc3-b219-9194cc96716f}',
+'{1bf608d5-d580-46fe-addc-91aa00f4b595}',
+'{dabb2041-4e99-47ae-b7f0-9337aad16d24}',
+'{bb5c0d80-ffe0-4c57-bbb5-937e2fedfc2c}',
+'{9655dee1-812e-4058-a11e-9389510c7055}',
+'{39b41c74-15b5-48d8-9f10-93ca67580570}',
+'{8b1f6679-384b-4d04-997b-94604fae4ea2}',
+'{cee11faa-d2a6-407f-9c09-946f3ba620ef}',
+'{8d282ba3-450b-4858-b98d-95ec5d0fdee0}',
+'{655dc72c-bb04-4f0c-9e70-9684874ffbc3}',
+'{5058bf6f-4d38-40d6-b66d-96f8c28e2cdf}',
+'{a5139383-8a3a-4dee-a589-9a2537d2392b}',
+'{aac63f04-4763-407d-be63-9a8a7c9918f6}',
+'{65758431-b868-4d05-9ac5-9aeb9cb73694}',
+'{bbbdeaa4-0007-4864-a9f0-9bb2226e3f55}',
+'{0d311c3d-6049-4afe-8395-9bd19eec9b4f}',
+'{fa06d6c5-c4e3-4a9d-a1dc-9d889c3372a7}',
+'{40e05e0a-cef5-427f-9596-9f152917edde}',
+'{9120d19c-a7d6-4f7e-a6aa-9f2aa254b83b}',
+'{871af1e7-09b6-4d30-9ee5-9f6ef002ca41}',
+'{06261bca-9986-4942-bbc4-9fbf173e7804}',
+'{b7620f21-1de7-4565-8e2b-9fe8c6abbb7a}',
+'{97b5c9f4-230f-4800-bd11-a0ca2638a48e}',
+'{a9340387-a013-4121-82c5-a0dc9317379b}',
+'{a84c662a-731c-4805-8dff-a12392c3ba68}',
+'{f0af2371-0d31-4313-8337-a1f81d165f05}',
+'{1ca14e35-62b8-43ce-b994-a24bafa8936e}',
+'{6dd27057-8914-43c4-b344-a2c935922f3e}',
+'{041726e8-bf9f-4b63-86a5-a2f13e9180be}',
+'{e50a5eeb-5c01-4ba3-b56b-a3b602402e41}',
+'{fd2d96b1-e411-4745-9fad-a5007992550f}',
+'{595e509d-51b0-43c9-b1f5-a634555a1b68}',
+'{f9aa4875-2d9f-4bdf-93b1-a63c16a25211}',
+'{f962113c-fa41-4957-9077-a6807d95cf90}',
+'{96226c12-3d8a-4fe6-b425-a6bcc3d31877}',
+'{93717476-929f-4513-8e4c-a6f0da46622d}',
+'{2aeac990-fa45-4d44-abed-a749b712f370}',
+'{58bb2cb0-01fa-4970-b71e-a811c0f11ee5}',
+'{22027796-8de8-4ac2-8685-a85b96157696}',
+'{81c8bd77-05ba-4d34-969e-a89933f5ef6c}',
+'{0a19b751-814f-49e3-aab6-aa25a8b4e216}',
+'{6f8251b7-062b-4e19-9a22-ac5c8c02582b}',
+'{02139a0b-009c-4d6c-826a-aff3fc78e6f4}',
+'{3e8f68cf-5dd3-472d-a90a-b10098ddc5fe}',
+'{b47b81a4-ddb6-427c-9d22-b1148b3f9f42}',
+'{d0b1e500-cff1-464a-b6b3-b2bb907cd7f7}',
+'{a1511eca-af80-412a-8b7c-b4eecdea8df7}',
+'{c7e04e15-02ce-41e8-ac02-b537e0e53333}',
+'{016710a9-d0fc-4561-9157-b53d6268480b}',
+'{83d19cd8-b27c-486d-8b97-b59745d4b328}',
+'{69909351-acac-421e-bef0-b6085f23acc1}',
+'{3c19af7e-17fe-4d59-a3aa-b681b3e7652d}',
+'{6f8d8ce2-7c9a-486c-b3d3-b796610f7a1c}',
+'{a772b997-e638-4a27-96f7-b9be9ef9c457}',
+'{0fc49b30-f4c7-4982-b571-ba4f2b36f441}',
+'{d9bf047e-b019-428c-8284-ba847387fdb2}',
+'{db32d16f-afc4-4809-8033-bb7ab81b3e7f}',
+'{e10e9f48-d063-4961-8007-bb7f0dd7dbe2}',
+'{552e3f25-b138-48cd-87a2-bcde43ab92ff}',
+'{4dd7c889-e2a1-445d-b080-be3fdb08abdc}',
+'{e7702b12-17a3-40e1-b038-be41f9f61e08}',
+'{df992803-9915-4c6b-a81d-bf4a68e6e4f8}',
+'{f0d8c48c-466c-4895-87b3-c2a6bacfd440}',
+'{114b6194-8f62-4a47-8740-c2d661016573}',
+'{0f83ed0f-4507-4a0e-a05c-c3e83eb03164}',
+'{49b7462b-d59b-45de-b28c-c49accd0efcb}',
+'{5c660245-784d-4d82-86e5-c4c5c0aa6e35}',
+'{b52a51e1-7515-45ca-bc21-c4e35f85fc6a}',
+'{35d13706-1bef-46ca-a807-c503a54f5048}',
+'{1cde9747-4bf8-4df5-847f-c6321349a7d5}',
+'{36c5743a-67a1-47f8-8fb5-c66658adf1cb}',
+'{06f115c6-91a7-4c47-bd3e-c7808fb4d225}',
+'{1a90abf8-8af5-4907-83aa-c845898a7dde}',
+'{81b4eea7-642b-4f95-b31d-c9cb0a7ca784}',
+'{4d03a322-d2f4-4170-9172-ca28e4d58dc6}',
+'{182a57e1-c05f-42ba-84ad-cca5b5d3942b}',
+'{679f80e3-2c56-4056-ae97-ce418604f086}',
+'{fc090eb8-a050-4b10-98fb-cef889fe0543}',
+'{c59e778f-b029-4157-914b-cf2973e58f34}',
+'{ad67f6d6-e714-4864-be2d-d17d3860e06e}',
+'{c08852fa-4812-4f54-ad2a-d1d14c13901f}',
+'{d92cc5eb-382c-4bf7-8ac9-d30f0b3449a4}',
+'{6789806a-6cc9-4a96-ad06-d4704fe15b42}',
+'{eac7c88c-43ab-4550-9294-d54b857016fd}',
+'{c33c2d65-81d0-411a-9ef0-d5b6e89d1d1b}',
+'{e191678e-bce5-44a7-8e02-d78106e51fa3}',
+'{5b320936-4105-40bf-a8f6-d78714605d7a}',
+'{86e678c0-5c50-4af7-b717-d8a6c5e8f5b6}',
+'{7a6f0f3e-a0b2-4f39-ba86-d99ac1bc62c3}',
+'{490ca95f-ecd3-4eb4-8206-d9d99a15cb91}',
+'{867ec533-c131-4f57-adab-da309b00f03e}',
+'{c1e4d93f-e293-4fa6-97f4-dadd85525c8c}',
+'{27556221-08bd-4c67-b1cd-dc8f86c7c36f}',
+'{c282e0f8-6cc6-43d1-ab18-ddfe478c698d}',
+'{0fd11598-8301-49d3-bc0f-de25285bfef5}',
+'{95b44754-e155-47b9-a203-de8cf687cb9f}',
+'{31f6ba19-a1b6-447b-be3b-dfb71907f70f}',
+'{135d376e-e234-4799-b2c7-e053fe15869e}',
+'{cf0b8b77-b516-4039-8c68-e0994df044e5}',
+'{807fad09-c6ea-48f9-9693-e40fcafdf989}',
+'{5dba4ddf-036b-4055-a9d3-e7afebbe326f}',
+'{5458334f-4594-4a27-9f9f-e8024f1f2197}',
+'{81684279-f9da-4af4-9d1b-e8371471f6c2}',
+'{7e49b2fb-2349-44d0-904c-e88a6ba31302}',
+'{c0786d6b-47a9-4060-9b4a-e8ee16e1e5cb}',
+'{f4564e5a-dc66-424b-b2c3-e9f033a8f928}',
+'{0a3b1e66-d885-468f-bda2-eaa0a0368ec7}',
+'{7606dd6c-157e-4c66-9f6e-eb055c2cf65c}',
+'{5953d72b-7bff-4c8c-9ae1-eb300967638b}',
+'{d6667210-125e-45ec-be9c-eb98b5e52655}',
+'{6cab1961-c285-4e94-b0e7-ecba3de0ccb6}',
+'{5a952052-fc5b-4dcf-be53-ece5a490c279}',
+'{080ed133-acd1-4383-90bf-ed091cc315aa}',
+'{c68fff6e-0e18-463a-b01e-f06cf5c73310}',
+'{19050e61-8398-4cc5-9caa-f0cf23f3f7ab}',
+'{7ff9ad09-5a10-476c-aff4-f0f0a920bc57}',
+'{0bd3df46-d9f1-46aa-b30f-f2bdf9587792}',
+'{d6f4fa13-e0dd-4543-81ac-f34937315703}',
+'{b0df77ba-dfea-498e-b468-f4a998c71b35}',
+'{07979e7c-6606-4b54-ab3d-f5daba51efe4}',
+'{024ba8d9-9a65-4dc7-a0ca-f608b9b88e6d}',
+'{453491c7-0a7d-49a8-b6dd-f62b91b9c7db}',
+'{4b2d3998-f735-4494-9c3a-f62dd7b09233}',
+'{2e4fbba5-db0a-4e6b-8fe6-f6520c823557}',
+'{d9f134a7-298e-4a0d-b7e2-f72a4d06ea7c}',
+'{172ac727-6f83-4694-8c22-f9a0834cbc67}',
+'{a45dffb1-37f5-4a4f-bfba-fa05d99564cb}',
+'{7bdaebdb-bcae-47c5-bfab-fa9cf18fee9e}',
+'{bd891500-ac30-40a8-add4-faea6cd8f9e3}',
+'{edf06efc-8a70-44d8-a94c-fbe327e1ba0a}',
+'{2c137ccf-d9d9-4f19-887a-fd0c233b42fb}',
+'{4ec88790-db34-4728-9012-fd46a60df5b4}'
+)
+
+--------------------------- backlog exam details ---------------
+
+SELECT DISTINCT * FROM (
+	SELECT  ADMSubjectMaster.SubjectFullName,dbo.FNSubjectTypeDescription(ADMSubjectMaster.SubjectType) subjecttype,FullName,CUSRegistrationNo,
+	CASE WHEN ADMSubjectMaster.SubjectType=3 THEN
+    0
+	ELSE
+	275
+	end
+	AmountPaid
+	,dbo.ARGStudentExamForm_UG.CreatedOn appliedon,
+	CourseFullName,'Backlog' exmtype,ARGStudentExamForm_UG.Semester
+	 FROM dbo.VWStudentWithDetail
+	JOIN dbo.ARGStudentExamForm_UG ON ARGStudentExamForm_UG.Student_ID = VWStudentWithDetail.Student_ID
+	JOIN dbo.ARGStudentReExamForm ON ARGStudentReExamForm.StudentExamForm_ID = ARGStudentExamForm_UG.StudentExamForm_ID
+	JOIN dbo.ADMSubjectMaster ON ADMSubjectMaster.Subject_ID = ARGStudentReExamForm.Subject_ID
+	where ARGStudentExamForm_UG.Semester=3 AND Year=2020 AND AcceptCollege_ID='B5E689E6-75FB-44E9-8ED7-3E649C18B659'
+	AND ARGStudentExamForm_UG.Status=4 AND IsRegular=0 AND CourseFullName='b.a' AND AmountPaid IS NOT NULL 
+	AND ADMSubjectMaster.SubjectType=3
+) t
+ORDER BY CUSRegistrationNo,SubjectType
+
+
+-------------------------- BTech Major Project core hasResult 8 sem -------------------
+--origional value was hasresult=1
+
+UPDATE dbo.ADMSubjectMaster SET HasResult=0 WHERE Subject_ID IN
+(
+'{d616bfe3-4fc3-4a4e-afb9-1e3de1a68817}',
+'{58e3cda8-e828-4558-aa23-466e175cddb4}',
+'{eba68d95-9df9-4c99-81be-578e25ab78b6}',
+'{433f5ba0-3c64-4482-b465-761deda20ac6}',
+'{9e051888-3245-4ba5-96fa-aec0a14f67cb}',
+'{0247fa22-ef4b-4148-9169-ccd91605ae7d}'
+)
+
+
+------------------------------Course Structure with credit query--------------------------------
+
+SELECT CourseFullName,
+       SubjectFullName,
+       ADMSubjectMaster.Semester,
+       dbo.FNSubjectTypeDescription(SubjectType) AS Type,
+       TotalCredit,
+       CreditWeightage,
+       (CAST(ISNULL(TotalCredit, 0) AS INT) * CAST(ISNULL(CreditWeightage, 0) AS INT)) AS [Total Marks]
+FROM dbo.ADMSubjectMaster
+    JOIN dbo.MSSubjectMarksStructure
+        ON MSSubjectMarksStructure.SubjectMarksStructure_ID = ADMSubjectMaster.SubjectMarksStructure_ID
+    JOIN dbo.ADMCourseMaster
+        ON ADMCourseMaster.Course_ID = ADMSubjectMaster.Course_ID
+WHERE ADMCourseMaster.Programme = 3
+      AND dbo.FNSubjectTypeDescription(SubjectType) NOT IN ( 'None', 'GE', 'OE', 'Skill' )
+      AND CourseFullName NOT IN ( 'Generic Elective-IG' )
+ORDER BY CourseFullName,
+         ADMSubjectMaster.Semester,
+         SubjectType;
+
+---------------------Course Structure of all GE-OE and Skill Courses---------------------------------------
+
+	SELECT DepartmentFullName,CourseFullName,
+		ADMSubjectMaster.Semester,
+		dbo.FNSubjectTypeDescription(SubjectType) AS Type,
+       SubjectFullName,  
+       TotalCredit,
+       CreditWeightage,
+       (CAST(ISNULL(TotalCredit, 0) AS INT) * CAST(ISNULL(CreditWeightage, 0) AS INT)) AS [Total Marks]
+FROM dbo.ADMSubjectMaster
+    JOIN dbo.MSSubjectMarksStructure
+        ON MSSubjectMarksStructure.SubjectMarksStructure_ID = ADMSubjectMaster.SubjectMarksStructure_ID
+    JOIN dbo.ADMCourseMaster
+        ON ADMCourseMaster.Course_ID = ADMSubjectMaster.Course_ID
+		JOIN dbo.Department ON Department.Department_ID = ADMSubjectMaster.Department_ID
+WHERE ADMCourseMaster.Programme = 3
+      AND dbo.FNSubjectTypeDescription(SubjectType)   IN (  'GE', 'OE', 'Skill' )
+     --AND CourseFullName   IN ( 'Generic Elective-IG','Skill Enhancement-IG' )
+
+ORDER BY DepartmentFullName,CourseFullName,
+         ADMSubjectMaster.Semester,
+         SubjectType;
+
+
+----------------------------------For uploading external awards for Skill subjects only---------------------------
+INSERT INTO dbo.AppUserEvaluatorSubjects
+(
+    EvaluatorSubject_ID,
+    Semester,
+    User_ID,
+    Subject_ID,
+    Status,
+    CreatedOn,
+    CreatedBy
+)
+SELECT
+  NEWID(),
+    5,
+    IntUsr.User_ID,
+    AppUserProfessorSubjects.Subject_ID,
+    1,
+    GETDATE(),
+    dbo.AppUserProfessorSubjects.CreatedBy     
+  FROM dbo.AppUsers Usr JOIN dbo.AppUserProfessorSubjects
+ON AppUserProfessorSubjects.User_ID = Usr.User_ID
+JOIN dbo.ADMSubjectMaster ON ADMSubjectMaster.Subject_ID = AppUserProfessorSubjects.Subject_ID
+JOIN dbo.AppUsers IntUsr ON IntUsr.UserName ='Ext_'+ Usr.UserName
+JOIN dbo.AppUserRoles ON AppUserRoles.User_ID = IntUsr.User_ID
+WHERE AppUserProfessorSubjects.Semester=5 AND SubjectType=3 AND RoleID=11
+
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+		ALTER TABLE dbo.MSSubjectMarksStructure
+		ALTER COLUMN TotalCredit DECIMAL(4,2)
+
+		ALTER TABLE dbo.MSSubjectMarksStructure
+		ALTER COLUMN CreditWeightage DECIMAL(4,2)
+
+        ----------------------------------------update isinternal passed and isexternal passed according to batch---------(Backlog Result)-----------------
+
+        SELECT * FROM dbo.IH_Semester3
+			   (SELECT _ID FROM VWStudentResultAllSemesters JOIN ADMSubjectMaster ON ADMSubjectMaster.Subject_ID = VWStudentResultAllSemesters.Subject_ID 
+                                -- JOIN dbo.ARGPersonalInformation_IH ON ARGPersonalInformation_IH.Student_ID = VWStudentResultAllSemesters.Student_ID
+							    --JOIN dbo.ARGStudentExamForm_IH ON ARGStudentExamForm_IH.Student_ID = VWStudentResultAllSemesters.Student_ID
+								JOIN VWStudentCourse ON VWStudentCourse.Student_ID = VWStudentResultAllSemesters.Student_ID AND ADMSubjectMaster.Semester=3
+                                AND ( IsClearAndLocked=0  OR IsClearAndLocked IS NULL) 
+                                --AND InternalMarks>=dbo.GetInternalMinMarks(SubjectMarksStructure_ID) 
+                                 AND dbo.GetInternalResult(SubjectMarksStructure_ID,VWStudentResultAllSemesters.Student_ID,ADMSubjectMaster.Semester,ADMSubjectMaster.Subject_ID)=1
+								
+                                AND isinternalpassed=0  AND Programme IN(3,4,6)
+								AND VWStudentCourse.Batch IN ('2017','2018','2019','2020')
+
+                                ----------------------------- internal pending -------------------
+                                SELECT COUNT(UG_Semester2.Student_ID) totalStudentAwardsReceived,
+       ADMSubjectMaster.SubjectFullName,
+       MAX(dbo.FNSubjectTypeDescription(ADMSubjectMaster.SubjectType))
+FROM dbo.VWStudentWithDetail
+    LEFT JOIN dbo.UG_Semester2
+        ON UG_Semester2.Subject_ID = VWStudentWithDetail.Subject_ID
+           AND UG_Semester2.Student_ID = VWStudentWithDetail.Student_ID
+    JOIN dbo.ADMSubjectMaster
+        ON ADMSubjectMaster.Subject_ID = VWStudentWithDetail.Subject_ID
+WHERE VWStudentWithDetail.Batch = 2022
+      AND CurrentSemesterOrYear = 2
+      AND AcceptCollege_ID = 'b5e689e6-75fb-44e9-8ed7-3e649c18b659'
+      --AND VWStudentWithDetail.Course_ID = '7EBBC065-FEEB-4473-9CD2-93DEB3280003'
+      --AND UG_Semester2.Student_ID IS NOT NULL
+	  AND VWStudentWithDetail.Semester=2 AND ADMSubjectMaster.Status=1
+GROUP BY UG_Semester2.Subject_ID,ADMSubjectMaster.SubjectFullName
+ORDER BY ADMSubjectMaster.SubjectFullName;
+
+------------------------------------- pg general merit list ----------------
+
+
+SELECT DISTINCT CourseFullName,Preference,StudentFormNo,CUETEntranceRollNo,CUETApplicationNo,FullName,FathersName,Category,Mobile,ExamName,Subjects,
+ExamBody,MaxMarks,MarksObt,(MarksObt/MaxMarks)*100 [Gratuation Percentage],SubjectEntrancePoints [CUET PG SubjectEntrancePoints],'https://www.cusrinagar.edu.in'+Certificate.CertificateUrl MarksCardFileName,
+CASE WHEN dbo.ARGPersonalInformation_PG.Category<>'OM' THEN
+'https://www.cusrinagar.edu.in'+s.CertificateUrl 
+ELSE
+''
+END CategoryFileName
+FROM dbo.ARGPersonalInformation_PG
+    JOIN dbo.ARGCoursesApplied_PG
+        ON ARGCoursesApplied_PG.Student_ID = ARGPersonalInformation_PG.Student_ID
+		JOIN dbo.ARGStudentPreviousQualifications_PG ON ARGStudentPreviousQualifications_PG.Student_ID = ARGPersonalInformation_PG.Student_ID
+		JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = ARGCoursesApplied_PG.Course_ID
+		JOIN dbo.ARGStudentAddress_PG ON ARGStudentAddress_PG.Student_ID = ARGPersonalInformation_PG.Student_ID		
+		JOIN dbo.Certificate ON Certificate.Student_ID = ARGPersonalInformation_PG.Student_ID AND CertificateType IN(4)
+		LEFT JOIN dbo.Certificate s ON s.Student_ID = ARGPersonalInformation_PG.Student_ID AND s.CertificateType IN(5)
+WHERE Batch = 2023 --AND IsLateralEntry=1
+      AND FormStatus = 10 AND CUETEntranceRollNo IS NOT NULL 
+	 -- AND ARGCoursesApplied_PG.AppearedInEntrance=1
+	  ORDER BY CourseFullName, SubjectEntrancePoints DESC--, Category; --AND SelfFinancedPayment_ID IS NOT NULL 
+
+
+      ------------------------ pg non cuet -------------------
+      
+SELECT DISTINCT CourseFullName,Preference,StudentFormNo,CUETEntranceRollNo,CUETApplicationNo,FullName,FathersName,Category,Mobile,ExamName,Subjects,
+ExamBody,MaxMarks,MarksObt,(MarksObt/MaxMarks)*100 [Gratuation Percentage],'https://www.cusrinagar.edu.in'+Certificate.CertificateUrl MarksCardFileName,
+CASE WHEN dbo.ARGPersonalInformation_PG.Category<>'OM' THEN
+'https://www.cusrinagar.edu.in'+s.CertificateUrl 
+ELSE
+''
+END CategoryFileName
+FROM dbo.ARGPersonalInformation_PG
+    JOIN dbo.ARGCoursesApplied_PG
+        ON ARGCoursesApplied_PG.Student_ID = ARGPersonalInformation_PG.Student_ID
+		JOIN dbo.ARGStudentPreviousQualifications_PG ON ARGStudentPreviousQualifications_PG.Student_ID = ARGPersonalInformation_PG.Student_ID
+		JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = ARGCoursesApplied_PG.Course_ID
+		JOIN dbo.ARGStudentAddress_PG ON ARGStudentAddress_PG.Student_ID = ARGPersonalInformation_PG.Student_ID		
+		JOIN dbo.Certificate ON Certificate.Student_ID = ARGPersonalInformation_PG.Student_ID AND CertificateType IN(4)
+		LEFT JOIN dbo.Certificate s ON s.Student_ID = ARGPersonalInformation_PG.Student_ID AND s.CertificateType IN(5)
+		JOIN dbo.PaymentDetails_PG ON Entity_ID=ARGPersonalInformation_PG.Student_ID
+WHERE Batch = 2023 --AND IsLateralEntry=1
+      AND FormStatus = 10 AND TxnDate>='2023-09-01'
+	 -- AND ARGCoursesApplied_PG.AppearedInEntrance=1
+	  ORDER BY CourseFullName, [Gratuation Percentage] DESC--, Category; --AND SelfFinancedPayment_ID IS NOT NULL 
+
+      ----------------------------- IG GEOGRAPHY ------------------------
+SELECT DISTINCT FullName,CUSRegistrationNo,CollegeFullName FROM dbo.ARGPersonalInformation_IH
+JOIN dbo.ARGSelectedCombination_IH ON ARGSelectedCombination_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+JOIN dbo.ADMCombinationMaster ON ADMCombinationMaster.Combination_ID = ARGSelectedCombination_IH.Combination_ID
+JOIN dbo.ADMCollegeMaster ON ADMCollegeMaster.College_ID = ADMCombinationMaster.College_ID
+WHERE SemesterBatch=2020 AND ARGSelectedCombination_IH.Semester=6 AND Course_ID='FA853451-1B13-447B-A0F2-E6D5A4ED9AB5'
+ORDER BY CUSRegistrationNo
+-------------------- comb setting --------------
+INSERT INTO dbo.CombinationSetting
+(
+    CombinationSetting_ID,
+    Batch,
+    Semester,
+    Course_ID,
+    AllowCollegeChangeCombination,
+    AllowStudentChangeCombination,
+    AllowDeleteCombination,
+    CheckAdmissionForm,
+    CheckExaminationForm,
+    CheckCourseApplied,
+    CheckResult,
+    CompulsarySubjects,
+    Description,
+    CreatedOn,
+    CreatedBy,
+    UpdatedOn,
+    UpdatedBy,
+    CombinationSettingStructure_ID,
+    AllowChangeCourse,
+    ValidateByIntakeCapacity,
+    DefaultPaymentDate,
+    DefaultPaymentAmount,
+    CheckInSelectionList,
+    CheckSelectionListCollege,
+    ClosingDate
+)
+SELECT  NEWID(),
+       2021,
+       CombinationSetting.Semester,
+       CombinationSetting.Course_ID,
+       1,
+       0,
+       1,
+       1,
+       0,
+       0,
+       0,
+       CombinationSetting.CompulsarySubjects,
+       CombinationSetting.Description,
+       CombinationSetting.CreatedOn,
+       CombinationSetting.CreatedBy,
+       CombinationSetting.UpdatedOn,
+       CombinationSetting.UpdatedBy,
+       CombinationSetting.CombinationSettingStructure_ID,
+       CombinationSetting.AllowChangeCourse,
+       CombinationSetting.ValidateByIntakeCapacity,
+       '2023-09-07',
+      '2800',
+       0,
+       0,
+       '2023-10-07 23:14:57.640' FROM dbo.CombinationSetting 
+JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = CombinationSetting.Course_ID
+WHERE Batch=2020 AND Semester=5 AND Programme IN (1)
+GO
+INSERT INTO dbo.CombinationSetting
+(
+    CombinationSetting_ID,
+    Batch,
+    Semester,
+    Course_ID,
+    AllowCollegeChangeCombination,
+    AllowStudentChangeCombination,
+    AllowDeleteCombination,
+    CheckAdmissionForm,
+    CheckExaminationForm,
+    CheckCourseApplied,
+    CheckResult,
+    CompulsarySubjects,
+    Description,
+    CreatedOn,
+    CreatedBy,
+    UpdatedOn,
+    UpdatedBy,
+    CombinationSettingStructure_ID,
+    AllowChangeCourse,
+    ValidateByIntakeCapacity,
+    DefaultPaymentDate,
+    DefaultPaymentAmount,
+    CheckInSelectionList,
+    CheckSelectionListCollege,
+    ClosingDate
+)
+SELECT  NEWID(),
+       2021,
+       CombinationSetting.Semester,
+       CombinationSetting.Course_ID,
+       1,
+       0,
+       1,
+       1,
+       0,
+       0,
+       0,
+       CombinationSetting.CompulsarySubjects,
+       CombinationSetting.Description,
+       CombinationSetting.CreatedOn,
+       CombinationSetting.CreatedBy,
+       CombinationSetting.UpdatedOn,
+       CombinationSetting.UpdatedBy,
+       CombinationSetting.CombinationSettingStructure_ID,
+       CombinationSetting.AllowChangeCourse,
+       CombinationSetting.ValidateByIntakeCapacity,
+       '2023-09-07',
+      '5375',
+       0,
+       0,
+       '2023-10-07 23:14:57.640' FROM dbo.CombinationSetting 
+JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = CombinationSetting.Course_ID
+WHERE Batch=2020 AND Semester=5 AND Programme IN (3,4)INSERT INTO dbo.CombinationSetting
+(
+    CombinationSetting_ID,
+    Batch,
+    Semester,
+    Course_ID,
+    AllowCollegeChangeCombination,
+    AllowStudentChangeCombination,
+    AllowDeleteCombination,
+    CheckAdmissionForm,
+    CheckExaminationForm,
+    CheckCourseApplied,
+    CheckResult,
+    CompulsarySubjects,
+    Description,
+    CreatedOn,
+    CreatedBy,
+    UpdatedOn,
+    UpdatedBy,
+    CombinationSettingStructure_ID,
+    AllowChangeCourse,
+    ValidateByIntakeCapacity,
+    DefaultPaymentDate,
+    DefaultPaymentAmount,
+    CheckInSelectionList,
+    CheckSelectionListCollege,
+    ClosingDate
+)
+SELECT  NEWID(),
+       2021,
+       CombinationSetting.Semester,
+       CombinationSetting.Course_ID,
+       1,
+       0,
+       1,
+       1,
+       0,
+       0,
+       0,
+       CombinationSetting.CompulsarySubjects,
+       CombinationSetting.Description,
+       CombinationSetting.CreatedOn,
+       CombinationSetting.CreatedBy,
+       CombinationSetting.UpdatedOn,
+       CombinationSetting.UpdatedBy,
+       CombinationSetting.CombinationSettingStructure_ID,
+       CombinationSetting.AllowChangeCourse,
+       CombinationSetting.ValidateByIntakeCapacity,
+       '2023-09-07',
+      '2800',
+       0,
+       0,
+       '2023-10-07 23:14:57.640' FROM dbo.CombinationSetting 
+JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = CombinationSetting.Course_ID
+WHERE Batch=2020 AND Semester=5 AND Programme IN (1)
+GO
+---------------------------------- btech LE-------------------------
+SELECT DISTINCT CourseFullName,ARGCoursesApplied_IH.Preference,StudentFormNo,FullName,FathersName,Category,Mobile,ExamName,Subjects,
+ExamBody,MaxMarks,MarksObt,(MarksObt/MaxMarks)*100 [Diploma/B.Sc Percentage],'https://www.cusrinagar.edu.in'+Certificate.CertificateUrl MarksCardFileName,
+CASE WHEN dbo.ARGPersonalInformation_IH.Category<>'OM' THEN
+'https://www.cusrinagar.edu.in'+s.CertificateUrl 
+ELSE
+''
+END CategoryFileName
+FROM dbo.ARGPersonalInformation_IH
+    JOIN dbo.ARGCoursesApplied_IH
+        ON ARGCoursesApplied_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+		JOIN dbo.ARGStudentPreviousQualifications_IH ON ARGStudentPreviousQualifications_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+		JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = ARGCoursesApplied_IH.Course_ID
+		JOIN dbo.ARGStudentAddress_IH ON ARGStudentAddress_IH.Student_ID = ARGPersonalInformation_IH.Student_ID		
+		JOIN dbo.Certificate ON Certificate.Student_ID = ARGPersonalInformation_IH.Student_ID AND CertificateType IN(4)
+		LEFT JOIN dbo.Certificate s ON s.Student_ID = ARGPersonalInformation_IH.Student_ID AND s.CertificateType IN(5)
+		JOIN dbo.PaymentDetails_IH ON Entity_ID=ARGPersonalInformation_IH.Student_ID
+WHERE Batch = 2023 AND IsLateralEntry=1 AND Category<>'om'
+      AND FormStatus = 10 AND TxnDate>='2023-11-14'
+	  ORDER BY CourseFullName, [Diploma/B.Sc Percentage] DESC--, Category; --AND SelfFinancedPayment_ID IS NOT NULL 
+
+
+      --------------------------ALL Subjects Of IG batch-2017--------------------------------------------
+
+      SELECT DISTINCT D.DepartmentFullName,SM.Semester,Trim(SM.SubjectFullName) AS SubjectTitle,
+SM.SubjectCode,
+dbo.FNProgrammeDescription(SM.Programme) AS [Programme],
+ dbo.FNSubjectTypeDescription(SM.SubjectType) AS [Subject-Type]
+ FROM dbo.VWStudentWithDetail VW
+JOIN dbo.ADMSubjectMaster SM ON SM.Subject_ID = VW.Subject_ID
+JOIN dbo.ADMCourseMaster CM ON CM.Course_ID = VW.Course_ID
+JOIN dbo.ARGPersonalInformation_IH ON ARGPersonalInformation_IH.Student_ID = VW.Student_ID
+LEFT JOIN dbo.Department D ON D.Department_ID = SM.Department_ID
+WHERE    ARGPersonalInformation_IH.Batch='2017' AND SM.Status=1 AND SM.Programme=3
+ORDER BY D.DepartmentFullName,SM.Semester,[Subject-Type],SubjectTitle
+
+-------------------------- year wise semester payments -----------------------
+SELECT * FROM (SELECT 
+CASE WHEN PaymentDetails_UG.Semester=1 THEN
+'Semester 1 & 2'
+ WHEN PaymentDetails_UG.Semester=3 THEN
+'Semester 3 & 4'
+ WHEN PaymentDetails_UG.Semester=5 THEN
+'Semester 5 & 6'
+ WHEN PaymentDetails_UG.Semester=7 THEN
+'Semester 7 & 8'
+ WHEN PaymentDetails_UG.Semester=9 THEN
+'Semester 9 & 10'
+ELSE
+CAST(PaymentDetails_UG.Semester AS VARCHAR(10))
+END Semester,
+       YEAR(TxnDate) [year of payment],
+	   CollegeFullName,
+       COUNT(Entity_ID) TotalStudents,
+       SUM(TxnAmount) Amount,
+       CASE WHEN Programme=1 THEN 'UG'
+	    WHEN Programme=2 THEN 'PG'
+	    WHEN Programme=3 THEN 'IG'
+	    WHEN Programme=4 THEN 'Honors'
+	    WHEN Programme=6 THEN 'Professional'
+	    WHEN Programme=5 THEN 'Engineering'
+		END AS programmes
+FROM dbo.ARGPersonalInformation_UG
+    JOIN dbo.PaymentDetails_UG
+        ON Entity_ID = Student_ID
+    JOIN dbo.ARGSelectedCombination_UG
+        ON ARGSelectedCombination_UG.Student_ID = ARGPersonalInformation_UG.Student_ID
+    JOIN dbo.ADMCombinationMaster
+        ON ADMCombinationMaster.Combination_ID = ARGSelectedCombination_UG.Combination_ID
+		AND ARGSelectedCombination_UG.SEMESTER=PaymentDetails_UG.SEMESTER
+    JOIN dbo.ADMCourseMaster
+        ON ADMCourseMaster.Course_ID = ADMCombinationMaster.Course_ID
+		JOIN dbo.ADMCollegeMaster ON ADMCollegeMaster.College_ID = ADMCombinationMaster.College_ID
+WHERE ModuleType = 6 
+GROUP BY CollegeFullName,Programme,
+         PaymentDetails_UG.Semester,
+         YEAR(TxnDate)
+Union
+SELECT 
+CASE WHEN PaymentDetails_ih.Semester=1 THEN
+'Semester 1 & 2'
+ WHEN PaymentDetails_ih.Semester=3 THEN
+'Semester 3 & 4'
+ WHEN PaymentDetails_ih.Semester=5 THEN
+'Semester 5 & 6'
+ WHEN PaymentDetails_ih.Semester=7 THEN
+'Semester 7 & 8'
+ WHEN PaymentDetails_ih.Semester=9 THEN
+'Semester 9 & 10'
+ELSE
+CAST(PaymentDetails_ih.Semester AS VARCHAR(10))
+END Semester,
+       YEAR(TxnDate) [year of payment],
+	   CollegeFullName,
+       COUNT(Entity_ID) TotalStudents,
+       SUM(TxnAmount) Amount,
+       CASE WHEN Programme=1 THEN 'UG'
+	    WHEN Programme=2 THEN 'PG'
+	    WHEN Programme=3 THEN 'IG'
+	    WHEN Programme=4 THEN 'Honors'
+	    WHEN Programme=6 THEN 'Professional'
+	    WHEN Programme=5 THEN 'Engineering'
+		END AS programmes
+FROM dbo.ARGPersonalInformation_ih
+    JOIN dbo.PaymentDetails_ih
+        ON Entity_ID = Student_ID
+    JOIN dbo.ARGSelectedCombination_ih
+        ON ARGSelectedCombination_ih.Student_ID = ARGPersonalInformation_ih.Student_ID
+    JOIN dbo.ADMCombinationMaster
+        ON ADMCombinationMaster.Combination_ID = ARGSelectedCombination_ih.Combination_ID
+		AND ARGSelectedCombination_ih.SEMESTER=PaymentDetails_ih.SEMESTER
+    JOIN dbo.ADMCourseMaster
+        ON ADMCourseMaster.Course_ID = ADMCombinationMaster.Course_ID
+		JOIN dbo.ADMCollegeMaster ON ADMCollegeMaster.College_ID = ADMCombinationMaster.College_ID
+WHERE ModuleType = 6 
+GROUP BY CollegeFullName,Programme,
+         PaymentDetails_ih.Semester,
+         YEAR(TxnDate)
+union
+SELECT 
+CASE WHEN PaymentDetails_PG.Semester=1 THEN
+'Semester 1 & 2'
+ WHEN PaymentDetails_PG.Semester=3 THEN
+'Semester 3 & 4'
+ WHEN PaymentDetails_PG.Semester=5 THEN
+'Semester 5 & 6'
+ WHEN PaymentDetails_PG.Semester=7 THEN
+'Semester 7 & 8'
+ WHEN PaymentDetails_PG.Semester=9 THEN
+'Semester 9 & 10'
+ELSE
+CAST(PaymentDetails_PG.Semester AS VARCHAR(10))
+END Semester,
+       YEAR(TxnDate) [year of payment],
+	   CollegeFullName,
+       COUNT(Entity_ID) TotalStudents,
+       SUM(TxnAmount) Amount,
+       CASE WHEN Programme=1 THEN 'UG'
+	    WHEN Programme=2 THEN 'PG'
+	    WHEN Programme=3 THEN 'IG'
+	    WHEN Programme=4 THEN 'Honors'
+	    WHEN Programme=6 THEN 'Professional'
+	    WHEN Programme=5 THEN 'Engineering'
+		END AS programmes
+FROM dbo.ARGPersonalInformation_PG
+    JOIN dbo.PaymentDetails_PG
+        ON Entity_ID = Student_ID
+    JOIN dbo.ARGSelectedCombination_PG
+        ON ARGSelectedCombination_PG.Student_ID = ARGPersonalInformation_PG.Student_ID
+    JOIN dbo.ADMCombinationMaster
+        ON ADMCombinationMaster.Combination_ID = ARGSelectedCombination_PG.Combination_ID
+		AND ARGSelectedCombination_PG.SEMESTER=PaymentDetails_PG.SEMESTER
+    JOIN dbo.ADMCourseMaster
+        ON ADMCourseMaster.Course_ID = ADMCombinationMaster.Course_ID
+		JOIN dbo.ADMCollegeMaster ON ADMCollegeMaster.College_ID = ADMCombinationMaster.College_ID
+WHERE ModuleType = 6 
+GROUP BY CollegeFullName,Programme,
+         PaymentDetails_PG.Semester,
+         YEAR(TxnDate)) s
+ORDER BY 
+        s.CollegeFullName, [year of payment] asc;
+        ------------------------------------------ Govt degree college tral----------------------------
+        SELECT ARGPersonalInformation_PG.FullName,StudentFormNo,CourseFullName,ARGPersonalInformation_PG.Batch,Mobile,PreviousUniversityRegnNo
+ FROM dbo.VWStudentCourse 
+JOIN dbo.ARGPersonalInformation_PG ON ARGPersonalInformation_PG.Student_ID = VWStudentCourse.Student_ID
+JOIN dbo.ARGStudentAddress_PG ON ARGStudentAddress_PG.Student_ID = ARGPersonalInformation_PG.Student_ID
+WHERE PreviousUniversityRegnNo LIKE '%-tc-%'
+AND ARGPersonalInformation_PG.AcceptCollege_ID IS NOT NULL
+
+---------------------------------MisMatch MSCGPA 6th to 10th---------------------------------------------
+		SELECT   * FROM dbo.MSCGPA WHERE TCourse_ID='58144C9C-319B-4AA1-B335-BF77B0FD1C24' AND NotificationNo='CUS/Result/6thSem/Batch-2017/20/21' and SemesterTo=6 ORDER BY Student_ID   
+	    
+		
+		SELECT   * FROM dbo.MSCGPA 
+		JOIN dbo.ARGPersonalInformation_IH ON ARGPersonalInformation_IH.Student_ID = MSCGPA.Student_ID
+		WHERE TCourse_ID='58144C9C-319B-4AA1-B335-BF77B0FD1C24' and SemesterTo=10 AND NotificationNo='CUS/Result/2/X/23/180' AND IsLateralEntry=0 ORDER BY MSCGPA.Student_ID  

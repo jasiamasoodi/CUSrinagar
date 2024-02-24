@@ -1,0 +1,233 @@
+﻿
+@using CUSrinagar.Extensions;
+
+@model  List<CUSrinagar.Models.AdmissionFormWidget>
+
+@{
+    ViewBag.Title = "Admission Statistics";
+}
+
+@section CUSSitemap
+{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index", "Dashboard", new { area = "CUCollegeAdminPanel" })">Home</a>
+            </li>
+            <li class="active">Addmission Statistics</li>
+        </ul><!-- /.breadcrumb -->
+    </div>
+}
+<div class="row ">
+    <div class="col-md-12 jsTableContent">
+        <div class="panel panel-primary js-pager-table hidden-print" data-otherparam1="@CUSrinagar.Enums.PrintProgramme.UG">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Statistics
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        Admission Statistics.
+                    </small>
+                    <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                        <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                    </span>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="search-box">
+                    @using (Html.BeginForm("AdmissionFormWigets", "Statistics", FormMethod.Post))
+                    {
+                        <div class="col-sm-10">
+                            <div class="form-inline col-sm-12">
+
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        @Html.DropDownList("Batch", new SelectList(ViewBag.ExaminationYears, "Value", "Text", ViewBag.ExamYear), null, new { @class = "" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        @Html.DropDownList("Semester", new SelectList(ViewBag.Semesters, "Value", "Text", ViewBag.SemesterValue), null, new { @class = "" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <button type="submit" class="btn  btn-white btn-primary"><i class="fa fa-search"></i>&nbsp;Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-lg btn-inverse btn-block" id="totalStudentLabel">Total Students = @ViewBag.Totals</button>
+
+        <h2 class="alert-block alert-dismissable center " style="padding:10px" id="totalProgrammeLabel">
+            @{
+                var programmes = Enum.GetValues(typeof(CUSrinagar.Enums.PrintProgramme)).Cast<CUSrinagar.Enums.PrintProgramme>();
+                <a href="#" id="UGprogrammeWiseCount" class="btn btn-lg btn-inverse"></a>
+                <a href="#" id="BEDprogrammeWiseCount" class="btn btn-lg btn-inverse"></a>
+                <a href="#" id="PGprogrammeWiseCount" class="btn btn-lg btn-inverse"></a>
+                <a href="#" id="IGprogrammeWiseCount" class="btn btn-lg btn-inverse"></a>
+            }
+        </h2>
+        <hr />
+
+        <div class="col-md-4 padding-10 table-bordered hidden-print">
+
+            @{
+                var colleges = (List<System.Web.Mvc.SelectListItem>)ViewBag.Colleges;
+                colleges.RemoveAt(0);
+            }
+
+            @foreach (var item in colleges)
+            {
+                <hr class="no-margin-bottom" />
+                if (ViewBag.College_ID == null)
+                {
+                    <br />
+                    <div class="btn btn-white btn-lg btn-primary jswidget-header " style="width:100%">
+                        @Html.Hidden(item.Text, item.Value, new { @class = "jsCollege_ID" })
+                        <a href="#" class="jsCollegeLabel">  @item.Text  </a>
+                    </div>
+                }
+                else
+                {
+                    if (ViewBag.College_ID != null && item.Value == ViewBag.College_ID.ToString())
+                    {
+                        <div class="widget-header table-bordered ">
+                            @Html.Hidden(item.Text, item.Value, new { @class = "jsCollege_ID" })
+
+                            <a href="#" class="jsCollegeLabel">@item.Text</a>
+
+                        </div>
+                    }
+                }
+                <hr class="no-margin-bottom" />
+
+            }
+        </div>
+
+        <div class="col-md-8 table-bordered padding-10">
+            <hr />
+            <h1 class="btn btn-white btn-primary btn-block">
+                <span class="col-md-12">
+                    <strong><span id="CollegeLabel">Click any College on the left to see its details.</span> </strong>
+                </span>
+            </h1>
+            <hr />
+            <div class="padding-10" style="text-align:center">
+                <strong>
+                    <span class="label label-xlg label-grey arrowed-in" style="display:none;" id="CollegeCount">
+                    </span>
+                    <span class="label label-xlg label-grey arrowed-in" style="display:none;" id="CollegeBatch">
+                    </span>
+                </strong>
+            </div>
+            <hr />
+            <div id="CollegeWizeHtml">
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var College_ID = null;
+
+            getProgrameWiseCount(1);
+            getProgrameWiseCount(2);
+            getProgrameWiseCount(3);
+            getProgrameWiseCount(5);
+
+            $(document).on('click', '.jswidget-header', function () {
+                var $content = $(this);
+                $("#CollegeLabel").html($content.find(".jsCollegeLabel").html());
+                getTabContent($content);
+            });
+
+            $(document).on('click', '.jsGetGenderCount', function () {
+                var $tr = $(this);
+                if ($tr.next('.hasAddedGender').length > 0) return;
+                GetGenderCount($tr);
+            });
+
+            function GetGenderCount($tr) {
+                var programme = $tr.closest('.accordion-style1').find(".jsCourseProgramme").val();
+                //var College_ID = $tr.closest('.accordion-style1').find(".jsCollege_ID").val();
+                var CourseFullName = $tr.find(".jsCourseFullName").val();
+                var Batch = $("#Batch option:selected").val();
+                var _url = `/CUSrinagarAdminPanel/Statistics/GetCourseWiseGenderCount?programme=${programme}&Batch=${Batch}&College_ID=${College_ID}&CourseFullName=${CourseFullName}`;
+                $.ajax({
+                    url: _url,
+                    dataType: "html",
+                    success: function (html) {
+                        var tr = `<tr class='hasAddedGender'><td colspan='2'> ${html} </td> </tr>`;
+                        $tr.after(tr);
+                    }
+                });
+            }
+
+            function getProgrameWiseCount(programme) {
+                var Batch = $("#Batch option:selected").val();
+                var _url = `/CUSrinagarAdminPanel/Statistics/GetProgrammeWiseCount?programme=${programme}&Batch=${Batch}`;
+                $.ajax({
+                    url: _url,
+                    dataType: 'json',
+                    success: function (data) {
+                        if (programme == 1)
+                            $("#UGprogrammeWiseCount").html("UG = " + data);
+                        else if (programme == 2)
+                            $("#PGprogrammeWiseCount").html("PG = " + data);
+                        else if (programme == 3)
+                            $("#IGprogrammeWiseCount").html("IG / Honor's / Prof / Eng = " + data);
+                        else if (programme == 5)
+                            $("#BEDprogrammeWiseCount").html("BED = " + data);
+                    },
+                    error: function (xhr, message, sdfsdfd) {
+                        var dfdfd = xhr;
+                    }
+                });
+            }
+
+            function getTabContent($content) {
+                var programme = $("#programme option:selected").val();
+                College_ID = $content.find(".jsCollege_ID").val();
+                var Batch = $("#Batch option:selected").val();
+                var _url = `/CUSrinagarAdminPanel/Statistics/GetCourseWiseCountForProgramme?programme=${programme}&Batch=${Batch}&College_ID=${College_ID}`;
+                $.ajax({
+                    url: _url,
+                    dataType: "html",
+                    success: function (html) {
+                        $("#CollegeWizeHtml").html(html);
+                        $("#CollegeCount").show().html(`Total Number Of Students = ${$("#TotalStudents").val()}`);
+                        var batch = $("#Batch option:selected").val();
+                        if (batch.length > 0) {
+                            $("#CollegeBatch").show().html("Batch = " + batch);
+                        } else {
+                            $("#CollegeBatch").show().html("Showing data for all batches");
+                        }
+                    }
+                });
+            }
+
+            var _url = `/CUSrinagarAdminPanel/Statistics/GetCourseWiseCountForProgramme?Batch=${$("#Batch option:selected").val()}`;
+            $.ajax({
+                url: _url,
+                dataType: "html",
+                success: function (html) {
+                    var totalstudent = $(html).find('#TotalStudent').val();
+                    $('#totalStudentLabel').html(`<i>Batch ${isNullOrEmpty($("#Batch option:selected").val()) ? 'All Batches' : $("#Batch option:selected").val()}   -   Total Students = ${totalstudent}</i>`);
+                }
+            });
+
+
+        });
+    </script>
+
+}
+

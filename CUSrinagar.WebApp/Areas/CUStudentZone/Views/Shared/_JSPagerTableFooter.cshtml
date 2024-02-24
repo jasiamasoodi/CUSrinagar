@@ -1,0 +1,19 @@
+﻿@{
+    int PageSize;
+    int.TryParse(Convert.ToString(ViewData["PageSize"]), out PageSize);
+}
+<div class="panel-footer js-pager-table-footer hidden-print">
+    <ul class="pager no-margin no-margin-top">
+        <li class="previous disabled jsPrev"><a href="#">&larr; Previous</a></li>
+        <li class="pg">
+            <select class="js-pager-table-size">
+                <option value="15">15</option>
+                <option value="30">30</option>
+                <option value="50">50</option>
+                <option value="-1" @(PageSize == -1 ? "selected='selected'" : "")>All</option>
+            </select>
+        </li>
+        <li class="pager-table-text"><label class="jsPageNumber margin-left-20">Page 0</></label>
+        <li class="next jsNext"><a href="#">Next &rarr;</a></li>
+    </ul>
+</div>

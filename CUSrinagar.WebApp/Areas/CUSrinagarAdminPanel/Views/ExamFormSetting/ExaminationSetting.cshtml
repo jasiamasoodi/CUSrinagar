@@ -1,0 +1,205 @@
+﻿@using CUSrinagar.Models;
+
+@{
+    ViewBag.Title = "Examination Setting";
+}
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUSrinagarAdminPanel"})">Home</a>
+            </li>
+            <li class="active">Examination Setting</li>
+        </ul>
+    </div>
+    <div class="col-md-4">
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12 jsTableContent">
+        <div class="panel panel-primary js-pager-table" data-otherparam1="">
+
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Examination Setting
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        List
+                    </small>
+                    <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                        <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                    </span>
+                </h3>
+            </div>
+
+            <div class="panel-body">
+                <div class="search-box">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label>Semester</label>
+                            <br />
+                            <div class="">
+                                <select class="jsfilterelement form-control" data-column="Semester" data-operator="EqualTo" id="SemesterDDL">
+                                    <option value="">-- All --</option>
+                                    <option value="1">Semester-1</option>
+                                    <option value="2">Semester-2</option>
+                                    <option value="3">Semester-3</option>
+                                    <option value="4">Semester-4</option>
+                                    <option value="5">Semester-5</option>
+                                    <option value="6">Semester-6</option>
+                                    <option value="7">Semester-7</option>
+                                    <option value="8">Semester-8</option>
+                                    <option value="9">Semester-9</option>
+                                    <option value="10">Semester-10</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Exam Type</label>
+                            <br />
+                            <div class="jsDDLContainer">
+                                <select class="jsfilterelement form-control" data-column="IsBacklogSetting" data-operator="EqualTo" id="IsBacklogDDL">
+                                    <option value="">All</option>
+                                    <option value="0">Regular</option>
+                                    <option value="1">Backlog</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Course Category</label>
+                            <br />
+                            <div class="jsDDLContainer">
+                                <select class="jsfilterelement form-control" data-column="CourseCategory" data-operator="EqualTo" id="CourseCategoryDDL">
+                                    <option value="">All</option>
+                                    @foreach (SelectListItem item in CUSrinagar.Extensions.Helper.GetEnumAsValue<CUSrinagar.Enums.ExaminationCourseCategory>())
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="invisible">for styling purpose</label>
+                            <br />
+                            <button type="button" class="btn btn-sm btn-primary fa-search-btn js-search"><i class="fa fa-search"></i>&nbsp;Search</button>
+
+                        </div>
+                        <div class="form-group pull-right">
+                            <label class="invisible">for styling purpose</label>
+                            <br />
+                            <a class="btn btn-success" href="@Url.Action("Create","ExamFormSetting")">Create</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="js-table-content" data-url=@Url.Action("ExaminationSettingList", "ExamFormSetting", new { area = "CUSrinagarAdminPanel" }) data-DefaultOrderByColumn="Year">
+
+            </div>
+
+            @{Html.RenderPartial("_JSPagerTableFooter");}
+        </div>
+    </div>
+</div>
+
+<div id="AllowFormsModal" tabindex="-1" role="dialog" aria-hidden="true" class="modal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="bootbox-close-button close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Enter Start and End Dates</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Regular Batch</td>
+                            <td>
+                                <span style="color : red" id="err"></span>
+                                <input type="number" required min="2016" ,max="9999" id="Model_RegularBatch" name="Model_RegularBatch" class="form-control" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Start Date</td>
+                            <td>
+                                @{
+                                    string parsedDate = (DateTime.Now.Year + "-" + (DateTime.Now.Month.ToString().Length == 1 ? "0" + DateTime.Now.Month : DateTime.Now.Month.ToString()) + "-" + (DateTime.Now.Day.ToString().Length == 1 ? "0" + DateTime.Now.Day : DateTime.Now.Day.ToString()) + "T" + (DateTime.Now.Hour.ToString().Length == 1 ? "0" + DateTime.Now.Hour : DateTime.Now.Hour.ToString()) + ":" + (DateTime.Now.Minute.ToString().Length == 1 ? "0" + DateTime.Now.Minute : DateTime.Now.Minute.ToString())).Trim();
+                                }
+                                <input type="datetime-local" id="Model_StartDate" name="Model_StartDate" value="@parsedDate" class="form-control" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>End Date</td>
+                            <td>
+                                @{
+
+                                    parsedDate = (DateTime.Now.Year + "-" + (DateTime.Now.Month.ToString().Length == 1 ? "0" + DateTime.Now.Month : DateTime.Now.Month.ToString()) + "-" + (DateTime.Now.Day.ToString().Length == 1 ? "0" + DateTime.Now.Day : DateTime.Now.Day.ToString()) + "T" + (DateTime.Now.Hour.ToString().Length == 1 ? "0" + DateTime.Now.Hour : DateTime.Now.Hour.ToString()) + ":" + (DateTime.Now.Minute.ToString().Length == 1 ? "0" + DateTime.Now.Minute : DateTime.Now.Minute.ToString())).Trim();
+                                }
+                                <input type="datetime-local" id="Model_EndDate" name="Model_EndDate" value="@parsedDate" class="form-control" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Notifications</td>
+                            <td>
+                                @{
+                                    List<Notification> collection = ViewBag.Notifications;
+                                    if (collection != null)
+                                    {
+                                        <div class="wd-400 jsDDLContainer">
+                                            <select id="Model_Notification_ID" class="form-control chosen-select">
+                                                @foreach (var item in collection)
+                                                {
+                                                    <option value="@item.Notification_ID">@item.Description</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" type="button" class="btn btn-default jscancelModel">Cancel</button>
+                <button type="button" class="btn btn-primary" id="AllowFormsModalBtn">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="HardCodeFeeModal" class="modal" tabindex="-1" role="dialog">
+    <br />
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="bootbox-close-button close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Enter Hard Code Fee Amount</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-sm-12">
+                        <label class="control-label col-sm-4">Fixed fee amount</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="Model_HardCodeFeeAmount" name="Model_HardCodeFeeAmount" placeholder="Enter amount" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" type="button" class="btn btn-default jsfeeCancelModel">Cancel</button>
+                <button type="button" class="btn btn-primary" id="HardCodeFeeModalBtn">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script src="~/Scripts/Pages/examination-setting.js"></script>
+}

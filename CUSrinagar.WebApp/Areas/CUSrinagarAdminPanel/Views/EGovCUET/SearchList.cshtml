@@ -1,0 +1,656 @@
+﻿@model CUSrinagar.Models.CUETRegistrationData
+@using CUSrinagar.Extensions
+@{
+    ViewBag.Title = "CUET Candidate Details";
+}
+
+
+
+<div class="col-lg-12 col-md-12">
+    <div class="col-lg-10 col-md-10">
+        <div class="table-responsive panel">
+            <table class="table">
+                <tbody>
+                    @if (Model.CUETErrors != null)
+                    {
+                        <tr>
+                            <td colspan="4" style="font-size:17px;">
+                                <div class='alert alert-danger alert-dismissable'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'></button> <a href='#' class='alert-link'> @Model.CUETErrors.Error.Code.GetEnumDescription() - @Model.CUETErrors.Error.Message</a></div>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td class="text-success">CUET @Model.CandidateDetails.PrintProgramme.ToString() Application Number</td>
+                            <td>@Model.CandidateDetails.ApplicationNo</td>
+                            <td class="text-success">  CUET DOB</td>
+                            <td>@Model.CandidateDetails.DOB.Date.ToLongDateString()</td>
+
+                        </tr>
+
+                        <tr>
+                            <td class="text-success"> BoardRegistrationNo</td>
+                            <td>@Model.CandidateDetails.BoardRegistrationNo</td>
+                            <td class="text-success">
+                                Candidate's Name (As per class X or Equivalent
+                                Certificate)
+                            </td>
+                            <td>@Model.CandidateDetails.Name</td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                Email Address
+                            </td>
+                            <td>@Model.CandidateDetails.Email</td>
+
+                            <td class="text-success">Gender</td>
+                            <td>@Model.CandidateDetails.Gender</td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">Nationality</td>
+                            <td>@Model.CandidateDetails.Nationality</td>
+
+                            <td class="text-success">
+                                Citizen of the Country
+                            </td>
+                            <td>@Model.CandidateDetails.OtherNationality</td>
+                        </tr>
+
+                        <tr>
+                            <td class="text-success">Category</td>
+                            <td>@Model.CandidateDetails.Category</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+
+                        <tr>
+                            <td class="text-success">
+                                If you are a PwBD Candidate with benchmark
+                                disability 40% or more/severe where percentage
+                                is not defined
+                            </td>
+                            <td>@Model.CandidateDetails.PwdApplicable</td>
+                            <td class="text-success">
+                                Type of Disability
+                            </td>
+                            <td>@Model.CandidateDetails.PwdCategory</td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                Other Type of Disability
+                            </td>
+                            <td>@Model.CandidateDetails.PwdCategoryOther</td>
+                            <td class="text-success">
+                                Do you need a Scribe (As per the criteria given in
+                                the Information Bulletin)?
+                            </td>
+                            <td>@Model.CandidateDetails.PwdWar</td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td class="text-success">
+                                Father's Name
+                            </td>
+                            <td>@Model.CandidateDetails.FatherName</td>
+                            <td class="text-success">Father's Qualification</td>
+                            <td>@Model.CandidateDetails.FatherQualification</td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">Father's Occupation</td>
+                            <td>@Model.CandidateDetails.FatherOccupation</td>
+                            <td class="text-success">Mother's Name</td>
+                            <td>@Model.CandidateDetails.MotherName</td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">Mother's Qualification</td>
+                            <td>@Model.CandidateDetails.MotherQualification</td>
+                            <td class="text-success">
+                                Mother's Occupation
+                            </td>
+                            <td>@Model.CandidateDetails.MotherOccupation</td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                Guardian's Name
+                            </td>
+                            <td>@Model.CandidateDetails.GuardianName</td>
+                            <td class="text-success">
+                                Annual Family Income
+                            </td>
+                            <td>@Model.CandidateDetails.FamilyIncome</td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                Are You Twin ?
+                            </td>
+                            <td>@Model.CandidateDetails.Twin</td>
+                            <td class="text-success">
+                                Name of the other Brother/Sister as per Class X
+                                Certificate
+                            </td>
+                            <td>@Model.CandidateDetails.TwinName</td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">Domicile State</td>
+                            <td>@Model.CandidateDetails.DomicileState</td>
+                            <td class="text-success">
+                                Place of Residence
+                            </td>
+                            <td>@Model.CandidateDetails.ResidencePlace</td>
+                        </tr>
+
+                        <tr>
+                            <td class="text-success">Medium of Study in Qualifying Examination</td>
+                            <td>@Model.CandidateDetails.MediumSchooling</td>
+                            <td class="text-success">Country (Present Address)</td>
+                            <td>@Model.CandidateDetails.Country</td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                State/UT (Present Address)
+                            </td>
+                            <td>@Model.CandidateDetails.AddState</td>
+                            <td class="text-success">
+                                District (Present Address)
+                            </td>
+                            <td>@Model.CandidateDetails.AddDistrict</td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                Country (Permanent Address)
+                            </td>
+                            <td>@Model.CandidateDetails.CountryPr</td>
+                            <td class="text-success">
+                                State/UT (Permanent Address)
+                            </td>
+                            <td>@Model.CandidateDetails.AddStatePr</td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">District (Permanent Address)</td>
+                            <td>@Model.CandidateDetails.AddDistrictPr</td>
+                            <td class="text-success">
+                                Do you belong to the Below Poverty Line ?
+                            </td>
+                            <td>@Model.CandidateDetails.Bpl</td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                Are you a Kashmiri Migrant ?
+                            </td>
+                            <td>@Model.CandidateDetails.KashmiriMigrant</td>
+                            <td class="text-success">
+                                Ward of Defense Personnel / Ex-Servicemen
+                            </td>
+                            <td>@Model.CandidateDetails.CwQuota</td>
+                        </tr>
+
+                        <tr>
+                            <td class="text-success">Claim for NCC Quota</td>
+                            <td>@Model.CandidateDetails.NccSelection</td>
+                            <td class="text-success">Claim for Sports Quota</td>
+                            <td>@Model.CandidateDetails.SportsSelection</td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td class="text-success">
+                                Level of Sports Achievement
+                            </td>
+                            <td>@Model.CandidateDetails.SportsAchievement</td>
+                            <td class="text-success">
+                                Are you a ward of University Employees?
+                            </td>
+                            <td>@Model.CandidateDetails.WardQuota</td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">Is your Father Employee of University</td>
+                            <td>@Model.CandidateDetails.WardEmployeeIdFather</td>
+                            <td class="text-success">Name of the University</td>
+                            <td>@Model.CandidateDetails.WardUniversityFather</td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                Father's Employee ID
+                            </td>
+                            <td>@Model.CandidateDetails.WardEmployeeIdFather </td>
+                            <td class="text-success">Name of the Department/Affiliated College</td>
+                            <td>@Model.CandidateDetails.WardDepartmentFather </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                Father's Designation
+                            </td>
+                            <td>@Model.CandidateDetails.WardEmployeeDesignationFather</td>
+                            <td class="text-success">
+                                Father's Employment Status
+                            </td>
+                            <td>@Model.CandidateDetails.WardEmploymentStatusFather </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                Is your Mother Employee of University
+                            </td>
+                            <td>@Model.CandidateDetails.WardQuotaRelationMother</td>
+                            <td class="text-success">
+                                Name of the University
+                            </td>
+                            <td>@Model.CandidateDetails.WardUniversityMother</td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">Mother's Employee ID</td>
+                            <td>@Model.CandidateDetails.WardEmployeeIdMother</td>
+                            <td class="text-success">Name of the Department/Affiliated College</td>
+                            <td>@Model.CandidateDetails.WardDepartmentMother</td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">Mother's Designation</td>
+                            <td>@Model.CandidateDetails.WardEmployeeDesignationMother </td>
+                            <td class="text-success">Mother's Employment Status</td>
+                            <td>@Model.CandidateDetails.WardEmploymentStatusMother</td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">Claim for NCC Quota</td>
+                            <td>@Model.CandidateDetails.NccSelection</td>
+                            <td class="text-success">CwQuota</td>
+                            <td>@Model.CandidateDetails.CwQuota</td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">Xth Result Status</td>
+                            <td>@Model.CandidateDetails.XResultStatus </td>
+                            <td class="text-success">Xth Passing Year</td>
+                            <td>@Model.CandidateDetails.XPassingYear </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                Xth Qualifying Exam
+                            </td>
+                            <td>@Model.CandidateDetails.XCourseName </td>
+                            <td class="text-success">Xth Place of Schooling</td>
+                            <td>@Model.CandidateDetails.XSchoolingPlace</td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">Xth Type of School/College</td>
+                            <td>@Model.CandidateDetails.XSchoolType </td>
+                            <td class="text-success">Xth Other Type of School/College</td>
+                            <td>@Model.CandidateDetails.XSchoolTypeOther </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                Xth Qualifying Examination Country
+                            </td>
+                            <td>@Model.CandidateDetails.XCountry</td>
+                            <td class="text-success">
+                                Xth Qualifying Examination State
+                            </td>
+                            <td>@Model.CandidateDetails.XState </td>
+                        </tr>
+
+
+
+
+                        <tr>
+                            <td class="text-success">
+                                Xth Qualifying Examination District
+                            </td>
+                            <td>@Model.CandidateDetails.XDistrict </td>
+                            <td class="text-success">Xth Board Name</td>
+                            <td>@Model.CandidateDetails.XBoard </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                Xth Other Board Name
+                            </td>
+                            <td>@Model.CandidateDetails.XBoardOther </td>
+                            <td class="text-success">Xth Result Mode</td>
+                            <td>@Model.CandidateDetails.XResultType </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">Xth Maximum Grade Point</td>
+                            <td>@Model.CandidateDetails.XGradePoint </td>
+                            <td class="text-success">
+                                Xth CGPA Obtained
+                            </td>
+                            <td>@Model.CandidateDetails.XCgpaObtained </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">Xth CGPA Equivalent Percentage</td>
+                            <td>@Model.CandidateDetails.XCgpa </td>
+                            <td class="text-success">Xth Maximum Marks</td>
+                            <td>@Model.CandidateDetails.XMaximumMarks </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">Xth Marks Obtained</td>
+                            <td>@Model.CandidateDetails.XMarksObtained </td>
+                            <td class="text-success">
+                                Xth Percentage
+                            </td>
+                            <td>@Model.CandidateDetails.XPercentage </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                XIIth Result Status
+                            </td>
+                            <td>@Model.CandidateDetails.XiiResultStatus </td>
+                            <td class="text-success">XIIth Passing Year</td>
+                            <td>@Model.CandidateDetails.XiiPassingYear </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                XIIth Qualifying Exam
+                            </td>
+                            <td>@Model.CandidateDetails.XiiCourseName </td>
+                            <td class="text-success">XIIth Place of Schooling</td>
+                            <td>@Model.CandidateDetails.XiiSchoolingPlace  </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">XIIth Type of School/College</td>
+                            <td>@Model.CandidateDetails.XiiSchoolType </td>
+                            <td class="text-success">Xth Other Type of School/College</td>
+                            <td>@Model.CandidateDetails.XSchoolTypeOther </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">XIIth Qualifying Examination Country</td>
+                            <td>@Model.CandidateDetails.XiiCountry </td>
+                            <td class="text-success">
+                                XIIth Qualifying Examination State
+                            </td>
+                            <td>@Model.CandidateDetails.XiiState </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">XIIth Qualifying Examination District</td>
+                            <td>@Model.CandidateDetails.XiiDistrict </td>
+                            <td class="text-success">
+                                XIIth Board Name
+                            </td>
+                            <td>@Model.CandidateDetails.XiiBoard </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">XIIth Other Board Name</td>
+                            <td>@Model.CandidateDetails.XiiBoardOther </td>
+                            <td class="text-success">XIIth Result Mode</td>
+                            <td>@Model.CandidateDetails.XiiResultType  </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                XIIth Maximum Grade Point
+                            </td>
+                            <td>@Model.CandidateDetails.XiiGradePoint </td>
+                            <td class="text-success">XIIth CGPA Obtained</td>
+                            <td>@Model.CandidateDetails.XiiCgpaObtained</td>
+
+                        </tr>
+                        <tr>
+                            <td class="text-success">XIIth CGPA Equivalent Percentage</td>
+                            <td>@Model.CandidateDetails.XiiCgpa </td>
+                            <td class="text-success">
+                                XIIth Maximum Marks
+                            </td>
+                            <td>@Model.CandidateDetails.XiiMaximumMarks  </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                XIIth Marks Obtained
+                            </td>
+                            <td>@Model.CandidateDetails.XiiMarksObtained </td>
+                            <td class="text-success">
+                                XIIth Percentage
+                            </td>
+                            <td>@Model.CandidateDetails.XiiPercentage  </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">Cluster University Srinagar and Programmes Selected/Applied</td>
+                            <td>
+                                @if (Model?.CandidateDetails?.UniversityProgrammeSelection?.SelectedCourses.Any() ?? false)
+                                {
+                                    <ol>
+                                        @foreach (var item in Model.CandidateDetails.UniversityProgrammeSelection.SelectedCourses)
+                                        {
+                                            <li>@item</li>
+                                        }
+                                    </ol>
+                                }
+                                else
+                                {
+                                    <strong class="red">Candidate has not applied for Cluster University Srinagar in CUET @Model.CandidateDetails.PrintProgramme.ToString() Form </strong>
+                                }
+                            </td>
+                            <td class="text-success">
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">Medium of Test Paper / Subject 1</td>
+                            <td>@Model.CandidateDetails.TestPaperMedium1 </td>
+                            <td class="text-success">
+                                Test Paper/Subject 1
+                            </td>
+                            <td>@Model.CandidateDetails.TestPaper1</td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                Medium of Test Paper / Subject 2
+                            </td>
+                            <td>@Model.CandidateDetails.TestPaperMedium2 </td>
+                            <td class="text-success">
+                                Test Paper/Subject 2
+                            </td>
+                            <td>@Model.CandidateDetails.TestPaper2  </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                Medium of Test Paper / Subject 3
+                            </td>
+                            <td>@Model.CandidateDetails.TestPaperMedium3 </td>
+                            <td class="text-success">Test Paper/Subject 3</td>
+                            <td>@Model.CandidateDetails.TestPaper3  </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                Medium of Test Paper / Subject 4
+                            </td>
+                            <td>@Model.CandidateDetails.TestPaperMedium4 </td>
+                            <td class="text-success">
+                                Test Paper/Subject 4
+                            </td>
+                            <td>@Model.CandidateDetails.TestPaper4  </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">Medium of Test Paper / Subject 5</td>
+                            <td>@Model.CandidateDetails.TestPaperMedium5 </td>
+                            <td class="text-success">
+                                Test Paper/Subject 5
+                            </td>
+                            <td>@Model.CandidateDetails.TestPaper5  </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                Medium of Test Paper / Subject 6
+                            </td>
+                            <td>@Model.CandidateDetails.TestPaperMedium6  </td>
+                            <td class="text-success">
+                                Test Paper/Subject 6
+                            </td>
+                            <td>@Model.CandidateDetails.TestPaper6  </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                Medium of Test Paper / Subject 7
+                            </td>
+                            <td>@Model.CandidateDetails.TestPaperMedium7  </td>
+                            <td class="text-success">
+                                Test Paper/Subject 7
+                            </td>
+                            <td>@Model.CandidateDetails.TestPaper7  </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                Medium of Test Paper / Subject 8
+
+                            </td>
+                            <td>@Model.CandidateDetails.TestPaperMedium8 </td>
+                            <td class="text-success">
+                                Test Paper/Subject 8
+                            </td>
+                            <td>@Model.CandidateDetails.TestPaper8  </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                Medium of Test Paper / Subject 9
+
+                            </td>
+                            <td>@Model.CandidateDetails.TestPaperMedium9 </td>
+                            <td class="text-success">
+                                Test Paper/Subject 9
+                            </td>
+                            <td>@Model.CandidateDetails.TestPaper9  </td>
+                        </tr>
+                        <tr>
+                            <td class="text-success">
+                                Medium of Test Paper / Subject 10
+                            </td>
+                            <td>@Model.CandidateDetails.TestPaperMedium10 </td>
+                            <td class="text-success">
+                                Test Paper/Subject 10
+                            </td>
+                            <td>@Model.CandidateDetails.TestPaper10  </td>
+                        </tr>
+                        if (Model.CandidateDetails.CUETResult?.Any() ?? false)
+                        {
+                            <tr>
+                                <th colspan="4" class="text-success align-center red" style="font-size:20px;">
+                                    CUET Result
+                                </th>
+                            </tr>
+
+                            foreach (KeyValuePair<string, string> item in Model.CandidateDetails.CUETResult)
+                            {
+                                if (item.Key.ToLower().Contains("sub") && string.IsNullOrWhiteSpace(item.Value))
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    if (item.Key.ToLower().Contains("sub"))
+                                    {
+                                        <tr>
+                                            <td colspan="4" style="background-color:#a2c9e5"></td>
+                                        </tr>
+                                    }
+                                    <tr>
+                                        <td colspan="2" class="text-success">
+                                            @if (item.Key.ToLower().Contains("sub_"))
+                                            {
+                                                <text> Subject Code</text>
+                                            }
+                                            else if (item.Key.ToLower().Contains("sname_"))
+                                            {
+                                                <text> Subject Applied </text>
+                                            }
+                                            else if (item.Key.ToLower().Contains("ps_mrk"))
+                                            {
+                                                <text> Percentile Score </text>
+                                            }
+                                            else if (item.Key.ToLower().Contains("tot_mrk"))
+                                            {
+                                                <text> Marks In Figure </text>
+                                            }
+                                            else if (item.Key.ToLower().Contains("mrk_fig"))
+                                            {
+                                                <text> Marks In Words </text>
+                                            }
+                                            else
+                                            {
+                                                @item.Key.ToString()
+                                            }
+                                        </td>
+                                        <td colspan="2">  @item.Value</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @if (Model.CUETErrors == null)
+    {
+        <div class="form-group col-sm-2 center">
+
+            @if (!string.IsNullOrWhiteSpace(Model.CandidateDoc.PhotoURL))
+            {
+                <img src="@Model.CandidateDoc.PhotoURL" class="img-thumbnail" />
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.CandidateDoc.SignatureURL))
+            {
+                <img src="@Model.CandidateDoc.SignatureURL" class="img-thumbnail" />
+            }
+
+            <br />
+            <br />
+            <br />
+
+            @if (!string.IsNullOrWhiteSpace(Model.CandidateDoc.CategoryCertificate + ""))
+            {
+                <iframe src="@Model.CandidateDoc.CategoryCertificate.ToString()" onload='javascript:(function(o){o.style.height=o.contentWindow.document.body.scrollHeight+"px";}(this));' style="height:400px;width:100%;border:none;overflow:hidden;"></iframe>
+                <div class="center">
+                    <a href="@Model.CandidateDoc.CategoryCertificate.ToString()" class="btn btn-primary" target="_blank">Zoom Category Certificate</a>
+                </div>
+                <br />
+                <br />
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.CandidateDoc.KmCertificate + ""))
+            {
+                <iframe src="@Model.CandidateDoc.KmCertificate.ToString()" onload='javascript:(function(o){o.style.height=o.contentWindow.document.body.scrollHeight+"px";}(this));' style="height:400px;width:100%;border:none;overflow:hidden;"></iframe>
+                <div class="center">
+                    <a href="@Model.CandidateDoc.KmCertificate.ToString()" class="btn btn-primary" target="_blank">Zoom Kashmiri Migrant Certificate</a>
+                </div>
+                <br />
+                <br />
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.CandidateDoc.BplCertificate + ""))
+            {
+                <iframe src="@Model.CandidateDoc.BplCertificate.ToString()" onload='javascript:(function(o){o.style.height=o.contentWindow.document.body.scrollHeight+"px";}(this));' style="height:400px;width:100%;border:none;overflow:hidden;"></iframe>
+                <div class="center">
+                    <a href="@Model.CandidateDoc.BplCertificate.ToString()" class="btn btn-primary" target="_blank">Zoom BPL Certificate</a>
+                </div>
+                <br />
+                <br />
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.CandidateDoc.CwCertificate + ""))
+            {
+                <iframe src="@Model.CandidateDoc.CwCertificate.ToString()" onload='javascript:(function(o){o.style.height=o.contentWindow.document.body.scrollHeight+"px";}(this));' style="height:400px;width:100%;border:none;overflow:hidden;"></iframe>
+                <div class="center">
+                    <a href="@Model.CandidateDoc.CwCertificate.ToString()" class="btn btn-primary" target="_blank">
+                        Zoom Defense Personnel/ Ex Servicemen
+                        Certificate
+                    </a>
+                </div>
+                <br />
+                <br />
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.CandidateDoc.PwdCertificate + ""))
+            {
+                <iframe src="@Model.CandidateDoc.PwdCertificate.ToString()" onload='javascript:(function(o){o.style.height=o.contentWindow.document.body.scrollHeight+"px";}(this));' style="height:400px;width:100%;border:none;overflow:hidden;"></iframe>
+                <div class="center">
+                    <a href="@Model.CandidateDoc.PwdCertificate.ToString()" class="btn btn-primary" target="_blank">Zoom PWD Certificate</a>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+
+
+
+
+

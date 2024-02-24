@@ -1,0 +1,59 @@
+﻿@{ __o = Html.LabelFor(m => m.Course_ID);
+}
+
+<div class="page-wrapper pager-table-text">
+    <header class="page-heading clearfix">
+        <h1 class="heading-title pull-left">
+            Combinations
+            <small>
+                <i class="ace-icon fa fa-angle-double-right"></i>
+                List of Combinations
+            </small>
+        </h1>
+    </header>
+    <div class="col-xs-12">
+        <div class="col-xs-10"> <h3><b>College:</b> @ViewBag.CollegeName&nbsp;&nbsp;&nbsp;&nbsp;<b>Course:</b> @ViewBag.CourseName</h3></div>
+        <div class="col-xs-2">
+            <a href=@Url.Action("Index", "Course", new { area = string.Empty }) class="btn btn-theme btn-sm pull-right" style="margin-top: 21px;margin-right: -15px;">
+                Back
+            </a>
+        </div>
+    </div>
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="col-xs-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+
+                    <div class="js-table-content" data-url=@Url.Action("_CombinationList", "Course",new { area = string.Empty, @CourseCode = ViewBag.CourseCode, @CollegeCode = ViewBag.CollegeCode }) data-DefaultOrderByColumn="CombinationCode">
+
+                    </div>
+                    @{Html.RenderPartial("_JSPagerTableFooter");}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var _CurrentSection = "Academics";
+</script>
+
+@section PageSpecificJS{
+    <script>
+        $(document).ready(function () {
+
+            var $pagertable = $(".js-pager-table");
+
+            loadpagertable();
+        });
+
+    </script>
+}
+<style>
+    .filter-btn a {
+        color: white !important
+    }
+</style>
+
+
+
+

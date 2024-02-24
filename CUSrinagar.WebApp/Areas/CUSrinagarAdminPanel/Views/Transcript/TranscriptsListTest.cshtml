@@ -1,0 +1,185 @@
+﻿@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@using CUSrinagar.Models
+@model List<Transcript>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Transcript</title>
+    <link href="~/Content/ThemePublic/Libraries/css/transcript.css" rel="stylesheet" />
+</head>
+<body class="middle ">
+    @if (Model.IsNotNullOrEmpty())
+    {
+        foreach (var transcript in Model)
+        {
+            if (transcript != null && transcript.Subject.IsNotNullOrEmpty() && transcript.SGPA.IsNotNullOrEmpty() && transcript.CGPA.IsNotNullOrEmpty())
+            {
+                <section class="sheet">
+                    <div class="printable-section">
+                                               
+                        <!--Header General Info Section Begins-->
+                        <table class="general-info-section" border="0">
+                            <tbody style="">
+                                <tr>
+                                    <td>Name:</td>
+                                    <td>@transcript.FullName</td>
+                                    <td>Registration No:</td>
+                                    <td>@transcript.CUSRegistrationNo</td>
+                                </tr>
+                                <tr>
+                                    <td>Father:</td>
+                                    <td>@transcript.FathersName</td>
+                                    <td>Exam Roll No:</td>
+                                    <td>@transcript.ExamRollNumber</td>
+                                </tr>
+                                <tr>
+                                    @*<td>Mother:</td>
+                    <td>@transcript.MothersName</td>*@
+                                    <td>Programme:</td>
+                                    <td>@transcript.CourseFullName</td>
+                                    <td>Batch:</td>
+                                    <td>@transcript.Batch</td>
+                                </tr>
+                                <tr>
+                                    <td>College:</td>
+                                    <td>@transcript.CollegeFullName</td>
+                                    <td>Mode:</td>
+                                    <td>Regular</td>
+
+                                </tr>
+                                @*<tr>
+
+
+                </tr>*@
+                            </tbody>
+                        </table>
+                        <!---Header General Info Section Ends-->
+                        <!--Subject Section Begins-->
+                        <table class="subject-section" border="1">
+                            <tbody>
+                                <tr>
+                                    <th class="text-center">Course</th>
+                                    <th class="text-center">C</th>
+                                    <th class="text-center">Ext</th>
+                                    <th class="text-center">Int</th>
+                                    <th class="text-center">G</th>
+                                    <th class="text-center" title="Grade Points">G P</th>
+                                    <th class="text-center" title="Credit Points">C P</th>
+                                    <th class="text-center">SGPA</th>
+                                </tr>
+                                @{
+                                    var Semesters = transcript.SGPA.Select(x => x.Semester).Distinct().OrderBy(x => x)?.ToList();
+                                    if (Semesters.IsNotNullOrEmpty())
+                                    {
+                                        for (int Semester = 1; Semester <= Semesters.Count; Semester++)
+                                        {
+                                            <tr>
+                                                <th title="Semester" colspan="6">@(CUSrinagar.Extensions.Helper.GetEnumDescription((Semester)(Semester))) </th>
+                                            </tr>
+                                            var _SGPATypes = transcript.SGPA.Where(x => x.Semester == Semester)?.ToList();
+                                            if (_SGPATypes.IsNotNullOrEmpty())
+                                            {
+                                                foreach (var _SGPAType in _SGPATypes)
+                                                {
+                                                    var _Subjects = transcript.Subject.Where(x => x.Semester == Semester && x.SGPAType == _SGPAType.SGPAType).ToList();
+                                                    if (_Subjects.IsNotNullOrEmpty())
+                                                    {
+                                                        _Subjects = (from m in _Subjects orderby m.SubjectType, m.SubjectTitle select m).ToList();
+                                                        foreach (var item in _Subjects)
+                                                        {
+                                                            string code = new CUSrinagar.DataManagers.GeneralFunctions().GetSubjectTypeCode(item.SubjectType);
+                                                            <tr>
+                                                                <td title="Title">@item.SubjectTitle @(string.IsNullOrEmpty(code) ? "" : "(" + code + ")") </td>
+                                                                <td title="Credit" class="text-center">@item.Credit</td>
+                                                                <td>
+                                                                    @{
+                                                                        <small>@item.ExternalMarksObt</small><small>-</small><small>@item.ExternalMinMarks</small><small>/</small><small>@item.ExternalMaxMarks</small>
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    @{
+                                                                        <small>@item.InternalMarksObt</small><small>-</small><small>@item.InternalMinMarks</small><small>/</small><small>@item.InternalMaxMarks</small>
+                                                                    }
+                                                                </td>
+                                                                <td title="Grade Letter" class="text-center">@item.GradeLetter</td>
+                                                                <td title="Grade Points" class="text-center">@item.GradePoints</td>
+                                                                <td title="Credit Points" class="text-center">@(item.Credit * item.GradePoints)</td>
+                                                                <td title="SGPA" class="text-center"></td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                    <tr>
+                                                        <th title="Total" class="text-center">Total</th>
+                                                        <th title="Total Credit" class="text-center">@_SGPAType.Credits</th>
+                                                        <th colspan="4"></th>
+                                                        <th title="Total Credit Points" class="text-center">@_SGPAType.CreditPoints</th>
+                                                        <th title="SGPA" class="text-center">@_SGPAType.SGPA</th>
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <!--Subject Section Ends-->
+                        <!---Footer Points Section Begins-->
+                        <table border="0" class="footer-points-section">
+                            <tbody>
+                                @if (transcript.CGPA.IsNotNullOrEmpty())
+                                {
+                                    foreach (var item in transcript.CGPA.OrderBy(x => x.SGPAType).ToList())
+                                    {
+                                        <tr>
+                                            <td>
+                                                Total Credits Earned: <b> @item.TotalCreditsEarned</b>
+                                            </td>
+                                            <td>
+                                                Total Credit Points: <b> @item.TotalCreditPoints</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Commulative Grade Point Average(CGPA): <b> @item.CGPA</b>
+                                            </td>
+                                            <td>
+                                                Percentage Equivalent: <b>@item.Percentage</b>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                <tr>
+                                    <td>
+                                        Date of Passing: <b>
+                                            @if (@transcript.CGPA.FirstOrDefault().DateofDeclaration == null)
+                                            {<span></span>}
+                                            else
+                                            {<span>@transcript.CGPA.FirstOrDefault().DateofDeclaration.ToShortDateString()</span>}@*@transcript.CGPA.First().DateofDeclaration.ToString("dd-MMM-yyyy")*@
+                                        </b>
+                                    </td>
+                                    <td>
+                                        Notification No.: <b> @transcript.CGPA.FirstOrDefault().NotificationNo@*@transcript.CGPA.First().NotificationNo*@</b>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!---Footer Points Section Ends-->
+                    </div>
+                </section>
+            }
+        }
+    }
+    else
+    {
+        <section class="sheet padding-5mm">
+            <p>Result Not Found .... </p>
+        </section>
+    }
+
+</body>
+</html>

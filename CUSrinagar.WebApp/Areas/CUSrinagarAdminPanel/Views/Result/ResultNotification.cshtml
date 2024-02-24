@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "Result Notification";
+}
+
+<div class="page-wrapper pager-table-text">
+
+
+    <div class="page-header">
+        <h1>
+            Result
+            <small>
+                <i class="ace-icon fa fa-angle-double-right"></i>
+                List of notifications
+            </small>
+        </h1>
+    </div>
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-
+                 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Result
+
+
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+
+
+                    </div>
+
+                    <div class="js-table-content" data-url="/CUSrinagarAdminPanel/Result/ResultNotificationPartial" data-DefaultOrderByColumn="">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script>
+        $(document).ready(function () {
+            var $pagertable = $(".js-pager-table");
+            loadpagertable();
+        });
+
+
+    </script>
+    <style>
+        .filter-btn a {
+            color: white !important
+        }
+    </style>
+}
+
+
+
+
+
+
+
+

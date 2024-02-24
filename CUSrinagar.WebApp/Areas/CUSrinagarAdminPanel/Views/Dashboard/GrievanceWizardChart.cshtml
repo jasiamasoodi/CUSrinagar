@@ -1,0 +1,93 @@
+﻿@model CUSrinagar.Models.GrievanceWidget
+
+<div class="col-sm-6 jswidget" style="page-break-after:always;">
+    @Html.Hidden("GrievanceSummary", Newtonsoft.Json.JsonConvert.SerializeObject(Model.Summary))
+    <div class="widget-box">
+        <div class="widget-header widget-header-flat widget-header-small">
+            <h5 class="widget-title">
+                <i class="ace-icon fa fa-signal"></i>
+                Feedback/Grievance Statistics
+            </h5>
+            <div class="widget-toolbar no-border hidden">
+                <div class="inline dropdown-hover">
+                    <button class="btn btn-minier btn-primary">
+                        This Week
+                        <i class="ace-icon fa fa-angle-down icon-on-right bigger-110"></i>
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-right dropdown-125 dropdown-lighter dropdown-close dropdown-caret">
+                        <li class="active">
+                            <a href="#" class="blue">
+                                <i class="ace-icon fa fa-caret-right bigger-110">&nbsp;</i>
+                                This Week
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                <i class="ace-icon fa fa-caret-right bigger-110 invisible">&nbsp;</i>
+                                Last Week
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                <i class="ace-icon fa fa-caret-right bigger-110 invisible">&nbsp;</i>
+                                This Month
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                <i class="ace-icon fa fa-caret-right bigger-110 invisible">&nbsp;</i>
+                                Last Month
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="widget-body">
+            <div class="widget-main">
+                <div id="piechart-placeholder"></div>
+
+                <div class="hr hr8 hr-double"></div>
+
+                <div class="clearfix">
+                    <div class="grid4">
+                        <span class="grey">
+                            <i class="ace-icon fa fa-comments fa-2x blue"></i>
+                            &nbsp; Recieved
+                        </span>
+                        <h4 class="bigger pull-right">@Model.Received</h4>
+                    </div>
+
+                    <div class="grid4">
+                        <span class="grey">
+                            <i class="ace-icon fa fa-comments fa-2x purple"></i>
+                            &nbsp; Resolved
+                        </span>
+                        <h4 class="bigger pull-right">@Model.Resolved</h4>
+                    </div>
+
+                    <div class="grid4">
+                        <span class="grey">
+                            <i class="ace-icon fa fa-comments fa-2x purple"></i>
+                            &nbsp; Forwarded
+                        </span>
+                        <h4 class="bigger pull-right">@Model.Forwarded</h4>
+                    </div>
+
+                    <div class="grid4">
+                        <span class="grey">
+                            <i class="ace-icon fa fa-comments fa-2x red"></i>
+                            &nbsp; Pending
+                        </span>
+                        <h4 class="bigger pull-right">@Model.Pending</h4>
+                    </div>
+                </div>
+            </div><!-- /.widget-main -->
+        </div><!-- /.widget-body -->
+    </div><!-- /.widget-box -->
+</div>

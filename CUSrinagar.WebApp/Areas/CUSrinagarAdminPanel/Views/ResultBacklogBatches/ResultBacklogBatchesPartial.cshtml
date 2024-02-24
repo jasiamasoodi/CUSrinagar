@@ -1,0 +1,33 @@
+﻿@using CUSrinagar.Models;
+@using CUSrinagar.Enums;
+@using CUSrinagar.Extensions
+@model IEnumerable<CUSrinagar.Models.ResultCompact>
+
+<table class="table table-hover table-bordered ">
+    <thead>
+        <tr>
+            <th>S.No</th>
+            <th data-property="Batch">Batch</th>
+            <th data-property="CourseFullName" title="CourseFullName">CourseFullName</th>
+            <th data-property="ExamRollNumber" title="ExamRollNumber">ExamRollNumber</th>
+            <th data-property="NoOfStudents" title="NoOfStudents">NoOfStudents</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var itemSTD in Model)
+            {
+
+                <tr>
+                    <td class="js-sno"></td>
+                    <td>@itemSTD.SemesterBatch</td>
+                    <td>@itemSTD.CourseFullName</td>
+                    <td>@itemSTD.ExamRollNumber</td>
+                    <td>@itemSTD.NoOfStudents</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+

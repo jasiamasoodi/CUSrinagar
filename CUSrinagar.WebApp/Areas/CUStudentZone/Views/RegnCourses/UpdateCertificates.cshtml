@@ -1,0 +1,131 @@
+﻿@model CUSrinagar.Models.UpdateCertificates
+
+@{
+    ViewBag.title = "Update Certificates / Points";
+}
+<div class="page-header">
+    <h1>
+        @if (Model?.coursesApplied?.All(x => x.SubjectCGPA != null) ?? true)
+        {
+            <text>&nbsp; &nbsp; &nbsp; Update Subject CGPA and Certificates</text>
+        }
+        else
+        {
+            <text>&nbsp;&nbsp;&nbsp;Update Certificates</text>
+        }
+    </h1>
+</div>
+<div id="response" style="width:85%;margin:0 auto">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+</div>
+@if (DateTime.Now.Date <= new DateTime(2023, 11, 20) @*&& Model.coursesApplied.All(x => x.SubjectCGPA != null)*@)
+{
+    <div class="row  col-sm-12" style="background-color:white;padding-bottom: 10px">
+        <div class="content-wrapper col-sm-12" style="overflow:auto">
+            @using (Html.BeginForm("UpdateCertificates", "RegnCourses", FormMethod.Post, new { @enctype = "multipart/form-data", @class = "rnd5", @id = "frmqq", area = "CUStudentZone" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="col-sm-12">
+                    <h4 style="margin-left:8px;">
+                        <i class="fa fa-camera" aria-hidden="true"></i>
+                        <strong style="font-size:15px">Upload your Certificates <a class="quadraText" href="https://www.peko-step.com/en/tool/combine-images.html" target="_blank">Click here to Combine images</a> <span style="float:right;"> Only jpg, png, jpeg, bmp & 100-500KB image file is allowed.</span></strong>
+                    </h4><hr />
+                    <img id="img-previewMC" src="" style="width:130px;" />
+                    <br />
+                    @if (Model?.coursesApplied?.All(x => x.SubjectCGPA != null) ?? true)
+                    {
+                        @Html.LabelFor(model => model.CertificateMarksCard, new { @class = "small-70" }) <text>/Transcript <strong>of GRADUATION (Combined Image All Semesters)</strong></text>
+                    }
+                    else
+                    {
+                        <text>Diploma / B.Sc (Combined Image All Semesters or Final year Marks Card)</text>
+                    }
+                    @Html.HiddenFor(model => model.Certificate_ID)
+                    @Html.HiddenFor(model => model.OldMarksCardPath)
+                    <span class="required">
+                        @Html.ValidationMessageFor(model => model.CertificateMarksCard)
+
+                        <span class="erMsgMC"></span>
+                    </span>
+                    @Html.TextBoxFor(model => model.CertificateMarksCard, new { @style = "padding:2px 0;", @type = "file", @onchange = "return valFileCertificates('#CertificateMarksCard',100,500,'KB','jpg,jpeg,bmp,png','.erMsgMC','#img-previewMC');", title = "Only jpg, png, jpeg, bmp & 100-200KB image file is allowed." })
+                    <hr />
+                </div>
+                if (Model?.coursesApplied?.All(x => x.SubjectCGPA != null) ?? true)
+                {
+                    <table class="table table-bordered table-hover col-sm-12">
+                        <tbody class=table-acedemic-body>
+                            @for (int i = 0; i < Model?.coursesApplied?.Count(); i++)
+                            {
+                                <tr>
+                                    @Html.HiddenFor(model => model.coursesApplied[i].CourseName)
+                                    <th>@Model.coursesApplied[i].CourseName.Replace("Integrated", "").Replace("Honor's", "").Replace("Bachelor of ", "") (Lateral Entry)</th>
+
+                                    @Html.HiddenFor(model => model.coursesApplied[i].Student_ID)
+                                    @Html.HiddenFor(model => model.coursesApplied[i].Course_ID)
+                                    <td>
+                                        <span class="required">
+                                            @Html.ValidationMessageFor(model => model.coursesApplied[i].SubjectCGPA)
+                                        </span>
+                                        @Html.TextBoxFor(model => model.coursesApplied[i].SubjectCGPA, new { @class = $"form-control sCGPA width100", @maxlength = "5", placeholder = "Subject CGPA Points", title = $"", @onkeypress = "return floatNumbersOnly(event);" })
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                <div class="col-sm-12 center">
+                    <button type="submit" id="jsSave" style="z-index:101" class="btn btn-success"><i class="fa fa-save"></i> Update Details</button>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <h2 style="color:red;">&nbsp;&nbsp;&nbsp;Process not allowed or has been closed</h2>
+}
+
+@section PageSpecificJSFiles{
+    @Scripts.Render("~/bundles/Libraries/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function ($) {
+            $(document).on('submit', '#frmqq', function (e) {
+                if ($(this).valid()) {
+                    var countofSCGPA = 0;
+                    $("#frmqq").find('[id$="__SubjectCGPA"]').each(function () {
+                        if ($.trim($(this).val()) == '') {
+                            countofSCGPA++;
+                        }
+                    });
+                    if (Number(countofSCGPA) > 0) {
+                        alert("Please enter Over All Subject CGPA Points");
+                        return false;
+                    }
+                    if (confirm("Are you sure you want to save?")) {
+                        $("#jsSave").text("Saving....").prop("disabled", true);
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        });
+    </script>
+}
+
+
+@section PageSpecificStyle{
+    <style>
+        .width100 {
+            width: 100% !important;
+        }
+
+        .field-validation-error, .required {
+            color: red;
+        }
+    </style>
+}
+

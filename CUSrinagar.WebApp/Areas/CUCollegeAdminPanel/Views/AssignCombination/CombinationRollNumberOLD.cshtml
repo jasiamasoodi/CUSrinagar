@@ -1,0 +1,493 @@
+﻿@using CUSrinagar.Models
+@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@model CUSrinagar.Models.ARGPersonalInformation
+@{
+    ViewBag.Title = "Student Detail";
+    ARGSelectedCombination _PrevSemComb = ViewBag.PreviousSemCombination;
+    string combinationSettingDescription = "";
+}
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index", "Dashboard", new { area = "CUCollegeAdminPanel" })">Home</a>
+            </li>
+            <li class="active">Student Combination Info</li>
+        </ul><!-- /.breadcrumb -->
+    </div>
+}
+<div class="panel panel-primary">
+    <div class="panel-heading lead no-margin-bottom">
+        <div class="row">
+            <div class="text-center">
+                <div class="col-sm-12">
+                    <form method="post" id="StudentSearchCombinationInfoForm" action='@Url.Action("ViewFormDetail")' role="form" class="form-inline">
+                        @Html.Hidden("fromAcceptExamFormScreen", (object)ViewBag.fromAcceptExamFormScreen)
+                        @Html.DropDownList("printProg", new SelectList(ViewBag.PrintProgrammeList, "Value", "Text", (short)ViewBag.PrintProgramme),
+                                    null, new
+                                    {
+                                        @class = " form-control",
+                                        @required = "required"
+                                    })
+                        @Html.DropDownList("sem", new SelectList(ViewBag.Semesters, "Value", "Text", ViewBag.Semester),
+                                    null, new
+                                    {
+                                        @class = " form-control",
+                                        @required = "required"
+                                    })
+                        <input type="text" class="form-control" id="Form_RegistrationNumber" name="Form_RegistrationNumber" placeholder="Form Number/CUS Registration No" value="@ViewBag.Form_RegistrationNumber" required />
+                        <button type="submit" class="btn btn-default btn-lg">
+                            <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>Search
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="col-sm-12 col-md-12">
+            @if (Model != null && ViewBag.CombinationSetting != null && _PrevSemComb != null)
+            {
+
+                short choosenSemester = (short)ViewBag.Semester;
+                var _combinationSetting = (CUSrinagar.Models.CombinationSetting)ViewBag.CombinationSetting;
+                combinationSettingDescription = _combinationSetting.Description;
+
+                List<CUSrinagar.Models.ADMSubjectMaster> _PrevSemSubjects = _PrevSemComb.Subjects;
+
+                var CurrentSemCombination = (CUSrinagar.Models.ARGSelectedCombination)Model.SelectedCombinations?.First() ?? new ARGSelectedCombination();
+
+                <div class="col-sm-12 col-md-8">
+                    @using (Html.BeginForm("PostSubjectCombinationRollNumber", "AssignCombination", FormMethod.Post, new { @class = "jsMainForm form-horizontal", @id = "PostSubjectCombinationRollNumber" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("Semester", choosenSemester)
+                        @Html.Hidden("Batch", Model.Batch)
+                        @Html.Hidden("Student_ID", Model.Student_ID)
+                        @Html.Hidden("PrintProgramme", (object)ViewBag.PrintProgramme)
+                        @Html.Hidden("Form_RegistrationNumber", Model.CUSRegistrationNo.IsNullOrEmpty() ? Model.StudentFormNo : Model.CUSRegistrationNo)
+                        @Html.Hidden("fromAcceptExamFormScreen", (object)ViewBag.fromAcceptExamFormScreen)
+
+                        <div class="form-group">
+                            <label for="name" class="col-sm-4 control-label text-primary">Prev Subject(Sem-@_PrevSemComb.Semester) :</label>
+                            <div class="col-sm-8">
+                                <b><span class="small">@(string.Join(", ", _PrevSemSubjects.OrderBy(x => x.SubjectType).Select(x => x.SubjectFullName + $"({x.SubjectType.ToString()})")))</span></b>
+                            </div>
+                        </div>
+                        <hr class="no-margin-top margin-bottom-5" />
+                        <hr class="no-margin-top margin-bottom-10" />
+
+
+
+                        <div class="form-group">
+                            <label for="name" class="col-sm-4 control-label text-primary">Assign Subjects For Sem  :</label>
+                            <div class="col-sm-2 text-success">
+                                <b>@choosenSemester</b>
+                            </div>
+                            @if (Model.SelectedCombinations != null)
+                            {
+
+                                <label for="name" class="col-sm-2 control-label text-primary">Subjects Status :</label>
+                                <div class="col-sm-2">
+                                    @if (Model.SelectedCombinations.First().IsVerified)
+                                    {
+                                        <span class="text-success">Verfied</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-danger">Not verfied</span>
+                                    }
+                                </div>
+                            }
+                        </div>
+                        <hr class="no-margin-top margin-bottom-10" />
+
+                        if (_combinationSetting.CoreCourseCount > 0)
+                        {
+                            List<ADMSubjectMaster> _NewCoreSubjects = ViewBag.NewCoreSubjects;
+                            if (_NewCoreSubjects != null)
+                            {
+                                bool CheckAllCoreSubject = _NewCoreSubjects.Count == _combinationSetting.CoreCourseCount;
+                                <div class="form-group">
+                                    <label for="name" class="col-sm-4 control-label text-primary">Core subjects :</label>
+                                    <div class="col-sm-8">
+                                        @foreach (var coreSubject in _NewCoreSubjects)
+                                        {
+                                            var OptedSubject = CurrentSemCombination.Subjects?.FirstOrDefault(x => x.Subject_ID == coreSubject.Subject_ID);
+                                            if (OptedSubject != null)
+                                            {
+                                                <div class=" checkbox-inline jsCoreSubjectSection">
+                                                    <input class="ace jsCoreSubject" type="checkbox" checked="checked" id="@coreSubject.SubjectFullName" name="@coreSubject.SubjectFullName" value="@coreSubject.Subject_ID">
+                                                    <label class="lbl" for="@coreSubject.SubjectFullName"> @coreSubject.SubjectFullName (@coreSubject.SubjectType)</label>
+                                                    @Html.Hidden(coreSubject.SubjectFullName)
+                                                    @Html.TextBox(coreSubject.SubjectFullName, OptedSubject.SubjectFullName, new { @class = "jsCoreSubjectID  hidden" })
+                                                    @Html.TextBox("Subject", (object)OptedSubject.Subject_ID, new { @class = "jsCoreSubject_ID hidden" })
+                                                </div>
+
+                                            }
+                                            else
+                                            {
+                                                <div class=" checkbox-inline jsCoreSubjectSection">
+                                                    <input class="ace jsCoreSubject" type="checkbox" id="@coreSubject.SubjectFullName" name="@coreSubject.SubjectFullName" value="@coreSubject.Subject_ID" @(CheckAllCoreSubject ? "checked='checked'" : "")>
+                                                    <label class="lbl" for="@coreSubject.SubjectFullName"> @coreSubject.SubjectFullName (@coreSubject.SubjectType)</label>
+                                                    @Html.Hidden(coreSubject.SubjectFullName)
+                                                    @Html.TextBox("Subject", (object)(CheckAllCoreSubject ? coreSubject.Subject_ID.ToString() : null), new { @class = "jsCoreSubject_ID hidden" })
+                                                    @Html.TextBox(coreSubject.SubjectFullName, coreSubject.SubjectFullName, new { @class = "jsCoreSubjectID  hidden" })
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <h4 class="text-danger">Core subjects not available ....</h4>
+                                <h4 class="text-danger">Please visit Cluster University for correction ....</h4>
+                            }
+                            <hr class="no-margin-top margin-bottom-10" />
+                        }
+
+                        if (_combinationSetting.CompulsarySubject.IsNotNullOrEmpty())
+                        {
+                            <div class="form-group">
+                                <label for="name" class="col-sm-4 control-label text-primary">Compulsary Subject :</label>
+                                <div class="col-sm-8">
+                                    <small><b>@String.Join(", ", _combinationSetting.CompulsarySubject.OrderBy(x => x.SubjectType).Select(x => new { Title = x.SubjectFullName + $"({x.SubjectType})-{x.TotalCredit}" }).Select(x => x.Title).ToList())</b></small>
+                                </div>
+                            </div>
+                            <hr class="no-margin-top margin-bottom-10" />
+                        }
+
+                        if (_combinationSetting.DesciplineCentricElectiveCourseCount > 0)
+                        {
+                            if (_combinationSetting.DCEBySubject)
+                            {
+                                var _PrevSemCoreSubjects = (List<ADMSubjectMaster>)ViewBag.BaseSemSubject; // _PrevSemComb?.Subjects?.Where(x => x.SubjectType == SubjectType.Core)?.ToList();
+                                if (_PrevSemCoreSubjects.IsNotNullOrEmpty())
+                                {
+                                    int count = 0;
+                                    foreach (var item in _PrevSemCoreSubjects)
+                                    {
+                                        var _DCEChoices = (List<CUSrinagar.Models.SubjectCompact>)ViewData[item.Subject_ID.ToString()];
+                                        var _Selected_Subjects = CurrentSemCombination != null && CurrentSemCombination.Subjects != null ? CurrentSemCombination.Subjects.Where(x => x.SubjectType == CUSrinagar.Enums.SubjectType.DCE || x.SubjectType == CUSrinagar.Enums.SubjectType.DSE).ToList() : null;
+                                        if (_DCEChoices.IsNotNullOrEmpty())
+                                        {
+                                            <div class="form-group jsDesciplineCentricElective">
+                                                <label for="name" class="col-sm-4 control-label text-primary">DCE @(AppUserHelper.TableSuffix == PrintProgramme.IH ? "" : $"({item.SubjectFullName})") @(count + 1) :</label>
+                                                <div class="col-sm-8">
+                                                    <select id='@("DesciplineCentricElective" + (count + 1).ToString())' name='subject' class="form-control chosen-select" tabindex='@(count + 1)'>
+                                                        <option value=""> - Select -</option>
+                                                        @if (_DCEChoices != null)
+                                                        {
+                                                            foreach (var subject in _DCEChoices)
+                                                            {
+                                                                <option @(_Selected_Subjects.IsNotNullOrEmpty() && _Selected_Subjects.Any(x => x.Subject_ID == subject.Subject_ID) ? "selected='selected'" : "") value="@subject.Subject_ID" data-credit="@subject.TotalCredit">@subject.SubjectFullName (@Helper.GetEnumDescription(subject.SubjectType)-@subject.TotalCredit Credits)-@subject.DepartmentFullName</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        }
+                                        <hr class="no-margin-top margin-bottom-10" />
+                                        count++;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                var _DesciplineCentricElectiveCourses = (List<CUSrinagar.Models.SubjectCompact>)ViewBag.DesciplineCentricElectiveCourses;
+                                var _Selected_Subjects = CurrentSemCombination != null && CurrentSemCombination.Subjects != null ? CurrentSemCombination.Subjects.Where(x => x.SubjectType == CUSrinagar.Enums.SubjectType.DCE || x.SubjectType == CUSrinagar.Enums.SubjectType.DSE).ToList() : null;
+                                for (int count = 0; count < _combinationSetting.DesciplineCentricElectiveCourseCount; count++)
+                                {
+                                    <div class="form-group jsDesciplineCentricElective">
+                                        <label for="name" class="col-sm-4 control-label text-primary">DCE Subject @(count + 1) :</label>
+                                        <div class="col-sm-8">
+                                            <select id='@("DesciplineCentricElective" + (count + 1).ToString())' name='subject' class="form-control chosen-select" tabindex='@(count + 1)'>
+                                                <option value=""> - Select -</option>
+                                                @if (_DesciplineCentricElectiveCourses != null)
+                                                {
+                                                    Guid _Selected_Subject = _Selected_Subjects != null && _Selected_Subjects.Count > count ? _Selected_Subjects[count].Subject_ID : Guid.Empty;
+                                                    foreach (var subject in _DesciplineCentricElectiveCourses)
+                                                    {
+                                                        <option @(_Selected_Subjects.IsNotNullOrEmpty() && _Selected_Subject == subject.Subject_ID ? "selected='selected'" : "") value="@subject.Subject_ID" data-credit="@subject.TotalCredit">@subject.SubjectFullName (@Helper.GetEnumDescription(subject.SubjectType)-@subject.TotalCredit Credits)-@subject.DepartmentFullName</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <hr class="no-margin-top margin-bottom-10" />
+                                }
+                            }
+                        }
+
+                        if (_combinationSetting.GenericElectiveCourseCount > 0)
+                        {
+                            var _Selected_Subjects = CurrentSemCombination != null && CurrentSemCombination.Subjects != null ? CurrentSemCombination.Subjects.Where(x => x.SubjectType == CUSrinagar.Enums.SubjectType.GE || x.SubjectType == CUSrinagar.Enums.SubjectType.OE).ToList() : null;
+                            for (int count = 0; count < _combinationSetting.GenericElectiveCourseCount; count++)
+                            {
+                                var generalElectiveSubjects = (List<CUSrinagar.Models.SubjectCompact>)ViewData["GE" + count];
+                                ADMSubjectMaster selected_Subject = new ADMSubjectMaster();
+                                if (generalElectiveSubjects != null && _Selected_Subjects != null && _Selected_Subjects.Count > count)
+                                {
+                                    selected_Subject = _Selected_Subjects[count];
+                                }
+                                <div class="form-group">
+                                    <label for="name" class="col-sm-4 control-label text-primary">GE/OE Subject @(count + 1) :</label>
+                                    @if (_combinationSetting.AllowInterCollegeElective)
+                                    {
+                                        <div class="col-sm-4">
+                                            <input type="hidden" data-column="Programme" data-operator="EqualTo" data-scope="college-ge-row-@count" class="jsProgrammeDDL" value="@ViewBag.Programme" />
+                                            <input type="hidden" data-column="Semester" data-operator="EqualTo" data-scope="college-ge-row-@count" class="jsSemesterDDL" value="@choosenSemester" />
+                                            <input type="hidden" data-column="SubjectType" data-operator="In" data-scope="college-ge-row-@count" class="jsSubjectTypeDDL" value="@((short)SubjectType.OE),@((short)SubjectType.GE)" />
+                                            <div class="jsDDLContainer">
+                                                @Html.DropDownList("CollegeDDL", new SelectList(ViewBag.College, "Value", "Text",selected_Subject.College_ID), "------ All Colleges ------",
+                                               new
+                                               {
+                                                   @class = "chosen-select jsCollegeDDL",
+                                                   @data_column = "AcceptCollege_ID",
+                                                   @data_operator = "EqualTo",
+                                                   @data_scope="college-ge-row-"+ count
+                                               })
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="col-sm-@(_combinationSetting.AllowInterCollegeElective?"4":"8")">
+                                        <div class="jsDDLContainer jsGenericElectiveSubject">
+                                            <select id='@("GenericElectiveSubject"+(count).ToString())' name='subject' class="form-control chosen-select jsSubjectDDL" tabindex='@(count+1)' data-scope="college-ge-row-@count" data-defaulttextvalue="-- select --,">
+                                                <option value=""> - Select -</option>
+                                                @if (generalElectiveSubjects != null)
+                                                {
+                                                    foreach (var subject in generalElectiveSubjects)
+                                                    {
+                                                        <option @(selected_Subject.Subject_ID == subject.Subject_ID ? "selected='selected'" : "") value="@subject.Subject_ID" data-subjecttype="@subject.SubjectType">@subject.SubjectFullName (@(subject.SubjectType.ToString())-@subject.TotalCredit Credits)-@subject.DepartmentFullName</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="no-margin-top margin-bottom-10" />
+                            }
+                        }
+                        if (_combinationSetting.SkillEnhancementCourseCount > 0)
+                        {
+                            var skillEnhancementSubjects = (List<CUSrinagar.Models.SubjectCompact>)ViewBag.SkillEnhanceSubjects;
+                            var _Selected_Subjects = CurrentSemCombination != null && CurrentSemCombination.Subjects != null ? CurrentSemCombination.Subjects.Where(x => x.SubjectType == CUSrinagar.Enums.SubjectType.SEC).ToList() : null;
+                            for (int count = 0; count < _combinationSetting.SkillEnhancementCourseCount; count++)
+                            {
+                                <div class="form-group jsSkillEnhanceSubject">
+                                    <label for="name" class="col-sm-4 control-label text-primary" title="Skill Enhancement Subject">SEC @(count + 1) :</label>
+                                    <div class="col-sm-8">
+                                        <select id='@("SkillEnhanceSubject"+(count+1).ToString())' name='subject' class="form-control chosen-select" tabindex='@(count+1)'>
+                                            <option value=""> - Select -</option>
+                                            @if (skillEnhancementSubjects != null)
+                                            {
+                                                Guid _Selected_Subject = _Selected_Subjects != null && _Selected_Subjects.Count > count ? _Selected_Subjects[count].Subject_ID : Guid.Empty;
+                                                foreach (var subject in skillEnhancementSubjects)
+                                                {
+                                                    <option @(_Selected_Subject == subject.Subject_ID ? "selected='selected'" : "") value="@subject.Subject_ID" data-credit="@subject.TotalCredit">@subject.SubjectFullName (@(subject.SubjectType.ToString())-@subject.TotalCredit Credits)-@subject.DepartmentFullName</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <hr class="no-margin-top margin-bottom-10" />
+                            }
+                        }
+
+                        if (_combinationSetting.OptionalCoreCourseCount > 0)
+                        {
+                            var _OptionalCoreCourseCount = (List<CUSrinagar.Models.SubjectCompact>)ViewBag.OptionalCoreCourseCount;
+                            var _Selected_Subjects = CurrentSemCombination != null && CurrentSemCombination.Subjects != null ? CurrentSemCombination.Subjects.Where(x => x.SubjectType == CUSrinagar.Enums.SubjectType.OC).ToList() : null;
+                            for (int count = 0; count < _combinationSetting.OptionalCoreCourseCount; count++)
+                            {
+                                <div class="form-group jsOptionalCoreCourse">
+                                    <label for="name" class="col-sm-4 control-label text-primary">Optional Core Subject @(count + 1) :</label>
+                                    <div class="col-sm-8">
+                                        <select id='@("OptionalCoreCourse"+(count+1).ToString())' name='subject' class="form-control chosen-select" tabindex='@(count+1)'>
+                                            <option value=""> - Select -</option>
+                                            @if (_OptionalCoreCourseCount != null)
+                                            {
+                                                Guid _Selected_Subject = _Selected_Subjects != null && _Selected_Subjects.Count > count ? _Selected_Subjects[count].Subject_ID : Guid.Empty;
+                                                foreach (var subject in _OptionalCoreCourseCount)
+                                                {
+                                                    <option @(_Selected_Subject == subject.Subject_ID ? "selected='selected'" : "") value="@subject.Subject_ID" data-credit="@subject.TotalCredit">@subject.SubjectFullName (@(subject.SubjectType.ToString())-@subject.TotalCredit Credits)-@subject.DepartmentFullName</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <hr class="no-margin-top margin-bottom-10" />
+                            }
+                        }
+                        if (_combinationSetting.AdditionalCourseCount > 0)
+                        {
+                            var _AdditionalCourses = (List<CUSrinagar.Models.SubjectCompact>)ViewBag.AdditionalCourses;
+                            List<StudentAdditionalSubject> studentAddionalSubjects = (List<StudentAdditionalSubject>)ViewBag.StudentAddionalSubjects;
+                            for (int count = 0; count < _combinationSetting.AdditionalCourseCount; count++)
+                            {
+                                <div class="form-group jsAdditionalCourse">
+                                    <label for="name" class="col-sm-4 control-label text-primary">Additional Core Subject @(count + 1) :</label>
+                                    <div class="col-sm-8">
+                                        <select id='@("AdditionalCourse"+(count+1).ToString())' name='additionalSubject' class="form-control chosen-select" tabindex='@(count+1)'>
+                                            <option value=""> - Select -</option>
+                                            @if (_AdditionalCourses != null)
+                                            {
+                                                Guid _Selected_Subject = studentAddionalSubjects != null && studentAddionalSubjects.Count > count ? studentAddionalSubjects[count].Subject_ID : Guid.Empty;
+                                                foreach (var subject in _AdditionalCourses)
+                                                {
+                                                    <option @(_Selected_Subject == subject.Subject_ID ? "selected='selected'" : "") value="@subject.Subject_ID" data-credit="@subject.TotalCredit">@subject.SubjectFullName (@(subject.SubjectType.ToString())-@subject.TotalCredit Credits)-@subject.DepartmentFullName</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <hr class="no-margin-top margin-bottom-10" />
+                            }
+                        }
+
+                        <div class="form-group">
+                            <label for="name" class="col-sm-4 control-label text-primary">Class Roll Number :</label>
+                            <div class="col-sm-2">
+                                <input type="text" id="ClassRollNo" name="ClassRollNo" value="@Model.ClassRollNo" maxlength="15">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="checkbox">
+                                    <label class="block">
+                                        <input type="checkbox" class="ace input-lg" />
+                                        <span class="lbl bigger"> Override existing class Roll Number</span>
+                                        <input type="hidden" name="OverrideClassRollNumber" value="False">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="no-margin-top margin-bottom-10" />
+
+                        <div class="form-group">
+                            <label for="name" class="col-sm-4 control-label text-primary"></label>
+                            <div class="col-sm-12">
+                                <div class="pull-right">
+                                    <button id="jsSaveUpdateCombinationWithRollNumber" type="submit" class="btn btn-success" autofocus>
+                                        <i class="glyphicon glyphicon-ok"></i><b>&nbsp;Save/Update Combinations</b>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="col-sm-12 col-sm-4  hidden-xs hidden-sm">
+                    <center>
+                        <div class="thumbnail no-margin-bottom">
+                            @if (Model.Photograph != null)
+                            {
+                                <img src="@Url.Content(Model.Photograph)" class="img-responsive max-height-200" />
+                            }
+                        </div>
+                    </center>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="text-primary">CUS Regstration No.</td>
+                                <td>@Model.CUSRegistrationNo</td>
+                            </tr>
+                            <tr>
+                                <td class="text-primary">Class Roll No.</td>
+                                <td>@Model.ClassRollNo</td>
+                            </tr>
+                            <tr>
+                                <td class="text-primary">Student Status</td>
+                                <td>@(CUSrinagar.Extensions.Helper.GetEnumDescription(Model.FormStatus))</td>
+                            </tr>
+                            <tr>
+                                <td class="text-primary">Name</td>
+                                <td>@Model.FullName</td>
+                            </tr>
+                            <tr>
+                                <td class="text-primary">Course</td>
+                                <td>@_PrevSemComb.CourseID</td>
+                            </tr>
+                            <tr>
+                                <td class="text-primary">Batch</td>
+                                <td>@Model.Batch</td>
+                            </tr>
+                            <tr>
+                                <td class="text-primary">Current Semester</td>
+                                <td>@Model.CurrentSemesterOrYear</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                @*<div class="col-sm-12 col-md-12">
+                        <div class="col-sm-12 col-md-7">
+                            <b>Note: </b><h4 class="red text-size-3"><u>@combinationSettingDescription</u> </h4>
+                        </div>
+                    </div>*@
+            }
+            else
+            {
+                <div class="col-sm-12 center center-block">
+                    <p class="center">
+                        <h1 class="text-danger">Student not found.</h1>
+                        <h3>Please check search filters like batch, course, semester.</h3>
+                        <hr />
+                        <h4 class="text-danger">@ViewBag.ErrorMessage</h4>
+                    </p>
+                </div>
+            }
+        </div>
+        <div class="col-sm-12 col-md-7">
+            @if (!string.IsNullOrEmpty(combinationSettingDescription))
+            {
+                <b>Note: </b><h5 class="text-size-3"><u>@combinationSettingDescription</u> </h5>
+            }
+            <div>
+                <hr />
+                <h5>WARNING!</h5>
+                <ol>
+                    <li>Those candidates who have not appeared in internal/continous assesment are not eligible to appear in exam and their forms will be cancelled.</li>
+                    <li><strong>In case of any discrepancy please contact University I.T. Section.</strong></li>
+                </ol>
+                <hr />
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+@section PageSpecificJS{
+    <script>
+        $(document).ready(function () {
+
+            $("#StudentSearchCombinationInfoForm").submit(function () {
+                var semester = parseInt($("#sem").find('option:selected').val()) || 0;
+                if (semester == 1) {
+                    $("#StudentSearchCombinationInfoForm").attr('action', '/CUCollegeAdminPanel/AssignCombination/ViewFormDetail');
+                } else if (semester > 1) {
+                    $("#StudentSearchCombinationInfoForm").attr('action', '/CUCollegeAdminPanel/AssignCombination/CombinationRollNumber');
+                }
+            });
+
+
+            $("#PostSubjectCombinationRollNumber").submit(function () {
+                $(".jsCoreSubjectSection").each(function (index, section) {
+                    var $section = $(section);
+                    var $checkbox = $section.find('input[type=checkbox]');
+                    if ($checkbox.is(':checked')) {
+                        $section.find('input.jsCoreSubject_ID').val($checkbox.val());
+                    } else {
+                        $section.find('input.jsCoreSubject_ID').val('');
+                    }
+                });
+            });
+
+
+            $('html, body').animate({ scrollTop: (0) }, '2000');
+
+
+        });
+    </script>
+}

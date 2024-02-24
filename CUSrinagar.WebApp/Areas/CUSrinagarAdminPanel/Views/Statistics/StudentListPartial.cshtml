@@ -1,0 +1,86 @@
+﻿@model  List<CUSrinagar.Models.StudentStatisticsSummary>
+@{
+    Layout = null;
+    List<string> groupByClauseList = ViewBag.GroupByClause;
+}
+
+<table class="table table-hover table-bordered js-table">
+    @if (Model != null)
+    {
+        <thead style="white-space: nowrap;">
+            <tr>
+                <th class="wd-35">S.No</th>
+                @if (groupByClauseList.Contains("Batch"))
+                {
+                    <th data-property="Batch">Batch</th>
+                }
+                @if (groupByClauseList.Contains("CollegeFullName"))
+                {
+                    <th data-property="CollegeFullName">College</th>
+                } 
+                @if (groupByClauseList.Contains("Programme"))
+                {
+                    <th data-property="Programme">Programme</th>
+                }
+                @if (groupByClauseList.Contains("CourseFullName"))
+                {
+                    <th data-property="CourseFullName">Course</th>
+                }
+                @if (groupByClauseList.Contains("ARGStudentAddress.District"))
+                {
+                    <th data-property="District">District</th>
+                }
+                @if (groupByClauseList.Contains("Gender"))
+                {
+                    <th data-property="Gender">Gender</th>
+                }
+                <th data-property="Count">Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="js-sno"></td>
+                        @if (groupByClauseList.Contains("Batch"))
+                        {
+                            <td>@item.Batch</td>
+                        }
+                        @if (groupByClauseList.Contains("CollegeFullName"))
+                        {
+                            <td>@item.CollegeFullName</td>
+                        } 
+                        @if (groupByClauseList.Contains("Programme"))
+                        {
+                            <td>@(item.Programme.HasValue ? CUSrinagar.Extensions.Helper.GetEnumDescription(item.Programme.Value) : "N.A") </td>
+                        }
+                        @if (groupByClauseList.Contains("CourseFullName"))
+                        {
+                            <td>@item.CourseFullName</td>
+                        }
+                        @if (groupByClauseList.Contains("ARGStudentAddress.District"))
+                        {
+                            <td>@item.District</td>
+                        }
+                        @if (groupByClauseList.Contains("Gender"))
+                        {
+                            <td>@item.Gender</td>
+                        }
+                        <td>@item.Count</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    }
+    else
+    {
+        <tbody>
+            <tr>
+                <td><h3>No record found</h3></td>
+            </tr>
+        </tbody>
+    }
+
+</table>

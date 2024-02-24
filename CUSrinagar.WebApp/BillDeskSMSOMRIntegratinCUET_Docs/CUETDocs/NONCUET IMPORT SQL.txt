@@ -1,0 +1,160 @@
+ALTER TABLE dbo.gwcnocuet
+ADD Id UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID();
+GO
+UPDATE dbo.gwcnocuet SET [Reservation Category]='OM' WHERE [Reservation Category]='General' OR [Reservation Category]IS NULL;
+GO
+UPDATE gwcnocuet SET [12thBoard]='JKBOSE'  WHERE [12thBoard] IN
+(
+'J & K STATE BOARD OF SCHOOL EDUCATION'
+)
+GO
+UPDATE gwcnocuet SET [12thBoard]='CBSE'  WHERE [12thBoard] IN
+(
+'CENTRAL BOARD OF SECONDARY EDUCATION(CBSE)'
+)
+GO
+ UPDATE dbo.gwcnocuet SET PermanentAddress=SUBSTRING(PermanentAddress,0,149) WHERE LEN(PermanentAddress)>150
+GO
+UPDATE gwcnocuet SET [12thBoard]='OTHER'  WHERE [12thBoard] NOT IN
+(
+'CENTRAL BOARD OF SECONDARY EDUCATION(CBSE)',
+'J & K STATE BOARD OF SCHOOL EDUCATION'
+)
+GO
+UPDATE gwcnocuet SET [12thStream]='SCIENCE WITH MATH'  WHERE [12thStream] IN
+(
+N'SCIENCE-PCBM',
+N'SCIENCE-PCM'
+)
+GO
+ UPDATE gwcnocuet SET [12thStream]='SCIENCE'  WHERE [12thStream] IN
+(
+N'SCIENCE-PCB'
+)
+
+GO
+ UPDATE gwcnocuet SET [12thStream]='ARTS WITH MATH'  WHERE [12thStream] IN
+(
+N'ARTS-MATHS'
+)
+
+GO
+ UPDATE gwcnocuet SET [12thStream]='HOME-SCIENCE'  WHERE [12thStream] IN
+(
+N'HOME-SC'
+)
+GO
+INSERT INTO dbo.ARGPersonalInformation_UG
+(
+    Student_ID,
+    StudentFormNo,
+    BoardRegistrationNo,    CUSRegistrationNo,    PreviousUniversityRegnNo,    FullName,
+    FathersName,    MothersName,
+    Gender,
+    DOB, Religion,    Category,    Batch,
+    FormStatus,    ClassRollNo,
+    CurrentSemesterOrYear,    AcceptCollege_ID,
+    IsPassout,
+    IsProvisional,    CATEntrancePoints,    IsLateralEntry,
+    MigrationIssued,
+    EntranceRollNo,
+    TotalFee,    UploadedOnNadDigilocker,
+    AcceptedBy_ID,    MarksCardSerialNo,
+    Photograph,    CreatedBy,
+    CreatedOn,    UpdatedOn,
+    UpdatedBy,
+    CUETApplicationNo,
+    CUETEntranceRollNo,    OtherUnivMigrationReceivedOn
+)
+SELECT  id,'CUS-UG-'+CAST(Registration_Number AS VARCHAR(MAX)),'WRONG'+CAST(Registration_Number AS VARCHAR(MAX)),
+NULL,UPPER([University Registration Number]),UPPER([Student Name]),UPPER([Father Name]),UPPER([Mother Name]),UPPER(Gender),CAST (DateOfBirth AS DATE),
+religion,[Reservation Category],2055,10,[Class Roll No#],0,NULL,0,0,0,0,0,CAST(Registration_Number AS BIGINT),0,0,NULL,NULL,'/Content/ThemePublic/PrintImages/DefaultStudentPhoto.jpeg',
+ID,GETDATE(),NULL,NULL,CAST(Registration_Number AS VARCHAR(MAX)),NULL,0
+  FROM  dbo.gwcnocuet WHERE admission_mode='NON-CUET' AND CancellationStatus='NO' AND Registration_Number LIKE '333%'
+GO
+INSERT INTO dbo.ARGStudentAddress_UG
+(
+    Address_ID,
+    Student_ID,
+    PinCode,
+    Mobile,
+    Email,
+    PermanentAddress,
+    AssemblyConstituency,
+    ParliamentaryConstituency,
+    Block,
+    Tehsil,
+    District,
+    State,
+    CreatedOn,
+    CreatedBy,
+    UpdatedOn,
+    UpdatedBy
+)
+SELECT  NEWID(),id,Pincode,StudentMobile,Email,REPLACE(REPLACE(PermanentAddress,', Jammu and Kashmir, India, ',''),'Jammu and Kashmir , ',''),'Other','OTHER',UPPER(District),UPPER(District),UPPER(District),UPPER(States),GETDATE(),id,NULL,NULL FROM  dbo.gwcnocuet WHERE admission_mode='NON-CUET' AND CancellationStatus='NO' AND Registration_Number LIKE '333%'
+GO
+  INSERT INTO dbo.ARGCoursesApplied_UG
+(
+    Student_ID,
+    Course_ID,
+    Preference,
+    SubjectEntrancePoints,
+    AppearedInEntrance,
+    SelfFinancedPayment_ID,
+    StudentSelectionStatus,
+    SelectionAgaintListNo,
+    IsActive,
+    SubjectCGPA,
+    IsEligible
+)
+SELECT  id,'39AB4D01-16EF-40DD-9DC7-FAA14C7801B6',0,0,0,NULL,0,NULL,1,NULL,1 FROM  dbo.gwcnocuet WHERE admission_mode='NON-CUET' AND CancellationStatus='NO' AND Registration_Number LIKE '333%'
+GO
+INSERT INTO  dbo.ARGStudentPreviousQualifications_UG
+(
+    Qualification_ID,
+    Student_ID,
+    ExamName,
+    Stream,
+    Subjects,
+    Session,
+    Year,
+    RollNo,
+    MaxMarks,
+    MarksObt,
+    ExamBody,
+    CreatedOn,
+    CreatedBy,
+    UpdatedOn,
+    UpdatedBy,
+    OverAllCGPA
+)
+SELECT  NEWID(),id,'12TH',[12thStream],[12thStream],'ANNUAL',[12thPassingyear],[12thBoardRollno],100,[12thPercentage],[12thBoard],GETDATE(),id,NULL,NULL,NULL FROM  dbo.gwcnocuet WHERE admission_mode='NON-CUET' AND CancellationStatus='NO' AND Registration_Number LIKE '333%'
+GO
+INSERT INTO dbo.PaymentDetails_UG
+(
+    Payment_ID,
+    Entity_ID,
+    TxnReferenceNo,
+    BankReferenceNo,
+    TxnAmount,
+    BankID,
+    BankMerchantID,
+    TxnType,
+    CurrencyName,
+    ItemCode,
+    SecurityType,
+    SecurityID,
+    TxnDate,
+    AuthStatus,
+    SettlementType,
+    ErrorStatus,
+    ErrorDescription,
+    ModuleType,
+    PaymentType,
+    Email,
+    PhoneNumber,
+    Semester
+)
+SELECT NEWID(),ID, 'CUS-UG-'+CAST(Registration_Number AS VARCHAR(MAX)),'NON-CUET-OFFLINE',0,NULL,NULL,
+'eSamarth','INR',NULL,NULL,NULL,GETDATE(),NULL,NULL,NULL,NULL,1,2,Email,StudentMobile,NULL
+ FROM dbo.gwcnocuet WHERE admission_mode='NON-CUET' AND CancellationStatus='NO' AND Registration_Number LIKE '333%'

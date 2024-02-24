@@ -1,0 +1,31 @@
+﻿
+@model  CUSrinagar.Models.InternalExam
+@{
+    ViewBag.Title = "CUS :: Add Internal Exam";
+
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header">
+
+                <h4 class="widget-title"><i class='menu-icon fa fa-pencil-square-o'></i>Add Internal Exam</h4>
+
+
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+
+                    @using (Html.BeginForm("Edit", "InternalAdmin", FormMethod.Post, new { enctype = "multipart/form-data", @name = "validation-form", @id = "validation-form", @class = "form-horizontal", @role = "form" }))
+                    {
+
+                        @Html.HiddenFor(model=>model.Exam_Id)
+                        @Html.Partial("_CreateOrEdit", Model)
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

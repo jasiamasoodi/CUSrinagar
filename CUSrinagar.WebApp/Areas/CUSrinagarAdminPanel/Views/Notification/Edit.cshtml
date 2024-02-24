@@ -1,0 +1,31 @@
+﻿@model  CUSrinagar.Models.Notification
+@{
+    ViewBag.Title = "CUS :: Edit Notification";
+
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header">
+                <h4 class="widget-title"><i class='menu-icon fa fa-pencil-square-o'></i>Edit Notification</h4>
+
+
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+
+                    @using (Html.BeginForm("Edit", "Notification", FormMethod.Post, new { enctype = "multipart/form-data", @name = "validation-form", @id = "validation-form", @class = "form-horizontal", @role = "form" }))
+                    {
+
+                        @Html.HiddenFor(model => model.Notification_ID);
+                        @*@Html.HiddenFor(model => model.Link);*@
+                        @Html.HiddenFor(model => model.CreatedBy);
+                        @Html.HiddenFor(model => model.CreatedOn);
+                        @Html.HiddenFor(model => model.Status);
+                        @Html.Partial("_CreateOrEdit", Model)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

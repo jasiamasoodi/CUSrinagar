@@ -1,0 +1,88 @@
+﻿@{
+
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area="CUStudentZone"})">Home</a>
+        </li>
+        <li>
+            <a href="#" class="active">Feedback</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+
+<div class="page-content">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="well well-sm">
+                <form>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name">
+                                    Name
+                                </label>
+                                <input type="text" class="form-control" id="name" placeholder="Enter name" required="required" />
+                            </div>
+                            <div class="form-group">
+                                <label for="email">
+                                    Email Address
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-envelope"></span>
+                                    </span>
+                                    <input type="email" class="form-control" id="email" placeholder="Enter email" required="required" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">
+                                    Phone Number
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-phone"></span>
+                                    </span>
+                                    <input type="text" class="form-control phone" id="email" placeholder="Enter email" required="required" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">
+                                    Subject
+                                </label>
+                                <select id="subject" name="subject" class="form-control" required="required">
+                                    <option value="" selected="">Choose One:</option>
+                                    <option value="service">University</option>
+                                    <option value="suggestions">College</option>
+                                    <option value="product">Admission</option>
+                                    <option value="product">Examination</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name">
+                                    Message
+                                </label>
+                                <textarea name="message" id="message" class="form-control" rows="9" cols="25" required="required"
+                                          placeholder="Message"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-primary pull-right" id="btnContactUs">
+                                Send Message
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJSFiles{
+    
+}

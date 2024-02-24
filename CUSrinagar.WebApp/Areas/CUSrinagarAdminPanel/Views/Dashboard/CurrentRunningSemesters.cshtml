@@ -1,0 +1,91 @@
+﻿
+@model List<GeneralModels.ExaminationDashboard>
+@using CUSrinagar.Extensions
+@{
+    Layout = null;
+}
+
+@if (Model != null)
+{
+    <table class="table table-bordered table-striped">
+        <thead class="thin-border-bottom">
+            <tr>
+                <th>
+                    Batch
+                </th>
+                <th>
+                    Course
+                </th>
+                <th>
+                    Current Semester
+                </th>
+                 @*<th>
+                   PassOut
+                </th>*@
+            </tr>
+        </thead>
+
+        @foreach (var item in Model)
+        {
+            <tbody>
+                <tr>
+
+                    @if (item.Course == "UG")
+                    {
+                        <td><b class="red">@item.SemesterBatch</b></td>
+                        <td><b class="red">@item.Course</b></td>
+                        <td><b class="red">@item.CurrentSemesterOrYear</b></td>
+
+
+
+                    }
+                    @if (item.Course == "PG")
+                    {
+                        <td><b class="purple">@item.SemesterBatch</b></td>
+                        <td><b class="purple">@item.Course</b></td>
+                        <td><b class="purple">@item.CurrentSemesterOrYear</b></td>
+
+
+
+                    }
+                    @if (item.Course == "IG")
+                    {
+                        <td><b class="green">@item.SemesterBatch</b></td>
+                        <td><b class="green">@item.Course</b></td>
+                        <td><b class="green">@item.CurrentSemesterOrYear</b></td>
+
+
+
+                    }
+                    @if (item.Course == "Eng")
+                    {
+                        <td><b class="blue">@item.SemesterBatch</b></td>
+                        <td><b class="blue">@item.Course</b></td>
+                        <td><b class="blue">@item.CurrentSemesterOrYear</b></td>
+
+
+
+                    }
+                    @if (item.Course == "B.Ed")
+                    {
+                        <td><b class="brown">@item.SemesterBatch</b></td>
+                        <td><b class="brown">@item.Course</b></td>
+                        <td><b class="brown">@item.CurrentSemesterOrYear</b></td>
+
+
+
+                    }
+                   
+                    @*<td>@item.PassOut</td>*@
+                </tr>
+            </tbody>
+        }
+    </table>
+}
+else
+{
+    <h4>No Current Running Semesters Found</h4>
+}
+
+
+

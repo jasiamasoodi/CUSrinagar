@@ -1,0 +1,47 @@
+﻿@model  List<CUSrinagar.Models.Syllabus>
+@{
+   
+    var ISChecked = "";
+}
+
+ 
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th data-property="FullName">Programme</th>
+            <th data-property="UserName">Course Name</th>
+            <th data-property="Semester">Semester</th>
+            <th data-property="SubjectFullName">Subject</th>
+            <th>Download Syllabus</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var row in Model)
+            {
+                <tr>
+                    <td>@row.Programme</td>
+                    <td>@row.CourseFullName</td>
+                    <td>@row.Semester</td>
+                    <td>@row.SubjectFullName</td>
+                    <td><a download title='Download' href='@row.SyllabusUrl'> Download </a></td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr><td colspan="2"> No Record Found </td></tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+@section PageSpecificJS{
+    <script type="text/javascript">
+ 
+    </script>
+}

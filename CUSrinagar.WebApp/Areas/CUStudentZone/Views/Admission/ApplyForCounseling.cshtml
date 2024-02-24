@@ -1,0 +1,198 @@
+﻿@model CUSrinagar.Models.ARGPersonalInformation
+@using CUSrinagar.Enums
+@{
+    ViewBag.Title = "Apply For Counseling";
+}
+
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="">Admission</a>
+        </li>
+        <li>
+            <a href="@Url.Action("ApplyForCounseling", new { R=CUSrinagar.Extensions.Helper.EncryptCookieAndURLSafe(((short)PrintProgramme.IH).ToString())})" class="active">Apply for counseling</a>
+        </li>
+    </ul>
+}
+
+<div class="row page-content">
+    <div class="col-sm-12 col-md-12">
+
+        @if (Model != null)
+        {
+            var showSave = false;
+            <div class="">
+                @using (Html.BeginForm("ApplyForCounseling", "Admission", FormMethod.Post,
+                                    new
+                                    {
+                                        @class = "jsMainForm form-horizontal",
+                                        @name = "ApplyForCounseling",
+                                        @id = "ApplyForCounseling"
+                                    }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="R" value="@ViewBag.R" />
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <div class="form-group">
+                                <label for="name" class="col-sm-4 control-label text-primary">Form Number :</label>
+                                <div class="col-sm-8">
+                                    <b><span class="small">@Model.StudentFormNo</span></b>
+                                </div>
+                            </div>
+                            <hr class="no-margin-top margin-bottom-5" />
+                            <div class="form-group">
+                                <label for="name" class="col-sm-4 control-label text-primary">Name :</label>
+                                <div class="col-sm-8">
+                                    <b><span class="small">@Model.FullName</span></b>
+                                </div>
+                            </div>
+                            <hr class="no-margin-top margin-bottom-5" />
+                            <div class="form-group">
+                                <label for="name" class="col-sm-4 control-label text-primary">Status :</label>
+                                <div class="col-sm-8">
+                                    <b><span class="small">@(CUSrinagar.Extensions.Helper.GetEnumDescription(Model.CoursesApplied.First().StudentSelectionStatus))</span></b>
+                                </div>
+                            </div>
+                            <hr class="no-margin-top margin-bottom-5" />
+                            <div class="form-group">
+                                <label for="name" class="col-sm-4 control-label text-primary">Applying For Course :</label>
+                                <div class="col-sm-8">
+                                    @if (Model.CoursesApplied != null && Model.CoursesApplied.Count > 0)
+                                    {
+                                        foreach (var item in Model.CoursesApplied)
+                                        {
+                                            <div class="checkbox">
+                                                <label class="block">
+                                                    <input type="checkbox" class="ace input-lg " value="@item.Course_ID" name="Course_ID"
+                                                    @{ bool alreadyApplied = (item.StudentSelectionStatus == StudentSelectionStatus.AppliedForCounseling 
+                                                            || item.StudentSelectionStatus == StudentSelectionStatus.CertificatesUploaded 
+                                                            || item.StudentSelectionStatus == StudentSelectionStatus.CertificatesUploaded_SF 
+                                                            || item.StudentSelectionStatus==StudentSelectionStatus.Verified_MakePayment 
+                                                            || item.StudentSelectionStatus==StudentSelectionStatus.Verified_MakePayment_SF 
+                                                            || item.StudentSelectionStatus==StudentSelectionStatus.Joined 
+                                                            || item.StudentSelectionStatus==StudentSelectionStatus.Joined_SF);}
+                                                    @(alreadyApplied ? "Checked=checked" : "" )
+                                                    @(alreadyApplied ? "disabled" : "" ) />
+                                                    @if (alreadyApplied)
+                                                    {
+                                                        <span class="lbl bigger-12000 text-success"> Applied @item.CourseName</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        showSave = true;
+                                                        <span class="lbl bigger-12000"> Apply For @item.CourseName</span>
+                                                    }
+                                                </label>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="name" class="col-sm-4 control-label text-primary">Entrance Roll No :</label>
+                                <div class="col-sm-8">
+                                    <b><span class="small">@Model.EntranceRollNo</span></b>
+                                </div>
+                            </div>
+                            <hr class="no-margin-top margin-bottom-5" />
+                            <div class="form-group">
+                                <label for="name" class="col-sm-4 control-label text-primary">Category :</label>
+                                <div class="col-sm-8">
+                                    <b><span class="small">@Model.Category</span></b>
+                                </div>
+                            </div>
+                            <hr class="no-margin-top margin-bottom-5" />
+                            <div class="form-group">
+                                <label for="name" class="col-sm-4 control-label text-primary">Email :</label>
+                                <div class="col-sm-8">
+                                    <b><span class="small">@Model.StudentAddress.Email</span></b>
+                                </div>
+                            </div>
+                            <hr class="no-margin-top margin-bottom-5" />
+                            <div class="form-group">
+                                <label for="name" class="col-sm-4 control-label text-primary">Mobile :</label>
+                                <div class="col-sm-8">
+                                    <b><span class="small">@Model.StudentAddress.Mobile</span></b>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <div class="hidden-xs hidden-sm">
+                                    <center>
+                                        <div class="thumbnail no-margin-bottom">
+                                            @if (Model.Photograph != null)
+                                            {
+                                                <img src="@Url.Content(Model.Photograph)" class="img-responsive max-height-200" />
+                                            }
+                                        </div>
+                                    </center>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="no-margin-top margin-bottom-5" />
+                    <hr class="no-margin-top margin-bottom-5" />
+                    <div class="form-group col-sm-12 text-success">
+                        <h5><b>Procedure</b> </h5>
+                        <small>
+                            <b>
+                                <ol>
+                                    <li>Select the courses you want to apply for.</li>
+                                    <li>Selection list shall be prepared strictly according to the merit.</li>
+                                    <li>Due to limited No. of vacancies you are advised to apply for Honors and Professional courses also(if eligible)</li>
+                                    <li>Selected candidates shall be informed through SMS regarding their selection and completion of the admission formalities</li>
+                                    @*<li>Make payment online to complete the admission procedure.</li>*@
+                                </ol>
+                            </b>
+                        </small>
+                    </div>
+                    <hr class="no-margin-top margin-bottom-5" />
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4 control-label text-primary"></label>
+                        <div class="col-sm-8">
+                            <div class="">
+                                @if (true)//(showSave)pull-right
+                                {
+                                    <button id="" type="submit" class="btn btn-success">
+                                        <i class="glyphicon glyphicon-ok"></i><b>&nbsp;Save</b>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <h3 class="quadraText"><b>Counseling process has been closed</b></h3>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <h3 class="text-danger">@ViewBag.ErrorMessage</h3>
+        }
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-sm-12 col-md-12">
+        @*<p class="text-danger"> <b>Note : No admission shall be confirmed if payment is not made by of before last date.</b></p>*@
+        <p>
+            <b>
+                Important: In case of any query, please mail us on
+                <a href="mailto:admissions@cusrinagar.edu.in?Subject=IH_Admission"><i class="fa fa-envelope"></i>admissions@cusrinagar.edu.in</a>
+            </b>
+        </p>
+    </div>
+</div>
+
+@section PageSpecificJSFiles{
+    <script src="~/Scripts/Pages/std-upload-certificates-ih.js"></script>
+}
+
+
+
+

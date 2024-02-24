@@ -1,0 +1,353 @@
+﻿@model  CUSrinagar.Models.BIL_BillDetails
+@using CUSrinagar.Extensions
+
+@{
+    ViewBag.Title = "CUS :: Assign Paper";
+    bool IsSetter = Model.User_ID == null || Model.BillType == CUSrinagar.Enums.BillType.PaperSetterBill;
+    bool IsEvaluator = Model.BillType == CUSrinagar.Enums.BillType.EvaluatorBill;
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header">
+                <h4 class="widget-title"><i class='menu-icon fa fa-pencil-square-o'></i>Assign Paper</h4>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger" id="errorMessage">
+                            <a href="#" class="close">&times;</a>
+                            <strong>Error!&nbsp;</strong><span>  @Html.Raw(TempData["ErrorMessage"])</span>
+                        </div>
+                    }
+                    @using (Html.BeginForm("SaveBill", "Bill", FormMethod.Post, new { enctype = "multipart/form-data", @name = "validation-form", @id = "validation-form", @class = "form-horizontal", @role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(model => model.User_ID, new { @class = "jsUserId", @data_scope = "row1" })
+                        @Html.HiddenFor(model => model.Bill_ID, new { })
+                        @Html.HiddenFor(model => model.BillType, new { })
+                        if (!ViewData.ModelState.IsValidField("ErrorMessage"))
+                        {
+                            <div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong>@Html.ValidationMessage("ErrorMessage", "", new { @class = "red " })</strong></div>
+                        }
+
+
+                        <div class=" col-sm-6   no-padding">
+                            <div class="form-group">
+                                <label class="col-sm-4">
+                                    <span class="red bigger-110">*</span>
+                                    @if (IsEvaluator)
+                                    {
+                                        @Html.Label(" Evaluator Name")
+                                    }
+                                    else
+                                    {
+                                        @Html.LabelFor(model => model.FullName)
+                                    }
+
+                                </label>
+                                <div class=" col-sm-6  no-padding ">
+                                    @Html.DisplayFor(model => model.FullName, new { @class = "width-100" })
+                                    @if (Model.UserName != null)
+                                    {
+                                        <span> User : <a href="/CUSrinagarAdminPanel/Bill/EditSetter/@Model.User_ID" target="_blank">@Model.UserName</a></span>
+                                    }
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Department_Id)
+
+                                </label>
+
+                                @if (IsEvaluator)
+                                {<div class=" col-sm-6  no-padding ">
+                                        @Html.DisplayFor(model => model.DepartmentFullName)
+                                    </div>}
+                                else
+                                { <div class=" col-sm-6  no-padding ">
+                                        @Html.DropDownListFor(model => model.Department_Id, (List<SelectListItem>)ViewBag.SubjectDeptsDDL, String.Empty, new { @class = "width-100 jsDepartmentDDL", @data_scope = "row1" })
+                                    </div>
+                                    <div class="  col-sm-2  no-padding">
+                                        @Html.ValidationMessageFor(model => model.Department_Id, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                    </div>}
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Semester)
+
+                                </label>
+
+                                @if (IsEvaluator)
+                                {
+                                    <div class=" col-sm-6  no-padding ">
+                                        @Html.DisplayFor(model => model.Semester)
+                                    </div>}
+                                else
+                                {
+                                    <div class=" col-sm-6  no-padding ">
+                                        @Html.DropDownListFor(model => model.Semester, (List<SelectListItem>)ViewBag.SemestersDDL, String.Empty, new { @class = "width-100 jsSemesterDDL", @data_scope = "row1" })
+                                    </div>
+                                    <div class="  col-sm-2  no-padding">
+                                        @Html.ValidationMessageFor(model => model.Semester, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                    </div>}
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Subject_ID)
+
+                                </label>
+                                @if (IsEvaluator)
+                                {
+                                    <div class="col-sm-6 ">
+                                        @Html.DisplayFor(model => model.SubjectFullName)
+                                    </div> }
+                                else
+                                {
+                                    <div class=" col-sm-6  no-padding jsDDLContainer">
+                                        @Html.DropDownListFor(model => model.Subject_ID, (List<SelectListItem>)ViewBag.SubjectsDDL ?? new List<SelectListItem>(), String.Empty, new { @class = "chosen-select width-100 jsSubjectDDL", @data_scope = "row1" })
+                                    </div>
+                                    <div class="  col-sm-2  no-padding">
+                                        @Html.ValidationMessageFor(model => model.Subject_ID, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                    </div>}
+                            </div>
+                            @if (IsSetter)
+                            {
+                                <div class="form-group ">
+                                    <label class="col-sm-4">
+                                        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.BillNo)
+
+                                    </label>
+                                    <div class=" col-sm-6  no-padding ">
+                                        @Html.DropDownListFor(model => model.BillNo, (IEnumerable<SelectListItem>)ViewBag.BillNosDDL ?? new List<SelectListItem>(), "New Bill", new { @class = "width-100 jsBillNoDDL", @data_scope = "row1", @data_defaulttextvalue = "New Bill" })
+                                    </div>
+
+
+                                </div>
+                                <div class="form-group ">
+                                    <label class="col-sm-4">
+                                        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.SamplePaper_ID)
+
+                                    </label>
+                                    <div class=" col-sm-6  no-padding ">
+                                        @Html.DropDownListFor(model => model.SamplePaper_ID, (List<SelectListItem>)ViewBag.SamplePapersDDL, String.Empty, new { @class = "width-100" })
+                                    </div>
+                                    <div class="  col-sm-2  no-padding">
+                                        @Html.ValidationMessageFor(model => model.SamplePaper_ID, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                    </div>
+                                </div>
+                                <div class="form-group ">
+                                    <label class="col-sm-4">
+                                        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.PaperPattern_ID)
+
+                                    </label>
+                                    <div class=" col-sm-6  no-padding ">
+                                        @Html.DropDownListFor(model => model.PaperPattern_ID, (List<SelectListItem>)ViewBag.PaperPatternsDDL, String.Empty, new { @class = "width-100" })
+                                    </div>
+                                    <div class="  col-sm-2  no-padding">
+                                        @Html.ValidationMessageFor(model => model.PaperPattern_ID, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                @Html.HiddenFor(model => model.DepartmentFullName)
+                                @Html.HiddenFor(model => model.SubjectFullName)
+                                @Html.HiddenFor(model => model.Department_Id)
+                                @Html.HiddenFor(model => model.Semester)
+                                @Html.HiddenFor(model => model.Subject_ID)
+                                @Html.HiddenFor(model => model.BillNo)
+                            }
+                            @if (IsEvaluator)
+                            {
+                                <div class="form-group ">
+                                    <label class="col-sm-4">
+                                        @Html.LabelFor(model => model.ConveyanceCharges)
+
+                                    </label>
+                                    <div class=" col-sm-6  no-padding ">
+                                        @Html.TextBoxFor(model => model.ConveyanceCharges)
+                                    </div>
+                                    <div class="  col-sm-2  no-padding">
+                                        @Html.ValidationMessageFor(model => model.ConveyanceCharges, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                    </div>
+                                </div>}
+                        </div>
+                        <div class=" col-sm-6   no-padding">
+                            <div class="form-group ">
+                                <label class="col-sm-4">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Batch)
+
+                                </label>
+                                <div class=" col-sm-6  no-padding ">
+                                    @Html.TextBoxFor(model => model.Batch, new { @class = "width-100", @maxlength = "100" })
+                                </div>
+                                <div class="  col-sm-2  no-padding">
+                                    @Html.ValidationMessageFor(model => model.Batch, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <label class="col-sm-4">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Examination)
+
+                                </label>
+                                <div class=" col-sm-6  no-padding ">
+                                    @Html.TextBoxFor(model => model.Examination, new { @class = "width-100", @maxlength = "100" })
+                                </div>
+                                <div class="  col-sm-2  no-padding">
+                                    @Html.ValidationMessageFor(model => model.Examination, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <label class="col-sm-4">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Session)
+
+                                </label>
+                                <div class=" col-sm-6  no-padding ">
+                                    @Html.TextBoxFor(model => model.Session, new { @class = "width-100", @maxlength = "50" })
+                                </div>
+                                <div class="  col-sm-2  no-padding">
+                                    @Html.ValidationMessageFor(model => model.Session, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+                            @if (IsSetter)
+                            {
+                                <div class="form-group ">
+                                    <label class="col-sm-4">
+                                        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.PaperReceiverEmail)
+
+                                    </label>
+                                    <div class=" col-sm-6  no-padding ">
+                                        @Html.TextBoxFor(model => model.PaperReceiverEmail, new { @class = "width-100", @maxlength = "150", @Value = string.IsNullOrWhiteSpace(Model.PaperReceiverEmail) ? "controllersecrecy@gmail.com" : Model.PaperReceiverEmail })
+                                    </div>
+                                    <div class="  col-sm-2  no-padding">
+                                        @Html.ValidationMessageFor(model => model.PaperReceiverEmail, "", new { @type = "email", @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                    </div>
+                                </div>
+                            }
+                            <div class="form-group ">
+                                <label class="col-sm-4">
+                                    <span class="red bigger-110">*</span>
+                                    @if (IsEvaluator)
+                                    {@Html.Label("Rate Per Paper") }
+                                else
+                                {@Html.LabelFor(model => model.AmountPerSet)}
+
+
+                                </label>
+                                @if (IsSetter)
+                                {
+                                    <div class=" col-sm-6  no-padding ">
+                                        @Html.TextBoxFor(model => model.AmountPerSet, new { @type = "Number", @class = "width-100", @maxlength = "10", @Value = Model.AmountPerSet <= 0 ? "1000" : Model.AmountPerSet.ToString() })
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class=" col-sm-6  no-padding ">
+                                        @Html.TextBoxFor(model => model.AmountPerSet, new { @type = "Number", @class = "width-100", @maxlength = "10" })
+                                    </div>
+                                }
+                                <div class="  col-sm-2  no-padding">
+                                    @Html.ValidationMessageFor(model => model.AmountPerSet, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <label class="col-sm-4">
+                                    <span class="red bigger-110">*</span>
+                                    @if (IsEvaluator)
+                                    {@Html.Label("No Of Answer Scripts Evaluated") }
+                                else
+                                {@Html.LabelFor(model => model.NoOfSets)}
+                                </label>
+
+                                @if (IsSetter)
+                                {
+                                    <div class=" col-sm-6  no-padding ">
+                                        @Html.TextBoxFor(model => model.NoOfSets, new { @type = "Number", @class = "width-100", @maxlength = "10", @Value = Model.NoOfSets <= 0 ? "1" : Model.NoOfSets.ToString() })
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class=" col-sm-6  no-padding ">
+                                        @Html.TextBoxFor(model => model.NoOfSets, new { @type = "Number", @class = "width-100", @maxlength = "10" })
+                                    </div>
+                                }
+                                <div class="  col-sm-2  no-padding">
+                                    @Html.ValidationMessageFor(model => model.NoOfSets, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+                            @if (IsSetter)
+                            {
+                                <div class="form-group  ">
+                                    <label class="col-sm-4">
+                                        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.TotalAssignmentCompletionDays)
+                                    </label>
+                                    <div class=" col-sm-6  no-padding ">
+                                        @Html.TextBoxFor(model => model.TotalAssignmentCompletionDays, new { @type = "Number", @class = "width-100", @maxlength = "3", @Value = Model.TotalAssignmentCompletionDays <= 0 ? "5" : Model.TotalAssignmentCompletionDays.ToString() })
+                                    </div>
+                                    <div class="  col-sm-2  no-padding">
+                                        @Html.ValidationMessageFor(model => model.TotalAssignmentCompletionDays, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="col-sm-12">
+                            @if (IsSetter)
+                            {
+                                <div class="form-group ">
+                                    <label class="col-sm-3  no-padding">
+                                        @Html.LabelFor(model => model.SyllabusLink)
+                                    </label>
+                                    <div class="col-sm-7 ">
+                                        @Html.TextAreaFor(model => model.SyllabusLink, new { @class = "width-100" })
+                                    </div>
+                                    <div class="  col-sm-2  no-padding">
+                                        @Html.ValidationMessageFor(model => model.SyllabusLink, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class=" text-center">
+                            <div class="form-group">
+                                <div class=" col-sm-6  align-right">
+                                    <button type="submit" class="btn btn-sm btn-primary save-button">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        Save
+                                    </button>
+                                    <a id="cData1" href="/CUSrinagarAdminPanel/Bill/Bills/" class="fm-button ui-state-default ui-corner-all fm-button-icon-left btn btn-sm btn-danger">
+                                        <i class="ace-icon fa fa-times"></i>Cancel
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section PageSpecificJS{
+    @Scripts.Render("~/bundles/Libraries/jqueryval")
+
+    <script src="@Url.Content("~/Scripts/JSChosen.js")"></script>
+    <script src="~/Scripts/General/custom-select.js"></script>
+}
+
+

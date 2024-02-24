@@ -1,0 +1,44 @@
+﻿@model IEnumerable<CUSrinagar.Models.CombinationSetting>
+@{
+    Layout = null;
+}
+<table class="table table-bordered">
+    @if (Model != null)
+    {
+        <thead>
+            <tr>
+                <th><input class="ace checkbox checkbox-inline jsSelectAllChk" type="checkbox"><span class="lbl padding-right-10"></span>S.No.</th>
+                <th data-property="Batch">Batch</th>
+                <th data-property="CourseFullName">Course</th>
+                <th data-property="Semester">Semester</th>
+                <th data-property="AllowStudentChangeCombination" title="Allow student change combination">Student</th>
+                <th data-property="AllowCollegeChangeCombination" title="Allow college change combination">College</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input class="ace checkbox checkbox-inline jsSelectChk" type="checkbox"><span class="lbl padding-right-10"></span><span class="js-sno"></span>
+                        @Html.HiddenFor(model => item.CombinationSetting_ID, new { @class = "jsEntity_ID" })
+
+                    </td>
+                    <td>@item.Batch</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CourseFullName)
+                        @Html.HiddenFor(modelItem => item.CombinationSetting_ID)
+                    </td>
+                    <td>@item.Semester</td>
+                    <td>@Html.DisplayFor(modelItem => item.AllowStudentChangeCombination)</td>
+                    <td>@Html.DisplayFor(modelItem => item.AllowCollegeChangeCombination)</td>
+                    <td>
+                        <a href="@Url.Action("CreateEdit",new { @id=item.CombinationSetting_ID})" target="_blank"><i class="fa fa-edit"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    }
+</table>
+ 

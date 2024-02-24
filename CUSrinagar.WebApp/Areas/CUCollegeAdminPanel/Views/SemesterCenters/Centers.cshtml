@@ -1,0 +1,219 @@
+﻿
+@model CUSrinagar.Models.SemesterCenters
+
+@{
+    ViewBag.Title = "Semester Centers ";
+}
+
+<div class="page-wrapper pager-table-text">
+    <div class="page-header">
+        <div style="padding-bottom: 30px;">
+            <div class="col-sm-12">
+                <div class="col-sm-3">
+                    <h1 class="heading-title pull-left">
+                        Semester Centers
+                        <small>
+                            <i class="ace-icon fa fa-angle-double-right"></i>
+                            List
+                        </small>
+                    </h1>
+                </div>
+                <div class="col-sm-9 align-right">
+                    <button type="button" href="#ModalDownloadCenterNotice" data-toggle="modal" class="btn btn-sm btn-success"><i class="fa fa-file-pdf-o"></i>&nbsp;Download Center Notices</button>
+
+                    <div class="btn-group btn-sm">
+                        <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle" aria-expanded="false">
+                            Download Details As Excel
+                            <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-default dropdown-info">
+                            <li>
+                                <a type="button" href="#ModalCenterWiseSubjectCount" data-toggle="modal"><i class="fa fa-file-excel-o"></i>&nbsp;Center Wise Subject Count</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div id="response" style="width:80%;margin:0 auto">
+        @if (TempData["response"] != null)
+        {
+            @Html.Raw(TempData["response"])
+        }
+    </div>
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <i class="fa fa-home" aria-hidden="true"></i> Active Centers
+                        </h3>
+                    </div>
+                    <div class="JSContent" style="overflow:auto !important">
+                        @{Html.RenderPartial("_DisplayCenters", (List<CUSrinagar.Models.ARGEntranceCentersMaster>)ViewBag.Data);}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*------------------ Download Center Notice model -------------------------*@
+    <div id="ModalDownloadCenterNotice" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="smaller lighter no-margin"><i class="fa fa-file-pdf-o"></i>&nbsp;Center Notice</h3>
+                </div>
+
+                <div class="modal-body JSCreateNoticeContent">
+                    <div class="msg2"></div>
+                    @using (Html.BeginForm("DownloadCenterNotices", "SemesterCenters", FormMethod.Post, new { id = "frmCreateNoticeContent" }))
+                    {
+                        @Html.AntiForgeryToken();
+                        @Html.Hidden("PrintCenterNotice.ExaminationYear", DateTime.Now.Year.ToString())
+                        <div class="form-group">
+                            @Html.Hidden("PrintCenterNotice.College_ID", Guid.Empty.ToString())
+                            <div class="col-sm-12">
+                                <label class=" control-label no-padding-right">
+                                    @Html.LabelFor(sc => sc.PrintCenterNotice.CourseCategory) <span class="red">*</span>
+                                </label>
+                                <span class="red">@Html.ValidationMessageFor(sc => sc.PrintCenterNotice.CourseCategory)</span>
+                                @Html.DropDownListFor(sc => sc.PrintCenterNotice.CourseCategory, (IEnumerable<SelectListItem>)ViewBag.Programmes, string.Empty, new { @class = "form-control" })
+                            </div>
+                            <br />
+                            <br />
+                            <div class="col-sm-12">
+                                <label class=" control-label no-padding-right">
+                                    @Html.LabelFor(sc => sc.PrintCenterNotice.Semester) <span class="red">*</span>
+                                </label>
+                                <span class="red">@Html.ValidationMessageFor(sc => sc.PrintCenterNotice.Semester)</span>
+                                @Html.TextBoxFor(sc => sc.PrintCenterNotice.Semester, new { @class = "form-control", @maxlength = "2" })
+                            </div>
+                            <br />
+                            <br />
+                            <br />
+                            <div class="col-sm-12"></div>
+                            <br />
+                            <br />
+                            <div class="col-sm-12 text-center">
+                                <button type="submit" class="btn btn-sm btn-success JSDCNotice">
+                                    <i class="ace-icon fa fa-check"></i>
+                                    Download Center Notice
+                                </button>
+                            </div>
+                            <br />
+                        </div>
+                    }
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
+                        <i class="ace-icon fa fa-times"></i>
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*--------- Download Center Wise Subject Count model -----------------------*@
+    <div id="ModalCenterWiseSubjectCount" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="smaller lighter no-margin"><i class="fa fa-file-excel-o"></i>&nbsp;Center Wise Subject Count</h3>
+                </div>
+
+                <div class="modal-body JSCenterWiseSubjectCount">
+                    <div class="msg3"></div>
+                    @using (Html.BeginForm("DownloadCenterWiseSubjectCount", "SemesterCenters", FormMethod.Post, new { id = "frmCenterWiseSubjectCount" }))
+                    {
+                        @Html.AntiForgeryToken();
+                        <div class="form-group">
+                            @Html.Hidden("PrintCenterNotice.College_ID", Guid.Empty.ToString())
+                            <div class="col-sm-12">
+                                <label class=" control-label no-padding-right">
+                                    @Html.LabelFor(sc => sc.PrintCenterNotice.CourseCategory) <span class="red">*</span>
+                                </label>
+                                <span class="red">@Html.ValidationMessageFor(sc => sc.PrintCenterNotice.CourseCategory)</span>
+                                @Html.DropDownListFor(sc => sc.PrintCenterNotice.CourseCategory, (IEnumerable<SelectListItem>)ViewBag.ProgrammesMergeDDL, string.Empty, new { @class = "form-control" })
+                            </div>
+                            <br />
+                            <br />
+                            <div class="col-sm-12">
+                                <label class=" control-label no-padding-right">
+                                    @Html.LabelFor(sc => sc.PrintCenterNotice.Semester) <span class="red">*</span>
+                                </label>
+                                <span class="red">@Html.ValidationMessageFor(sc => sc.PrintCenterNotice.Semester)</span>
+                                @Html.TextBoxFor(sc => sc.PrintCenterNotice.Semester, new { @class = "form-control", @maxlength = "2" })
+                            </div>
+                            <br />
+                            <br />
+                            <div class="col-sm-12">
+                                <label class=" control-label no-padding-right">
+                                    @Html.LabelFor(sc => sc.PrintCenterNotice.ExaminationYear) <span class="red">*</span>
+                                </label>
+                                <span class="red">@Html.ValidationMessageFor(sc => sc.PrintCenterNotice.ExaminationYear)</span>
+                                @Html.TextBoxFor(sc => sc.PrintCenterNotice.ExaminationYear, new { @class = "form-control", @maxlength = "4" })
+                            </div>
+                            <br />
+                            <br />
+                            <div class="col-sm-12"></div>
+                            <br />
+                            <div class="col-sm-12">
+                                <label class=" control-label no-padding-right">
+                                    @Html.LabelFor(sc => sc.PrintCenterNotice.ListType) <span class="red">*</span>
+                                </label>
+                                <span class="red">@Html.ValidationMessageFor(sc => sc.PrintCenterNotice.ListType)</span>
+                                @Html.DropDownListFor(sc => sc.PrintCenterNotice.ListType, (IEnumerable<SelectListItem>)ViewBag.ExamFormListTypeDDL, string.Empty, new { @class = "form-control" })
+
+                            </div>
+                            <br />
+                            <br />
+                            <div class="col-sm-12 text-center">
+                                <button type="submit" class="btn btn-sm btn-success JSCWSubjectCount">
+                                    <i class="fa fa-file-excel-o"></i>&nbsp;Download As Excel
+                                </button>
+                            </div>
+                            <br />
+                        </div>
+                    }
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
+                        <i class="ace-icon fa fa-times"></i>
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section PageSpecificJSFiles{
+    @Scripts.Render("~/bundles/Libraries/jqueryval")
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSSemesterCenters/JSCenters.js")"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#SemesterCentersSection").addClass("active");
+        });</script>
+}
+
+@section PageSpecificStyle
+{
+    <style type="text/css">
+        table tbody tr td, table tbody tr th {
+            vertical-align: inherit !important;
+        }
+    </style>
+}
+
+

@@ -1,0 +1,88 @@
+﻿@model CUSrinagar.Models.Employee
+@using CUSrinagar.Extensions;
+@{
+    ViewBag.Title = "Employees";
+}
+
+<div class="page-wrapper pager-table-text">
+
+    <div class="page-header">
+        <div style="padding-bottom: 30px;">
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <h1 class="heading-title pull-left">
+                        Employees
+                        <small>
+                            <i class="ace-icon fa fa-angle-double-right"></i>
+                            All Employees
+                        </small>
+                    </h1>
+                </div>
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6 align-right">
+                    <a class="btn btn-primary pull-right" href="@Url.Action("Create","Employee")"> Add Employee </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Employees List
+                            <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                <a href="#"><i class="fa fa-search" aria-hidden="true"></i>Search</a>
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-sm-12 search-box">
+                            <div class="col-sm-5 lbl bigger-120 no-padding-right">
+                                Name
+                                <div id="Course">
+                                    @Html.TextBox("EmployeeFullName", "", new { @class = "form-control jsfilterelement", @data_column = "EmployeeFullName", @data_operator = "Contains" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                Department
+                                <div>
+                                    @Html.DropDownListFor(m => m.Department_ID, (IEnumerable<SelectListItem>)ViewBag.Departments,"-- All --" ,new { @class = "chosen-select form-control jsfilterelement",@data_TableAlias = "EmployeeDepartment" , @data_column = "Department_ID", @data_operator = "EqualTo"})
+                                </div>
+                            </div>
+                            <div class="col-sm-1 " style="padding-top: 17px;">
+                                <button type="button" class="btn btn-primary fa-search-btn"><i class="fa fa-search"></i>&nbsp;Search</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="js-table-content" data-url="@Url.Action("EmployeeListPartial", "Employee", new { area = "CUSrinagarAdminPanel" })" data-DefaultOrderByColumn="CreatedOn">
+
+                    </div>
+                    @{Html.RenderPartial("_JSPagerTableFooter");}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script>
+        $(document).ready(function () {
+            var $pagertable = $(".js-pager-table");
+            loadpagertable();
+        });
+    </script>
+    <style>
+        .filter-btn a {
+            color: white !important
+        }
+    </style>
+}
+
+
+
+

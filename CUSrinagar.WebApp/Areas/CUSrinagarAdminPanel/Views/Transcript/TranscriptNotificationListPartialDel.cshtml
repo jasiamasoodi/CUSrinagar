@@ -1,0 +1,27 @@
+﻿@model List<CUSrinagar.Models.TranscriptNotification>
+<table class="table table-hover table-bordered ">
+    <thead>
+        <tr>
+            <th>S.No</th>
+            <th data-property="Batch">Batch</th>
+            <th data-property="CourseFullName">Course</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td class="js-sno"></td>
+                    <td>@item.Batch</td>
+                    <td>@item.CourseFullName</td>
+                    <td>
+                        <a target="_blank" title="Edit student result" href="@Url.Action("Detail","Transcript",new {@area="CUSrinagarAdminPanel",@id=item.TranscriptGeneration_ID})" class=""><i class="fa fa-edit"></i> </a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

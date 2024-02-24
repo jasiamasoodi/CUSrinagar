@@ -1,0 +1,127 @@
+﻿@model  List<CUSrinagar.Models.MigrationDetail>
+@{
+    Layout = null;
+    var ISChecked = "";
+}
+
+<div id="CourseCollegeMapping" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin">Accept-Reject Form</h3>
+            </div>
+
+            @using (Html.BeginForm("UpdateForm", "Migration", FormMethod.Post, new { enctype = "multipart/form-data", @name = "validation-form", @id = "submit-form", @class = "form-horizontal", @role = "form" }))
+            {
+                <div class="modal-body">
+                    <div class="row page-row" style="background-color:white;">
+                        <div style="margin-bottom:0 !important;">
+                            <div id="collapse_cus" class="panel-collapse collapse in">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-3"><span class="danger">*</span>Remarks:</div>
+                                    <div class="col-sm-9">
+                                        @Html.TextArea("REMARKSBYCOLLEGE", new { cols = 45 })
+                                        <div> <span id="REMARKSBYCOLLEGEError" class="red"></span></div>
+                                    </div>
+                                </div>
+
+                                <div class="radio col-sm-12">
+                                    <bold>
+                                        <div class="col-sm-3"></div>
+                                        <div class="col-sm-2">
+
+                                            <label>
+
+                                                @Html.RadioButton("AcceptReject", 4) Accept
+                                            </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </div>
+                                        <div class="col-sm-2">
+
+                                            <label>
+
+                                                @Html.RadioButton("AcceptReject", 3) Reject
+                                            </label>
+                                        </div>
+                                        <div class="col-sm-5"> <span id="AcceptRejectError" class="red"></span></div>
+                                        @Html.Hidden("Form_Id")<br />
+                                    </bold>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+
+
+
+                    <button type="button" id="submitremarks" class="btn btn-sm btn-success pull-right"><i class="ace-icon fa fa-times"></i>Submit</button>
+                    <button type="button" class="btn btn-sm btn-danger pull-left" data-dismiss="modal">
+                        <i class="ace-icon fa fa-times"></i>
+                        Close
+                    </button>
+
+
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th data-property="Programme">Programme</th>
+            <th>Student Name</th>
+            <th>Registration No</th>
+            <th data-property="CourseFullName">Course Name</th>
+            <th data-property="CurrentSemesterOrYear">Semester</th>
+            <th data-property="Batch">Batch</th>
+            <th data-property="FormType">Form Type</th>
+            <th data-property="IsAccepted">Status</th>
+
+        </tr>
+
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var row in Model)
+            {
+        <tr>
+            <td>@row.Programme</td>
+            <td>
+                @row.FullName
+            </td>
+            <td>
+                @row.CUSRegistrationNo
+            </td>
+            <td>@row.CourseFullName</td>
+            <td>@row.CurrentSemesterOrYear</td>
+            <td>@row.Batch</td>
+            <td>@row.FormType</td>
+            <td>
+                @if (row.FormStatus == CUSrinagar.Enums.FormStatus.Accepted)
+                {<label style="color: green;font-size: larger;font-weight: bolder;"> Accepted</label>}
+                else if (row.FormStatus == CUSrinagar.Enums.FormStatus.Rejected)
+                {<label style="color: coral;font-size: larger;font-weight: bolder;"> Rejected</label>}
+                else
+                { <span id="jsShowPopUp" href="#CourseCollegeMapping" data-toggle="modal" class="label-info  pull-right" style="color:white;cursor:pointer;padding:7px;margin-right:33%;font-size:1.0em;" data-FormId="@row.Form_ID">
+                        Accept or Reject
+                    </span>
+                }
+
+            </td>
+        </tr>
+            }
+        }
+    </tbody>
+</table>
+<style>
+    .danger {
+        color: red;
+    }
+</style>

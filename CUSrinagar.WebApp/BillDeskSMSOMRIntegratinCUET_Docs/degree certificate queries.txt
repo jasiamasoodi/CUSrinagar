@@ -1,0 +1,120 @@
+GO
+SELECT 
+'Update ADMCourseMaster SET DegreeCourseTitle='''+ISNULL(DegreeCourseTitle,CourseFullName)+''' Where Course_ID='''+CAST(Course_ID AS VARCHAR(max))+''''
+,* FROM dbo.ADMCourseMaster ORDER BY Programme,CourseFullName
+GO
+user db
+SELECT * FROM dbo.DegreeCertificate ORDER BY SerialNumber DESC
+GO
+DELETE FROM dbo.DegreeCertificate WHERE Remarks LIKE '%dummy%' AND 1=0
+GO
+DBCC CHECKIDENT ('DegreeCertificate', RESEED, 15)
+go
+use cus2018
+go
+SELECT NEWID(),T.Batch,T.Student_ID,'CUS/EXM/DC/UG/17',ROW_NUMBER() OVER (PARTITION BY batch ORDER BY T.CollegeFullName,T.CourseFullName,T.CUSRegistrationNo)+10,
+'2021-08-09 11:02:45.827','38AB4161-8503-48AF-BF0B-07C8D0F5F5A4','Dummy' 
+,T.CollegeFullName,T.CourseFullName,T.CUSRegistrationNo
+FROM (
+	SELECT DISTINCT T.Student_ID,FullName,CUSRegistrationNo,T.TCourse_ID,ADMCourseMaster.CourseFullName,CollegeFullName,Batch
+	FROM dbo.MSCGPA T
+	JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = T.TCourse_ID
+	JOIN dbo.VWStudentCourse ON VWStudentCourse.Student_ID = T.Student_ID
+	LEFT JOIN dbo.DegreeCertificate ON DegreeCertificate.Student_ID = T.Student_ID
+	WHERE DegreeCertificate_ID IS NULL AND Batch=2017 
+)T ORDER BY T.CollegeFullName,T.CourseFullName,T.CUSRegistrationNo
+GO
+
+INSERT INTO dbo.DegreeCertificate
+(DegreeCertificate_ID,    Student_ID,    DispatchNumber,  IssueNumber,    CreatedOn,    CreatedBy_ID,     Remarks)
+SELECT NEWID(),T.Student_ID,'CUS/EXM/DC/BED/17'
+,ROW_NUMBER() OVER (PARTITION BY batch ORDER BY T.CollegeFullName,T.CourseFullName,T.CUSRegistrationNo)+13 IssueNumber,
+'2021-08-09 11:02:45.827','38AB4161-8503-48AF-BF0B-07C8D0F5F5A4','Dummy' 
+FROM (
+	SELECT DISTINCT T.Student_ID,FullName,CUSRegistrationNo,T.TCourse_ID,ADMCourseMaster.CourseFullName,CollegeFullName,Batch
+	FROM dbo.MSCGPA T
+	JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = T.TCourse_ID
+	JOIN dbo.VWStudentCourse ON VWStudentCourse.Student_ID = T.Student_ID
+	LEFT JOIN dbo.DegreeCertificate ON DegreeCertificate.Student_ID = T.Student_ID
+	WHERE DegreeCertificate_ID IS NULL AND Batch=2017 AND ADMCourseMaster.CourseFullName IN
+	('B.ED') 
+)T ORDER BY T.CollegeFullName,T.CourseFullName,T.CUSRegistrationNo
+
+GO
+
+INSERT INTO dbo.DegreeCertificate
+(DegreeCertificate_ID,    Student_ID,    DispatchNumber,  IssueNumber,    CreatedOn,    CreatedBy_ID,     Remarks)
+SELECT NEWID(),T.Student_ID,'CUS/EXM/DC/UG/17'
+,ROW_NUMBER() OVER (PARTITION BY batch ORDER BY T.CollegeFullName,T.CourseFullName,T.CUSRegistrationNo)+262 IssueNumber,
+'2021-08-09 11:02:45.827','38AB4161-8503-48AF-BF0B-07C8D0F5F5A4','Dummy' 
+FROM (
+	SELECT DISTINCT T.Student_ID,FullName,CUSRegistrationNo,T.TCourse_ID,ADMCourseMaster.CourseFullName,CollegeFullName,Batch
+	FROM dbo.MSCGPA T
+	JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = T.TCourse_ID
+	JOIN dbo.VWStudentCourse ON VWStudentCourse.Student_ID = T.Student_ID
+	LEFT JOIN dbo.DegreeCertificate ON DegreeCertificate.Student_ID = T.Student_ID
+	WHERE DegreeCertificate_ID IS NULL AND Batch=2017 AND ADMCourseMaster.CourseFullName IN
+	('B.Sc. Medical','B.A','B.Com','B.Sc. Non-Medical','B.Sc. Home-Science') 
+)T ORDER BY T.CollegeFullName,T.CourseFullName,T.CUSRegistrationNo
+GO
+INSERT INTO dbo.DegreeCertificate
+(DegreeCertificate_ID,    Student_ID,    DispatchNumber,  IssueNumber,    CreatedOn,    CreatedBy_ID,     Remarks)
+SELECT NEWID(),T.Student_ID,'CUS/EXM/DC/PROF/17'
+,ROW_NUMBER() OVER (PARTITION BY batch ORDER BY T.CollegeFullName,T.CourseFullName,T.CUSRegistrationNo)+2799 IssueNumber,
+'2021-08-09 11:02:45.827','38AB4161-8503-48AF-BF0B-07C8D0F5F5A4','Dummy' 
+FROM (
+	SELECT DISTINCT T.Student_ID,FullName,CUSRegistrationNo,T.TCourse_ID,ADMCourseMaster.CourseFullName,CollegeFullName,Batch
+	FROM dbo.MSCGPA T
+	JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = T.TCourse_ID
+	JOIN dbo.VWStudentCourse ON VWStudentCourse.Student_ID = T.Student_ID
+	LEFT JOIN dbo.DegreeCertificate ON DegreeCertificate.Student_ID = T.Student_ID
+	WHERE DegreeCertificate_ID IS NULL AND Batch=2017 AND ADMCourseMaster.CourseFullName 
+	IN(
+	'Bachelor of Computer Applications (BCA)','Bachelor of Business Administration (BBA)'
+	)
+)T ORDER BY T.CollegeFullName,T.CourseFullName,T.CUSRegistrationNo
+GO
+GO
+INSERT INTO dbo.DegreeCertificate
+(DegreeCertificate_ID,    Student_ID,    DispatchNumber,  IssueNumber,    CreatedOn,    CreatedBy_ID,     Remarks)
+SELECT NEWID(),T.Student_ID,'CUS/EXM/DC/HONORS/17'
+,ROW_NUMBER() OVER (PARTITION BY batch ORDER BY T.CollegeFullName,T.CourseFullName,T.CUSRegistrationNo)+2886 IssueNumber,
+'2021-08-09 11:02:45.827','38AB4161-8503-48AF-BF0B-07C8D0F5F5A4','Dummy' 
+FROM (
+	SELECT DISTINCT T.Student_ID,FullName,CUSRegistrationNo,T.TCourse_ID,ADMCourseMaster.CourseFullName,CollegeFullName,Batch
+	FROM dbo.MSCGPA T
+	JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = T.TCourse_ID
+	JOIN dbo.VWStudentCourse ON VWStudentCourse.Student_ID = T.Student_ID
+	LEFT JOIN dbo.DegreeCertificate ON DegreeCertificate.Student_ID = T.Student_ID
+	WHERE DegreeCertificate_ID IS NULL AND Batch=2017 AND ADMCourseMaster.CourseFullName 
+	IN(
+	'English Honor''s',
+	'Journalism & Mass Communication Honor''s','Chemistry Honor''s','Economics Honor''s'
+	)
+	
+	
+)T ORDER BY T.CollegeFullName,T.CourseFullName,T.CUSRegistrationNo
+GO
+GO
+INSERT INTO dbo.DegreeCertificate
+(DegreeCertificate_ID,    Student_ID,    DispatchNumber,  IssueNumber,    CreatedOn,    CreatedBy_ID,     Remarks)
+SELECT NEWID(),T.Student_ID,'CUS/EXM/DC/PG/17'
+,ROW_NUMBER() OVER (PARTITION BY batch ORDER BY T.CollegeFullName,T.CourseFullName,T.CUSRegistrationNo)+2923 IssueNumber,
+'2021-08-09 11:02:45.827','38AB4161-8503-48AF-BF0B-07C8D0F5F5A4','Dummy' 
+FROM (
+	SELECT DISTINCT T.Student_ID,FullName,CUSRegistrationNo,T.TCourse_ID,ADMCourseMaster.CourseFullName,CollegeFullName,Batch
+	FROM dbo.MSCGPA T
+	JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = T.TCourse_ID
+	JOIN dbo.VWStudentCourse ON VWStudentCourse.Student_ID = T.Student_ID
+	LEFT JOIN dbo.DegreeCertificate ON DegreeCertificate.Student_ID = T.Student_ID
+	WHERE DegreeCertificate_ID IS NULL AND Batch=2017 AND ADMCourseMaster.CourseFullName 
+	IN
+(
+'M.Sc Environmental Science','M.Com','MA Education','M.Ed Supplementary','MA English','M.Sc Physics',
+'M.Sc Zoology','M.Sc Geography','M.Sc Botany','M.Sc Chemistry','M.Ed'
+)
+
+)T ORDER BY T.CollegeFullName,T.CourseFullName,T.CUSRegistrationNo
+GO
+
+

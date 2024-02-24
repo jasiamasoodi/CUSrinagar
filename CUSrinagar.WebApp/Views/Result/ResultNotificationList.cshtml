@@ -1,0 +1,46 @@
+﻿@model List<CUSrinagar.Models.ResultNotificationList>
+
+<table class="table  table-bordered table-hover">
+    <thead>
+        <tr>
+            <th class="text-center">S.No. </th>
+
+            <th class="">Description</th>
+            <th data-property="Batch">Batch</th>
+            <th data-property="Semester" title="semester">Sem</th>
+            <th data-property="Dated"> Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+        <tr>
+            <td class="text-center">
+                <span class="js-sno"></span>
+            </td>
+
+            <td>@item.Title</td>
+            <td>@item.Batch</td>
+            <td>@item.Semester</td>
+            <td>@item.Dated.ToString("dd-MMMM-yyyy")</td>
+            <td>
+                <a class="btn btn-theme" href="@Url.Action("Result", "Result", new { @id = item.ResultNotification_ID })">View Result</a>
+                @*@if (item.PrintProgramme == CUSrinagar.Enums.PrintProgramme.PG)
+            {
+                <a class="btn btn-theme" href="@Url.Action("ResultPG", "Result", new { @ResultNotification_ID = item.ResultNotification_ID })">View Result</a>
+            }
+            else
+            {
+                <a class="btn btn-theme" href="@Url.Action("Result","Result",new { @Semester = @item.Semester })">View Result</a>
+            }*@
+            </td>
+
+        </tr>
+            }
+        }
+    </tbody>
+</table>

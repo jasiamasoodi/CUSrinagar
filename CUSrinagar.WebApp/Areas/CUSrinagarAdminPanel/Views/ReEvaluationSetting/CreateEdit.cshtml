@@ -1,0 +1,317 @@
+﻿@model CUSrinagar.Models.ReEvaluationSetting
+
+@{
+    string parsedDate = "";
+    var notificationList = (List<SelectListItem>)ViewBag.ResultNotifications ?? new List<SelectListItem>();
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area= "CUSrinagarAdminPanel" })">Home</a>
+        </li>
+        <li>
+            <a href="@Url.Action("ReEvaluationSetting","ReEvaluationSetting",new { area= "CUSrinagarAdminPanel" })" class="">ReEvaluation Setting</a>
+        </li>
+        <li>
+            <a href="#" class="active">Create/Edit</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+
+@using (Html.BeginForm("CreateEdit", "ReEvaluationSetting", FormMethod.Post, new { @class = "jsMainForm form-horizontal", @id = "ReEvaluationSettingForm" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.ReEvaluationSetting_ID)
+
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>
+                @if (Model.ReEvaluationSetting_ID != Guid.Empty)
+                {
+                    <span>Edit @(Model.IsReEvaluation ? "Re-Evaluation" : "Xerox")</span>
+                    <span class="pull-right">
+                        <a href="@Url.Action("Delete",new {@id=Model.ReEvaluationSetting_ID })" class="text-danger"><i class="ace-icon fa fa-trash-o"></i></a>
+                    </span>
+                }
+                else
+                {
+                    <span>Create</span>
+                }
+
+            </h3>
+            <hr class="no-margin-top" />
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">FormNumberPrefix</label>
+                <div class="col-sm-2">
+                    @if (Model.ReEvaluationSetting_ID != Guid.Empty)
+                    {
+                        @Html.HiddenFor(model => model.FormNumberPrefix)
+                        <input type="text" class="form-control" disabled value="@Model.FormNumberPrefix" />
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(model => model.FormNumberPrefix, new { @class = "form-control" })
+                    }
+
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            @if (Model.ReEvaluationSetting_ID != Guid.Empty)
+                            {
+                                @Html.HiddenFor(model => model.IsReEvaluation)
+                                <input disabled type="checkbox" class="ace input-lg" @(Model.IsReEvaluation ? "Checked='checked'" : "") />
+                            }
+                            else
+                            {
+                                <input type="checkbox" class="ace input-lg" @(Model.IsReEvaluation ? "Checked='checked'" : "") name="IsReEvaluation" value="@Model.IsReEvaluation" id="IsReEvaluation" />
+                            }
+                            <span class="lbl bigger"> IsReEvaluation</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">SubmittedYear</label>
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(model => model.SubmittedYear, new { @class = "form-control", @required = "required", @type = "number", @min = "2017" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Courses</label>
+                <div class="col-sm-9">
+                    @Html.DropDownList("CourseCategory", new SelectList(ViewBag.ExaminationCourseCategories, "Value", "Text", Model.CourseCategory),
+                               "Select course", new
+                               {
+                                   @class = "form-control",
+                                   @required = "required"
+                               })
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Semester</label>
+                <div class="col-sm-9">
+                    @Html.DropDownList("Semester", new SelectList(ViewBag.Semesters, "Value", "Text", Model.Semester), new
+               {
+                   @class = "form-control",
+                   @required = "required"
+               })
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Fee Per Subject</label>
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(model => model.FeePerSubject, new { @class = "form-control", @type = "number", @required = "required" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">FormNumberCount</label>
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(model => model.FormNumberCount, new { @class = "form-control", @type = "number", @required = "required" })
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.AllowDownloadForm ? "Checked='checked'" : "") name="AllowDownloadForm" id="AllowDownloadForm" value="@Model.AllowDownloadForm" />
+                            <span class="lbl bigger"> Allow Download Form</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByExaminationForm ? "Checked='checked'" : "") name="ValidateByExaminationForm" id="ValidateByExaminationForm" value="@Model.ValidateByExaminationForm" />
+                            <span class="lbl bigger"> ValidateByExaminationForm</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByResultNotificationIDs ? "Checked='checked'" : "") name="ValidateByResultNotificationIDs" id="ValidateByResultNotificationIDs" value="@Model.ValidateByResultNotificationIDs" />
+                            <span class="lbl bigger"> ValidateByResultNotificationIDs</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Start Date</label>
+                <div class="col-sm-9">
+                    @{
+                        parsedDate = (Model.StartDate.Year
+                            + "-" + (Model.StartDate.Month.ToString().Length == 1 ? "0" + Model.StartDate.Month : Model.StartDate.Month.ToString())
+                            + "-" + (Model.StartDate.Day.ToString().Length == 1 ? "0" + Model.StartDate.Day : Model.StartDate.Day.ToString())
+                            + "T" + (Model.StartDate.Hour.ToString().Length == 1 ? "0" + Model.StartDate.Hour : Model.StartDate.Hour.ToString())
+                            + ":" + (Model.StartDate.Minute.ToString().Length == 1 ? "0" + Model.StartDate.Minute : Model.StartDate.Minute.ToString())).Trim();
+                    }
+                    <input type="datetime-local" id="StartDate" name="StartDate" value="@parsedDate" required class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">End Date</label>
+                <div class="col-sm-9">
+                    @{
+                        parsedDate = (Model.EndDate.Year
+                            + "-" + (Model.EndDate.Month.ToString().Length == 1 ? "0" + Model.EndDate.Month : Model.EndDate.Month.ToString())
+                            + "-" + (Model.EndDate.Day.ToString().Length == 1 ? "0" + Model.EndDate.Day : Model.EndDate.Day.ToString())
+                            + "T" + (Model.EndDate.Hour.ToString().Length == 1 ? "0" + Model.EndDate.Hour : Model.EndDate.Hour.ToString())
+                            + ":" + (Model.EndDate.Minute.ToString().Length == 1 ? "0" + Model.EndDate.Minute : Model.EndDate.Minute.ToString())).Trim();
+                    }
+                    <input type="datetime-local" id="EndDate" name="EndDate" value="@parsedDate" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Notification_ID</label>
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(model => model.Notification_ID, new { @class = "form-control", @placeholder = "Guid of Notification" })
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label for="name" class="col-sm-2 control-label">Result Notifications</label>
+                <div class="col-sm-10 jsDDLContainer">
+                    <select id='jsMultiSelectDDL' name='Subject' class="multiselect" multiple="">
+                        @if (notificationList != null)
+                        {
+                            foreach (var item in notificationList)
+                            {
+                                <option value="@item.Value" @(Model.ResultNotification_IDs != null && Model.ResultNotification_IDs.Contains(item.Value) ? "selected" : "")>@item.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="clearfix"></div>
+                <label for="" class="col-sm-2 control-label invisible">style purpose</label>
+                <div class="col-sm-10">
+                    @Html.HiddenFor(model => model.ResultNotification_IDs)
+                    <p id="jsNotificationList" class="text-success small">
+                        @((Model.ResultNotifications == null) ? "" : String.Join(", ", Model.ResultNotifications.Select(x => x.Title)?.ToList()))
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class=" pull-text-right pull-right">
+                <button type="submit" value="False" name="CreateNew" id="submitForm" class="btn btn-primary pull-right">@(Model.ReEvaluationSetting_ID == Guid.Empty ? "Save" : "Update")</button>
+                &nbsp; &nbsp;
+            </div>
+            <div class=" pull-text-right pull-right">
+                <button type="submit" value="True" name="CreateNew" id="submitForm" class="btn btn-primary pull-right">@(Model.ReEvaluationSetting_ID == Guid.Empty ? "Save" : "Update")/Create New</button>
+                &nbsp; &nbsp;
+            </div>
+            @if (Model.ReEvaluationSetting_ID != Guid.Empty)
+            {
+                <div class=" pull-text-right pull-right">
+                    <button type="submit" value="True" name="SaveAsNew" id="submitForm" class="btn btn-primary pull-right">Save As New</button>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+
+@section PageSpecificJS{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#IsReEvaluation").change(function () {
+                var $checkbox = $(this);
+                if ($checkbox.is(':checked')) {
+                    $("#FeePerSubject").val('500');
+                    $("#FormNumberPrefix").val('-REV-');
+                } else {
+                    $("#FormNumberPrefix").val('-XRX-');
+                    $("#FeePerSubject").val('100');
+                }
+            });
+
+            $("#ReEvaluationSettingForm").submit(function (event) {
+                var list = (isNullOrEmpty($("#jsMultiSelectDDL").val()) || $("#jsMultiSelectDDL").val().indexOf("") == 0) ? "" : $("#jsMultiSelectDDL").val().toString().replace(/,/g, "|");
+                $("#ResultNotification_IDs").val(list);
+            });
+
+            $("#CourseCategory").change(function () {
+                $("#jsNotificationList").html("");
+                $("#ResultNotification_IDs").val("");
+                getNotificationDDL();
+            });
+            $("#Semester").change(function () {
+                $("#jsNotificationList").html("");
+                $("#ResultNotification_IDs").val("");
+                getNotificationDDL();
+            });
+            resetMultiSelect();
+
+            function getNotificationDDL() {
+                var $targetSelect = $("#jsMultiSelectDDL");
+                clearDDOptions($targetSelect);
+                fillDDLDefaultOption($targetSelect);
+
+                var _param = new Parameter();
+                _param.Filters = [];
+                var courseCategory = $("#CourseCategory").find('option:selected').val();
+                if (!isNullOrEmpty(courseCategory))
+                    _param.Filters.push({ Column: "PrintProgramme", Operator: "EqualTo", Value: GetPrintProgrammeForExaminationCourseCategory(courseCategory), GroupOperation: "AND", TableAlias: "" });
+
+                var semester = $("#Semester").find('option:selected').val();
+                if (!isNullOrEmpty(semester))
+                    _param.Filters.push({ Column: "Semester", Operator: "EqualTo", Value: semester, GroupOperation: "AND", TableAlias: "" });
+
+                _param.SortInfo = { ColumnName: "Dated" };
+                _param.PageInfo = { PageNumber: -1, PageSize: -1, DefaultOrderByColumn: "Dated" };
+                _param.SortInfo = { ColumnName: "", OrderBy: 2 };
+
+                clearDDOptions($targetSelect);
+                fillNotificationDDLAction($targetSelect, _param, null);
+            }
+
+
+            function fillNotificationDDLAction($targetSelect, _param, callback) {
+                var _url = "/CUSrinagarAdminPanel/General/ResultNotificationDDL";
+                $.ajax({
+                    url: _url,
+                    type: "POST",
+                    datatype: "Json",
+                    data: _param,
+                    beforeSend: function () { showLoader(); },
+                    success: function (data) {
+                        fillDDLOptions($targetSelect, data);
+                        ChosenStyle();
+                        resizechosen($targetSelect);
+                    },
+                    error: function (xhr, error, msg) {
+                        fillDDLOptions($targetSelect, null);
+                        showErrorMessage(msg);
+                    },
+                    complete: function () {
+                        hideLoader();
+                        if (!isNullOrEmpty(callback) && callback.length > 0) {
+                            window[callback]();
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+}
+
+
+

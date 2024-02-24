@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9C770BE0-1174-44E2-8C2E-D985D4F44B50}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CUSrinagar.Models</RootNamespace>
+    <AssemblyName>CUSrinagar.Models</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\lib\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.2.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Nut, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nut.2.4.2\lib\Nut.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.3.0\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.3.0\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ABCAPI\ABCAPIModels.cs" />
+    <Compile Include="AdmissionForm.cs" />
+    <Compile Include="Admission\ADMSemesterAdmissionSettings.cs" />
+    <Compile Include="Admission\BaseWorkFlow.cs" />
+    <Compile Include="Alomini.cs" />
+    <Compile Include="AttemptCertificate\AttemptCertificate.cs" />
+    <Compile Include="AttemptCertificate\AttemptCertificateDetails.cs" />
+    <Compile Include="AwardFilterSettings.cs" />
+    <Compile Include="AwardSettingsModel.cs" />
+    <Compile Include="BillDeskGateWay\ARGPaymentDetails.cs" />
+    <Compile Include="BillDeskGateWay\BillDeskS2SResponse.cs" />
+    <Compile Include="BillDeskGateWay\BillDeskS2SRequest.cs" />
+    <Compile Include="BillDeskGateWay\BillDeskRequest.cs" />
+    <Compile Include="BillDeskGateWay\BillDeskSettings.cs" />
+    <Compile Include="BillDeskGateWay\S2SSearch.cs" />
+    <Compile Include="Billing\BIL_BankAccountDetails.cs" />
+    <Compile Include="Billing\BIL_BillDetails.cs" />
+    <Compile Include="Billing\BIL_PaperSetterInstitute.cs" />
+    <Compile Include="Billing\BIL_PaperSetterSetttings.cs" />
+    <Compile Include="CertificateCourse\CertificateCoursePersonalInfo.cs" />
+    <Compile Include="CertificateCourse\CertificateCoursePrevQualifications.cs" />
+    <Compile Include="CertificationVerification.cs" />
+    <Compile Include="CloudPushNotifications\PushNotification.cs" />
+    <Compile Include="CUETAPI\CUETAPIRequestModel.cs" />
+    <Compile Include="CUETAPI\CUETDocuments.cs" />
+    <Compile Include="CUETAPI\CUETError.cs" />
+    <Compile Include="CUETAPI\CUETRegistrationData.cs" />
+    <Compile Include="DailyLectureFeedBack.cs" />
+    <Compile Include="DegreeCertificate.cs" />
+    <Compile Include="IssuingOfDegreeCertificate.cs" />
+    <Compile Include="MSFullDetails.cs" />
+    <Compile Include="Registration\NEPCollegePreferences.cs" />
+    <Compile Include="ResultAnomalies.cs" />
+    <Compile Include="SeatMatrix\FractionSeats.cs" />
+    <Compile Include="SeatMatrix\SeatAllocationMatrix.cs" />
+    <Compile Include="SeatMatrix\SeatCountAgainstCourse.cs" />
+    <Compile Include="Transcript.cs" />
+    <Compile Include="MarksCard\MSCGPA.cs" />
+    <Compile Include="MarksCard\MSGrades.cs" />
+    <Compile Include="MarksCard\MSSGPA.cs" />
+    <Compile Include="MarksCard\MSStudentMarks.cs" />
+    <Compile Include="SelectedStudent.cs" />
+    <Compile Include="SemesterAdmissionFilter.cs" />
+    <Compile Include="TranscriptDegreeSettings.cs" />
+    <Compile Include="TranscriptModel.cs" />
+    <Compile Include="StudentCollegePreference.cs" />
+    <Compile Include="CombinationSettings.cs" />
+    <Compile Include="Contact.cs" />
+    <Compile Include="DashboardWidget.cs" />
+    <Compile Include="Employee.cs" />
+    <Compile Include="Enrollment.cs" />
+    <Compile Include="EntranceCenters\AssignSemesterCenters.cs" />
+    <Compile Include="EntranceCenters\SearchFirstSemesterRR.cs" />
+    <Compile Include="EntranceLists.cs" />
+    <Compile Include="ExamForm.cs" />
+    <Compile Include="ExaminationSetting.cs" />
+    <Compile Include="FeeStructureMaster.cs" />
+    <Compile Include="FileTracking\FileTracking.cs" />
+    <Compile Include="FileTracking\FileTrackingHistory.cs" />
+    <Compile Include="InternalExam\InternalExam.cs" />
+    <Compile Include="Messages.cs" />
+    <Compile Include="ProfessorCRClasses.cs" />
+    <Compile Include="Questionaire.cs" />
+    <Compile Include="QuestionOptions.cs" />
+    <Compile Include="QuestionResponse.cs" />
+    <Compile Include="ResultHistory.cs" />
+    <Compile Include="Salary.cs" />
+    <Compile Include="SMSEmailModels\SMS.cs" />
+    <Compile Include="Statistics.cs" />
+    <Compile Include="Grievance.cs" />
+    <Compile Include="EvaluatorSubjects.cs" />
+    <Compile Include="PrintExamAdmitCards.cs" />
+    <Compile Include="ReEvaluation.cs" />
+    <Compile Include="ResultNotification.cs" />
+    <Compile Include="StudentExaminationForm.cs" />
+    <Compile Include="AwardModel.cs" />
+    <Compile Include="College.cs" />
+    <Compile Include="Admission\CombinationMaster.cs" />
+    <Compile Include="Admission\CourseMaster.cs" />
+    <Compile Include="EntranceCenters\ARGCentersAllotmentMaster.cs" />
+    <Compile Include="EntranceCenters\ARGEntranceCentersMaster.cs" />
+    <Compile Include="ProfessorSubjects.cs" />
+    <Compile Include="Registration\ARGCoursesApplied.cs" />
+    <Compile Include="Registration\ARGFromNoMaster.cs" />
+    <Compile Include="Registration\ARGBoardRegistrationData.cs" />
+    <Compile Include="Registration\AssignClassRollNo.cs" />
+    <Compile Include="Registration\PersonalInformation.cs" />
+    <Compile Include="Registration\SelectedCombination.cs" />
+    <Compile Include="Registration\StudentAddress.cs" />
+    <Compile Include="Registration\StudentPreviousQualification.cs" />
+    <Compile Include="Registration\Reprint.cs" />
+    <Compile Include="Admission\SubjectMaster.cs" />
+    <Compile Include="OAuthProvider\AppLogin.cs" />
+    <Compile Include="OAuthProvider\AppResetPassword.cs" />
+    <Compile Include="OAuthProvider\AppRoles.cs" />
+    <Compile Include="OAuthProvider\AppUser.cs" />
+    <Compile Include="OAuthProvider\AppUserHelper.cs" />
+    <Compile Include="OAuthProvider\AppUserRoles.cs" />
+    <Compile Include="DropDown.cs" />
+    <Compile Include="Enums\Enums.cs" />
+    <Compile Include="GeneralModels.cs" />
+    <Compile Include="NotificationModel.cs" />
+    <Compile Include="OAuthProvider\AuthCookie.cs" />
+    <Compile Include="OAuthProvider\IPrincipalProvider.cs" />
+    <Compile Include="OAuthProvider\SignInStatus.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SemesterModel.cs" />
+    <Compile Include="SMSEmailModels\SMSModel.cs" />
+    <Compile Include="StudentResult.cs" />
+    <Compile Include="StudentRR\CourseWiseList.cs" />
+    <Compile Include="Subject.cs" />
+    <Compile Include="SubjectDetails.cs" />
+    <Compile Include="TEREXExtensions.cs" />
+    <Compile Include="UserActivity.cs" />
+    <Compile Include="ValidationAttrs\CustomAttributes.cs" />
+    <Compile Include="ValidationAttrs\ValidateFileFormAttribute.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="JsonSearchFilter.cs" />
+    <Compile Include="SyllabusModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CUSrinagar.Extensions\CUSrinagar.Extensions.csproj">
+      <Project>{18D2DD4D-22A2-4EEE-A656-C4C49C73EF9C}</Project>
+      <Name>CUSrinagar.Extensions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets'))" />
+  </Target>
+</Project>

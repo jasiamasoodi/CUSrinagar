@@ -1,0 +1,72 @@
+﻿@model CUSrinagar.Models.ARGPersonalInformation
+@{
+    Layout = null;
+}
+<div class="col-lg-9 col-md-9">
+    <h3 class="no-margins">Accademic Details</h3>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Exam Name</th>
+                    <th>Subjects</th>
+                    <th>Max Marks</th>
+                    <th>Min Marks</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.AcademicDetails != null)
+                {
+                    foreach (var item in Model.AcademicDetails)
+                    {
+                        <tr>
+                            <td class="text-success">@item.ExamName</td>
+                            <td>@item.Subjects</td>
+                            <td>@item.MaxMarks</td>
+                            <td>@item.MarksObt</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <h3 class="no-margins">Courses Prefered</h3>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Program</th>
+                    <th>Course Code</th>
+                    <th>Course Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.CoursesApplied != null)
+                {
+                    foreach (var item in Model.CoursesApplied)
+                    {
+                        <tr>
+                            <td>@(item.Programme)</td>
+                            <td class="text-success">@item.CourseCode</td>
+                            <td>@item.CourseName</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+    <center>
+        <div class="thumbnail no-margin-bottom">
+            @if (Model.Photograph != null)
+            {
+                <img src="@Url.Content(Model.Photograph)" class="img-responsive max-height-200" />
+            }
+        </div>
+        <p><u><b> @Model.FullName</b></u></p>
+        <button class="btn btn-success form-control">Update</button>
+    </center>
+</div>
+
+

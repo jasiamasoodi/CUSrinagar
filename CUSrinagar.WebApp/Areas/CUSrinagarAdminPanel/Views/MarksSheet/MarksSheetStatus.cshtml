@@ -1,0 +1,643 @@
+﻿@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@using CUSrinagar.Models
+@model List<MarksSheet>
+
+@if (Model.IsNotNullOrEmpty())
+{
+    var marksSheets = Model.Where(x => x.SubjectResults.IsNotNullOrEmpty()).OrderBy(x => x.ExamRollNumber).ToList();
+    var maxNumberOfSemesters = Model.SelectMany(x => x.SubjectResults).Max(x => x.Semester);    
+    bool editable = HttpContext.Current.User.IsInRole(AppRoles.University.ToString()) || HttpContext.Current.User.IsInRole(AppRoles.University_TransScript.ToString());
+       
+
+    @section CUSSitemap{
+        <div class="col-md-12">
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="@Url.Action("Index", "Dashboard", new { area = "CUSrinagarAdminPanel" })">Home</a>
+                </li>
+                <li class="active"><a href="@Url.Action("TranscriptSearch", "Transcript")">Validate Result</a> </li>
+                <li class="bold">@marksSheets.First(x => !string.IsNullOrEmpty(x.CourseFullName)).CourseFullName</li>
+                <li class="bold">@marksSheets.First(x => !string.IsNullOrEmpty(x.CourseFullName)).Batch</li>
+                <li class="bold">@marksSheets.First(x => !string.IsNullOrEmpty(x.CollegeFullName)).CourseFullName</li>
+            </ul><!-- /.breadcrumb -->
+        </div>
+        <div class="col-md-7">
+          
+        </div>
+        <div class="col-md-4">
+        </div>
+    }
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+    </style>
+    <div class="page-content">
+
+        <div id="accordion" class="accordion-style1 panel-group">
+
+            @*<div class="panel panel-default">
+                    <div class="panel-heading hidden-print">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                                <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                &nbsp;Transcript Statistics
+                            </a>
+                        </h4>
+                    </div>
+
+                    <div class="panel-collapse collapse" id="collapse1" style="page-break-after:always;">
+                        <div class="panel-body">
+                            <table class="table table-bordered table-hover jsPrintTabContent">
+                                <thead>
+                                    <tr>
+                                        <th colspan="8">
+                                            <b>Transcript Statistics</b>
+                                            <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>S.No.</th>
+                                        <th>Batch</th>
+                                        <th>College</th>
+                                        <th>Course</th>
+                                        <th>Total Students</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var batches = Transcripts.Select(x => x.Batch).Distinct().OrderBy(x => x);
+                                        foreach (var batch in batches)
+                                        {
+                                            var colleges = Transcripts.Where(x => x.Batch == batch).Select(x => x.CollegeFullName).Distinct().OrderBy(x => x);
+                                            foreach (var college in colleges)
+                                            {
+                                                count = 1;
+                                                var courses = Transcripts.Where(x => x.CollegeFullName == college).Select(x => x.CourseFullName).Distinct().OrderBy(x => x);
+                                                foreach (var course in courses)
+                                                {
+                                                    <tr>
+                                                        <td>@(count++)</td>
+                                                        <td>@batch</td>
+                                                        <td>@college</td>
+                                                        <td>@course</td>
+                                                        <td>@(Transcripts.Where(x => x.Batch == batch && x.CollegeFullName == college && x.CourseFullName == course).Select(x => x.Student_ID).Distinct().Count())</td>
+                                                    </tr>
+                                                }
+                                                <tr>
+                                                    <td>#</td>
+                                                    <th>@batch</th>
+                                                    <th>@college</th>
+                                                    <th>Total</th>
+                                                    <th>@(Transcripts.Where(x => x.Batch == batch && x.CollegeFullName == college).Select(x => x.Student_ID).Distinct().Count())</th>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5">|</td>
+                                                </tr>
+                                            }
+                                            <tr>
+                                                <th>#</th>
+                                                <th>@batch</th>
+                                                <th colspan="2">Grand Total</th>
+                                                <th>@(Transcripts.Where(x => x.Batch == batch).Select(x => x.Student_ID).Distinct().Count())</th>
+                                            </tr>
+                                        }
+                                    }
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>*@
+
+
+
+
+
+
+
+
+            @*<div class="panel panel-default">
+                    <div class="panel-heading hidden-print">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+                                <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                &nbsp;Result Date & Notifications
+                            </a>
+                        </h4>
+                    </div>
+
+                    <div class="panel-collapse collapse" id="collapse2" style="page-break-after:always;">
+                        <div class="panel-body">
+                            <table class="table table-bordered table-hover jsPrintTabContent">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5">
+                                            <b>Transcript : Date/Notificcations</b>
+                                            <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>S.No.</th>
+                                        <th>Total Students</th>
+                                        <th>Credit</th>
+                                        <th>Date Of Declartions</th>
+                                        <th>Notification</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var _CGPAs = Transcripts.SelectMany(x => x.CGPA).Select(x => x.TotalCreditsEarned).Distinct().ToList();
+                                        for (int i = 0; i < _CGPAs.Count; i++)
+                                        {
+                                            var item = _CGPAs[i];
+                                            var notifications = Transcripts.SelectMany(x => x.CGPA).Where(x => x.TotalCreditsEarned == item).Select(x => x.NotificationNo).Distinct().ToList();
+                                            foreach (var not in notifications)
+                                            {
+                                                count = Transcripts.SelectMany(x => x.CGPA).Where(x => x.TotalCreditsEarned == item && x.NotificationNo == not).Select(x => x.Student_ID).Distinct().Count();
+                                                var dateOfDeclarations = Transcripts.SelectMany(x => x.CGPA).Where(x => x.TotalCreditsEarned == item && x.NotificationNo == not).Select(x => x.DateofDeclaration.ToString("dd-MMM-yy")).Distinct().ToList();
+                                                <tr>
+                                                    <td>@(i + 1)</td>
+                                                    <td>@count</td>
+                                                    <td>@item</td>
+                                                    <td>@string.Join("|", dateOfDeclarations)</td>
+                                                    <td>@not</td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>*@
+
+
+
+
+
+            @*<div class="panel panel-default">
+                    <div class="panel-heading hidden-print">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+                                <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                &nbsp;Transcript Statistics : Subject Wise
+                            </a>
+                        </h4>
+                    </div>
+
+                    <div class="panel-collapse collapse" id="collapse3" style="page-break-after:always;">
+                        <div class="panel-body">
+                            @{
+                                batches = Transcripts.Select(x => x.Batch).Distinct().OrderBy(x => x);
+                                foreach (var batch in batches)
+                                {
+                                    var colleges = Transcripts.Where(x => x.Batch == batch).Select(x => x.CollegeFullName).Distinct().OrderBy(x => x);
+                                    foreach (var college in colleges)
+                                    {
+                                        count = 1;
+                                        var courses = Transcripts.Where(x => x.CollegeFullName == college).Select(x => x.CourseFullName).Distinct().OrderBy(x => x);
+                                        foreach (var course in courses)
+                                        {
+                                            <table class="table table-bordered table-hover jsPrintTabContent" style="page-break-after:always;">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="6">
+                                                            <b>Transcript Statistics : Subject Wise</b>
+                                                            <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th colspan="6">
+                                                            Batch:@batch College:@college Course:@course
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>S.No.</th>
+                                                        <th>Sem</th>
+                                                        <th>Type</th>
+                                                        <th>Credit</th>
+                                                        <th>Subject Title</th>
+                                                        <th>Count</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        var _Subjects = (from m in Transcripts.Where(x => x.CollegeFullName == college && x.CourseFullName == course).SelectMany(x => x.Subject).ToList() orderby m.Semester, m.Credit, m.SubjectType.ToString(), m.SubjectTitle select new { m.Semester, m.Subject_ID, m.Credit, m.SubjectTitle, m.SubjectType }).Distinct().ToList();
+                                                        foreach (var item_semester in _Subjects.Select(x => x.Semester).Distinct().OrderBy(x => x))
+                                                        {
+                                                            foreach (var item_subject in _Subjects.Where(x => x.Semester == item_semester).OrderBy(x => x.SubjectType.ToString()).ToList())
+                                                            {
+                                                                <tr>
+                                                                    <td>@(count++)</td>
+                                                                    <td>@(item_semester)</td>
+                                                                    <td>@(item_subject.SubjectType.ToString())</td>
+                                                                    <td>@(item_subject.Credit)</td>
+                                                                    <td>@(item_subject.SubjectTitle)</td>
+                                                                    <td>@(Transcripts.Where(x => x.Batch == batch && x.CollegeFullName == college && x.CourseFullName == course && x.Subject.Any(y => y.Semester == item_semester && y.Subject_ID == item_subject.Subject_ID)).Select(x => x.Student_ID).Distinct().Count())</td>
+                                                                </tr>
+                                                            }
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>@(item_semester)</th>
+                                                                <th colspan="4" class="text-right">
+                                                                    <span>Students: </span>
+                                                                    @{
+                                                                        var list_count = Transcripts.Where(x => x.Batch == batch && x.CollegeFullName == college && x.CourseFullName == course && x.Subject.Any(y => y.Semester == item_semester)).SelectMany(x => x.Subject, (parent, child) => new { parent.Student_ID, child.SubjectType }).Distinct().GroupBy(x => x.SubjectType).OrderBy(x => x.Key.ToString());
+                                                                        foreach (var item_count in list_count)
+                                                                        {
+                                                                            <span>@(item_count.Count() + "(" + item_count.Key.ToString() + ")")</span> <span>&nbsp;|&nbsp;</span>
+                                                                        }
+                                                                    }
+                                                                </th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="9">|</td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td>#</td>
+                                                        <th>@batch</th>
+                                                        <th>@college</th>
+                                                        <th>@course</th>
+                                                        <th class="text-right" colspan="5">Total: @(Transcripts.Where(x => x.Batch == batch && x.CollegeFullName == college && x.CourseFullName == course).Select(x => x.Student_ID).Distinct().Count())</th>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        }
+                                    }
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>*@
+
+
+
+
+
+            <div class="panel panel-default">
+                <div class="panel-heading hidden-print">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse4">
+                            <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                            &nbsp;Student List
+                        </a>
+                    </h4>
+                </div>
+
+                <div class="panel-collapse collapse" id="collapse4" style="page-break-after:always;">
+                    <div class="panel-body">
+                        <table class="table table-bordered table-hover jsPrintTabContent">
+                            <thead>
+                                <tr>
+                                    <th colspan="10">
+                                        <b>MarksSheet List : Student MaxMarks Wise</b>
+                                        <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Registration No</th>
+                                    <th>Roll No</th>
+                                    <th>Total Max Marks</th>
+                                    @*<th>Credits</th>*@
+                                    <th>Result Date</th>
+                                    <th>Created On</th>
+                                    @*<th>Validated On</th>*@
+                                    <th>Printed On</th>
+                                    @*<th>Handed OverOn</th>*@
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < marksSheets.Count(); i++)
+                                {
+                                    var item = marksSheets[i];
+                                    //subjectTypes = item.SubjectResults.Select(x => x.SubjectType).Distinct().OrderBy(x => x.ToString()).ToList();
+                                    <tr>
+                                        <th>
+                                            @(i + 1)
+                                            @Html.HiddenFor(model => item.Student_ID, new { @class = "jsEntity_ID" })
+                                        </th>
+                                        <td>@item.CUSRegistrationNo</td>
+                                        <td>@item.ExamRollNumber</td>
+                                        <td>
+                                            7750
+                                        <td>
+                                            <span> @item.DateOfDeclaration.ToString("dd-MMM-yy")</span>                                           
+                                        </td>
+                                        <td>
+                                            <span> @item.CreatedOn.ToString("dd-MMM-yy")</span>
+                                        </td>
+                                        @*<td>
+                                            @if (item.CGPA.First().IsValidated)
+                                            {
+                                                <span>@string.Join(",", item.CGPA.Select(x => x.ValidatedOn.Value.ToString("dd-MMM-yy")).Distinct())</span>
+                                            }
+                                            else if (editable)
+                                            {
+                                                <button class="btn btn-sm jsValidated" value="@item.Student_ID">Good</button>
+                                            }
+                                        </td>*@
+                                    <td>
+                                        @if (item.PrintedOn == null)
+                                        {
+                                            
+                                            <button class="btn btn-sm jsPrinted" value="@item.Student_ID">Printed</button>
+                                        }
+                                        else 
+                                        {
+                                            <span>@string.Join(",", item.PrintedOn)</span>
+                                        }
+                                    </td>
+                                        @*<td>
+                                            @if (item.CGPA.First().IsHandedOver)
+                                            {
+                                                <span>@string.Join(",", item.CGPA.Select(x => x.HandedOverOn.Value.ToString("dd-MMM-yy")).Distinct())</span>
+                                            }
+                                            else if (editable)
+                                            {
+                                                <button class="btn btn-sm jsHandedOver" value="@item.Student_ID">Handed Over</button>
+                                            }
+                                        </td>*@
+                                        <td>
+                                            @*<a title="Marks Cards" target="_blank" href="@Url.Action("PrintMarksSheet", "Result"
+                                                , new {
+                                                    @area = "CUSrinagarAdminPanel",
+                                                    Student_ID = item.CGPA.First().Student_ID
+                                                    , printProgramme = ViewBag.PrintProgramme })">
+                                                <i class="fa fa-print"></i>
+                                            </a>*@
+                                            <a title="Markssheet" target="_blank" href="@Url.Action("PrintMarksSheet", "MarksSheet"
+                                                 , new {
+                                                     Batch = item.Batch
+                                                     , PrintProgramme = ViewBag.PrintProgramme
+                                                     , Course_ID = item.Course_ID
+                                                     , AcceptCollege_ID = item.AcceptCollege_ID
+                                                     , CUSRegistrationNo = item.CUSRegistrationNo })">
+                                                <i class="fa fa-print fa-2x"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+            @*<div class="panel panel-default">
+                    <div class="panel-heading hidden-print">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse5">
+                                <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                &nbsp;Student List Semester Wise
+                            </a>
+                        </h4>
+                    </div>
+
+                    <div class="panel-collapse collapse" id="collapse5" style="page-break-after:always;">
+                        <div class="panel-body">
+                            <table class="table table-bordered table-hover jsPrintTabContent">
+                                <thead>
+                                    <tr>
+                                        <th colspan="7">
+                                            <b>Transcript Statistics :Student Semester Credits</b>
+                                            <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th title="Serial+Semester">S.No-Sem</th>
+                                        <th>Registration No</th>
+                                        <th>Exam Roll No</th>
+                                        <th>Name</th>
+                                        <th>Sem</th>
+                                        <th>Credits</th>
+                                        <th>SGPA</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < Transcripts.Count(); i++)
+                                    {
+                                        var item = Transcripts[i];
+                                        var Semesters = item.SGPA.Select(x => x.Semester).Distinct().OrderBy(x => x)?.ToList();
+                                        if (Semesters.IsNotNullOrEmpty())
+                                        {
+                                            for (int Semester = 1; Semester <= Semesters.Count; Semester++)
+                                            {
+                                                var _SGPATypes = item.SGPA.Where(x => x.Semester == Semester).OrderBy(x => x.SGPAType).ToList();
+                                                if (_SGPATypes.IsNotNullOrEmpty())
+                                                {
+                                                    for (int j = 0; j < _SGPATypes.Count(); j++)
+                                                    {
+                                                        var _SGPAType = _SGPATypes[j];
+                                                        subjectTypes = item.Subject.Where(x => x.Semester == Semester).Select(x => x.SubjectType).Distinct().OrderBy(x => x).ToList();
+                                                        <tr>
+                                                            <td title="Serial+Semester">@((i + 1).ToString() + "-" + (Semester).ToString())</td>
+                                                            <td>@item.CUSRegistrationNo</td>
+                                                            <td>@item.ExamRollNumber</td>
+                                                            <td>@item.FullName</td>
+                                                            <td>@Semester</td>
+                                                            <td>
+                                                                @foreach (var sitem in subjectTypes)
+                                                                {
+                                                                    string code = CUSrinagar.DataManagers.GeneralFunctions.GetSubjectTypeCode(sitem);
+                                                                    foreach (var sitemCredit in item.Subject.Where(x => x.SubjectType == sitem && x.Semester == Semester).Select(x => x.Credit).Distinct())
+                                                                    {
+                                                                        <span>@(string.IsNullOrEmpty(code) ? sitem.ToString() : code)</span><span>(</span><span title="credits">@string.Join(",", sitemCredit)</span><span>x</span><span title="no. of subjects">@item.Subject.Where(x => x.SubjectType == sitem && x.Credit == sitemCredit && x.Semester == Semester).Count()</span><span>)=</span><span title="total credits">@item.Subject.Where(x => x.SubjectType == sitem && x.Credit == sitemCredit && x.Semester == Semester).Sum(x => x.Credit)</span>
+                                                                        <span>|</span>
+                                                                    }
+                                                                }
+                                                                =>&nbsp;<b>@item.Subject.Where(x => subjectTypes.Any(y => y == x.SubjectType) && x.Semester == Semester).Sum(x => x.Credit)</b>
+
+                                                            </td>
+                                                            <th>@_SGPAType.SGPA</th>
+                                                        </tr>
+                                                    }
+                                                }
+                                            }
+                                            <tr>
+                                                <th>#</th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th>
+                                                    <div class="col-sm-9">
+                                                        @Html.HiddenFor(model => item.Student_ID, new { @class = "jsEntity_ID" })
+
+                                                        @if (item.CGPA.First().IsValidated)
+                                                        {
+                                                            <small>ValidatedOn:@string.Join(",", item.CGPA.Select(x => x.ValidatedOn.Value.ToString("dd-MMM-yy")).Distinct())</small>
+                                                        }
+                                                        else if (editable)
+                                                        {
+                                                            <button class="btn btn-sm jsValidated" value="@item.Student_ID">Validate-Good</button>
+                                                        }
+                                                        &nbsp;&nbsp;&nbsp;
+                                                        @if (item.CGPA.First().IsPrinted)
+                                                        {
+                                                            <small>PrintedOn:@string.Join(",", item.CGPA.Select(x => x.PrintedOn.Value.ToString("dd-MMM-yy")).Distinct())</small>
+                                                        }
+                                                        else if (editable)
+                                                        {
+                                                            <button class="btn btn-sm jsPrinted" value="@item.Student_ID">Printed</button>
+                                                        }
+                                                        &nbsp;&nbsp;&nbsp;
+                                                        @if (item.CGPA.First().IsHandedOver)
+                                                        {
+                                                            <small>HandedOverOn:@string.Join(",", item.CGPA.Select(x => x.HandedOverOn.Value.ToString("dd-MMM-yy")).Distinct())</small>
+                                                        }
+                                                        else if (editable)
+                                                        {
+                                                            <button class="btn btn-sm jsHandedOver" value="@item.Student_ID">Handed Over</button>
+                                                        }
+                                                    </div>
+                                                    <div class="col-sm-3 text-right">
+                                                        <a title="Marks Cards" class="float-right right" target="_blank" href="@Url.Action("PrintMarksSheet", "Result"
+                                                            , new {
+                                                                @area = "CUSrinagarAdminPanel",
+                                                                Student_ID = item.CGPA.First().Student_ID
+                                                                , printProgramme = ViewBag.PrintProgramme })">
+                                                            <i class="fa fa-print"></i>
+                                                        </a>
+                                                        <a title="Transcript" target="_blank" href="@Url.Action("PrintTranscript", "Transcript"
+                                                             , new {
+                                                                 Batch = item.Batch
+                                                             , PrintProgramme = ViewBag.PrintProgramme
+                                                             , Course_ID = item.Course_ID
+                                                             , AcceptCollege_ID = item.AcceptCollege_ID
+                                                             , CUSRegistrationNo = item.CUSRegistrationNo })">
+                                                            <i class="fa fa-print fa-2x"></i>
+                                                        </a>
+                                                    </div>
+                                                </th>
+                                                <th title="CGPA">
+                                                    <span>@string.Join(",", item.CGPA.Select(x => x.CGPA).Distinct())</span>
+                                                </th>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>*@
+
+            @*<div class="panel panel-default">
+                    <div class="panel-heading hidden-print">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse6">
+                                <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                &nbsp;Print for note
+                            </a>
+                        </h4>
+                    </div>
+
+                    <div class="panel-collapse collapse" id="collapse6" style="page-break-after:always;">
+                        <div class="panel-body">
+                            <table class="table table-bordered table-hover jsPrintTabContent">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5">
+
+                                            <b>Sub :- </b>Issuance of transcript to students<br />
+                                            <p style="font-size: small;">Cluster University of Srinagar is running U.G,Professional,Honor's' and Post-Graduate degree programmes in its Constituent and Affliated colleges. The pass out students of the various programmes have been requesting for issuance of transcripts. For this purpose, the IT Section has generated the transcripts for the below mentioned courses and needs to print the transcript for issuance to the concerned candidates.</p>
+                                            <b>
+                                                Date of Declaration of Result : &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Semester :
+                                            </b>
+
+                                            <p style="font-size:small;"><br />Students whose roll numbers are attached have cleared their result on the same date. Hence are recommended for generation and issuing of transripts through their respective colleges.</p>
+                                            <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                            <b>Transcripts to be printed</b><br />
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>Batch</th>
+                                        <th>College</th>
+                                        <th>Course</th>
+                                        <th>Total</th>
+                                        <th>List of students</th>
+                                    </tr>
+
+                                </thead>
+                                <tbody>
+                                    @{
+                                        batches = Transcripts.Select(x => x.Batch).Distinct().OrderBy(x => x);
+                                        foreach (var batch in batches)
+                                        {
+                                            count = 1;
+                                            var colleges = Transcripts.Where(x => x.Batch == batch).Select(x => x.CollegeFullName).Distinct().OrderBy(x => x);
+                                            foreach (var college in colleges)
+                                            {
+
+                                                var courses = Transcripts.Where(x => x.CollegeFullName == college).Select(x => x.CourseFullName).Distinct().OrderBy(x => x);
+                                                foreach (var course in courses)
+                                                {
+                                                    var listOfStudents = Transcripts.Where(x => x.Batch == batch && x.CollegeFullName == college && x.CourseFullName == course).Select(x => x.ExamRollNumber).Distinct();
+                                                    if (listOfStudents.IsNotNullOrEmpty())
+                                                    {
+                                                        <tr>
+                                                            <td>@batch</td>
+                                                            <td>@college</td>
+                                                            <td>@course</td>
+                                                            <td>@(listOfStudents.Count())</td>
+                                                            <td style="word-wrap:break-word;">
+                                                                <small>
+                                                                    @(string.Join(", ", listOfStudents))
+                                                                </small>
+                                                            </td>
+                                                        </tr>
+                                                        count++;
+                                                    }
+
+                                                }
+                                            }
+                                            <tr><td colspan="5" style="color:white;">|</td></tr>
+                                        }
+
+                                        <tr>
+                                            <td></td>
+                                            <th colspan="2">Grand total</th>
+                                            <th colspan="2">
+                                                <b>@(Model.Select(x => x.Student_ID).Distinct().Count())</b>
+                                            </th>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <br /><br />
+                            <table>
+                                <tr>
+
+                                    <td width="33%">Dealing Assistant</td>
+                                    <td width="33%">IT Incharge</td>
+                                    <td width="33%">Controller Examinations</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>*@
+
+
+
+
+        </div>
+    </div>
+}
+else
+{
+    <h3> No, records found</h3>
+    <hr />
+}
+

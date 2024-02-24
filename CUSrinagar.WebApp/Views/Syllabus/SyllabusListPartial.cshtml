@@ -1,0 +1,59 @@
+﻿@model  List<CUSrinagar.Models.Syllabus>
+@using CUSrinagar.Extensions
+
+@{
+    Layout = null;
+}
+<table class="table table-hover table-bordered">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th data-property="DepartmentFullName">Department</th>
+            <th data-property="SubjectFullName">Subject Title</th>
+            <th data-property="SubjectCode">Subject Code</th>
+            <th data-property="SubjectType">Type</th>
+            @if (!Model?.First()?.IsNEP ?? false)
+            {
+                <th data-property="CourseFullName">Course</th>
+            }
+            <th>Download PDF</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var row in Model)
+            {
+                if (!string.IsNullOrEmpty(row.SubjectFullName))
+                {
+                    <tr>
+                        <td>
+                            @if (!string.IsNullOrEmpty(row.DepartmentFullName))
+                            {
+                                <span>@row.DepartmentFullName.Trim()</span>
+                            }
+                        </td>
+                        <td>
+                            <strong>@row.SubjectFullName</strong>
+                            @if (!string.IsNullOrEmpty(row.Remark))
+                            {
+                                <p class="margin-top-10" style="font-size:12px">Remarks: @row.Remark</p>
+                            }
+                        </td>
+                        <td>@row.SubjectCode</td>
+                        <td>@(row.SubjectType.GetEnumDescription().ToString())</td>
+                        @if (!row.IsNEP)
+                        {
+                            <td>@row.CourseFullName</td>
+                        }
+
+                        <th class="text-center"><a title='Click here to download' href='@row.SyllabusUrl' target="_blank" style="font-size:22px"><i class="fa fa-file-pdf-o text-danger"></i></a></th>
+                    </tr>
+                }
+            }
+        }
+        else
+        {
+            <tr><td colspan="9"> No Record Found</td></tr>
+        }
+    </tbody>
+</table>

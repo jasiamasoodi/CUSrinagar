@@ -1,0 +1,114 @@
+﻿
+@model  CUSrinagar.Models.InternalQuestions
+@{
+    var routeValues = HttpContext.Current.Request.RequestContext.RouteData.Values;
+    string actionName = "";
+    if (routeValues != null)
+    {
+        if (routeValues.ContainsKey("controller"))
+        {
+            actionName = routeValues["action"].ToString();
+        }
+    }
+
+}
+@Html.AntiForgeryToken()
+<style>
+    .disableDDL {
+        pointer-events: none;
+    }
+</style>
+@if (!ViewData.ModelState.IsValidField("ErrorMessage"))
+{
+    <div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong>@Html.ValidationMessage("ErrorMessage", "", new { @class = "red " })</strong></div>
+}
+@Html.HiddenFor(model => model.Exam_Id)
+
+    <div class="jsDDLContainer">
+
+          <div class="form-group">
+            <label class="col-sm-3 control-label no-padding-right">
+               @Html.Label("College")
+            </label>
+            <div class="col-sm-6 ">
+                @ViewBag.College
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label no-padding-right">
+                 @Html.Label("Semester")
+            </label>
+            <div class="col-sm-6 ">
+                @ViewBag.Semester
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label no-padding-right">
+               @Html.Label("Subject")
+            </label>
+            <div class="col-sm-6 ">
+                @ViewBag.Subject
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <label class="col-sm-3 control-label no-padding-right">
+                <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Question)
+            </label>
+            <div class="col-sm-6 ">
+                @Html.TextBoxFor(model => model.Question, new { @class = "width-100", @maxlength = "150" })
+            </div>
+            <div class="col-sm-2">
+                @Html.ValidationMessageFor(model => model.Question, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+            </div>
+        </div>
+        @{
+            var i = 0;
+            var j = i + 1;
+            <div class="form-group region" id="formgroup_@i">
+                <label class="col-sm-3 control-label no-padding-right">
+                    <span class="red bigger-110">*</span> @Html.Label("Option " + j)
+
+                </label>
+                <div class="col-sm-6 ">
+
+                    @Html.TextBox("option[" + i + "].OptionName", "", new { @class = "width -100", @maxlength = "150" })
+                    @Html.RadioButton("option[" + i + "].IsCorrect", false) Is Answer
+                </div>
+                <div class="col-sm-2">
+                    @Html.ValidationMessage("option[" + i + "].OptionName", "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                </div>
+                <div class="col-sm-1">
+                    <button type="button" class="remove alert-danger " data-count="@i" id="Del_@i">Remove</button>
+
+                </div>
+            </div>
+        }
+        <span data-count="@i" class="hidden Count"></span>
+        <div class="col-sm-2">
+            <button type="button" class="add alert-success " data-count="@i" id="Add">+Add</button>
+
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label no-padding-right"></label>
+            <div class="col-sm-8">
+                <button type="submit" class="btn btn-sm btn-primary save-button" id="sub">
+                    <i class="ace-icon fa fa-check"></i>
+                    Save
+                </button>
+                <button type="button" id="close" onclick="window.close()" class="fm-button ui-state-default ui-corner-all fm-button-icon-left btn btn-sm btn-danger">  <i class="ace-icon fa fa-times"></i>Close</button>
+
+
+            </div>
+        </div>
+    </div>
+<script src="~/Scripts/Pages/InternalExam.js"></script>

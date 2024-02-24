@@ -1,0 +1,155 @@
+﻿@model  List<CUSrinagar.Models.AppUsers>
+@using CUSrinagar.Extensions
+
+@{
+    Layout = null;
+    var ISChecked = "";
+}
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th data-property="UserName">User Name</th>
+            <th data-property="FullName">Full Name</th>
+            <th data-property="Email">Email</th>
+            <th>Role</th>
+            <th data-property="Status">Status</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null)
+        {
+            int index = 0;
+            foreach (var row in Model)
+            {
+                if (row.UserRoles.Any(x => x.RoleID == CUSrinagar.Enums.AppRoles.PaperSetterBills))
+                {
+                    continue;
+                }
+
+                row.Password = row.Password.Decrypt();
+
+                <tr>
+                    <td>@row.UserName @Html.HiddenFor(i => i[index].Password) </td>
+
+                    <td>
+                        <a href='@Url.Action("EditSetter","Bill",new { area = "CUSrinagarAdminPanel", @id = row.User_ID })'>
+
+                            @row.FullName
+                        </a>
+                    </td>
+                    <td>@row.Email</td>
+                    <td>@string.Join(" , ", row.UserRoles.Select(x => x.RoleID.GetEnumDescription()))</td>
+                    <td>
+                        @if (row.Status)
+                        {
+                            ISChecked = "Active";
+                        }
+                        else
+                        { ISChecked = "In-Active"; }
+                        <label class='pull-center inline'>
+                            <span class='lbl middle'>@ISChecked</span>
+                        </label>
+                    </td>
+                    <td>
+                        <a href="javascript:void(0);" id='@row.User_ID' data-role="Setter" class="JSAddRole ace-icon fa fa-plus-circle green bigger-130" title="Add Paper Setter Role"></a>
+                        &nbsp;&nbsp;&nbsp;
+                        <a href="#ModalBank_@index" data-toggle="modal" title="Bank Account Details" class="fa fa-address-book purple bigger-130"></a>
+
+                        <div id="ModalBank_@index" class="modal fade">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h3 class="smaller lighter no-margin">
+                                            <i class="fa fa-refresh"></i>
+                                            &nbsp;Bank Details
+                                        </h3>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <div class="emsg2"></div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="control-label no-padding-right">
+                                                        Account holder :
+                                                    </label>
+                                                    @(row.FullName?.ToUpper()) (@row.UserName)
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label no-padding-right">
+                                                        Bank Name :
+                                                    </label>
+                                                    @(row.BankAccountDetail?.BankName?.ToUpper())
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label no-padding-right">
+                                                        Branch :
+                                                    </label>
+                                                    @(row.BankAccountDetail?.Branch?.ToUpper())
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label no-padding-right">
+                                                        Account No. :
+                                                    </label>
+                                                    @(row.BankAccountDetail?.AccountNo?.ToUpper())
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label no-padding-right">
+                                                        IFS Code :
+                                                    </label>
+                                                    @(row.BankAccountDetail?.IFSCode?.ToUpper())
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label no-padding-right">
+                                                        Created On :
+                                                    </label>
+                                                    @(row.BankAccountDetail?.CreatedOn.ToLongDateString())
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label no-padding-right">
+                                                        Updated On :
+                                                    </label>
+                                                    @(row.BankAccountDetail?.UpdatedOn?.ToLongDateString())
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label no-padding-right bold">
+                                                        Allow Editing :
+                                                    </label>
+                                                    @if (row.BankAccountDetail?.IsEditable ?? false)
+                                                    {
+                                                        ISChecked = "checked = 'checked'";
+                                                    }
+                                                    else
+                                                    { ISChecked = ""; }
+                                                    @if (row.BankAccountDetail != null)
+                                                    {
+                                                        <label class='pull-center inline'>
+                                                            <input class='ace ace-switch ace-switch-5 jsBankisEditable' data-user='@row.User_ID' type='checkbox' @ISChecked />
+                                                            <span class='lbl middle'></span>
+                                                        </label>
+                                                    }
+                                                </div>
+                                                <div class="form-group text-center">
+                                                    <button class="btn btn-sm btn-danger" data-dismiss="modal">
+                                                        <i class="ace-icon fa fa-times"></i>
+                                                        Close
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                index++;
+            }
+        }
+    </tbody>
+</table>
+

@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "Message";
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area= "CUStudentZone" })">Home</a>
+        </li>
+        <li>
+            <a href="#" class="active">Messages</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary js-pager-table">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Message
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        List of Queries
+                    </small>
+                    <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                        <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                    </span>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="search-box">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label>Message</label><br />
+                            <div class="jsDDLContainer">
+                                <input type="text" class="form-control jsfilterelement" placeholder="Enter message or part of message" data-column="MessageBody" data-operator="Contains" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="invisible">for styling purpose</label><br />
+                            <button type="button" class="btn btn-sm btn-primary fa-search-btn js-search"><i class="fa fa-search"></i>&nbsp;Search</button>
+                        </div>
+                        @*<div class="form-group">
+                            <label class="invisible">for styling purpose</label><br />
+                            <div class="btn-group">
+                                <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle">
+                                    Action
+                                    <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-default dropdown-info">
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a href="javascript:void(0)" class="js-exportToCSV" data-url="@Url.Action("MessageList","Message",new { area="CUSrinagarAdminPanel"})">
+                                            Download Excel(CSV)
+                                        </a>
+                                    </li>
+                                    <li class="divider"></li>
+                                </ul>
+                            </div>
+                        </div>*@
+                        @*<div class="form-group pull-right">
+                            <label class="invisible">for styling purpose</label><br />
+                            <a class="btn btn-success" href="@Url.Action("Create","Message")">Create</a>
+                        </div>*@
+                    </div>
+                </div>
+            </div>
+            <div class="js-table-content" data-url=@Url.Action("MessageList", "Message", new { area = "CUStudentZone" }) data-DefaultOrderByColumn="Date">
+            </div>
+            @{Html.RenderPartial("_JSPagerTableFooter");}
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJSFiles{
+    <script>
+        $(document).ready(function () {
+            $("#MessageListItem").addClass("active");
+            //$("#GrievanceListItem").addClass("active open");
+        });
+        loadpagertableWithDefaultParams();
+    </script>
+}
+
+
+

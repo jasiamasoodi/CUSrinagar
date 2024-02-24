@@ -1,0 +1,10 @@
+﻿@{
+    string Type = ViewBag.Type;
+    string childType = ViewBag.ChildType;
+    string childSubType = ViewBag.ChildSubType;
+    string typeName = Type == "Semester" ? (Type + "Name") : (Type + "_ID");
+    string key = (Type == "Semester") ? "Value":"Key";
+    var ValuesDDL = ViewBag.ChildValues!=null? ViewBag.ChildValues:new List<SelectListItem>();
+}
+@Html.DropDownList(typeName, new SelectList(ValuesDDL, "Value", "Text"),
+                                     "--Select--", new { @class = "chosen-select tag-input-style SearchDDL ParentDDL form-control jsfilterelement", @data_column = @typeName, @data_operator = "EqualTo", @data_ddltype = @childType, @data_ddlchildtype = @childSubType, @data_ddlsubchildtype = "" })

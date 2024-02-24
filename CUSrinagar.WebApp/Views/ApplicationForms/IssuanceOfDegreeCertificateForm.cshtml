@@ -1,0 +1,244 @@
+﻿@using CUSrinagar.Extensions;
+@using CUSrinagar.Enums
+@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc;
+
+@model CUSrinagar.Models.IssuingOfDegreeCertificate
+
+@{
+    ViewBag.Title = "Issuing of Degree Certificate Form - ";
+}
+<div id="Jspleasewait" style="display:none;position:fixed;background-color:rgba(0, 0, 0, 0.20);left:0;top:0;z-index:200;width:100%;height:100%">
+    <p style="font-size:30px;font-weight:bold;color:white;margin-top:20%;margin-left:41%">
+        Please wait...
+    </p>
+</div>
+<div id="response">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+</div>
+
+@*--------------------- forms goes below --------------*@
+@if (DateTime.Now.Date > new DateTime(9999, 01, 01))
+{
+    <div class="table-responsive panel" style="border: 2px dashed #a9bda5">
+        <h4 class="text-center" style="color:orangered">Process closed or will be allowed soon</h4>
+    </div>
+}
+else
+{
+    using (Html.BeginForm("IssuanceOfDegreeCertificateForm", "ApplicationForms", FormMethod.Post, new { @class = "frmidc" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(model => model.Student_ID)
+        @Html.HiddenFor(model => model.PrintProgramme)
+        @Html.HiddenFor(model => model.Course_ID)
+
+        <div class="table-responsive panel" style="border: 2px dashed #a9bda5">
+            <h4 class="text-center">Application Form for Issuing of Degree Certificate for passout batches Only</h4>
+            <hr />
+            <div class="text-center">
+                <img src="https://www.cusrinagar.edu.in/@Model.Photograph" width="120" />
+            </div>
+            <table class="table">
+                <tbody class="qualifyingExm">
+                    <tr>
+                        @Html.HiddenFor(model => model.DOB)
+                        <td class="text-success" style="width:300px"> 1. Name of the Applicant:</td>
+                        <th>
+                            @Html.DisplayFor(model => model.FullName) @Html.HiddenFor(model => model.FullName)
+                        </th>
+                    </tr>
+                    <tr>
+                        <td class="text-success"> 2. Father's Name</td>
+                        <td>@Html.DisplayFor(model => model.FathersName) @Html.HiddenFor(model => model.FathersName)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success"> 3. Registration Number</td>
+                        <td>@Html.DisplayFor(model => model.CUSRegistrationNo) @Html.HiddenFor(model => model.CUSRegistrationNo)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success"> 3. DOB</td>
+                        <td>@Model.DOB.ToLongDateString() @Html.HiddenFor(model => model.DOB)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success">College last attented </td>
+                        <td>@Html.DisplayFor(model => model.CollegeFullName) @Html.HiddenFor(model => model.CollegeFullName)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success">Course last attented </td>
+                        <th>@Html.DisplayFor(model => model.CourseFullName) @Html.HiddenFor(model => model.CourseFullName)</th>
+                    </tr>
+                    <tr>
+                        <td class="text-primary"> @Html.LabelFor(model => model.EmploymentStatus)</td>
+                        <td>
+                            @Html.DropDownListFor(model => model.EmploymentStatus,
+                new SelectList((IEnumerable<SelectListItem>)ViewBag.EmploymentStatus, "Value", "Text", Model.EmploymentStatus),
+                "", new { @style = "width:50%" })
+                            @Html.ValidationMessageFor(model => model.EmploymentStatus, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-primary"> @Html.LabelFor(model => model.PerusingHigherEduInAndProgramme)</td>
+                        <td>
+                            @Html.TextAreaFor(model => model.PerusingHigherEduInAndProgramme, new { @style = "width:80%", @rows = "3" })
+                            @Html.ValidationMessageFor(model => model.PerusingHigherEduInAndProgramme, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-primary"> @Html.LabelFor(model => model.Specializations)</td>
+                        <td>
+                            @Html.TextAreaFor(model => model.Specializations, new { @style = "width:80%", @rows = "3" })
+                            @Html.ValidationMessageFor(model => model.Specializations, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+                        </td>
+                    </tr>
+                    <tr><th colspan="2" class="text-center"><h4>Presently working Phone and Email</h4></th></tr>
+                    <tr>
+                        @Html.Hidden("StudentAddress.Address_ID", Model.StudentAddress.Address_ID)
+                        @Html.Hidden("StudentAddress.Student_ID", Model.StudentAddress.Student_ID)
+                        @Html.Hidden("StudentAddress.PProgramme", (short)Model.PrintProgramme)
+
+                        <td class="text-primary"> @Html.LabelFor(model => model.StudentAddress.Mobile)</td>
+                        <td>
+                            @Html.TextBoxFor(model => model.StudentAddress.Mobile, new { @style = "width:100px", @maxlength = "10", @onkeypress = "return numbersOnly(event);", @title = "Provide a valid Mobile No. to enable University to send alerts, important communications etc" })
+                            @Html.ValidationMessageFor(model => model.StudentAddress.Mobile, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-primary">@Html.LabelFor(model => model.StudentAddress.Email)</td>
+                        <td>
+                            @Html.TextBoxFor(model => model.StudentAddress.Email, new { @style = "width:80%", @maxlength = "70" })
+                            @Html.ValidationMessageFor(model => model.StudentAddress.Email, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2" class="text-center">
+                            <h4>
+                                Details of Qualifying Examination previously passed<br /><span style="color:orangered">(On basis of which Admission was obtained like 12th/UG/PG/B.Ed/Diploma)</span>
+                            </h4>
+                        </th>
+                    </tr>
+                    <tr>
+                        @Html.HiddenFor(model => model.StudentAddress.Address_ID)
+                        <td colspan="2" class="padding-0 margin-0">
+                            <table class="col-sm-12">
+                                <thead style="background-color:white">
+                                    <tr>
+                                        <th class=table-acedemic-th>Exam<span class="required"> *</span></th>
+                                        <th class=table-acedemic-th>Stream<span class="required"> *</span></th>
+                                        <th class=table-acedemic-th>Subjects in which appeared (Full Detail)<span class="required"> *</span></th>
+                                        <th class=table-acedemic-th>Session<span class="required"> *</span></th>
+                                        <th class=table-acedemic-th>Year<span class="required"> *</span></th>
+                                        <th class=table-acedemic-th>Roll No<span class="required"> *</span></th>
+                                        <th class=table-acedemic-th>Max Marks<span class="required"> *</span></th>
+                                        <th class=table-acedemic-th>Marks Obt<span class="required"> *</span></th>
+                                        <th class=table-acedemic-th>Board/University<span class="required"> *</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody class=table-acedemic-body>
+                                    @Html.HiddenFor(model => model.StudentPreviousQualification.Qualification_ID)
+                                    @Html.Hidden("StudentPreviousQualification.ExamName", Model.StudentPreviousQualification.ExamName)
+                                    <tr>
+                                        <th>
+                                            <span class="required errenmsg">
+                                            </span>
+                                            @Html.DropDownList("Exam", new SelectList(((IEnumerable<SelectListItem>)ViewBag.ExamNamesDDL), "Value", "Text", Model.StudentPreviousQualification.ExamName), string.Empty, new { @class = "form-control width100" })
+                                        </th>
+                                        @if ((Model.PrintProgramme == PrintProgramme.UG || Model.PrintProgramme == PrintProgramme.IH)
+                                            && ((List<SelectListItem>)ViewBag.ExamNamesDDL).Any(x => x.Value.ToLower().Contains("12th")))
+                                        {
+                                            <td>
+                                                <span class="required">
+                                                    @Html.ValidationMessageFor(model => model.StudentPreviousQualification.Stream)
+                                                </span>
+                                                @Html.DropDownListFor(model => model.StudentPreviousQualification.Stream, new SelectList(((IEnumerable<SelectListItem>)ViewBag.I2thStreamDDL), "Value", "Text", Model.StudentPreviousQualification.Session), string.Empty, new { @class = "form-control width100" })
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                <span class="required">
+                                                    @Html.ValidationMessageFor(model => model.StudentPreviousQualification.Stream)
+                                                </span>
+                                                @Html.TextBoxFor(model => model.StudentPreviousQualification.Stream, new { @class = "form-control width100", @maxlength = "150", @onkeypress = "return forAddressOnly(event);", @title = "e.g BA Or BSc Or B.Ed", @placeholder = "e.g BA Or B.Ed" })
+                                            </td>
+                                        }
+                                        <td>
+                                            <span class="required">
+                                                @Html.ValidationMessageFor(model => model.StudentPreviousQualification.Subjects)
+                                            </span>
+                                            @Html.TextAreaFor(model => model.StudentPreviousQualification.Subjects, new { @class = "form-control width100", @rows = "4", @maxlength = "240", @onkeypress = "return forAddressOnly(event);", @title = "Subjects separated by comma" })
+                                        </td>
+                                        <td>
+                                            <span class="required">
+                                                @Html.ValidationMessageFor(model => model.StudentPreviousQualification.Session)
+                                            </span>
+                                            @Html.DropDownListFor(model => model.StudentPreviousQualification.Session, new SelectList(((IEnumerable<SelectListItem>)ViewBag.Session), "Value", "Text", Model.StudentPreviousQualification.Session), string.Empty, new { @class = "form-control width100" })
+                                        </td>
+                                        <td>
+                                            <span class="required">
+                                                @Html.ValidationMessageFor(model => model.StudentPreviousQualification.Year)
+                                            </span>
+                                            @Html.TextBoxFor(model => model.StudentPreviousQualification.Year, new { @class = "form-control width100", @maxlength = "4", @onkeypress = "return numbersOnly(event);", @title = "Year Of Passing" })
+                                        </td>
+                                        <td>
+                                            <span class="required">
+                                                @Html.ValidationMessageFor(model => model.StudentPreviousQualification.RollNo)
+                                            </span>
+                                            @Html.TextBoxFor(model => model.StudentPreviousQualification.RollNo, new { @class = "form-control width100", @maxlength = "80", @onkeypress = "return forAdmissionRollNo(event);", @title = "RollNo" })
+                                        </td>
+                                        <td>
+                                            <span class="required">
+                                                @Html.ValidationMessageFor(model => model.StudentPreviousQualification.MaxMarks)
+                                            </span>
+                                            @Html.TextBoxFor(model => model.StudentPreviousQualification.MaxMarks, new { @class = "form-control width100 jsvalmm", @maxlength = "4", @onkeypress = "return numbersOnly(event);", @title = "Maximum Marks" })
+                                        </td>
+                                        <td>
+                                            <span class="required">
+                                                @Html.ValidationMessageFor(model => model.StudentPreviousQualification.MarksObt)
+                                            </span>
+                                            @Html.TextBoxFor(model => model.StudentPreviousQualification.MarksObt, new { @class = "form-control width100 jsvalminm", @maxlength = "7", @onkeypress = "return floatNumbersOnly(event);", @title = "Marks Obtained" })
+                                        </td>
+
+                                        <td>
+                                            <span class="required">
+                                                @Html.ValidationMessageFor(model => model.StudentPreviousQualification.ExamBody)
+                                            </span>
+                                            @Html.DropDownListFor(model => model.StudentPreviousQualification.ExamBody, new SelectList(((IEnumerable<SelectListItem>)ViewBag.Boards), "Value", "Text", Model.StudentPreviousQualification.ExamBody), string.Empty, new { @class = "form-control width100" })
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2" class="text-center">Amount Rs 400 is non-refundable</th>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="form-group col-sm-12">
+                <div class="clear bold text-center">
+                    @Html.Captcha("", "Enter Verification Code", 4, " Required", true)
+                </div>
+                <br/>
+                <div class="text-center danger col-sm-12" style="font-size:18px;color:black;background-color:#d9d3ad;padding:10px">It is recommended to check the details carefully before making payment, after payment no changes are allowed.</div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <p style="text-align:center;">
+                <span id="btn">
+                    <input type="submit" value="Apply & Make Payment" id="jsSave" class="btn btn-success" style="color:white !important" />
+                </span>
+            </p>
+        </div>
+    }
+}
+
+@section PageSpecificJS{
+    @Scripts.Render("~/bundles/Libraries/jqueryval")
+    <script src=@Url.Content("~/Content/ThemePublic/Libraries/disableBack.js")></script>
+    <script src=@Url.Content("~/Content/ThemePublic/ApplicationForms/IssuingOfDegreeCertificateForm.js")></script>
+}

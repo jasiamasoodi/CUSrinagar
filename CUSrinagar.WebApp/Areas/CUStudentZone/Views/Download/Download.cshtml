@@ -1,0 +1,42 @@
+﻿@using CUSrinagar.Extensions;
+@{
+    ViewBag.Title = "Downloads";
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area="CUStudentZone"})">Home</a>
+        </li>
+        <li>
+            <a href="#" class="active">Downloads</a>
+        </li>
+    </ul>
+}
+<div class="page-header">
+    <h1>
+        &nbsp;&nbsp;
+        <i class="fa fa-credit-card"></i> Downloads
+    </h1>
+</div>
+<div class="page-content">
+    <div class="row">
+        <div class="col-sm-12">
+             
+            <a class="btn btn-primary" href="@Url.Action("PrintMarksSheet", "Download")" target="_blank"><i class="fa fa-print"> Print MarksSheet</i></a>
+
+            <a class="btn btn-primary" href="@Url.Action("PrintTranscript", "Download")" target="_blank"><i class="fa fa-print"> Print Provisional Transcript</i></a>
+
+            <a class="btn btn-primary" href="@Url.Action("PrintDegreeCertificate", "Download")" target="_blank"><i class="fa fa-print"> Download Sample Degree Certificate</i></a>
+
+        </div>
+    </div>
+</div>
+
+
+
+@section PageSpecificJSFiles
+{
+    <script>
+    </script>
+}

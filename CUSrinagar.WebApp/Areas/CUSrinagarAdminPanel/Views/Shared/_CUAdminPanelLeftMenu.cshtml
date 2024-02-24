@@ -1,0 +1,1480 @@
+﻿<ul class="nav nav-list">
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Statistics.ToString()) || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()))
+    {
+        <li id="StatisticsSection" class="hover">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text">
+                    Statistics
+                </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li id="CourseStatistics " class="hover">
+                    <a href='@Url.Action("Enrollment", "Statistics", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        Enrollment
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li id="CourseStatistics " class="hover">
+                    <a href='@Url.Action("CategoryWise", "Statistics", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        Category Wise
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li id="CourseDistrictStatistics " class="hover">
+                    <a href='@Url.Action("DistrictWise", "Statistics", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        District Wise
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+                <li id="CourseDistrictStatistics " class="hover">
+                    <a href='@Url.Action("ExaminationFormWigets", "Statistics", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        Examination Forms
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li id="CourseDistrictStatistics " class="hover">
+                    <a href='@Url.Action("AdmissionFormWigets", "Statistics", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        Admissions
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+                <li id="AdmissionsStatistics " class="hover">
+                    <a href='@Url.Action("FeeStructureList", "FeeStructure", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        Fee Structure Wise
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+                <li id="AdmissionsStatistics " class="hover">
+                    <a href='@Url.Action("NewAdmissionStatistics", "Statistics", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        New Admissions
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li id="CourseDistrictStatistics " class="hover">
+                    <a href='@Url.Action("GrievanceWidgets", "Statistics", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        Grievances
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+                <li id="ReEvaluationsStatistics " class="hover">
+                    <a href='@Url.Action("ReEvaluationStatistics", "Statistics", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        ReEvaluations
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+                <li id="PaymentStatistics " class="hover">
+                    <a href='@Url.Action("PaymentStatistics", "Statistics", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        Payment Statistics
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+
+                <li class="hover">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        <span class="menu-text">
+                            Awards
+                        </span>
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+                    <b class="arrow"></b>
+                    <ul class="submenu">
+                        <li class="hover" id="CourseDistrictStatistics">
+                            <a href='@Url.Action("AwardStatistics", "Statistics", new { area = "CUSrinagarAdminPanel" })'>
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                <span class="menu-text"> Awards </span>
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="ac">
+                            <a href='@Url.Action("ResultPendingLists", "PendingLists", new { area = "CUSrinagarAdminPanel" })'>
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Pending-Lists
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                    </ul>
+                </li>
+
+                <li id="ProfessorStatistics " class="hover">
+                    <a href='@Url.Action("ProfessorList", "ProfessorStatistics", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        Class Statistics
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+                @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.ResultGazette.ToString()))
+                {
+                    <li id="ResultGazette " class="hover">
+                        <a href='@Url.Action("ResultGazette", "ResultGazette", new { area = "CUSrinagarAdminPanel" })'>
+                            <i class="menu-icon "></i>
+                            Result Gazette
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                }
+
+            </ul>
+        </li>
+
+      
+
+
+    }
+
+
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()))
+    {
+        <li class="hover">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text">
+                    Courses
+                </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li class="hover" id="">
+                    <a href=@Url.Action("Courses", "Course", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        <span class="menu-text"> Courses </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                @*<li class="ac">
+                        <a href=@Url.Action("Subjects", "Subject", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            <span class="menu-text"> Subjects </span>
+                        </a>
+                    </li>*@
+                <li class="ac">
+                    <a href='@Url.Action("Combination", "Combination", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        All Combinations
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li class="nc">
+                    <a href='@Url.Action("Index", "Combination", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Add New Combination
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li class="hover" id="">
+                    <a href=@Url.Action("Subjects", "Subject", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        <span class="menu-text"> Subject List </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li class="hover" id="">
+                    <a href=@Url.Action("SubjectMarksStructure", "SubjectMarksStructure", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        <span class="menu-text">Marks Structure</span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+    }
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.eGovCUET.ToString()))
+    {
+        <li class="hover">
+            <a href="@Url.Action("Search", "EGovCUET", new { area = "CUSrinagarAdminPanel" })">
+                @*class="dropdown-toggle">*@
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text">
+                    eGov CUET Search
+                </span>
+            </a>
+            @*<b class="arrow"></b>
+                <ul class="submenu">
+                    <li class="hover" id="">
+                        <a href=@Url.Action("Search", "EGovCUET", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            <span class="menu-text"> Search</span>
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                </ul>*@
+        </li>
+    }
+
+
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.SubjectList.ToString()))
+    {
+        <li class="hover" id="">
+            <a href=@Url.Action("Subjects", "Subject", new { area = "CUSrinagarAdminPanel" })>
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text"> Subject List </span>
+            </a>
+            <b class="arrow"></b>
+        </li>
+    }
+
+
+
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.Enrollment.ToString()))
+    {
+        <li class="hover" id="">
+            <a href=@Url.Action("Index", "Enrollment", new { area = "CUSrinagarAdminPanel" })>
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text"> Enrollment </span>
+            </a>
+            <b class="arrow"></b>
+        </li>
+    }
+
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Salary.ToString()))
+    {
+        <li class="hover">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text">
+                    Employee
+                </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+
+                <li class="nc">
+                    <a href='@Url.Action("EditSalarySettings", "Salary", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Salary Settings
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li class="hover" id="">
+                    <a href=@Url.Action("List", "Employee", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        <span class="menu-text"> List </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+                <li class="ac">
+                    <a href='@Url.Action("EmployeeList", "Salary", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Employee Salary
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+
+
+
+            </ul>
+        </li>
+    }
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_CAO.ToString()) || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Salary.ToString()))
+    {
+        <li class="hover">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text">
+                    Salary
+                </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Salary.ToString()))
+                {
+
+                    <li class="hover" id="">
+                        <a href=@Url.Action("CurrentSalaryList", "Salary", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            <span class="menu-text"> Generate Salary </span>
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                }
+                <li class="hover" id="">
+                    <a href=@Url.Action("SalaryList", "Salary", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        <span class="menu-text">Salary Bill </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+                <li class="hover" id="">
+                    <a href=@Url.Action("EmployeeHistory", "Salary", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        <span class="menu-text">Employee Salary History</span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+    }
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()) || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_DeputyController.ToString()))
+    {
+
+        <li class="hover" id="">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text">
+                    Users
+                </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li class="hover" id="">
+                    <a href=@Url.Action("UserList", "UserProfile", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        <span class="menu-text"> Users List</span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li class="hover">
+                    <a href='@Url.Action("AssignProfessorCRClasses","UserProfile",new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Assign Classes
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+            </ul>
+        </li>
+    }
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()))
+    {
+        <li class="hover" id="SyllabusSection">
+            <a href=@Url.Action("Index", "Syllabus", new { area = "CUSrinagarAdminPanel" })>
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text"> Syllabus </span>
+            </a>
+            <b class="arrow"></b>
+        </li>
+    }
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_OfficeAssistant.ToString()))
+    {
+        <li class="hover" id="">
+            <a href=@Url.Action("Index", "Syllabus", new { area = "CUSrinagarAdminPanel" })>
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text"> Syllabus </span>
+            </a>
+            <b class="arrow"></b>
+        </li>
+
+    }
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_TransScript.ToString()) || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.View_TransScript.ToString()))
+    {
+        <li class="hover" id="">
+            <a href=@Url.Action("TranscriptSearch", "Transcript", new { area = "CUSrinagarAdminPanel" })>
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text">Transcript</span>
+            </a>
+            <b class="arrow"></b>
+        </li>
+    }
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_TransScript.ToString()))
+    {
+        <li class="hover" id="">
+            <a title="Degree Certificate" href=@Url.Action("DegreeCertificate", "DegreeCertificate", new { area = "CUSrinagarAdminPanel" })>
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text">Degree Certif.</span>
+            </a>
+            <b class="arrow"></b>
+        </li>
+    }
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Notification.ToString()) ||
+        HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()) ||
+        HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Registrar.ToString()))
+    {
+
+        <li class="hover" id="NotificationsSection">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text"> Notification </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu" id="CentersSection">
+                @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Notification.ToString())
+                    || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()))
+                {
+                    <li class="hover" id="NotificationSection">
+                        <a href=@Url.Action("Index", "Notification", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            <span class="menu-text"> Notifications </span>
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="hover" id="NotificationSection">
+                        <a href=@Url.Action("MarqueeText", "Notification", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            <span class="menu-text"> Marquee Text </span>
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                }
+                @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Registrar.ToString())
+                   || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString())
+                   || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Notification.ToString()))
+                {
+                    <li class="hover" id="NotificationSection">
+                        <a href=@Url.Action("Index", "EntranceLists", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            <span class="menu-text"> Entrance Lists</span>
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                }
+            </ul>
+        </li>
+    }
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_StudentInfo.ToString()) || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_StudentProfile.ToString()))
+    {
+        <li class="hover" id="RegistrationSection">
+            <a href=@Url.Action( "SearchStudent","StudentInfo", new { area = "CUSrinagarAdminPanel" })>
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text" title="Full Student Info">Student Info </span>
+            </a>
+
+            <b class="arrow"></b>
+        </li>
+    }
+
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_FileTracking.ToString()))
+    {
+        <li class="hover" id="FileTrackingListItem">
+            <a href=@Url.Action("AllFiles", "FileTracking", new { area = "CUSrinagarAdminPanel" })>
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text"> File Tracking </span>
+            </a>
+            <b class="arrow"></b>
+        </li>
+    }
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Registrar.ToString())
+          || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString())
+          || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_RR.ToString())
+          || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Statistics.ToString()))
+    {
+        <li class="hover" id="SeatAllocationSection">
+            <a href=@Url.Action("GenerateList", "SeatAllocation", new { area = "CUSrinagarAdminPanel" })>
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text"> Selection List </span>
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li id="StatisticsSection " class="hover">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text">
+                    Admission
+                </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                @*<li id="PaymentStatistics "class="hover">
+                        <a href='@Url.Action("UploadedCertificateIH", "Admission", new { area = "CUSrinagarAdminPanel" })'>
+                            <i class="menu-icon "></i>
+                            IG/Honor's/Prof
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    <li id="CourseDistrictStatistics "class="hover">
+                        <a href='@Url.Action("CollegePreference", "Admission", new { area = "CUSrinagarAdminPanel" })'>
+                            <i class="menu-icon "></i>
+                            UG
+                        </a>
+                        <b class="arrow"></b>
+                    </li>*@
+                <li id=" " class="hover">
+                    <a href='@Url.Action("PGCertificateCheck", "Admission", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        Adm Certificates
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li id=" " class="hover">
+                    <a title="Register Of Students" href='@Url.Action("StudentsRegister", "Admission", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        Register of Stds
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_RR.ToString()))
+                {
+                    <li class="hover">
+                        <a href='@Url.Action("Report", "RR", new { area = "CUSrinagarAdminPanel" })'>
+                            <i class="menu-icon fa fa-file-text"></i>
+                            Download RR
+                        </a>
+                    </li>
+                }
+                @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()))
+                {
+                    <li class="hover" id="">
+                        <a href=@Url.Action("AssignRegistrationNumbers", "Registration", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            <span class="menu-text">Assign Regn.Nos. </span>
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                }
+            </ul>
+        </li>
+
+    }
+
+    @*@if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()))
+        {
+
+            <li class="hover"  id="SeatAllocationSection">
+                <a title="Update Student Status" href=@Url.Action("UpdateStudentStatus", "SeatAllocation", new { area = "CUSrinagarAdminPanel" })>
+                    <i class="menu-icon fa fa-caret-right"></i>
+                    <span class="menu-text">Update Status </span>
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li class="hover"  id="SeatAllocationSection">
+                <a title="Update Selection List" href=@Url.Action("UpdateSelectionList", "SeatAllocation", new { area = "CUSrinagarAdminPanel" })>
+                    <i class="menu-icon fa fa-caret-right"></i>
+                    <span class="menu-text">Update Sel. List </span>
+                </a>
+                <b class="arrow"></b>
+            </li>
+        }*@
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_CAO.ToString()))
+    {
+        <li id="StatisticsSection " class="hover">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text">
+                    Statistics
+                </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li id="PaymentStatistics " class="hover">
+                    <a href='@Url.Action("PaymentStatistics", "Statistics", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        Payments Statistics
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li id="CourseDistrictStatistics " class="hover">
+                    <a href='@Url.Action("ExaminationFormWigets", "Statistics", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        Examinations Statistics
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li id="fees " class="hover">
+                    <a href='@Url.Action("FeeStructureList", "FeeStructure", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        Fee Structure Wise
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+    }
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()))
+    {
+        <li class="dt hover">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text">
+                    Examination
+                </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li class="hover" id="">
+                    <a href=@Url.Action("Create", "ExaminationWhiteList", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        <span class="menu-text"> New WhiteList </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+                <li class="hover" id="">
+                    <a href=@Url.Action("Applications", "ExaminationWhiteList", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        View WhiteListed
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li class="hover" id="">
+                    <a href='@Url.Action("ExaminationForms", "ExamFormSetting", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon fa fa-caret-right"></i>Examination Forms
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+                <li id="ReEvaluationXeroxListListItem" class="" title="ReEvaluation/Xerox Setting">
+                    <a href='@Url.Action("ReEvaluationXerox", "DeanResult", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        ReEval/Xerox
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+    }
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()) ||
+        HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Registrar.ToString()) ||
+        HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_EController.ToString()))
+    {
+        <li class="hover" id="SemesterCentersSection">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text"> Exam Centers </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu" id="CentersSection">
+                @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()) ||
+                    HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_EController.ToString()))
+                {
+                    <li class="hover">
+                        <a href=@Url.Action("Centers", "SemesterCenters", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            <span class="menu-text"> Semester Centers </span>
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                }
+                @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()) ||
+                   HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Registrar.ToString()))
+                {
+                    <li class="hover" id="EntranceSection">
+                        <a href=@Url.Action("EntranceCenters", "Entrance", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            <span class="menu-text"> Entrance Centers</span>
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="hover" id="EntranceSection">
+                        <a href=@Url.Action("VerifyRR", "Entrance", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            <span class="menu-text"> Verify RR</span>
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                }
+            </ul>
+        </li>
+
+    }
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_ReEvaluations.ToString()))
+    {
+        <li id="ReEvaluationXeroxListItem " class="hover">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-bars"></i>
+                <span class="menu-text">
+                    Student
+                </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li id="ReEvaluationXeroxListListItem" class="" title="ReEvaluation/Xerox Setting">
+                    <a href='@Url.Action("ReEvaluationXerox", "DeanResult", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        ReEval/Xerox
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+        <li class="hover" id="QuestionaireSection">
+            <a href=@Url.Action("QuestionaireCountList", "Questionaire", new { area = "CUSrinagarAdminPanel" })>
+                <i class="menu-icon fa fa-question-circle"></i>
+                <span class="menu-text"> Questionaire</span>
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="hover" id="">
+            <a href=@Url.Action("FindSubjectClashforDateSheets", "DeanResult", new { area = "CUSrinagarAdminPanel" })>
+                <i class="menu-icon fa fa-calendar"></i>
+                <span class="menu-text"> Create Datesheet</span>
+            </a>
+            <b class="arrow"></b>
+        </li>
+    }
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Dean.ToString()))
+    {
+        <li id="StatisticsSection " class="hover">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text">
+                    Statistics
+                </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li id="CourseStatistics " class="hover">
+                    <a href='@Url.Action("Enrollment", "Statistics", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        Enrollment
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li id="CategoryGenderWise " class="hover">
+                    <a href='@Url.Action("CategoryWise", "Statistics", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        Category Wise
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li id="CourseDistrictStatistics " class="hover">
+                    <a href='@Url.Action("DistrictWise", "Statistics", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        District Wise
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+                <li id="CourseDistrictStatistics " class="hover">
+                    <a href='@Url.Action("AdmissionFormWigets", "Statistics", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        Admissions
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+
+                <li id="AdmissionsStatistics " class="hover">
+                    <a href='@Url.Action("NewAdmissionStatistics", "Statistics", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        New Admissions
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+
+                <li id="PaymentStatistics " class="hover">
+                    <a href='@Url.Action("PaymentStatistics", "Statistics", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        Payment Statistics
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+
+        <li class="hover" id="SyllabusSection">
+            <a href=@Url.Action("Index", "Syllabus", new { area = "CUSrinagarAdminPanel" })>
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text"> Syllabus </span>
+            </a>
+            <b class="arrow"></b>
+        </li>
+
+
+        <li class="ac">
+            <a href='@Url.Action("Combination", "Combination", new { area = "CUSrinagarAdminPanel" })'>
+                <i class="menu-icon fa fa-caret-right"></i>
+                All Combinations
+            </a>
+            <b class="arrow"></b>
+        </li>
+    }
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Evaluator.ToString()))
+    {
+        <li class="ad">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-bars"></i>
+                <span class="menu-text">
+                    Awards
+                </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li class="ug">
+                    <a href='@Url.Action("Award", "Award", new { Programme = CUSrinagar.Enums.Programme.UG, area = "CUSrinagarAdminPanel" , MarksFor =CUSrinagar.Enums.MarksFor.Theory})'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        UG Award
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li class="ig">
+                    <a href='@Url.Action("Award", "Award", new { Programme = CUSrinagar.Enums.Programme.IG, area = "CUSrinagarAdminPanel", MarksFor =CUSrinagar.Enums.MarksFor.Theory })'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        IG Award
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li class="ig">
+                    <a href='@Url.Action("Award", "Award", new { Programme = CUSrinagar.Enums.Programme.HS, area = "CUSrinagarAdminPanel", MarksFor =CUSrinagar.Enums.MarksFor.Theory })'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Honor's Award
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li class="pg">
+                    <a href='@Url.Action("Award", "Award", new { Programme = CUSrinagar.Enums.Programme.Professional, area = "CUSrinagarAdminPanel", MarksFor =CUSrinagar.Enums.MarksFor.Theory })'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Professional Award
+                    </a><b class="arrow"></b>
+                </li>
+                <li class="pg">
+                    <a href='@Url.Action("Award", "Award", new { Programme = CUSrinagar.Enums.Programme.Engineering, area = "CUSrinagarAdminPanel", MarksFor =CUSrinagar.Enums.MarksFor.Theory })'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Engineering Award
+                    </a><b class="arrow"></b>
+                </li>
+                <li class="pg">
+                    <a href='@Url.Action("Award", "Award", new { Programme = CUSrinagar.Enums.Programme.PG, area = "CUSrinagarAdminPanel", MarksFor =CUSrinagar.Enums.MarksFor.Theory })'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        PG Award
+                    </a><b class="arrow"></b>
+                </li>
+
+            </ul>
+        </li>
+
+        @*<li class="hover">
+                <a href="#" class="dropdown-toggle">
+                    <i class="menu-icon fa fa-caret-right"></i>
+                    <span class="menu-text"> Result </span>
+                    <b class="arrow fa fa-angle-down"></b>
+                </a>
+                <b class="arrow"></b>
+                <ul class="submenu">
+                    <li class="hover">
+                        <a href=@Url.Action("RapidEntry", "Result", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Rapid Entry
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                </ul>
+            </li>*@
+
+    }
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Coordinator.ToString()))
+    {
+        <li class="augf">
+            <a href='@Url.Action("Instructions","UserProfile",new { area = "CUSrinagarAdminPanel"})'>
+                <i class="menu-icon fa fa-caret-right"></i>
+                Instructions
+            </a>
+        </li>
+        <li class="hover" id="UserProfileSection">
+            <a href=@Url.Action("UserListEvalvator", "UserProfile", new { area = "CUSrinagarAdminPanel" })>
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text"> Users </span>
+            </a>
+            <b class="arrow"></b>
+        </li>
+    }
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_PaymentReconcile.ToString()))
+    {
+        <li class="hover" id="BillDeskSection">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text"> BillDesk </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li class="hover">
+                    <a href=@Url.Action("SearchPayments", "BillDesk", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Payment Status
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+    }
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()))
+    {
+        @*<li class="lf">
+                <a href='@Url.Action("FormList", "Migration", new { area = "CUSrinagarAdminPanel" })'>
+                    <i class="menu-icon fa fa-caret-right"></i>
+                    Migration Forms
+                </a>
+            </li>*@
+        <li class="hover" id="SettingSection">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text"> Settings </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li class="hover">
+                    <a href=@Url.Action("CombinationSetting", "CombinationSetting", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Combination Setting
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li class="hover">
+                    <a title="Subject combination setting" href=@Url.Action("SubjectCombinationSetting", "CombinationSetting", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Subject Comb Setting
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li class="hover" id="ExamFormSettingListItem">
+                    <a href=@Url.Action("ExaminationSetting", "ExamFormSetting", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Exam Form Settings
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li class="hover">
+                    <a href=@Url.Action("ReEvaluationSetting", "ReEvaluationSetting", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        ReEvaluation/Xerox
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+                <li class="hover" id="">
+                    <a href=@Url.Action("RegularAdmSettings", "AdmissionSettings", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        RegularAdmission Settings
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+
+                @if ((HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString())) || (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.AwardSettings.ToString())))
+                {
+                    <li class="hover" id="AwardSettingListItem">
+                        <a href=@Url.Action("Index", "AwardSetting", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Award Subject Settings
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="hover" id="AwardFilterSettingListItem">
+                        <a href=@Url.Action("AwardFilters", "AwardSetting", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Award Settings
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                }
+            </ul>
+        </li>
+    }
+    @if ((HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()) || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.RapidEntry.ToString())))
+    {
+        <li class="hover">
+            <a href=@Url.Action("RapidEntry", "Result", new { area = "CUSrinagarAdminPanel" })>
+                <i class="menu-icon fa fa-caret-right"></i>
+                Rapid Entry
+            </a>
+            <b class="arrow"></b>
+        </li>
+    }
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()) || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Results.ToString()))
+    {
+        <li class="hover">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text"> Result </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+
+                <li class="hover">
+                    <a href=@Url.Action("Result", "Result", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        List
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+                @*<li class="hover">
+                        <a href=@Url.Action("SubjectWise", "Result", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Subject Wise
+                        </a>
+                        <b class="arrow"></b>
+                    </li>*@
+                @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Statistics.ToString()) || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()))
+                {
+
+                    <li class="hover">
+                        <a href=@Url.Action("Statistics", "Result", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Statistics
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                }
+                @if ((HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString())) || (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.PublishResult.ToString())))
+                {
+                    @*<li class="hover">
+                            <a href=@Url.Action("Statistics", "Result", new { area = "CUSrinagarAdminPanel" })>
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Statistics
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="hover">
+                            <a href=@Url.Action("CourseWiseStatistics", "Result", new { area = "CUSrinagarAdminPanel" })>
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Course Wise Statistics
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="hover">
+                            <a href=@Url.Action("SubjectWiseStatistics", "Result", new { area = "CUSrinagarAdminPanel" })>
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Subject Wise Statistics
+                            </a>
+                            <b class="arrow"></b>
+                        </li>*@
+
+                    @*<li class="hover">
+                            <a href=@Url.Action("Gazette", "Gazette", new { area = "CUSrinagarAdminPanel" })>
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Gazette
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="hover">
+                            <a href=@Url.Action("SubjectWise", "Gazette", new { area = "CUSrinagarAdminPanel" })>
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Gazette Subject Wise
+                            </a>
+                            <b class="arrow"></b>
+                        </li>*@
+                    <li class="hover">
+                        <a href="#" class="dropdown-toggle">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            <span class="menu-text">  Result Notification </span>
+                            <b class="arrow fa fa-angle-down"></b>
+                        </a>
+                        <b class="arrow"></b>
+                        <ul class="submenu">
+                            <li class="hover">
+                                <a href=@Url.Action("ResultNotification", "ResultNotification", new { area = "CUSrinagarAdminPanel" })>
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    List
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+
+                            <li class="hover">
+                                <a href=@Url.Action("ValidateResult", "ResultNotification", new { area = "CUSrinagarAdminPanel" })>
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    Check Awards
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                            <li class="hover">
+                                <a href=@Url.Action("ResultBacklogBatches", "ResultBacklogBatches", new { area = "CUSrinagarAdminPanel" })>
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    Check Backlogs
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                            <li class="hover">
+                                <a href=@Url.Action("CreateResultNotification", "ResultNotification", new { area = "CUSrinagarAdminPanel" })>
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    Publish Result
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </ul>
+                    </li>
+
+                }
+
+                <li class="hover">
+                    <a href=@Url.Action("ResultHistory", "ResultHistory", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Result History
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li class="hover">
+                    <a href=@Url.Action("ResultMeritList", "ResultMeritList", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Result Merit List
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+
+
+        if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()) || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.ResultRevaluation.ToString()) || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.ExtPendingList.ToString()))
+        {
+            <li>
+                <a href="#" class="dropdown-toggle">
+                    <i class="menu-icon fa fa-caret-right"></i>
+                    <span class="menu-text"> Re-Evaluation</span>
+                    <b class="arrow fa fa-angle-down"></b>
+                </a>
+                <b class="arrow"></b>
+                <ul class="submenu">
+                    <li class="hover">
+                        <a href=@Url.Action("CreateRevaluationtNotification", "Revaluation", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Create
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="hover">
+                        <a href=@Url.Action("UpdateRevaluationtResult", "Revaluation", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Update
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.ExtPendingList.ToString())
+                    || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()))
+                    {
+                        <li class="hover">
+                            <a href=@Url.Action("ResultPendingLists", "PendingLists", new { area = "CUSrinagarAdminPanel" })>
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                External Pending List
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                    }
+                </ul>
+            </li>
+        }
+    }
+
+
+
+
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString())
+       || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.DegreeCertificate.ToString()))
+    {
+        <li class="hover">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text"> MarksSheet </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()))
+                {
+                    <li class="hover">
+                        <a href=@Url.Action("Result", "MarksSheet", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Generate B.Tech Marks-Sheet
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+
+
+                    <li class="hover">
+                        <a href=@Url.Action("List", "MarksSheet", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            List
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                }
+            </ul>
+        </li>
+    }
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString())
+        || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.DegreeCertificate.ToString()))
+    {
+        <li class="hover">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text"> Transcript </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()))
+                {
+                    <li class="hover">
+                        <a href=@Url.Action("TranscriptDegreeSettingsSearch", "Transcript", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Transcript/Degree Settings
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="hover">
+                        <a href=@Url.Action("SetTranscriptParameter", "Transcript", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Generate
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="hover">
+                        <a href=@Url.Action("TranscriptSearch", "Transcript", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            List
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+
+                }
+
+                <li class="hover" id="">
+                    <a href=@Url.Action("DegreeCertificate", "DegreeCertificate", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        <span class="menu-text">Degree Certificate</span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li class="hover">
+                    <a href=@Url.Action("DegreeCertificateEng", "DegreeCertificateEng", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>Engineering Degree Certificate
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+    }
+
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_GrievanceFeedback.ToString())
+        || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString())
+        || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_DeputyController.ToString())
+        || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.Feedback.ToString()))
+    {
+        <li id="StatisticsSection " class="hover">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text">
+                    Feedback
+                </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.Feedback.ToString()))
+                {
+                    <li id=" " class="hover">
+                        <a title="" href='@Url.Action("DailyLectureFeedBacks", "Feedback", new { area = "CUSrinagarAdminPanel" })'>
+                            <i class="menu-icon "></i>
+                            Daily Lecture Feedbacks
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="RR">
+                        <a href='#' onclick="alert('Feature under development')">
+                            <i class="menu-icon fa fa-file-text"></i>
+                            College<br />Facilities
+                        </a>
+                    </li>
+                }
+
+                @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_GrievanceFeedback.ToString())
+                    || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString())
+                    || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_DeputyController.ToString()))
+                {
+                    <li id=" " class="hover">
+                        <a href=@Url.Action("Grievance", "Grievance", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon "></i>
+                            Grievances
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                }
+            </ul>
+        </li>
+
+    }
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()))
+    {
+        <li class="hover">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text"> MISC </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li class="hover" id="SMSSection">
+                    <a href=@Url.Action("Send", "SMS", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        <span class="menu-text"> Compose SMS</span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li class="hover" id="CollegeSection">
+                    <a href=@Url.Action("CollegeList", "College", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        <span class="menu-text"> Colleges</span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+                @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Dean.ToString()) || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()))
+                {
+                    <li class="hover" id="MessageSection">
+                        <a href=@Url.Action("Message", "Message", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            <span class="menu-text"> Message </span>
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                }
+
+                <li class="hover" id="QuestionaireSection">
+                    <a href=@Url.Action("QuestionaireList", "Questionaire", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        <span class="menu-text"> Questionaire </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+            </ul>
+        </li>
+    }
+
+
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.MarksSheetList.ToString()))
+    {
+        <li class="hover" id="MarksSheetListItem">
+            <a href=@Url.Action("List", "MarksSheet", new { area = "CUSrinagarAdminPanel" })>
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text"> MarksSheet </span>
+            </a>
+            <b class="arrow"></b>
+        </li>
+    }
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Bills.ToString()))
+    {
+        <li class="hover">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text">
+                    Billing
+                </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+
+                <li class="hover">
+                    <a href='@Url.Action("SetterSearch", "Bill", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Paper Setters
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li class="hover">
+                    <a href=@Url.Action("Bills", "Bill", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        <span class="menu-text"> Bills </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li class="hover">
+                    <a href=@Url.Action("PaperSetterList", "Bill", new { area = "CUSrinagarAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        <span class="menu-text"> Paper Settings </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+
+            </ul>
+        </li>
+    }
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.EvaluatorBills.ToString()) || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.PaperSetterBills.ToString()))
+    {
+        <li class="hover">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text">
+                    Billing
+                </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+
+                <li class="hover">
+                    <a href='@Url.Action("BillAccountDetails", "BillAccount", new { area = "CUSrinagarAdminPanel" })'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Bank Account
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.PaperSetterBills.ToString()))
+                {
+
+                    <li class="hover">
+                        <a href=@Url.Action("Bills", "BillSetter", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            <span class="menu-text">Setter Bills </span>
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                }
+                @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.EvaluatorBills.ToString()))
+                {
+                    <li class="hover">
+                        <a href=@Url.Action("Bills", "BillEvaluator", new { area = "CUSrinagarAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            <span class="menu-text">Evaluator Bills </span>
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                }
+
+            </ul>
+        </li>
+    }
+
+</ul>

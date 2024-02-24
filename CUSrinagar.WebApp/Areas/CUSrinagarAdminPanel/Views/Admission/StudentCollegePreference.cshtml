@@ -1,0 +1,276 @@
+﻿@model List<CUSrinagar.Models.StudentCollegePreference>
+@using CUSrinagar.Enums
+@{
+    ViewBag.Title = "Student Details";
+    CUSrinagar.Models.ARGPersonalInformation STD = ViewBag.ARGPersonalInformation;
+    if (STD.CoursesApplied == null || STD.CoursesApplied.Count == 0) { STD.CoursesApplied = new List<CUSrinagar.Models.ARGCoursesApplied>() { new CUSrinagar.Models.ARGCoursesApplied() }; };
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action(" Index","Dashboard",new { area="CUSrinagarAdminPanel" })">Home</a>
+        </li>
+        <li>
+            <a href="@Url.Action("CollegePreference","Admission",new { area="CUSrinagarAdminPanel" })" class="">List</a>
+        </li>
+        <li>
+            <a href="#" class="active">Student Documents</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+
+@section PageSpecificStyle{
+
+}
+<div class="">
+    <div class="col-md-12">
+        <h4 class="">
+            Student Documents
+            <a class="pull-right" target="_blank" href="#"><i class="fa fa-print"></i> </a>
+        </h4>
+        <hr class="no-margin-top" />
+        @using (Html.BeginForm("UploadedCertificate", "Admission", FormMethod.Post, new { @area = "CUSrinagarAdminPanel", @class = "jsMainForm form-horizontal", @id = "" }))
+        {
+            @Html.AntiForgeryToken()
+            var showPayment = true;
+            <input type="hidden" name="printProgramme" value="@CUSrinagar.Enums.PrintProgramme.IH" />
+            <input type="hidden" name="Course_ID" value="@STD.CoursesApplied.First().Course_ID" />
+            <div class="row">
+                <div class="">
+                    <div class="col-sm-5">
+                        <div class="form-group">
+                            <label for="name" class="col-sm-5">Form Number</label>
+                            <div class="col-sm-5">@STD.StudentFormNo </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-5">DOB</label>
+                            <div class="col-sm-5">@STD.DOB.ToString("dd-MM-yyyy")</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-5">Name</label>
+                            <div class="col-sm-5">@STD.FullName </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-5">Mobile No.</label>
+                            <div class="col-sm-5">@STD.StudentAddress.Mobile </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-5">Email</label>
+                            <div class="col-sm-5">@STD.StudentAddress.Email </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-5">Applying For Course</label>
+                            <div class="col-sm-5 text-danger"><b>@STD.CoursesApplied.First().CourseName </b></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="name" class="col-sm-6">Category</label>
+                            <div class="col-sm-3">@STD.Category</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-6">Entrance Roll No</label>
+                            <div class="col-sm-3 text-danger"><b>@STD.EntranceRollNo </b> </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-6">CAT Entrance Points</label>
+                            <div class="col-sm-3">@STD.CATEntrancePoints </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-6">Subject Points</label>
+                            <div class="col-sm-3">@STD.CoursesApplied.First().SubjectEntrancePoints </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-6">Total Points</label>
+                            <div class="col-sm-3">@((STD.CATEntrancePoints.HasValue ? STD.CATEntrancePoints.Value : 0) + (STD.CoursesApplied.First().SubjectEntrancePoints)) </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-6">Selection Status</label>
+                            <div class="col-sm-3 text-danger"><b>@(CUSrinagar.Extensions.Helper.GetEnumDescription(@STD.CoursesApplied.First().StudentSelectionStatus)) </b> </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <div class="hidden-xs hidden-sm">
+                                <center>
+                                    <div class="thumbnail no-margin-bottom">
+                                        @if (STD.Photograph != null)
+                                        {
+                                            <img src="@Url.Content(STD.Photograph)" class="img-responsive max-height-200" />
+                                        }
+                                    </div>
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <!--Accademic Details-->
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3>Accedemic Details</h3>
+                </div>
+                <div class="col-sm-12">
+                    <table class="table table-hover table-bordered">
+                        <tr>
+                            <th>Exam Name</th>
+                            <th>Stream</th>
+                            <th>Session</th>
+                            <th>Year</th>
+                            <th>Roll No</th>
+                            <th>Max Marks</th>
+                            <th>Marks Obt</th>
+                            <th>%age</th>
+                        </tr>
+                        @if (STD.AcademicDetails != null)
+                        {
+                            foreach (var item in STD.AcademicDetails)
+                            {
+                                <tr>
+                                    <td rowspan="2">@item.ExamName</td>
+                                    <td>@item.Stream</td>
+                                    <td>@item.Session</td>
+                                    <td>@item.Year</td>
+                                    <td>@item.RollNo</td>
+                                    <td>@item.MaxMarks</td>
+                                    <td>@item.MarksObt</td>
+                                    <td>@item.Percentage</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4"><b>Subject(s)</b>: @item.Subjects</td>
+                                    <td colspan="3"><b>Board/University</b>: @item.ExamBody</td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
+
+            if (STD.PaymentDetail != null)
+            {
+                <!--Accademic Details-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h3>Payment Details</h3>
+                    </div>
+                    <div class="col-sm-12">
+                        <table class="table table-hover table-bordered">
+                            <tr>
+                                <th>TxnReferenceNo</th>
+                                <th>TxnDate</th>
+                                <th>Semester</th>
+                                <th>ModuleType</th>
+                                <th>TxnAmount</th>
+                            </tr>
+                            @if (STD.AcademicDetails != null)
+                            {
+                                foreach (var item in STD.PaymentDetail)
+                                {
+                                    <tr>
+                                        <td>@item.TxnReferenceNo</td>
+                                        <td>@item.TxnDate.ToString("dd-MM-yyyy")</td>
+                                        <td>@item.Semester</td>
+                                        <td>@item.ModuleType.ToString()</td>
+                                        <td>@item.TxnAmount</td>
+                                    </tr>
+                                }
+                            }
+                        </table>
+                    </div>
+                </div>
+            }
+
+            <div class="clearfix"></div>
+            <!--Certificate section-->
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3>College Preferences</h3>
+                </div>
+                @if (Model != null)
+                {
+                    <div class="row">
+                        <div class="col-sm-6">
+
+                            <table class="table table-bordered">
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.PreferenceOrder</td>
+                                            <td>@item.CollegeFullName</td>
+                                            <td>
+                                                @if (item.IsAllowed)
+                                                {
+                                                    <span class="text-success">Already added</span>
+                                                }
+                                                else if (STD.PaymentDetail != null && (STD.CoursesApplied.First().StudentSelectionStatus != StudentSelectionStatus.Joined && STD.CoursesApplied.First().StudentSelectionStatus != StudentSelectionStatus.Joined_SF))
+                                                {
+                                                    <a href="@Url.Action("SetCollegePreference",new {College_ID=item.College_ID,Student_ID=item.Student_ID, Course_ID=item.Course_ID, StudentSelectionStatus=StudentSelectionStatus.Verified_MakePayment,  printProgramme=PrintProgramme.IH })"
+                                                       class="btn btn-success" name="StudentSelectionStatus" value="@StudentSelectionStatus.Verified_MakePayment"><i class="glyphicon glyphicon-ok"></i><b>&nbsp;Allow Payment</b></a>
+                                                }
+
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            @*<div class="row">
+                    <div class="col-sm-12">
+                        <div class="pull-right">
+                            @if (STD.PaymentDetail == null && Model != null && Model.Count > 0)
+                            {
+                                <button disabled @(showPayment ? "" : "disabled") id="AllowPayment" type="submit" class="btn btn-success" name="StudentSelectionStatus" value="@StudentSelectionStatus.Verified_MakePayment"><i class="glyphicon glyphicon-ok"></i><b>&nbsp;Allow Payment</b> </button>
+                                <button disabled type="submit" class="btn btn-success" name="StudentSelectionStatus" value="@StudentSelectionStatus.CertificatesUploaded"><i class="glyphicon glyphicon-ok"></i><b>&nbsp;Save Details</b> </button>
+                            }
+                            else if (STD.PaymentDetail != null)
+                            {
+                                <a class="btn btn-success" target="_blank" k title="already selected"
+                                   href="@Url.Action("ViewFormDetail","AssignCombination",new {@area="CUSrinagarAdminPanel",@Form_RegistrationNumber=STD.StudentFormNo,@sem=1,@printProg=(short)PrintProgramme.IH })">
+                                    Assign Combination
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>*@
+        }
+    </div>
+</div>
+
+
+@*MODAL DIALOG START*@
+<div class="modal" id="PreviewPopUp" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered wd-650">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Preview</h4>
+            </div>
+            <div class="modal-body padding-0-10">
+                <div class="thumbnail">
+                    <img id="img-preview" class="" style="width:100%" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*MODAL DIALOG END*@
+
+
+@section PageSpecificJS{
+    <script src="~/Scripts/Pages/clg-upload-certificates-ih.js"></script>
+}
+
+
+

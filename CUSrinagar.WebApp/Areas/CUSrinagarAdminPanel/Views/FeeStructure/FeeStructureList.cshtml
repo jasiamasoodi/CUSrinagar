@@ -1,0 +1,184 @@
+﻿@model IEnumerable<CUSrinagar.Models.FeeStructureViewModel>
+@using CUSrinagar.Extensions;
+@using CUSrinagar.Models;
+@using System.Reflection;
+
+@{
+    ViewBag.Title = "Fee Structure";
+}
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUSrinagarAdminPanel"})">Home</a>
+            </li>
+            <li class="active">Examination Setting</li>
+        </ul><!-- /.breadcrumb -->
+    </div>
+    <div class="col-md-4">
+    </div>
+}
+
+<div class="col-md-12 jsTableContent">
+    <div class="panel panel-primary " data-otherparam1="">
+        <div class="panel-heading hidden-print">
+            <h3 class="panel-title">
+                Fee Structure
+                <small>
+                    <i class="ace-icon fa fa-angle-double-right"></i>
+                    Break Up
+                </small>
+            </h3>
+        </div>
+
+        <div class="panel-body hidden-print">
+            <div class="search-box">
+                @using (Html.BeginForm("FeeStructureList", "FeeStructure", FormMethod.Post, new { @class = "jsMainForm", @id = "" }))
+                {
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label>Year</label>
+                            <br />
+                            <div class="jsDDLContainer">
+                                <select id="year" name="year">
+                                    @*<option value="" selected="selected">-- All --</option>*@
+                                    <option value="2020" @(ViewBag.Yaer == 2020 ? "selected='selected'" : "")>2020</option>
+                                    <option value="2019" @(ViewBag.Yaer == 2019 ? "selected='selected'" : "")>2019</option>
+                                    <option value="2018" @(ViewBag.Yaer == 2018 ? "selected='selected'" : "")>2018</option>
+                                    <option value="2017" @(ViewBag.Yaer == 2017 ? "selected='selected'" : "")>2017</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Programme</label>
+                            <br />
+                            <div class="jsDDLContainer">
+                                <select id="programme" name="programme">
+                                    @*<option value="" selected="selected">-- All --</option>*@
+                                    <option value="3" @(ViewBag.Prog == 3 ? "selected='selected'" : "")>UG</option>
+                                    <option value="1" @(ViewBag.Prog == 1 ? "selected='selected'" : "")>IG/PG/Honors</option>
+                                    <option value="2" @(ViewBag.Prog == 2 ? "selected='selected'" : "")>Professional</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Programme</label>
+                            <br />
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</button>
+                        </div>
+
+                    </div>
+                }
+
+
+            </div>
+        </div>
+
+        <div class="js-table-content" data-url=@Url.Action("FeeStructureListPartial", "FeeStructure", new { area = "CUSrinagarAdminPanel" }) data-DefaultOrderByColumn="Year">
+            <div class="col-md-12 jsTableContent ">
+
+                @if (Model.IsNotNullOrEmpty())
+                {
+                    <div class="col-sm-12 center">
+                        <div>
+                        
+
+                            <a href="#" class="btn btn-inverse" style="min-width: 90px">
+                                Financial Year = @ViewBag.Yaer
+                            </a>
+                            <a href="#" class="btn btn-inverse" style="min-width: 90px">
+                                Total IPG Payments = @Model.FirstOrDefault().NoOfStudents
+                            </a>
+                        </div>
+                        <hr />
+                    </div>
+                    <div class="col-xs-12 col-sm-12 widget-container-col ui-sortable" id="widget-container-col-6">
+                        <div class="widget-box widget-color-dark light-border ui-sortable-handle" id="widget-box-6">
+                            <div class="widget-header">
+                                <div class="widget-toolbar pull-left">
+                                    <h4 class="badge badge-danger">@string.Join(",", Model.GroupBy(i => i.MasterCourseCategory.GetEnumDescription()).Select(x => x.Key))</h4>
+                                </div>
+                            </div>
+                            <div class="widget-body">
+                                <div class="widget-main padding-6">
+                                    <table class="table table-striped table-dark">
+                                        @{
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        Fee Component
+                                                    </th>
+                                                    <th>
+                                                        Fee Amount
+                                                    </th>
+                                                    <th>
+                                                        Sub Total
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            foreach (PropertyInfo property in typeof(FeeStructureAdmission).GetProperties().Where(p => p.PropertyType == typeof(int)))
+                                            {
+                                                if (@Model.First(i => i.FeeComponent == property.Name).FeeComponentAmount == 0)
+                                                {
+
+                                                }
+                                                else
+                                                {
+                                                    <tr style="border-bottom:solid 1px black">
+                                                        <td>
+                                                            @property.Name
+                                                        </td>
+                                                        <td>
+                                                            @Model.First(i => i.FeeComponent == property.Name).FeeComponentAmount
+                                                        </td>
+                                                        
+                                                        <td>
+                                                            @String.Format("{0:n}", Model.First(i => i.FeeComponent == property.Name).SubTotal)
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                            <tr style="font-style:italic;font-weight:bolder;border-top:2px solid black">
+                                                <td class="pull-right">
+                                                    Total Fee Amount
+                                                </td>
+                                                <td>
+                                                    @Model.GroupBy(i => i.MasterCourseCategory).First().Sum(c => c.FeeComponentAmount)
+                                                </td>                                               
+                                                <td>
+                                                    @String.Format("{0:n}", @Model.Sum(i => i.SubTotal))
+                                                </td>
+                                            </tr>
+                                        }
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+
+                    </div>
+                    <p style="page-break-after:always"></p>
+                }
+            </div>
+        </div>
+
+        @{Html.RenderPartial("_JSPagerTableFooter");}
+    </div>
+</div>
+
+
+@section PageSpecificJS{
+
+    <script>
+        $(document).ready(function () {
+
+        });
+    </script>
+
+
+}

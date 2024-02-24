@@ -1,0 +1,148 @@
+﻿@model IEnumerable<CUSrinagar.Models.ARGPersonalInformation>
+@using CUSrinagar.Extensions
+
+@{
+    ViewBag.Title = "Download Photographs ";
+    string currentYear = DateTime.Now.Year + "";
+    int TotalPhotos = Model.IsNotNullOrEmpty() ? Model.Count() : 0;
+}
+@section PageSpecificStyle{
+    <style type="text/css">
+        .required {
+            color: black;
+        }
+
+        .filter-btn a {
+            color: white !important
+        }
+    </style>
+}
+<div id="Jspleasewait" style="position:fixed;background-color:rgba(0, 0, 0, 0.60);left:0;top:0;z-index:200;width:100%;height:100%">
+    <p style="font-size:30px;font-weight:bold;color:white;margin-top:20%;margin-left:31%">
+        Downloading <span id="DownloadingImgs"></span> of @TotalPhotos photographs. Please wait...
+    </p>
+</div>
+<script type="text/javascript">
+    var totalPhotos = 1;
+    function loadImage() {
+        document.getElementById("DownloadingImgs").innerText = totalPhotos++;
+    }
+</script>
+<div class="page-wrapper pager-table-text">
+    <div class="page-content">
+        <div class="row page-row">
+            <div id="response">
+                @if (TempData["response"] != null)
+                {
+                    @Html.Raw(TempData["response"])
+                }
+            </div>
+            <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Download Photographs
+                            <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                            </span>
+                        </h3>
+                    </div>
+                    @using (Html.BeginForm("DownloadPhotographs", "Statistics", FormMethod.Post, new { area = "CUCollegeAdminPanel", id = "frmDownloadPhotos" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="panel-body">
+                            <div class="col-sm-12 search-box">
+                                <div class="col-sm-1 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span>Batch<span id="YearValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+
+                                    <div>
+                                        @Html.TextBox("Year", DateTime.Now.Year, new { @class = "form-control jsfilterelement", @data_column = "Year", @data_operator = "EqualTo" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span>Programme<span id="ProgrammeIValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                    <div>
+                                        @Html.DropDownList("ProgrammeId", new SelectList(ViewBag.ProgrammeList, "Value", "Text"),
+                               "--Select--", new { @class = "form-control SearchDDL", @data_column = "ProgrammeId", @data_operator = "EqualTo", data_ddltype = "Course", @data_ddlchildtype = "Semester" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span>Course<span id="CourseIValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                    <div id="Course">
+                                        @Html.DropDownList("CourseID", new SelectList(ViewBag.CourseList, "Value", "Text"),
+                                    "--Select--", new { @class = "form-control  SearchDDL jsfilterelement ", @data_column = "CourseID", @data_operator = "EqualTo", @data_ddltype = "Semester" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span>Semester<span id="SemestValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                    <div id="Semester">
+                                        @Html.DropDownList("Semester", new SelectList(ViewBag.SemesterList, "Value", "Text"),
+                                     "--Select--", new { @class = "jsfilterelement chosen-select tag-input-style " })
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-1 " style="padding-top: 17px;">
+                                    <button type="submit" class="btn btn-primary JSBtnSearchPhotos"><i class="fa fa-eye"></i>&nbsp;Search</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+                    @if (Model.IsNotNullOrEmpty())
+                    {
+                        <div class="col-sm-12 center margin-bottom-10" style="padding-top: 17px;">
+                            <strong class="purple">You should wait until WebPage is completely loaded before clicking </strong>
+                            <button type="button" disabled class="btn btn-success btn-sm JSDownloadBtn"><span class="quadraText"><i class="fa fa-download"></i></span>Download as ZIP</button>
+                            <br />
+                            <strong class="PhotoFileName" data-string="@ViewBag.SearchedQuery">@ViewBag.SearchedQuery</strong>
+                        </div>
+                    }
+                    <div class="col-sm-12" id="JSPhotos" style="max-height:600px;overflow-x:auto">
+                        @if (Model.IsNotNullOrEmpty())
+                        {
+                            foreach (var item in Model)
+                            {
+                                if (File.Exists(Server.MapPath(item.Photograph)))
+                                {
+                                    <div class="thumbnail col-sm-2 text-center">
+                                        <img onload="loadImage();" class="img-responsive" src="@Url.Content(item.Photograph)" style="max-height:150px;" data-FormNo="@item.CUSRegistrationNo.Replace("/","-")" />
+                                        <strong>@item.CUSRegistrationNo</strong>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="thumbnail col-sm-2" style="text-align:center">
+                                        <strong class="quadraText">Photograph not available for <br />@item.CUSRegistrationNo</strong>
+                                    </div>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            <p class="text-center red" style="font-weight:bold">No details found.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script type="text/javascript">
+        var chilDDLPath = '@Url.Action("_GetRRDDL", "RR", new {area = "CUCollegeAdminPanel" })';
+        var controllerName = "Statistics";
+    </script>
+
+    <script src="@Url.Content("~/Scripts/JSChosen.js")"></script>
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSRR/RRReport.js")"></script>
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSZIP/1-jszip.min.js")"></script>
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSZIP/2-jszip-utils.js")"></script>
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSZIP/3-FileSaver.js")"></script>
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSRR/DownloadPhotos.js")"></script>
+}
+
+
+
+

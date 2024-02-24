@@ -1,0 +1,308 @@
+﻿@using CUSrinagar.Models
+@model ARGStudentExamFormSubjects
+@{
+    ViewBag.Title = "Division Improvement Exam Form";
+    short choosenSemester = (short)ViewBag.SemesterChoosen;
+    var _StudentExamForm = (CUSrinagar.Models.ARGStudentExamFormSubjects)ViewBag.StudentExamForm;
+    var examFormDownloadble = (CUSrinagar.Models.ARGExamFormDownloadable)ViewBag.ARGExamFormDownloadable;
+    bool showSaveButton = false;
+    bool hasLessSubjects = false;
+    var response = (GeneralModels.ResponseData)ViewBag.Response;
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Examination")">Examination</a>
+        </li>
+        <li>
+            <a href="#" class="active">Division Improvement Examination Form</a>
+        </li>
+    </ul>
+}
+<div class="row" style="overflow:auto;">
+    <div class="col-sm-12 btn">
+        <div class="col-sm-12">
+            @if (examFormDownloadble != null)
+            {
+                <button href="#" style="color:black !important">Last Date for Applications  = @examFormDownloadble.EndDate.ToLongDateString() - @examFormDownloadble.EndDate.ToLongTimeString()</button>
+            }
+        </div>
+    </div>
+</div>
+<div class="row page-content">
+    <div class="col-sm-12 col-md-12">
+        <br />
+        @if ((response?.IsSuccess ?? false) && response.ErrorMessage != null)
+        {
+            <h3 class="alert alert-danger center">
+                <span><strong>@Html.Raw(response.ErrorMessage)</strong></span>
+            </h3>
+        }
+
+        @if (_StudentExamForm != null)
+        {
+            <div class="col-sm-12 col-md-8">
+                @Html.Hidden("ARGExamFormDownloadable", Newtonsoft.Json.JsonConvert.SerializeObject((CUSrinagar.Models.FeeStructure)ViewBag.FeeStructure))
+                @using (Html.BeginForm("Payment", "Examination", FormMethod.Post, new { @class = "jsMainForm form-horizontal", @id = "BacklogExaminationForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3 control-label text-primary"> Full Name :</label>
+                        <div class="col-sm-9">@Model.StudentInfo.FullName</div>
+                    </div>
+                    <hr class="no-margin-top margin-bottom-10" />
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3 control-label text-primary"> Registration No :</label>
+                        <div class="col-sm-9">
+                            @(string.IsNullOrEmpty(Model.StudentInfo.CUSRegistrationNo) ? Model.StudentInfo.StudentFormNo : Model.StudentInfo.CUSRegistrationNo)
+                        </div>
+                    </div>
+                    <hr class="no-margin-top margin-bottom-10" />
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3 control-label text-primary">Current Semester :</label>
+                        <div class="col-sm-9">
+                            @Model.StudentInfo.CurrentSemesterOrYear
+                        </div>
+                    </div>
+                    <hr class="no-margin-top margin-bottom-10" />
+                    <div class="form-group" style="font-size:17px;color:red;">
+                        <label for="name" class="col-sm-3 control-label text-primary">Form Type :</label>
+                        <div class="col-sm-9">
+                            Division Improvement Examination Form for Semester @choosenSemester
+                            <br /><span class="quadraText">CAUTION</span> : Submission of this form is allowed only once.
+                        </div>
+                    </div>
+                    <hr class="no-margin-top margin-bottom-10" />
+                    @Html.HiddenFor(item => _StudentExamForm.IsDivisionImprovement, new { @value = "true" })
+                    @Html.Hidden("semester", choosenSemester)
+                    @Html.Hidden("TotalRegularFee", _StudentExamForm.AmountPaid)
+                    @Html.HiddenFor(item => _StudentExamForm.AmountPaid)
+                    @Html.HiddenFor(item => _StudentExamForm.CreatedBy)
+                    @Html.HiddenFor(item => _StudentExamForm.CreatedOn)
+                    @Html.HiddenFor(item => _StudentExamForm.ExamRollNumber)
+                    @Html.HiddenFor(item => _StudentExamForm.FormNumber)
+                    @Html.HiddenFor(item => _StudentExamForm.IsRegular)
+                    @Html.HiddenFor(item => _StudentExamForm.Semester)
+                    @Html.HiddenFor(item => _StudentExamForm.Status)
+                    @Html.HiddenFor(item => _StudentExamForm.StudentExamForm_ID)
+                    @Html.HiddenFor(item => _StudentExamForm.Student_ID)
+                    @Html.HiddenFor(item => _StudentExamForm.UpdatedBy)
+                    @Html.HiddenFor(item => _StudentExamForm.UpdatedOn)
+                    @Html.HiddenFor(item => _StudentExamForm.Year)
+                    @Html.HiddenFor(item => _StudentExamForm.RecordState)
+                    @Html.HiddenFor(item => _StudentExamForm.Notification_ID)
+                    @Html.HiddenFor(item => _StudentExamForm.RecordState)
+
+                    if (_StudentExamForm.ReAppearSubjects != null && _StudentExamForm.ReAppearSubjects.Count > 0)
+                    {
+                        //if (AppUserHelper.OrgPrintProgramme == CUSrinagar.Enums.PrintProgramme.PG)
+                        //{
+                        //    _StudentExamForm.ReAppearSubjects = _StudentExamForm.ReAppearSubjects.Where(x => x.SubjectType != CUSrinagar.Enums.SubjectType.OpenElective && x.SubjectType != CUSrinagar.Enums.SubjectType.GE)?.ToList() ?? new List<ARGStudentReExamForm>();
+                        //}
+
+                        showSaveButton = true;
+                        _StudentExamForm.ReAppearSubjects = _StudentExamForm.ReAppearSubjects.OrderBy(x => x.SubjectFullName).OrderByDescending(x => x.IsApplied).ToList();
+                        <div>
+                            <br />
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">Subjects in which to Re-appear for Division Improvement</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < _StudentExamForm.ReAppearSubjects.Count; i++)
+                                    {
+                                        <tr class="">
+                                            <td>
+                                                @(_StudentExamForm.ReAppearSubjects[i].SubjectFullName + " (" + _StudentExamForm.ReAppearSubjects[i].SubjectType + ")")
+                                                @Html.Hidden("_StudentExamForm.ReAppearSubjects[" + i + "].Subject_ID", _StudentExamForm.ReAppearSubjects[i].Subject_ID)
+                                                @Html.Hidden("_StudentExamForm.ReAppearSubjects[" + i + "].SubjectFullName", _StudentExamForm.ReAppearSubjects[i].SubjectFullName)
+                                                @Html.Hidden("_StudentExamForm.ReAppearSubjects[" + i + "].Programme", _StudentExamForm.ReAppearSubjects[i].Programme)
+                                                @Html.Hidden("_StudentExamForm.ReAppearSubjects[" + i + "].StudentExamForm_ID", _StudentExamForm.ReAppearSubjects[i].StudentExamForm_ID)
+                                                @Html.Hidden("_StudentExamForm.ReAppearSubjects[" + i + "].StudentReExamForm_ID", _StudentExamForm.ReAppearSubjects[i].StudentReExamForm_ID)
+                                                @Html.Hidden("_StudentExamForm.ReAppearSubjects[" + i + "].Type", _StudentExamForm.ReAppearSubjects[i].Type)
+                                                @Html.Hidden("_StudentExamForm.ReAppearSubjects[" + i + "].RecordState", _StudentExamForm.ReAppearSubjects[i].RecordState)
+                                                @Html.Hidden("_StudentExamForm.ReAppearSubjects[" + i + "].SubjectCode", _StudentExamForm.ReAppearSubjects[i].SubjectCode)
+                                                @Html.Hidden("_StudentExamForm.ReAppearSubjects[" + i + "].FeeStatus", _StudentExamForm.ReAppearSubjects[i].FeeStatus)
+                                                @Html.Hidden("_StudentExamForm.ReAppearSubjects[" + i + "].SubjectType", _StudentExamForm.ReAppearSubjects[i].SubjectType)
+                                                @Html.Hidden("_StudentExamForm.ReAppearSubjects[" + i + "].HasExaminationFee", _StudentExamForm.ReAppearSubjects[i].HasExaminationFee)
+                                            </td>
+                                            <td>
+                                                <label class="pos-rel">
+                                                    @if (_StudentExamForm.ReAppearSubjects[i].FeeStatus == CUSrinagar.Enums.FormStatus.FeePaid || _StudentExamForm.ReAppearSubjects[i].FeeStatus == CUSrinagar.Enums.FormStatus.UpdatedManually)
+
+                                                    {
+                                                        <input type="checkbox" id="@(CUSrinagar.Enums.ReExamType.Backlog + _StudentExamForm.ReAppearSubjects[i].SubjectFullName.Replace(" ", ""))" class="ace js-reExamSubject" name="ReAppearSubjectFullName" value="@CUSrinagar.Enums.ReExamType.Backlog" checked="checked" disabled readonly />
+                                                        <label class="lbl " for="@(CUSrinagar.Enums.ReExamType.Backlog + _StudentExamForm.ReAppearSubjects[i].SubjectFullName.Replace(" ", ""))"><strong> Already Applied </strong></label>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        if (_StudentExamForm.ReAppearSubjects[i].HasInternalPassed)
+                                                        {
+                                                            <input type="checkbox" id="@(CUSrinagar.Enums.ReExamType.Backlog + _StudentExamForm.ReAppearSubjects[i].SubjectFullName.Replace(" ", ""))" class="ace js-reExamSubject" name="ReAppearSubjectFullName" value="@CUSrinagar.Enums.ReExamType.Backlog" />
+                                                            <label class="lbl" for="@(CUSrinagar.Enums.ReExamType.Backlog + _StudentExamForm.ReAppearSubjects[i].SubjectFullName.Replace(" ", ""))"><strong> Select </strong></label>
+                                                        }
+                                                        else
+                                                        {
+                                                            <label class="lbl" for="@(CUSrinagar.Enums.ReExamType.Backlog + _StudentExamForm.ReAppearSubjects[i].SubjectFullName.Replace(" ", ""))"><strong style="color:red"> Internal not Passed </strong></label>
+                                                        }
+                                                    }
+                                                    @Html.Hidden("_StudentExamForm.ReAppearSubjects[" + i + "].IsApplied", _StudentExamForm.ReAppearSubjects[i].IsApplied)
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <hr />
+                        <hr />
+                        <h3 class="alert alert-block alert-warning center" alert-info><i><strong>There are no Division Improvement available for you.</strong></i></h3>
+                        <hr />
+                        <hr />
+                    }
+                    if (_StudentExamForm.LateFeeAmount > 0)
+                    {
+                        @Html.Hidden("LateFeeAmount", _StudentExamForm.LateFeeAmount)
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3 control-label text-primary"></label>
+                            <div class="col-sm-9">
+                                <div style="float:right">
+                                    <b><span style="float:right">Examination Fee = <label style="font:bold" class="text-danger" id="jsTotalFee">0.0</label></span></b>
+                                    <br /><b>
+                                        <span style="float:right">
+                                            Late Fee =  <label style="font:bold" class="text-danger" id="jsLateFee">
+                                                @{
+                                                    var lateFee = "";
+                                                    if (_StudentExamForm.LateFeeAmount > 0 && _StudentExamForm.Status == CUSrinagar.Enums.FormStatus.Accepted)
+                                                    {
+                                                        lateFee = $" Paid Previously Rs {_StudentExamForm.LateFeeAmount}";
+                                                    }
+                                                    else
+                                                    {
+                                                        lateFee = _StudentExamForm.LateFeeAmount.ToString();
+                                                    }
+                                                    @lateFee;
+                                                }
+                                            </label>
+                                        </span>
+                                    </b>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="no-margin-top" />
+                    }
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="pull-right">
+                                @Html.Hidden("AmountAlreadyPaid", _StudentExamForm.AmountPaid)
+                                <input type="password" name="secretCode" class="pull-left" style="border:0" /><br />
+                                <div class="col-sm-12">
+                                    <div class="pull-right">
+                                        <strong>Amount Previously Paid = <label style="font:bold" id="jsAmountPrevPaid">@_StudentExamForm.AmountPaid</label></strong>
+                                        <hr />
+                                        @*<strong> <a class="btn btn-corner btn-danger">Amount To be Paid Now =  <label style="font:bold" id="jsAmountToBePaid">0.0</label></a></strong>*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3 control-label text-primary">Payment Information :</label>
+                        <div class="col-sm-4">
+                            <input type="email" value="@_StudentExamForm.StudentInfo.StudentAddress.Email" id="Email" name="Email" placeholder="Email ID" class="form-control" required />
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" value="@_StudentExamForm.StudentInfo.StudentAddress.Mobile" id="MobileNumber" name="MobileNumber" placeholder="Mobile Number" class="form-control phone" required minlength="10" maxlength="11" />
+                        </div>
+                        <h3 class="pull-right"><span class="quadraText">CAUTION</span> : Submission of this form is allowed only once.</h3>
+                    </div>
+                    <hr class="no-margin-top margin-bottom-10" />
+
+                    if (hasLessSubjects)
+                    {
+                        <h3 class="danger alert-danger">
+                            Combination not assigned properly. Please visit admission section of your college.
+                        </h3>
+                    }
+                    else if (showSaveButton)
+                    {
+                        <div class=" form-group">
+                            <div class="col-sm-12">
+                                <div class="pull-right">
+                                    <button class="btn btn-success" id="proceedToPayment" type="submit">
+                                        Proceed to Payment
+                                    </button>
+                                </div>
+
+                                <div class="pull-right" style="margin-right:20px">
+                                    <a class="btn btn-primary" id="proceedToPayment" href="@Url.Action("PrintBacklogExaminationFormReceipt",new { @studentExamForm_ID=_StudentExamForm.StudentExamForm_ID,@semester = _StudentExamForm.Semester})">
+                                        Print Receipt
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+            <div class="col-sm-12 col-sm-4 hidden-xs hidden-sm">
+                <center>
+                    <div class="thumbnail no-margin-bottom">
+                        @if (Model.StudentInfo.Photograph != null)
+                        {
+                            <img src="@Url.Content(Model.StudentInfo.Photograph)" class="img-responsive max-height-200" />
+                        }
+                    </div>
+                </center>
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <td class="text-primary">Name</td>
+                            <td>@Model.StudentInfo.FullName</td>
+                        </tr>
+                        <tr>
+                            <td class="text-primary">Course</td>
+                            <td>@Model.StudentInfo.SelectedCombinations.First().CourseID</td>
+                        </tr>
+                        <tr>
+                            <td class="text-primary">Batch</td>
+                            <td>@Model.StudentInfo.Batch</td>
+                        </tr>
+                        <tr>
+                            <td class="text-primary">College</td>
+                            <td>@Model.StudentInfo.AcceptCollegeID</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+
+        }
+    </div>
+    <div class="col-sm-12 col-md-12">
+        <div class="col-sm-12 col-md-12 text-danger">
+            <h3><u>Note</u></h3>
+            <ol>
+                <li><strong>After amount is deducted from your account, it is mandatory/Important to take printout of the exam form</strong></li>
+                <li>There is no fee for skill subjects</li>
+                <li>If you have already submitted fee or money has been deducted from your account and you are still unable to print your examination form. Please visit Cluster Univeristy I.T. Cell by or before last date.</li>
+                <li class="">Those candidates who have not appeared in internal/continous assesment are not eligible to appear in exam and their forms will be cancelled.</li>
+                <li class="">The Email Address and Phone Number  you enter here will be used to send the Payment Receipt.</li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJSFiles{
+    <script src="~/Scripts/Pages/DivisionImprovementForm.js"></script>
+}

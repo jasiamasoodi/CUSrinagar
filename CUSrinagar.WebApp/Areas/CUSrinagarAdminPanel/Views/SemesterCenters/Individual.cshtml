@@ -1,0 +1,127 @@
+﻿@using CUSrinagar.Models
+@using CUSrinagar.Enums
+
+@{
+    ViewBag.Title = "Assign Center to Individual ";
+    Tuple<bool, string, IndividualSemDetails> FormDetail = (Tuple<bool, string, IndividualSemDetails>)ViewBag.FormDetail;
+}
+<h3>
+    <i class="fa fa-users"></i> Assign Center to Individual
+</h3>
+<div class="panel panel-primary">
+    <div class="panel-heading lead no-margin-bottom">
+        <div class="row">
+            @if (TempData["response"] != null)
+            {
+                @Html.Raw(TempData["response"])
+            }
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <form method="POST" action='@Url.Action("Individual","SemesterCenters",new { area = "CUSrinagarAdminPanel"})'>
+                    @Html.AntiForgeryToken()
+                    <div class="input-group ">
+                        <span class="input-group-btn">
+                            <input type="text" class="form-control" name="ExamFormNo" style="width:300px;" maxlength="50" placeholder="Enter ExamFormNo" required autofocus />
+                        </span>
+                        <span class="input-group-btn">
+                            @Html.DropDownList("PrintProgramme", ((IEnumerable<SelectListItem>)ViewBag.PirntProgramme), new { @class = "form-control", required = "required", style = "width:300px;" })
+                        </span>
+                        <input type="hidden" name="command" value="" id="JsClicked" />
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-theme js-search-formdetail" style="margin-left:15px;">
+                                <span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
+                                Search
+                            </button>
+                            <button type="submit" class="btn btn-danger js-Delete-Center" style="margin-left:15px;">
+                                <span class="ace-icon fa fa-trash icon-on-right bigger-110"></span>
+                                Delete Center of Individual
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 text-right">
+            </div>
+        </div>
+    </div>
+    @if (FormDetail != null)
+    {
+        <div class="panel-body">
+            <table class="table table-bordered table-hover col-sm-12">
+                <tbody>
+                    <tr>
+                        <th>Exam Roll No. to Set</th>
+                        <th>Exam Form No</th>
+                        <th>Name</th>
+                        <th>Course</th>
+                        <th>College</th>
+                        <th>Exam Form Status</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            @FormDetail.Item3.ExamRollNoToSet
+                        </td>
+                        <td>
+                            @FormDetail.Item3.ExamFormNo
+                        </td>
+                        <td>
+                            @FormDetail.Item3.FullName
+                        </td>
+                        <td>
+                            @FormDetail.Item3.CourseFullName
+                        </td>
+                        <td>
+                            @FormDetail.Item3.CollegeFullName
+                        </td>
+                        <td>
+                            @{string status = @FormDetail.Item3.FormStatus.ToString();}
+                            <strong class="quadrat">@status</strong>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            @if (@FormDetail.Item3.FormStatus == FormStatus.Accepted)
+            {
+                <h2>Choose Center</h2>
+                <form method="POST" action="@Url.Action("SaveIndividualCenter", "SemesterCenters", new { area = "CUSrinagarAdminPanel" })">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="ExamFormNo" value="@FormDetail.Item3.ExamFormNo" />
+                    <input type="hidden" name="printProgramme" value="@FormDetail.Item3.PrintProgramme.ToString()" />
+                    <input type="hidden" name="ExamRollNoToSet" value="@FormDetail.Item3.ExamRollNoToSet" />
+                    <div class="col-sm-12">
+                        <div class="col-sm-3">
+                            @Html.DropDownList("CenterToAssign", ((IEnumerable<SelectListItem>)ViewBag.CenterList), "", new { @class = "form-control", required = "required", style = "width:300px;" })
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn-primary align-center" type="submit">Assign &amp; Save</button>
+                        </div>
+                    </div>
+                </form>
+            }
+        </div>
+    }
+</div>
+<div class="pull-right">
+    <a href="/CUSrinagarAdminPanel/SemesterCenters/BulkAdmitCards" class="btn btn-success float-right" target="_blank">
+        <i class="fa fa-arrow-left"></i> Download Student Admit Card & Attendance Sheet
+    </a>
+</div>
+@section PageSpecificJS{
+    <style>
+        .field-validation-error, .required {
+            color: red;
+            width: 100%;
+        }
+    </style>
+    @Scripts.Render("~/bundles/Libraries/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function ($) {
+            $(".js-search-formdetail").click(function () {
+                $("#JsClicked").val("search");
+            });
+
+            $(".js-Delete-Center").click(function () {
+                $("#JsClicked").val("delete");
+            });
+        });
+    </script>
+}

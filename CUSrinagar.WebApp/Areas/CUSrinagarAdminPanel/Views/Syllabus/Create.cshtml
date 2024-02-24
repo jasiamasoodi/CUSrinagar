@@ -1,0 +1,147 @@
+﻿@model CUSrinagar.Models.Syllabus
+
+@{
+    ViewBag.Title = "Syllabus";
+}
+
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area= "CUSrinagarAdminPanel" })">Home</a>
+        </li>
+        <li>
+            <a href="@Url.Action("Index","Syllabus",new { area= "CUSrinagarAdminPanel" })" class="">List</a>
+        </li>
+        <li>
+            <a href="#" class="active">Create/Edit Syllabus</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+
+@using (Html.BeginForm("Create", "Syllabus", FormMethod.Post, new { @enctype = "multipart/form-data", @class = "jsMainForm form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Syllabus_ID)
+    @Html.Hidden("Status", true)
+    <div class="row">
+
+        <div class="col-sm-6">
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Batch</label>
+                <div class="col-sm-9">
+                    @Html.TextBox("Session", Model.Session,
+                    new
+                    {
+                    @class = "form-control",
+                    required = "required"
+                    })
+                </div>
+            </div>
+
+            @*<div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Courses</label>
+                    <div class="col-sm-9">
+                        @Html.DropDownList("Course_ID", new SelectList(ViewBag.Courses, "Value", "Text", Model.Course_ID),
+                                   "Select course", new
+                                   {
+                                       @class = "form-control chosen-select jsCourseDDL",
+                                       required = "required",
+                                       @data_scope = "row1"
+                                   })
+                    </div>
+                </div>*@
+
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Programme</label>
+                <div class="col-sm-9">
+                    @Html.DropDownList("ProgrammeDDL", new SelectList(ViewBag.Programmes, "Value", "Text"), "-- All --",
+                                           new
+                                           {
+                                               @class = "form-control chosen-select jsProgrammeDDL jsfilterelement",
+                                               @data_column = "Programme",
+                                               @data_defaulttextvalue = " -- All --,",
+                                               @data_tablealias = "c",
+                                               @data_scope = "row1"
+                                           })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Department</label>
+                <div class="col-sm-9">
+                    @Html.DropDownList("Department_ID", new SelectList(ViewBag.Departments, "Value", "Text", Model.Department_ID),
+                               "Select Department", new
+                               {
+                                   @class = "form-control chosen-select jsDepartmentDDL",
+                                   required = "required",
+                                   @data_scope = "row1"
+                               })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Semester</label>
+                <div class="col-sm-9">
+                    @Html.DropDownList("Semester", new SelectList(ViewBag.Semesters, "Value", "Text", Model.Semester), new
+               {
+                   @class = "form-control chosen-select jsSemesterDDL",
+                   @required = "required",
+                   @data_scope = "row1"
+               })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Subject</label>
+                <div class="col-sm-9 jsDDLContainer">
+                    @Html.DropDownList("Subject_ID", new SelectList(new List<SelectListItem>()),
+                               "Select Subject", new
+                               {
+                                   @class = "form-control chosen-select jsSubjectDDL",
+                                   @required = "required",
+                                   @data_scope = "row1",
+                                   @data_defaulttextvalue = " -- choose subject --,",
+                               })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Remark</label>
+                <div class="col-sm-9">
+                    @Html.TextAreaFor(model => model.Remark, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Files</label>
+                <div class="col-sm-9">
+                    <input type="file" class="form-control" id="Files" name="Files" accept="application/pdf" />
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class=" pull-text-right pull-right">
+                <button type="submit" value="@(Model.Syllabus_ID == Guid.Empty ? "False" : "True")" name="CreateNew" id="submitForm" class="btn btn-primary pull-right">@(Model.Syllabus_ID == Guid.Empty ? "Save" : "Update")</button>
+                &nbsp; &nbsp;
+            </div>
+        </div>
+    </div>
+}
+
+
+@section PageSpecificJS{
+    <script src="@Url.Content("~/Scripts/JSChosen.js")"></script>
+    <script src="@Url.Content("~/Scripts/JSSyllabus/SyllabusCreateOrEdit.js")"></script>
+
+}

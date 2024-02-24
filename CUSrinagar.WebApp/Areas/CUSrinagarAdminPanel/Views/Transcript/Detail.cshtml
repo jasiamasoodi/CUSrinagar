@@ -1,0 +1,129 @@
+﻿@using System.Data
+@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@using CUSrinagar.Models
+@model DataSet
+
+@{
+    ViewBag.Title = "Transcript Details";
+    TranscriptNotification _TranscriptNotification = ViewBag.TranscriptNotification;
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action(" Index","Dashboard",new { area="CUSrinagarAdminPanel" })">Home</a>
+        </li>
+        <li>
+            <a href="@Url.Action("TranscriptNotification","Transcript",new { area="CUSrinagarAdminPanel" })" class="">List</a>
+        </li>
+        <li>
+            <a href="#" class="active">Student Detail</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+
+@section PageSpecificStyle{
+
+}
+<div class="">
+    <div class="col-md-10">
+        <h4 class="">
+            Student Details
+            <a class="pull-right" target="_blank" href="#"><i class="fa fa-print"></i> </a>
+        </h4>
+        <hr class="no-margin-top" />
+        @using (Html.BeginForm("CreateTranscript", "Transcript", FormMethod.Post, new { @area = "CUSrinagarAdminPanel", @class = "jsMainForm form-horizontal", @id = "" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="">
+                    <div class="col-sm-5">
+                        <div class="form-group">
+                            <label for="name" class="col-sm-5">Batch</label>
+                            <div class="col-sm-5">@_TranscriptNotification.Batch </div>
+
+                        </div>
+                        <hr />
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="name" class="col-sm-6">Course</label>
+                            <div class="col-sm-3">@_TranscriptNotification.CourseFullName</div>
+                        </div>
+                        <hr />
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <!--Accademic Details-->
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3>Accedemic Details</h3>
+                </div>
+                <div class="col-sm-12">
+                    <table class="table table-hover table-bordered">
+                        <tr>
+                            <th>CourseFullName</th>
+                            <th>Semester</th>
+                            <th>SubjectType</th>
+                            <th>TotalCredit</th>
+                            <th>SubjectFullName</th>
+                            <th>Count</th>
+                        </tr>
+                        @if (Model != null && Model.Tables != null && Model.Tables.Count > 0)
+                        {
+                            foreach (DataRow item in Model.Tables[0].Rows)
+                            {
+                                <tr>
+                                    <td></td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="pull-right">
+                        <button type="submit" class="btn btn-success" name="StudentSelectionStatus"><i class="glyphicon glyphicon-ok"></i><b>&nbsp;Create</b> </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@*MODAL DIALOG START*@
+<div class="modal" id="PreviewPopUp" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered wd-650">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Preview</h4>
+            </div>
+            <div class="modal-body padding-0-10">
+                <div class="thumbnail">
+                    <img id="img-preview" class="" style="width:100%" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*MODAL DIALOG END*@
+
+
+@section PageSpecificJS{
+
+}
+
+
+

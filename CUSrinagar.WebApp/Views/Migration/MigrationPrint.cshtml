@@ -1,0 +1,383 @@
+﻿@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@model CUSrinagar.Models.MigrationPI
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Migration</title>
+    <style type="text/css">
+        @@media print {
+            .noneOnPrint {
+                display: none;
+            }
+        }
+
+        p {
+            padding: 0mm;
+            margin: 0mm;
+        }
+    </style>
+</head>
+<body style="background: #e0e0e0;margin: auto;display: table;">
+    <section style="background: white;padding:0;margin: 0;overflow: hidden;box-sizing: border-box;width: 210mm;height: 297mm;position:relative;page-break-after: always;">
+        <div style="margin:0mm;margin-right: 4mm;margin-left: 4mm;margin-top:4mm;font-family:'Roboto';font-size:smaller">
+
+            <center>
+                <table style="">
+                    <tbody>
+                        <tr>
+                            <td style="text-align:left;">
+                                <img src="~/Content/ThemePublic/PrintImages/MarksSheetLogo.png" style="width:50px;" />
+                            </td>
+                            <td style="text-align:center;">
+                                <div style="margin-right:16px;">
+                                    <div style="font-family: Arial, sans-serif;font-size: 7mm;font-weight: bold;            position: relative;   z-index: 1;display: inline-block;  -webkit-font-smoothing: antialiased;  -moz-osx-font-smoothing: grayscale;            transform: scale(1, 1.5); -webkit-transform: scale(1, 1.5); -moz-transform: scale(1, 1.5);  -o-transform: scale(1, 1.5);  -ms-transform: scale(1, 1.5);">
+                                        <span style="letter-spacing:0.8mm;font-family: Algerian,Times, 'Times New Roman', serif;                font-weight: normal;                color: #2F5485;                text-shadow: 0.03em 0.03em 0px #b3b3b3;">
+                                            &nbsp;&nbsp;Cluster University Srinagar
+                                        </span>
+                                    </div>
+                                </div>
+                                <p> <b>Application for inter-University Migration/Copy of entries from the Register of Students</b></p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </center>
+
+            <table>
+                <tbody>
+                    <tr>
+                        <td style="width:100mm;">Sr. No  <b><u>@{var sno = Model.SerialNo.ToString().PadLeft(5, '0');}@sno</u></b></td>
+                        <td style="width:100mm;">Case No. (For office use)_______________________</td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+
+            <hr style="margin:0mm;margin-top:0.3mm;margin-bottom: 2mm;" />
+
+            <table width="95%">
+                <tbody>
+                    <tr>
+                        <td style="width:2mm;"><b>A</b>.</td>
+                        <td>Name : <b><u>@Model.FullName.ToUpper() </u></b> &nbsp;<span style="float:right">Gender :  <b><u>@Model.Gender.ToUpper()</u></b></span> </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            Father's Name : <b><u>@Model.FathersName.ToUpper()</u></b> &nbsp;<span style="float:right">
+                                Mother's Name : <b>
+                                    <u>
+                                        @if (!string.IsNullOrEmpty(Model.MothersName))
+                                        {@Model.MothersName.ToUpper()}
+                                    else
+                                    {<span>____________________</span>}
+                                    </u>
+                                </b>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            Class RollNo:  <b><u>@{var @rno = Model.ClassRollNo == null ? "____________________" : Model.ClassRollNo.ToUpper();} @rno</u></b>&nbsp;<span style="float:right">
+                                University Registration No. :  <b>
+                                    <u>
+                                        @if (!string.IsNullOrEmpty(Model.CUSRegistrationNo))
+                                        {@Model.CUSRegistrationNo.ToUpper()}
+                                    else
+                                    {<span>____________________</span>}
+                                    </u>
+                                </b>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            Class in which studying with stream : <b>
+                                <u>
+                                    @if (Model.CurrentSemesterOrYear > 0)
+                                    {
+                                        if (Model.IsLateralEntry)
+                                        {
+                                            string ss = Convert.ToString(ViewBag.CourseName);
+                                            <span>@Model.CurrentSemesterOrYear @ss.Replace("Integrated", "PG") (LE)</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@Model.CurrentSemesterOrYear (@ViewBag.CourseName)</span>
+                                        }
+                                    }
+                                    else
+                                    {<span>____________________</span>}
+                                </u>
+                            </b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Name of the Institution where studying presently : <b><u>@{var @cname = Model.AcceptCollegeID == null ? "____________________" : Model.AcceptCollegeID.ToUpper();} @cname</u></b>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>University to which migration is sought (with proof) <b><u> @Model.NewCollegeName.ToUpper()</u> </b></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Reasons for Migration <b><u>@Model.Remarks </u></b></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Subjects to be offered now <b><u>@Model.NewSubjects </u></b></td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            <hr style="margin-top:2mm;margin-bottom:2mm;" />
+
+            <p style=""><b>B</b>.&nbsp;Last examination of this University in which appeared/ passed.</p>
+            <table style="text-align:center;">
+                <tbody>
+                    @if (Model != null && Model.SemesterModel != null)
+                    {
+                        var RollNumber = string.Empty;
+                        var totalMarks = 0;
+                        int Year = 0;
+                        foreach (var item in Model.SemesterModel)
+                        {
+                            RollNumber = item.ExamRollNumber;
+                            totalMarks += (int)((item.ExternalMarks > 0 ? item.ExternalMarks : 0) + (item.ExternalAttendance_AssessmentMarks > 0 ? item.ExternalAttendance_AssessmentMarks : 0) + (item.InternalMarks > 0 ? item.InternalMarks : 0) + (item.InternalAttendance_AssessmentMarks > 0 ? item.InternalAttendance_AssessmentMarks : 0));
+                            Year = item.Year;
+
+                        }
+                        <tr>
+                            <th style="width:40mm;border:1px solid black;">Examination  </th>
+                            <th style="width:40mm;border:1px solid black;">Semester </th>
+                            <th style="width:40mm;border:1px solid black;">Year </th>
+                            <th style="width:40mm;border:1px solid black;">Roll No  </th>
+                            <th style="width:40mm;border:1px solid black;">Marks Obtained </th>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid black;">@ViewBag.CourseName</td>
+                            <td style="border:1px solid black;">@ViewBag.LastSemester</td>
+                            <td style="border:1px solid black;">@Year</td>
+                            <td style="border:1px solid black;">@RollNumber</td>
+                            <td style="border:1px solid black;">@totalMarks</td>
+
+                        </tr>
+
+                    }
+
+                </tbody>
+            </table>
+
+            <hr style="margin-top:2mm;margin-bottom:2mm;" />
+
+            <p><b>C</b>.&nbsp; I solemnly declare that all the particulars given by me are correct.</p>
+            <table>
+                <tbody>
+                    <tr>
+                        <td style="width:100mm;line-height:8mm;">
+                            <center><b>Address for correspondence</b></center>
+                            <u>
+                                @Model.StudentAddress.PermanentAddress
+                            </u><br />
+                            Pin: <u>@Model.StudentAddress.PinCode </u> &nbsp; District: <u>@Model.StudentAddress.District</u>
+                        </td>
+                        <td style="width:100mm;">
+                            Email: <u>@Model.Email </u><br />
+                            Mobile:  <u>@Model.Mobile  </u>
+                            <p style="text-align:right;"> <span style="text-decoration:overline">Signature of Applicant</span></p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="color:grey;text-align:center">Developed by I.T Cell</div>
+            <hr style="margin-top:2mm;margin-bottom:0mm;" />
+            <table>
+                <tbody>
+                    <tr>
+                        <td style="width:100mm;border-right:1px solid black;padding-right:1mm;vertical-align:top;">
+                            <center><u><b>CERTIFICATE</b></u></center>
+                            Certified that
+                            <ol type="i" style="margin:0mm;padding-left:8mm;text-align:justify;">
+                                <li>
+                                    The particulars filled in by the student are correct.The Student will be discharged from the rolls of this College / Institution only after the migration certificate is issued by the University.
+                                </li>
+                                <li>Certified that the examination form for admission to the ensuing examination has not been forwarded to this University so far.</li>
+                                <li>
+                                    Certified that @Model.FullName.ToUpper() @if (Model.Gender.ToUpper() == (CUSrinagar.Enums.Gender.Female).ToString().ToUpper())
+                                    {<span>daughter</span> }
+                                    else
+                                    {<span>son</span>}  of Mr. @Model.FathersName.ToUpper() is the same person who signed in my presence.
+                                </li>
+                                <li><string>Certified that the candidate has deposited his/her migration certificate(if required) at the time of Admission.</string></li>
+                            </ol>
+                            <br />
+                            <p style="">
+                                <br />
+                                <span>Dated _______________</span><br />
+                                <span STYLE="text-decoration:overline;float:right;">Signature of Principal</span>
+                            </p>
+                            <br />
+                            <br />
+                            <br />
+                            <p style="text-align:center;padding-right:5mm;"> Official Stamp</p>
+                        </td>
+                        <td style="border-left:1px solid black;padding-left:1mm;vertical-align:top;">
+                            <center><u><b>ADDITIONAL CERTIFICATE (Before Completion of Degree)</b></u></center>
+                            <p style="text-align:justify;">
+                                &emsp;&emsp;&emsp;
+                                Certified that I have no objection if the University issues Migration certificate to the applicant.
+                            </p>
+                            <br />
+                            <br />
+                            <p style="">
+                                <span>Dated _______________</span><br />
+                                <span STYLE="text-decoration:overline;float:right;">Signature of Principal</span>
+                            </p>
+                            <br />
+                            <br />
+                            <p style="text-align:center;padding-right:5mm;"> Official Stamp</p>
+
+                            <b>AFFIDAVIT:</b>
+                            <br />
+                            <p style="text-align:justify;text-transform:uppercase;">
+                                FOR DUPLICATE MIGRATION CERTIFICATE PLEASE ATTACH AN AFFIDAVIT DULY ATTESTED BY IST CLASS MAGISTRATE STATING THEREIN:-
+                            </p>
+                            <p>&emsp;That the Migration certificate earlier issued to me has been lost and has not been used by me to seek admission anywhere.</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr style="margin:0mm;margin-top:0.3mm;margin-bottom: 0mm;" />
+            <table>
+                <tbody>
+                    <tr>
+                        <td style="width:60mm;vertical-align:top;font-size:18px">
+                            <p style="text-align:justify;">
+                                Fee of Rs. @Model.TotalFeeM/- in the shape of
+                                Online Payment Transaction No.:-<u><small><b>@Html.DisplayFor(model => model.TransactionNo)</b></small></u>,&nbsp;
+                                Dated:-<u><small><b>@Model.TransactionDate.ToString("dd-MMM-yyy")</b></small></u> &nbsp;stands
+                                received from the applicant.
+                            </p>
+                        </td>
+                        <td style="width:80mm;border-left:1px solid black;padding-left:1mm;vertical-align:top;">
+                            <center><b>FOR OFFICE USE ONLY</b></center>
+                            <p style="text-align:justify;">Particulars of the Student mentioned above verified and found correct, requisite documents recieved, hence submitted for issuance of Migration Certificate.</p>
+                            <br /><br /><br />
+                            <center> <b> Dealing Assistant</b></center>
+                        </td>
+                        <td style="border-left:1px solid black;padding-left:1mm;vertical-align:top;">
+                            Order of the Competent Authority<br /><br />
+                            <p style=""> Sanctioned&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; _______</p><br />
+                            <p style="">Not Sanctioned &nbsp; _______</p>
+                            <br /><br />
+                            <p style="text-align:left;"><b>&emsp; Deputy/Assistant Registrar</b><br />&emsp; (Registration)</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr style="margin:0mm;margin-top:0.3mm;margin-bottom: 4mm;" />
+            <p style="">
+                <span> Date of Issue:- _______________________</span>
+                <span STYLE="float:right;"> Received Migration Certificate on ___________________</span>
+            </p>
+
+            <table border="0">
+                <tbody>
+                    <tr>
+                        <td style="width:114mm;text-align:center;">
+                            <br />
+                            <br />
+                            <br />
+                            Signature of the Dealing Assistant
+                        </td>
+                        <td style="text-align:center;">
+                            <br />
+                            <br />
+                            <br />
+                            Signature of the Student
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <section style="background: white;padding:0;margin: 0;overflow: hidden;box-sizing: border-box;width: 210mm;height: 297mm;position:relative;page-break-after: always;">
+        <div style="margin:0mm;margin-right: 4mm;margin-left: 20mm;margin-top:4mm;font-family:'Roboto';font-size:small;width:70%">
+            <h3> <u>INSTRUCTIONS:</u></h3>
+
+            <ol>
+                <li>
+                    Migration Fee (not Refundable):
+                    <br /><br />
+                    <table style="">
+                        <tbody>
+                            <tr>
+                                <td style="border:1px solid black;">i.</td>
+                                <td style="border:1px solid black;">For those who are already registered with this University</td>
+                                <td style="border:1px solid black;">Rs.300/-</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid black;">ii.</td>
+                                <td style="border:1px solid black;">
+                                    For duplicate Migration Certificate (with an affidavit duly attested by
+                                    Ist Class Magistrate stating therein <b>“That the Migration </b>certificate
+                                    <b>earlier issued to me has</b> been lost<b> and has not</b> been used by me to
+                                    <b>seek admission anywhere”)</b>
+                                </td>
+                                <td style="border:1px solid black;">Rs.300/-</td>
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                </li>
+                <br />
+
+                <br />
+                <li>
+                    Migration Certificate will be issued to the students who are registered with this university or
+                    have passed any examination from this University. In case of compartment/reappear
+                    <b>
+                        candidates, the migration certificate can be issued if the applicant gives in writing that
+                        he/she will not appear in the Compartment/Reappear subject/s of the examination
+                        concerned of this University.
+                    </b>
+                </li>
+                <br />
+                <li>
+                    In all correspondence with the University, Name, Father’s Name, Registration No., Particulars
+                    of Last Examination passed or appeared and the University Receipt No. and date of Migration
+                    Fee must be quoted.
+                </li>
+                <br />
+                <li>
+                    Students on the rolls of College/University Departments and leaving the course without
+                    completing it, or whose name has been struck off, should attest their migration form from the
+                    Head of Institution.
+                </li>
+                <br />
+                <li>
+                    A photo copy of the Provisional/ Discharge Certificate and Detailed Marks Card/Certificate of
+                    the last exam. Passed/Failed duly attested be also attached with the form.
+                </li>
+            </ol>
+            <br />
+            <h4>Note: Hard copy of downloaded application form to be submitted at Reciept Section of the Cluster University Srinagar, Administration Block, Gogji-Bagh Srinagar. </h4>
+        </div>
+    </section>
+    <div class="noneOnPrint" style="height:40px;background-color:lightslategrey;width:794px;position:fixed;bottom:0;z-index:100;text-align:center;padding-top:10px">
+        <button style="height: 32px;" href="#" class="btn btn-theme" onclick="window.print();"><b>Download or Print</b></button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:white">Developed &amp; Maintained by I.T Cell</span>
+    </div>
+</body>
+</html>

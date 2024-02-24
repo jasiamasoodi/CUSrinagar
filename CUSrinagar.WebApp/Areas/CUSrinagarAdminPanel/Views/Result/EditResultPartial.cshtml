@@ -1,0 +1,130 @@
+﻿@model CUSrinagar.Models.StudentProfile
+
+<style>
+    .width-100{
+        width:100px;
+    }
+</style>
+
+
+
+@if (Model != null)
+            {
+    <table id="simple-table" class="table  table-bordered table-hover to-uppercase">
+        <tbody>
+            <tr>
+                <td class="col-md-3"><b>Name:</b></td>
+                <td colspan="5">@Model.Name</td>
+            </tr>
+            <tr>
+                <td><b>Father's Name:</b></td>
+                <td colspan="5">@Model.FathersName</td>
+            </tr>
+            <tr>
+                <td><b>Registration No:</b></td>
+                <td colspan="5">@Model.RegistrationNumber</td>
+            </tr>
+            <tr>
+                <td><b>Roll No:</b></td>
+                <td colspan="5">@Html.TextBoxFor(model => model.RollNumber, new { @class = "" })</td>
+            </tr>
+            <tr></tr>
+            @if (Model.Subjects != null)
+            {
+                <tr>
+                    <th>Subject Name</th>
+                    <th>Practical Marks</th>
+                    <th>Practical Attendance</th>
+                    <th>Theory Marks</th>
+                    <th>Theory Attendance</th>
+                    <th>Action__________________________________</th>
+                </tr>
+
+                foreach (var subject in Model.Subjects)
+                {
+                    <tr>
+                        <td><b>@subject.Name</b>
+                            
+                            @Html.HiddenFor(sub => subject.Course_ID)
+                            @Html.HiddenFor(sub => subject.MinMarks)
+                            @Html.HiddenFor(sub => subject.MaxMarks)
+                            @Html.HiddenFor(sub => subject.Name)
+                            @Html.HiddenFor(sub => subject.RecordStatus)
+                            @Html.HiddenFor(sub => subject.ResultStatus)
+                            @Html.HiddenFor(sub => subject.SemesterName)
+                            @Html.HiddenFor(sub => subject.Subjects)
+                            @Html.HiddenFor(sub => subject.UpdatedByUserName)
+
+                        </td>
+                        <td>@Html.TextBoxFor(sub => subject.PracticalMarks, new { @class = "form-control" })</td>
+                        <td>@Html.TextBoxFor(sub => subject.PracticalAttendance, new { @class = "form-control" })</td>
+                        <td>@Html.TextBoxFor(sub => subject.TheoryMarks, new { @class = "form-control" })</td>
+                        <td>@Html.TextBoxFor(sub => subject.TheoryAttendance, new { @class = "form-control" })</td>
+                        <td>
+                            <div style="display:inline-block;">
+                                <button class="btn btn-white btn-info btn-bold js-save-row">
+                                    <i class="ace-icon fa fa-floppy-o bigger-120 blue"></i>
+                                    Save
+                                </button>
+
+                                <button class="btn btn-white btn-warning btn-bold js-delete-row">
+                                    <i class="ace-icon fa fa-trash-o bigger-120 orange"></i>
+                                    Delete
+                                </button>
+
+                                <button class="btn btn-white btn-default btn-round js-cancel-row">
+                                    <i class="ace-icon fa fa-times red2"></i>
+                                    Cancel
+                                </button>
+                            </div>
+                        </td>
+                        @*<td class="totalmarks">@(subject.TheoryMarks + subject.TheoryAttendance + subject.PracticalMarks + subject.PracticalAttendance)</td>*@
+                    </tr>
+                }
+            }
+        </tbody>
+        @if (Model.Subjects != null)
+        {
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><b>Grand Total</b></td>
+                    <td><b>@(Model.Subjects.Sum(subject => subject.TheoryMarks + subject.TheoryAttendance + subject.PracticalMarks + subject.PracticalAttendance))</b></td>
+                </tr>
+            </tfoot>
+        }
+    </table>
+    <div class="panel-footer">
+        <div class="row">
+            <ul class="list-inline col-md-6 col-sm-6 col-xs-6">
+                <li></li>
+            </ul>
+            <div class="meta col-md-6 col-sm-6 col-xs-6">
+                <span class="no-margins no-padding pull-right">
+                    <button class="btn btn-success js-update-result">Update</button>
+                </span>
+
+
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <h1>Result not found</h1>
+}
+
+
+<script>
+    $(document).ready(function () {
+        $(".js-save-row").click(function () {
+            var tr = $(this).closest('tr');
+
+
+
+        });
+    });
+</script>

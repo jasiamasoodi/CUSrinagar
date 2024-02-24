@@ -1,0 +1,142 @@
+﻿@model IEnumerable<CUSrinagar.Models.ExaminationSetting>
+@{
+    Layout = null;
+}
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th data-property="Year">Year</th>
+            <th data-property="CourseCategory">Course</th>
+            <th data-property="Semester" title="Semester">Sem</th>
+            <th data-property="IsBacklogSetting">Regular</th>
+            <th data-property="RegularBatch">RegularBatch</th>
+            <th data-property="StartDate">Start Date</th>
+            <th data-property="EndDate">End Date</th>
+            <th data-property="AllowDownloadForm" title="Allow download forms">Allow Forms</th>
+            <th data-property="AllowDownloadAdmitCards">Allow Admit Cards</th>
+            <th data-property="AllowInCenterAllotment">Center Allotment</th>
+            <th data-property="IsHardCodeFeeSet">Fixed fee</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+        <tr>
+            <td>
+                @item.Year
+                @Html.HiddenFor(model => item.ARGExamForm_ID, new { @class = "jsRow_ID" })
+                @*@Html.HiddenFor(model => item.AllowDownloadAdmitCards)*@
+                @*@Html.HiddenFor(model => item.AllowDownloadForm)*@
+                @Html.HiddenFor(model => item.AllowInCenterAllotment)
+                @Html.HiddenFor(model => item.CourseCategory)
+                @Html.HiddenFor(model => item.EndDate)
+                @Html.HiddenFor(model => item.FeeStructure_ID)
+                @Html.HiddenFor(model => item.FormNumberCount)
+                @Html.HiddenFor(model => item.FormNumberPrefix)
+                @Html.HiddenFor(model => item.GracePeriodDays1)
+                @Html.HiddenFor(model => item.GracePeriodDays2)
+                @Html.HiddenFor(model => item.GracePeriodLateFeeAmount)
+                @Html.HiddenFor(model => item.HardCodeFeeAmount)
+                @Html.HiddenFor(model => item.IsBacklogSetting)
+                @Html.HiddenFor(model => item.IsGracePeriod)
+                @*@Html.HiddenFor(model => item.IsHardCodeFeeSet)*@
+                @Html.HiddenFor(model => item.LateFee1)
+                @Html.HiddenFor(model => item.LateFee2)
+                @Html.HiddenFor(model => item.Notification_ID)
+                @Html.HiddenFor(model => item.PrintProgramme)
+                @Html.HiddenFor(model => item.Remark)
+                @Html.HiddenFor(model => item.Semester)
+                @Html.HiddenFor(model => item.StartDate)
+                @Html.HiddenFor(model => item.TotalFee)
+                @Html.HiddenFor(model => item.Year)
+                @Html.HiddenFor(model => item.RegularBatch)
+            </td>
+            <td>@item.CourseCategory</td>
+            <td>@item.Semester</td>
+            <td>
+                @{ var itemValue = item.IsBacklogSetting ? "NO" : "YES"; }
+                @itemValue
+            </td>
+            <td class="regBatch">@item.RegularBatch</td>
+            <td title="@item.StartDate">@item.StartDate.ToString("dd-MMMM-yy")</td>
+            <td title="@item.EndDate">@item.EndDate.ToString("dd-MMMM-yy")</td>
+            <td>
+                @if (item.AllowDownloadForm)
+                {
+                    <label>
+                        <input name="item.AllowDownloadForm" class="ace ace-switch ace-switch-2 btn-empty jsAllowDownloadForm" type="checkbox" checked="checked" value="@item.AllowDownloadForm.ToString()" />
+                        <span class="lbl"></span>
+                    </label>
+                }
+                else
+                {
+                    <label>
+                        <input name="item.AllowDownloadForm" class="ace ace-switch ace-switch-2 btn-empty jsAllowDownloadForm" type="checkbox" value="@item.AllowDownloadForm.ToString()" />
+                        <span class="lbl"></span>
+                    </label>
+                }
+            </td>
+            <td>
+                @if (item.AllowDownloadAdmitCards)
+                {
+                    <label>
+                        <input name="item.AllowDownloadAdmitCards" class="ace ace-switch ace-switch-2 btn-empty jsAllowDownloadAdmitCards" type="checkbox" checked="checked" value="@item.AllowDownloadAdmitCards.ToString()" />
+                        <span class="lbl"></span>
+                    </label>
+                }
+                else
+                {
+                    <label>
+                        <input name="item.AllowDownloadAdmitCards" class="ace ace-switch ace-switch-2 btn-empty jsAllowDownloadAdmitCards" type="checkbox" value="@item.AllowDownloadAdmitCards.ToString()" />
+                        <span class="lbl"></span>
+                    </label>
+                }
+            </td>
+
+            <td>
+                @if (item.AllowInCenterAllotment)
+                {
+                    <label>
+                        <input name="item.AllowInCenterAllotment" class="ace ace-switch ace-switch-2 btn-empty jsAllowInCenterAllotment" type="checkbox" checked="checked" value="@item.AllowInCenterAllotment.ToString()" />
+                        <span class="lbl"></span>
+                    </label>
+                }
+                else
+                {
+                    <label>
+                        <input name="item.AllowInCenterAllotment" class="ace ace-switch ace-switch-2 btn-empty jsAllowInCenterAllotment" type="checkbox" value="@item.AllowInCenterAllotment.ToString()" />
+                        <span class="lbl"></span>
+                    </label>
+                }
+            </td>
+            <td>
+                @if (item.IsHardCodeFeeSet)
+                {
+                    <label>
+                        <input name="item.IsHardCodeFeeSet" class="ace ace-switch ace-switch-2 btn-empty jsIsHardCodeFeeSet" type="checkbox" checked="checked" value="@item.IsHardCodeFeeSet.ToString()" />
+                        <span class="lbl"></span>
+                    </label>
+                    <span>[Rs.<span class="lblhardcodefeeamount">@item.HardCodeFeeAmount</span>]</span>
+                }
+                else
+                {
+                    <label>
+                        <input name="item.IsHardCodeFeeSet" class="ace ace-switch ace-switch-2 btn-empty jsIsHardCodeFeeSet" type="checkbox" value="@item.IsHardCodeFeeSet.ToString()" />
+                        <span class="lbl"></span>
+                    </label>
+                    <span>[Rs.<span class="lblhardcodefeeamount">@item.HardCodeFeeAmount</span>]</span>
+                }
+            </td>
+            <td>
+                <a href="@Url.Action("Edit",new { @id=item.ARGExamForm_ID})"><i class="glyphicon glyphicon-edit"></i></a>
+            </td>
+        </tr>
+            }
+        }
+    </tbody>
+</table>
+

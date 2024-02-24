@@ -1,0 +1,80 @@
+﻿@model CUSrinagar.Models.CertificateVerification
+
+@using (Html.BeginForm("CertificateVerfication", "ApplicationForms", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.Student_ID)
+    @Html.HiddenFor(model => model.OrgProgramme)
+
+    <div class="table-responsive panel">
+        <table class="table">
+            <tbody>
+
+                <tr>
+                    @Html.HiddenFor(model => model.DOB)
+                    <td class="text-success" style="width:300px"> 1. Name of the Applicant:</td>
+                    <td>
+                        @Html.DisplayFor(model => model.FullName) @Html.HiddenFor(model => model.FullName)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-success"> 2. Father's Name</td>
+                    <td>@Html.DisplayFor(model => model.FathersName) @Html.HiddenFor(model => model.FathersName)</td>
+                </tr>
+                <tr>
+                    <td class="text-success"> 3. Registration Number</td>
+                    <td>@Html.DisplayFor(model => model.CUSRegistrationNo) @Html.HiddenFor(model => model.CUSRegistrationNo)</td>
+                </tr>
+
+                <tr>
+                    <td class="text-success">College last attented </td>
+                    <td>@Html.DisplayFor(model => model.CollegeFullName) @Html.HiddenFor(model => model.CollegeFullName)</td>
+                </tr>
+                <tr>
+                    <td class="text-success"> 6. @Html.LabelFor(model => model.ReasonForVerification)</td>
+                    <td>
+                        @Html.TextAreaFor(model => model.ReasonForVerification, new { @style = "width:50%", @rows = "3" })
+                        @Html.ValidationMessageFor(model => model.ReasonForVerification, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-success"> 7. @Html.LabelFor(model => model.OrgNamePostalAddress)</td>
+                    <td>
+                        @Html.TextAreaFor(model => model.OrgNamePostalAddress, new { @style = "width:50%", @rows = "3" })
+                        @Html.ValidationMessageFor(model => model.OrgNamePostalAddress, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-success"> 8. @Html.LabelFor(model => model.OrgEmail)</td>
+                    <td>
+                        @Html.TextBoxFor(model => model.OrgEmail)
+                        @Html.ValidationMessageFor(model => model.OrgEmail, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-success"> 9. @Html.LabelFor(model => model.DocsAttachedForVerification)</td>
+                    <td>
+                        @Html.TextAreaFor(model => model.DocsAttachedForVerification, new { @style = "width:50%", @rows = "3" })
+                        @Html.ValidationMessageFor(model => model.DocsAttachedForVerification, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="2" class="text-center">Amount Rs 300 is non-refundable</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-12 col-md-12 ">
+        <p style="text-align:center;">
+            <span id="btn">
+                <input type="submit" value="Submit Form & Make Payment" class="btn btn-success" style="color:white !important" />
+            </span>
+        </p>
+    </div>
+}
+
+@section PageSpecificJS{
+    @Scripts.Render("~/bundles/Libraries/jqueryval")
+}
+

@@ -1,0 +1,19 @@
+﻿@model CUSrinagar.Models.Questionaire
+@{int i = Convert.ToInt32(this.ViewData["Count"].ToString());
+    int sno = i + 1;}
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.QuestionOptions[i].OptionLabel) @sno
+
+    </label>
+    <div class="col-sm-6 ">
+        @Html.HiddenFor(model => model.QuestionOptions[i].Question_Id, new { @class = "width-100" })
+        @Html.HiddenFor(model => model.QuestionOptions[i].Option_Id, new { @class = "width-100" })
+        @Html.TextBoxFor(model => model.QuestionOptions[i].OptionLabel, new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.QuestionOptions[i].OptionLabel, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>

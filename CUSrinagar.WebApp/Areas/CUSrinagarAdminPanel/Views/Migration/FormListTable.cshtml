@@ -1,0 +1,183 @@
+﻿
+@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@using CaptchaMvc.HtmlHelpers
+@model  List<CUSrinagar.Models.MigrationDetail>
+@{
+    Layout = null;
+    var ISChecked = "";
+}
+
+
+<div id="CourseCollegeMapping" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin">Accept-Reject Form</h3>
+            </div>
+
+            @using (Html.BeginForm("UpdateForm", "Migration", FormMethod.Post, new { enctype = "multipart/form-data", @name = "validation-form", @id = "submit-form", @class = "form-horizontal", @role = "form" }))
+            {
+
+
+
+                <div class="modal-body">
+                    <div class="row page-row" style="background-color:white;">
+                        <div style="margin-bottom:0 !important;">
+                            <div id="collapse_cus" class="panel-collapse collapse in">
+                                <div class="text-center">
+                                    <h5 class="">
+                                        FORM OF APPLICATION FOR <span class="to-uppercase bold" id="FType"></span>
+                                    </h5>
+                                </div>
+                                <hr class="margin-top-0 margin-bottom-1" />
+
+                                <table border="0" style="line-height:10mm; margin:10px">
+                                    <tbody>
+                                        <tr class="no-border">
+                                            <td>Name of the Applicant:- <u><small><b><span id="FulName"></span></b></small></u></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Father's Name:- <u><small><b><span id="FathrName"></span> </b> </small></u> &nbsp;&nbsp;Mother's Name:-  <u><small><b> <span id="MothrName"></span></b></small></u></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                University Registration No.:-  <u><small><b> <span id="CusRegNo"></span></b></small></u>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Name of the College/Institution where studying:- <u><small><b><span id="OldColg"></span></b></small></u></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Name of the College/Institution to which transfer is sought:-
+                                                <u><small><b><span id="NewCollegeName"></span></b></small></u>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Genuine reason for transfer:- <u><small><b><span id="Remark"></span></b></small></u></td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+
+                                <div class="col-sm-12">
+                                    <div class="col-sm-3"><span class="danger">*</span>Remarks:</div>
+                                    <div class="col-sm-9">
+                                        @Html.TextArea("REMARKSBYCOLLEGE", new { cols = 45 })
+                                        <div> <span id="REMARKSBYCOLLEGEError" class="red"></span></div>
+                                    </div>
+                                </div>
+
+                                <div class="radio col-sm-12">
+                                    <bold>
+                                        <div class="col-sm-3"></div>
+                                        <div class="col-sm-2">
+
+                                            <label>
+
+                                                @Html.RadioButton("AcceptReject", 4) Accept
+                                            </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </div>
+                                        <div class="col-sm-2">
+
+                                            <label>
+
+                                                @Html.RadioButton("AcceptReject", 3) Reject
+                                            </label>
+                                        </div>
+                                        <div class="col-sm-5"> <span id="AcceptRejectError" class="red"></span></div>
+                                        @Html.Hidden("Form_Id")<br />
+                                    </bold>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+
+
+
+                    <button type="button" id="submitremarks" class="btn btn-sm btn-success pull-right"><i class="ace-icon fa fa-times"></i>Submit</button>
+                    <button type="button" class="btn btn-sm btn-danger pull-left" data-dismiss="modal">
+                        <i class="ace-icon fa fa-times"></i>
+                        Close
+                    </button>
+
+
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+
+             <th>Student Name</th>
+            <th>Registration No</th>
+            <th data-property="FathersName">Father</th>
+            <th data-property="CourseFullName">Course Name</th>
+            <th data-property="CurrentSemesterOrYear">Semester</th>
+            <th data-property="Batch">Batch</th>
+            <th data-property="FormType">Form Type</th>
+            <th data-property="IsAccepted">Status</th>
+            <th data-property="REMARKSBYCOLLEGE">Remarks</th>
+        </tr>
+
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var row in Model)
+            {
+
+        <tr class="@row.Form_ID">
+            @{var Ftype = Helper.GetEnumDescription<MigrationE>(row.FormType);}
+            @Html.HiddenFor(x => row.FullName)
+            @Html.HiddenFor(x => row.CUSRegistrationNo)
+            @Html.HiddenFor(x => row.FathersName)
+            @Html.HiddenFor(x => row.MothersName)
+            @Html.HiddenFor(x => row.CollegeFullName)
+            @Html.HiddenFor(x => row.NewCollege)
+            @Html.HiddenFor(x => row.Remarks)
+            @Html.Hidden("FormType", Ftype)
+            <td>@row.FullName</td>
+            <td>@row.CUSRegistrationNo</td>
+            <td>@row.FathersName</td>
+            <td>@row.CourseFullName</td>
+            <td>@row.CurrentSemesterOrYear</td>
+            <td>@row.Batch</td>
+            <td>@Ftype</td>
+
+            <td>
+                @if (row.FormStatus == CUSrinagar.Enums.FormStatus.Accepted)
+                {<label style="color: green;font-size: larger;font-weight: bolder;"> Accepted</label>}
+                else if (row.FormStatus == CUSrinagar.Enums.FormStatus.Rejected)
+                {<label style="color: coral;font-size: larger;font-weight: bolder;"> Rejected</label>}
+                else
+                { <span id="jsShowPopUp" href="#CourseCollegeMapping" data-toggle="modal" class="label-info  pull-right" style="color:white;cursor:pointer;padding:7px;margin-right:33%;font-size:1.0em;" data-FormId="@row.Form_ID">
+                        Accept or Reject
+                    </span>
+                }
+
+            </td>
+            <td>@row.REMARKSBYCOLLEGE</td>
+        </tr>
+            }
+        }
+    </tbody>
+</table>
+<style>
+    .hidden
+    {
+        display:none;
+
+    }
+</style>

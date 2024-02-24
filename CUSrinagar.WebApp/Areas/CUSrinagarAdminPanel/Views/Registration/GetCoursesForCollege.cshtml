@@ -1,0 +1,33 @@
+﻿@{
+    Layout = null;
+}
+@using CUSrinagar.Extensions
+@model List<CUSrinagar.Models.CourseCollegeWidget>
+<table class="table table-striped table-dark">
+    <thead>
+        <tr>
+            <td><strong>Course Full Name</strong></td>
+            <td><strong>Programme</strong></td>            
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var courseListItem in Model)
+            {
+        <tr>
+            <td class="jsGetSubjects" data-value=@courseListItem.Course_ID>
+                <a target="_blank" href="#" role="button" class="bigger-125 blue" data-toggle="modal">
+                    @courseListItem.CourseFullName
+                </a>
+            </td>
+            <td class="jsProgramme" data-value=@((short)courseListItem.PrintProgramme)>
+                <a href="#"> Assign Registration Number for this Course.</a>
+            </td>
+        </tr>
+            }
+        }
+
+    </tbody>
+</table>
+

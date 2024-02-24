@@ -1,0 +1,64 @@
+﻿
+
+@model  List<CUSrinagar.Models.Questionaire>
+@{
+    Layout = null;
+
+}
+
+<table class="table  table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th>S.No.</th>
+            <th data-property="Question">Question</th>
+
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var row in Model)
+            {
+
+                <tr>
+                    <td class="js-sno"></td>
+
+                    <td>
+                        <div class="col-sm-12">@row.Question</div>
+                        <div class="col-sm-12">
+                            @if (row.QuestionOptions == null)
+                            {
+                                <b> No Info Available</b>
+                            }
+                            else
+                            {<table class="table  table-striped js-table">
+                                    <tr>
+                                        @foreach (CUSrinagar.Models.QuestionOptions option in row.QuestionOptions ?? new List<CUSrinagar.Models.QuestionOptions>())
+                                        {
+
+                                            <td width="22%">  @option.OptionLabel </td>
+                                        }
+                                    </tr>
+
+                                    <tr>
+                                        @foreach (CUSrinagar.Models.QuestionOptions option in row.QuestionOptions ?? new List<CUSrinagar.Models.QuestionOptions>())
+                                        {
+                                            decimal percent = ((decimal)option.StudentCount / (decimal)row.TotalStudents) * 100;
+                                            <td width="22%"> <b>@percent.ToString("f2")%</b> </td>
+                                        }
+                                    </tr>
+
+                                </table>}
+
+                        </div>
+                    </td>
+
+
+                </tr>
+
+            }
+        }
+    </tbody>
+</table>
+

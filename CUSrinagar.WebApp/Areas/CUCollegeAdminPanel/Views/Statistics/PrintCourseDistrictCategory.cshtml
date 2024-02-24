@@ -1,0 +1,122 @@
+﻿@model CUSrinagar.Models.CollegeCourseDistrictCategoryStatistics
+@{
+    Layout = null;
+    List<SelectListItem> Categories = ViewBag.Category;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Course Statistics : CUS</title>
+    <link href="~/Content/ThemePublic/Libraries/css/printer-frndly.css" rel="stylesheet" type="text/css" />
+    <style type="text/css" media="print">
+        @@page {
+            size: landscape;
+        }
+    </style>
+</head>
+<body class="A4 middle landscape">
+    @if (Model != null)
+    {
+        var college = Model;
+        {
+            if (college.CourseDistrictCategory != null)
+            {
+                var listOfCategories = college.CourseDistrictCategory.Where(x => x.Districts != null).SelectMany(x => x.Districts)?.Where(x => x.Categories != null).SelectMany(x => x?.Categories?.Select(y => y.CategoryName))?.Distinct()?.OrderBy(x => x)?.ToList();
+                foreach (var singleCourse in college.CourseDistrictCategory)
+                {
+                    bool NewCourse = true;
+                    <section class="sheet padding-5mm compact jsPageSection">
+                        <div class="center">
+                            <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                            <h3><u> @college.CollegeFullName</u></h3>
+                            <h4>District Category Wise Date of @ViewBag.Programme  Semester-@ViewBag.Semester Batch-@ViewBag.Batch</h4>
+                        </div>
+                        <table border="1" class="center" style="font-size:14px;">
+                            <thead style="">
+                                <tr class="center">
+                                    <th class="text-center" rowspan="2">Course</th>
+                                    <th class="text-center" rowspan="2">District</th>
+                                    <th class="text-center" colspan="2">Total</th>
+                                    @foreach (var cat in listOfCategories)
+                                    {
+                                        <th colspan="2" class="text-center " title="@(Categories.FirstOrDefault(x=>x.Value.ToLower()==cat.ToLower())?.Text)">
+                                            @cat.Substring(0, cat.Length < 4 ? cat.Length : 4).ToUpper()
+                                        </th>
+                                    }
+                                </tr>
+                                <tr>
+                                    <th class="text-center">M</th>
+                                    <th class="text-center">F</th>
+                                    @foreach (var cat in listOfCategories)
+                                    {
+                                        <th class="text-center ">M</th>
+                                        <th class="text-center ">F</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var districtCategory in singleCourse.Districts)
+                                {
+                                    <tr class="">
+                                        @if (NewCourse)
+                                        {
+                                            <td rowspan="@singleCourse.Districts.Count" class="">@singleCourse.CourseFullName</td>
+                                        }
+                                        <td>@districtCategory.District</td>
+                                        <td class="text-center">@districtCategory.Male</td>
+                                        <td class="text-center">@districtCategory.Female</td>
+                                        @foreach (var cat in listOfCategories)
+                                        {
+                                            var catCount = districtCategory.Categories.FirstOrDefault(i => i.CategoryName.ToLower() == cat.ToLower());
+                                            <td>@(catCount == null ? 0 : catCount.Male)</td>
+                                            <td>@(catCount == null ? 0 : catCount.Female)</td>
+                                        }
+                                    </tr>
+                                    NewCourse = false;
+                                }
+                            </tbody>
+                        </table>
+                    </section>
+                }
+            }
+
+        }
+
+
+        <div class="noneOnPrint print-download-strip jsFooterSection">
+            <button href="#" class="btn btn-default" onclick="window.print();"><b>Download / Print Statistics </b></button>
+        </div>
+    }
+    else
+    {
+        <section class="sheet padding-5mm">
+            <p>Record Not Found .... </p>
+        </section>
+    }
+
+</body>
+
+
+</html>
+
+@*<script src="~/Content/ThemeAdmin/Content/Scripts/Libraries/jquery-3.2.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            return;
+            var $pageSection = $(".jsPageSection");
+            //var $trs =$( JSON.parse(JSON.stringify($pageSection.find('tbody tr'))));
+            var $trs = $pageSection.find('tbody tr').clone();
+            var count = $trs.length;
+            $pageSection.find('tbody tr').remove();
+            for (var i = 0; i < count; i = i + 20) {
+                var $trs20 = $trs.slice(i, 20);
+                $pageSection.find('tbody').append($trs20);
+                //$($trs20).appendTo("body");
+                //$('body').append($pageSection);
+                $pageSection.appendTo('body');
+                $pageSection.find('tbody tr').remove();
+            }
+
+        });
+    </script>*@

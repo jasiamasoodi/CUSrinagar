@@ -1,0 +1,32 @@
+﻿
+@model IEnumerable<CUSrinagar.Models.CourseWiseGenderCountWidget>
+
+
+<table class="table table-striped table-dark" >
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Batch)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Gender)
+        </th>
+        <th>
+            Number Of Students
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Batch)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Gender)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NoOfStudents)
+        </td>
+    </tr>
+}
+
+</table>

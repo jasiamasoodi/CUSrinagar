@@ -1,0 +1,160 @@
+﻿@model CUSrinagar.Models.ExaminationWhiteListCompact
+
+@{
+    ViewBag.Title = "Create";
+
+    var AllowedTypes = System.Web.Configuration.WebConfigurationManager.AppSettings["NotificationFileAllowedTypes"];
+    AllowedTypes = (AllowedTypes != null) ? AllowedTypes : ".pdf";
+    var MaxUploadLimitInKB = Convert.ToInt64(System.Web.Configuration.WebConfigurationManager.AppSettings["NotificationFileSizeInKB"]);
+    MaxUploadLimitInKB = (MaxUploadLimitInKB > 1000) ? MaxUploadLimitInKB : 700000;
+    var MaxUploadLimitInBytes = MaxUploadLimitInKB * 1024;
+    var MaxUploadLimitInMB = MaxUploadLimitInKB / 1024;
+
+}
+<div id="response" style="width:80%;margin:0 auto">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+</div>
+<h2>New Whitelist Application</h2>
+@Html.ActionLink("Back to List", "Applications", new { @class = "btn btn-default" })
+
+
+@using (Html.BeginForm("Create", "ExaminationWhiteList", FormMethod.Post, new { enctype = "multipart/form-data", @id = "validation-form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="col-sm-10">
+        <div>
+            <hr />
+            <table class="table table-striped table-bordered table-hover">
+                <tbody>
+                    @*<tr>
+                            <td>
+                                Student Registration Number
+                            </td>
+                            <td>
+                                @Html.DropDownListFor(m => m.CUSRegistrationNo, (IEnumerable<SelectListItem>)ViewBag.Students, "Choose student", new { @class = "chosen-select form-control jsOnStudentSelect" })
+                                @Html.ValidationMessageFor(model => model.Student_ID, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>*@
+                    <tr>
+                        <td>
+                            Student Registration Number
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.CUSRegistrationNo, new { })
+                            @Html.ValidationMessageFor(model => model.CUSRegistrationNo, "", new { @class = "text-danger" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Student Details
+                        </td>
+                        <td>
+                            <input type="hidden" name="CUSRegistrationNo" value="" />
+                            <strong><span id="StudentName"></span></strong>
+                            <strong><span id="FathersName"></span></strong>
+                            <strong><span id="CourseName"></span></strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Allowed By</td>
+                        <td>
+                            @Html.DropDownListFor(m => m.AllowedBy_ID, (IEnumerable<SelectListItem>)ViewBag.Users, "Choose user allowed by", new { @class = "chosen-select form-control" })
+                            @Html.ValidationMessageFor(model => model.AllowedBy_ID, "", new { @class = "text-danger" })
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td> Backlog Application </td>
+                        <td>
+                            <label>
+                                <input name="IsBacklog" class="ace ace-switch ace-switch-2 btn-empty jsAllowDownloadAdmitCards" type="checkbox" checked="checked" value="True">
+                                <span class="lbl"></span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td> @Html.LabelFor(model => model.Semester)</td>
+                        <td>
+                            @Html.EditorFor(model => model.Semester, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Semester, "", new { @class = "text-danger" })
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>@Html.LabelFor(model => model.ExaminationYear)</td>
+                        <td>
+                            @Html.EditorFor(model => model.ExaminationYear, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ExaminationYear, "", new { @class = "text-danger" })
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>@Html.LabelFor(model => model.Remarks)</td>
+                        <td>
+                            @Html.EditorFor(model => model.Remarks, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Remarks, "", new { @class = "text-danger" })
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td>Upload Application Image (optional)</td>
+                        <td>
+                            <input type="file" id="Files" name="Files" />
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td colspan="2">
+                            <input type="submit" onclick="uploadFile()" value="Save Application" class="btn btn-success pull-right" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+<input type="text" hidden="hidden" style="width: 329px!important" />
+<iframe id="myframe" name="myframe" hidden="hidden"></iframe>
+<script src="@Url.Content("~/Scripts/JSNotification/NotificationCreateOrEdit.js")"></script>
+
+@section PageSpecificJS{
+
+    <script type="text/javascript">
+
+        var _AllowedTypes = "@AllowedTypes";
+        var _MaxUploadLimitInBytes = "@MaxUploadLimitInBytes"
+        var _MaxUploadLimitInMB = "@MaxUploadLimitInMB";
+
+        $(document).ready(function () {
+            $(".jsOnStudentSelect").change(function ()
+            {
+                //$('[name=CUSRegistrationNo]').val($(".jsOnStudentSelect :selected").text());
+                var student_id = $(".jsOnStudentSelect :selected").text();
+                var _url = getBaseUrlAdmin() + "ExaminationWhiteList/GetStudent";
+                $.ajax({
+                    url: _url,
+                    //type: "POST",
+                    //datatype: "Json",
+                    data: { Student_ID: student_id },
+                    success: function (data)
+                    {
+                        if (data != null && !isNullOrEmpty(data))
+                        {
+                            var array = data.split(',');
+                            $("#StudentName").html(' Student Name : ' + array[0] + ' - ');
+                            $("#FathersName").html(' Fathers Name : ' + array[1] + ' - ');
+                            $("#CourseName").html(' Class Roll No : ' + array[2] + ' - ');
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                });
+            });
+        });
+
+    </script>
+
+
+}

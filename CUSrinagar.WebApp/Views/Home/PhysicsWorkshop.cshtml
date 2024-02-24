@@ -1,0 +1,166 @@
+﻿
+@{
+    ViewBag.Title = "PhysicsWorkshop";
+    Layout = "~/Views/Shared/_CUWebAppLayout.cshtml";
+}
+<style>
+    .workshop h2 {
+        background-color: azure;
+    }
+
+    .workshop .row > div {
+        border: 1px solid #CCC;
+        background-color: aliceblue;
+        margin: 5px;
+    }
+
+        .workshop .row > div.col-md-11 {
+            padding: 5px;
+        }
+
+    .workshop ul {
+        padding-left: 0px;
+        list-style-type: none;
+    }
+
+        .workshop ul li {
+            font-size: 1.2em;
+        }
+
+            .workshop ul li .fa {
+                padding-right: 10px;
+                font: bold;
+            }
+</style>
+@*<div class="workshop">
+        <div class="row">
+            <div class='col-md-11'>
+                <div class='img-responsive'>
+                    <img src="~/Content/ThemePublic/Libraries/images/workshop/phy-workshop-header.jpg" width="100%" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class='col-md-11'>
+                <div style="text-align:center;">
+                    <span class="quadraText">
+                        <strong style="font-size:x-large;">Event Postponed  till September,2018. Dates to be communicated soon..</strong>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class='col-md-5 col-sm-12 col-xs-12'>
+                <div class='img-responsive'>
+                    <img src="~/Content/ThemePublic/Libraries/images/workshop/logos.jpg" width="100%" />
+                </div>
+            </div>
+
+            <div class='col-md-6 col-md-12- col-xs-12'>
+                <h2 class="text-center">AIM</h2>
+                <ul style="list-style-type:none">
+                    <li><i class="fa fa-angle-right"></i> To train young researchers on the fundamentals of Nuclear Physics.</li>
+                    <li><i class="fa fa-angle-right"></i> To expose the participants to cutting-edge research areas in the field.</li>
+                    <li><i class="fa fa-angle-right"></i> To provide hands-on experience on computational tools in Nuclear Physics.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class='col-md-6 col-md-12- col-xs-12'>
+                <h2 class='text-center'>TOPICS</h2>
+                <ul>
+                    <li><i class="fa fa-angle-right"></i>Density Functional Approach to Atomic Nuclei</li>
+                    <li><i class="fa fa-angle-right"></i> Algebraic Models</li>
+                    <li><i class="fa fa-angle-right"></i>Random Phase Approximation</li>
+                    <li><i class="fa fa-angle-right"></i>Time-Dependent Approaches</li>
+                    <li><i class="fa fa-angle-right"></i>Bruckner Many-Body Approach</li>
+                    <li><i class="fa fa-angle-right"></i>Symmetry Restoration</li>
+                    <li><i class="fa fa-angle-right"></i>Relativistic Collisions</li>
+                    <li><i class="fa fa-angle-right"></i>Quark Gluon Plasma</li>
+                </ul>
+            </div>
+
+
+            <div class='col-md-5 col-sm-12 col-xs-12 text-center'>
+                <h2 class="">Sponsored By</h2>
+                <p>Rashtriya Uchchatar Shiksha Abhiyan</p>
+                <p>(RUSA)</p>
+                <p>Ministry of Human Resource Development Govt. of India</p>
+            </div>
+
+
+            <div class='col-md-5 col-sm-12 col-xs-12'>
+                <h2 class="no-margin-top">ORGANISERS</h2>
+                <ul>
+                    <li><i class="fa fa-angle-right"></i>Prof. Sheikh Javid Ahmed</li>
+                    <li><i class="fa fa-angle-right"></i>Dr. Gowhar H. Bhat</li>
+                    <li><i class="fa fa-angle-right"></i>Mr. Ahmad Gulzar</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class='col-md-5 col-sm-12 col-xs-12'>
+                <h2 class='text-center'>REGISTRATION FEE</h2>
+                <ul>
+                    <li><span class="col-md-8 col-sm-8 col-xs-8"><i class="fa fa-angle-right"></i>Faculty Members:</span><span class="col-md-4 col-sm-4 col-xs-4">Rs. 4000</span>  </li>
+                    <li><span class="col-md-8 col-sm-8 col-xs-8"><i class="fa fa-angle-right"></i>Research Scholars :</span><span class="col-md-4 col-sm-4 col-xs-4">Rs. 2000</span>  </li>
+                    <li><span class="col-md-8 col-sm-8 col-xs-8"><i class="fa fa-angle-right"></i>Foreign Participants:</span><span class="col-md-4 col-sm-4 col-xs-4"> $ 200</span>  </li>
+                </ul>
+            </div>
+            <div class='col-md-6 bordered-radius fontClass'>
+                <h2 class='text-center'>TENTATIVE SPEAKERS</h2>
+                <ul>
+                    <li><i class="fa fa-angle-right"></i>Prof. Peter Ring   &nbsp; &nbsp; Prof. Dinesh K. Srivastava</li>
+                    <li><i class="fa fa-angle-right"></i> ( Munich , Germany ) &nbsp; &nbsp;  ( Kolkata , India )</li>
+                    <li><i class="fa fa-angle-right"></i>Prof. Luis Robledo( Madrid , Spain )   &nbsp; &nbsp;Prof. Piet Van Isacker( Ganil , France )</li>
+                    <li><i class="fa fa-angle-right"></i>Prof. Yang Sun( Shanghai , China )&nbsp;&nbsp;Prof.  Bijay K. Agrawal( Kolkata , India </li>
+                    <li> <i class="fa fa-angle-right"></i>Prof. Ashok K. Jain( Roorkee , India )   </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-11 col-sm-12 col-xs-12">
+                <h2 class="text-center">CALL FOR APPLICATIONS</h2>
+                <ul>
+                    <li> <i class="fa fa-angle-right"></i>  Applications are invited from Ph. D  students and faculty members.       </li>
+                    <li> <i class="fa fa-angle-right"></i> Application form can be downloaded <a href="http://cusrinagar.edu.in/FolderManager/Notification/2d8930c1-0056-4987-a6ce-5823e2559ab6_workshop-form.pdf">here</a>        </li>
+                    <li> <i class="fa fa-angle-right"></i>  <a href=''>Click Here  </a>   to download banner.     </li>
+                    <li> <i class="fa fa-angle-right"></i>   Deadline for submitting the applications is  Feb. 16, 2018      </li>
+                    <li> <i class="fa fa-angle-right"></i>     Number of participants is limited to sixty only and the applications shall be accepted on   first-come-first-serve basis.    </li>
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-11 col-sm-12 col-xs-12">
+                <div class='img-responsive'>
+                    <img src="~/Content/ThemePublic/Libraries/images/workshop/phy-workshop-footer.JPG" width="100%" />
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>*@
+<div class="workshop">
+    <div class="row">
+        <div class='col-md-11'>
+            <div class='img-responsive'>
+                <img src="~/Content/ThemePublic/Libraries/images/workshop/QCAI-Workshop.jpg" style="width:100%;" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-11 col-sm-12 col-xs-12">
+            <h2 class="text-center">Application Form</h2>
+            <ul>
+                <li> <i class="fa fa-angle-right"></i>  Last date for receiving abstracts for poster presentation - <b>13-02-2018</b>     </li>
+                <li> <i class="fa fa-angle-right"></i>Last date for receiving abstracts research paper for oral presentation - <b>17-02-2018</b> </li>
+                <li> <i class="fa fa-angle-right"></i> Download the application form <a href="~/Content/ThemePublic/Libraries/images/workshop/RegistrationForm_QMCOM_Workshop_2019.pdf">here</a> </li>
+            </ul>
+        </div>
+    </div>

@@ -1,0 +1,91 @@
+﻿
+@{
+    ViewBag.Title = "ProfessorList";
+}
+
+<div class="page-wrapper pager-table-text">
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Professor List
+                            <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                            </span>
+
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="col-sm-12 search-box">
+                            <label class="col-sm-12">Advance Search</label>
+
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                College
+                                <div>
+                                    @Html.DropDownList("College_ID", new SelectList(ViewBag.CollegeList, "Value", "Text"),
+                                          "Choose College", new
+                                          {
+                                              @class = " form-control jsfilterelement ",
+                                              @data_column = "College_ID",
+                                              @data_operator = "EqualTo",
+                                           })
+                                </div>
+                            </div>
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                Subject
+                                <div id="Course">
+                                    @Html.TextBox("SubjectFullName", "", new { @class = "form-control jsfilterelement", @data_column = "SubjectFullName", @data_operator = "Contains" })
+                                </div>
+                            </div>
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                Professor
+                                <div id="Course">
+                                    @Html.TextBox("Professor", "", new { @class = "form-control jsfilterelement", @data_column = "Professor", @data_operator = "Contains" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-1 " style="padding-top: 17px;">
+                                <button type="button" class="btn btn-primary fa-search-btn"><i class="fa fa-search"></i>&nbsp;Search</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="js-table-content" data-url="@Url.Action("ProfessorListTable", "ProfessorStatistics", new { area = "CUSrinagarAdminPanel" })" data-DefaultOrderByColumn="Semester">
+
+                    </div>
+                    @{Html.RenderPartial("_JSPagerTableFooter");}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section PageSpecificJS{
+
+    <script>
+          @*var DeletePath = '@Url.Action("Delete", "UserProfile", new { area = "CUCollegeAdminPanel" })';*@
+
+        $(document).ready(function () {
+
+            var $pagertable = $(".js-pager-table");
+
+            loadpagertable();
+        });
+    </script>
+
+
+
+
+}
+
+
+
+
+
+
+
+

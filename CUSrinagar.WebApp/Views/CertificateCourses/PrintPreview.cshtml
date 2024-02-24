@@ -1,0 +1,373 @@
+﻿@model CUSrinagar.Models.CertificateCoursePersonalInfo
+@using CUSrinagar.Extensions
+@{
+    Layout = null;
+    string MessageForAlert = Convert.ToString(TempData["alert"] + "");
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@Model.BoardRegnNo.Replace("/", "-") - CUSrinagar</title>
+    <style type="text/css">
+        .btn-theme {
+            background: #011c27;
+            border: 1px solid #84aac9;
+            color: #fff;
+        }
+
+            .btn-theme:hover {
+                background: #545677;
+                border: 1px solid #84aac9;
+                color: #fff;
+            }
+
+        .QRCode {
+            width: 95px;
+            position: absolute;
+            margin-top: -60px;
+            margin-left: 70px;
+        }
+
+        @@media print {
+            .QRCode {
+                width: 95px;
+                position: absolute;
+                margin-top: -60px;
+                margin-left: 70px;
+            }
+
+            .noneOnPrint {
+                display: none;
+            }
+
+            .dontbreakInside {
+                page-break-inside: avoid;
+            }
+
+            .breakpagehere {
+                page-break-after: always !important;
+            }
+
+            .blankspace {
+                height: 350px !important;
+            }
+        }
+
+        .breakpagehere {
+            height: 10px;
+            background-color: grey !important;
+        }
+
+        table tr td {
+            padding: 10px;
+        }
+
+        table tr td, table tr th {
+            max-width: 150px;
+            word-wrap: break-word !important;
+        }
+
+        table, table tr, table tr td, table tr th {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        div {
+            background-color: #fff;
+        }
+
+        .center {
+            text-align: center !important;
+        }
+
+        .pull-right {
+            float: right !important;
+        }
+
+        .pull-left {
+            float: left !important;
+        }
+    </style>
+</head>
+<body style="background-color:grey">
+    @{
+       var base64 = Convert.ToBase64String(Model.QRCode);
+        var QRImgSrc = $"data:image/png;base64,{base64}";
+    }
+    <div style="margin:0 auto;width:909px;padding:10px 10px">
+        <div class="center">
+            <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" style="width:90px;height:68px;" />
+            <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+            <br />
+
+            <strong style="font-size:20px;">
+                Certificate / Diploma Course (Arabic) Registration Form @Model.Batch
+                <img src="@QRImgSrc" class="QRCode" />
+            </strong>
+
+        </div>
+        <table>
+            <tr>
+                <td colspan="4">Board Registration No.:<strong> @Model.BoardRegnNo</strong></td>
+                <td rowspan="5" class="center">
+                    <img class="img-responsive" src="@Url.Content(Model.Photograph)" width="150" />
+                </td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td>@Model.FullName</td>
+                <td>Gender</td>
+                <td>@Model.Gender</td>
+            </tr>
+            <tr>
+                <td>Parentage</td>
+                <td>@Model.Parentage</td>
+                <td>Batch</td>
+                <td>@Model.Batch</td>
+            </tr>
+            <tr>
+                <td>Mobile</td>
+                <td>@Model.MobileNo</td>
+                <td>DOB</td>
+                <td><b>@Model.DOB.ToString("dd-MM-yyyy")</b> </td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td colspan="3">@Model.Email</td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td colspan="4">@Model.Address</td>
+            </tr>
+        </table>
+
+        @if (Model.PrevQualifications.IsNotNullOrEmpty())
+        {
+            <h3>Academic Details</h3>
+            <table>
+                <tr>
+                    <th>Exam Name</th>
+                    <th>Stream</th>
+                    <th>Year Of Passing</th>
+                    <th>Max Marks</th>
+                    <th>Marks Obt</th>
+                    <th>%age</th>
+                </tr>
+                @if (Model.PrevQualifications != null)
+                {
+                    foreach (var item in Model.PrevQualifications)
+                    {
+                        <tr>
+                            <td rowspan="2">@item.ExamName</td>
+                            <td>@item.Stream</td>
+                            <td>@item.YearOfPassing</td>
+                            <td>@item.MaxMarks</td>
+                            <td>@item.MarksObt</td>
+                            <th>@item.Percentage</th>
+                        </tr>
+                        <tr>
+                            <td colspan="4"><b>Subject(s)</b>: @item.Stream</td>
+                            <td colspan="3"><b>Board/University</b>: @item.ExamBody</td>
+                        </tr>
+                    }
+                }
+            </table>
+        }
+
+        <div>
+            <h3>Courses Applied</h3>
+            <table>
+                <tr>
+                    <th style="width:60px">
+                        S.No.
+                    </th>
+                    <th>
+                        Course Name
+                    </th>
+                </tr>
+
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>@Model.AppliedFor.GetEnumDescription()</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br />
+        </div>
+        <div class="dontbreakInside" style="width:100% !important">
+            <h3>Declaration by the Applicant</h3>
+            <p style="width:100%;text-align:justify">
+                I hereby declare that all statements made in this application form are true and the copies of the testimonials
+
+                enclosed are genuine to the best of my knowledge, and in case the above information or my eligibility is found incorrect at any
+
+                stage my Admission & Application Form shall be rejected summarily without any notice in this regard..
+
+                <br /><br />
+                <span class="pull-left ">Place:<br />Dated :</span>
+
+                <strong class="pull-right">
+                    <br />
+                    Signature of the Applicant
+                </strong>
+            </p>
+        </div>
+        <br />
+        <p class="breakpagehere"></p>
+
+        @{
+            if (Model.PaymentDetail != null)
+            {
+                <div class="dontbreakInside">
+                    <div class="center">
+                        <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                        <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" class="pull-left" style="width:90px;height:68px;" />
+                        <img src="@QRImgSrc" class="pull-right" />
+                        <h3 style="margin:0 !important;padding-bottom:0 !important">University Copy</h3>
+                        <strong style="text-align:center">Certificate / Diploma Course (Arabic) Registration Form - Fee Receipt @Model.Batch </strong>
+                    </div>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td colspan="3">Applied For : <strong>@Model.AppliedFor.GetEnumDescription()</strong></td>
+                                <td colspan="3" style="text-align:right"><strong>BoardRegn No. : @Model.BoardRegnNo</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Name  </td>
+                                <td colspan="2">  @Model.FullName</td>
+                                <td>Parentage  </td>
+                                <td colspan="2">  @Model.Parentage</td>
+                            </tr>
+                            <tr>
+                                <td>Contact No. </td>
+                                <td colspan="2">  @Model.MobileNo</td>
+                                <td>Email  </td>
+                                <td colspan="2">  @Model.Email.ToLower()</td>
+                            </tr>
+                            <tr style="border:0 !important;padding:0">
+                                <td style="border:0 !important;padding:0" colspan="6">
+                                    <table style="width:100%;border:0">
+                                        <tr>
+                                            <td><strong>TxnReference No. </strong></td>
+                                            <th>Dated  </th>
+                                            <th><strong>Amount Paid</strong></th>
+                                        </tr>
+                                        <tr>
+                                            <td><strong> @Model.PaymentDetail.TxnReferenceNo</strong></td>
+                                            <th>  @Model.PaymentDetail.TxnDate.ToString("dd-MM-yyyy")</th>
+                                            <th> &#x20b9; @Model.PaymentDetail.TxnAmount</th>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="center">
+                                    <br />
+                                    <br />
+                                    Signature of dealing Officer
+                                </td>
+                                <td colspan="3" class="center">
+                                    <br />
+                                    <br />
+                                    Signature of Applicant
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <br />
+                <br />
+                <br />
+                <fieldset class="center" style="border:0;border-top:1px dashed black;">
+                    <legend>Cut here</legend>
+                </fieldset>
+                <br />
+                <br />
+                <div class="dontbreakInside">
+                    <div class="center">
+                        <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                        <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" class="pull-left" style="width:90px;height:68px;" />
+                        <img src="@QRImgSrc" class="pull-right" />
+                        <h3 style="margin:0 !important;padding-bottom:0 !important">Student Copy</h3>
+                        <strong style="text-align:center">Certificate / Diploma Course (Arabic) Registration Form - Fee Receipt @Model.Batch </strong>
+                    </div>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td colspan="3">Applied For : <strong>@Model.AppliedFor.GetEnumDescription()</strong></td>
+                                <td colspan="3" style="text-align:right"><strong>BoardRegn No. : @Model.BoardRegnNo</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Name  </td>
+                                <td colspan="2">  @Model.FullName</td>
+                                <td>Parentage  </td>
+                                <td colspan="2">  @Model.Parentage</td>
+                            </tr>
+                            <tr>
+                                <td>Contact No. </td>
+                                <td colspan="2">  @Model.MobileNo</td>
+                                <td>Email  </td>
+                                <td colspan="2">  @Model.Email.ToLower()</td>
+                            </tr>
+                            <tr style="border:0 !important;padding:0">
+                                <td style="border:0 !important;padding:0" colspan="6">
+                                    <table style="width:100%;border:0">
+                                        <tr>
+                                            <td><strong>TxnReference No. </strong></td>
+                                            <th>Dated  </th>
+                                            <th><strong>Amount Paid</strong></th>
+                                        </tr>
+                                        <tr>
+                                            <td><strong> @Model.PaymentDetail.TxnReferenceNo</strong></td>
+                                            <th>  @Model.PaymentDetail.TxnDate.ToString("dd-MM-yyyy")</th>
+                                            <th> &#x20b9; @Model.PaymentDetail.TxnAmount</th>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="center">
+                                    <br />
+                                    <br />
+                                    Signature of dealing Officer
+                                </td>
+                                <td colspan="3" class="center">
+                                    <br />
+                                    <br />
+                                    Signature of Applicant
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            }
+        }
+    </div>
+
+    <div class="noneOnPrint" style="margin-left:-14px;height:40px;background-color:lightslategrey;width:100%;position:fixed;bottom:0;z-index:100;text-align:center;padding-top:10px">
+        @Html.ActionLink("Go Back", "Instructions", "CertificateCourses", null, new { style = "color:white;" })
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <button style="height: 32px;" href="#" class="btn btn-theme" onclick="window.print();"><b>Download or Print Form</b></button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a style="height: 32px;color:white" href="https://www.wikihow.com/Save-a-Web-Page-as-a-PDF-in-Google-Chrome" target="_blank"><b>See How to Save as PDF</b></a>
+    </div>
+
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/Libraries/jquery-2.1.4.min.js")"></script>
+    <script src="@Url.Content("~/Content/ThemePublic/Libraries/disableBack.js")"></script>
+    <script type="text/javascript">
+        $(document).ready(function ($) {
+            setTimeout(function () {
+                if ('@MessageForAlert' !== '') {
+                    alert('@MessageForAlert');
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

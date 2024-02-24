@@ -1,0 +1,70 @@
+﻿@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@using CUSrinagar.Models
+
+@model  IEnumerable<ADMEntranceLists>
+
+@{
+    ViewBag.Title = $"Entrance Lists {DateTime.UtcNow.Year-1} - ";
+    IEnumerable<SelectListItem> EntranceListTypeColumns = Helper.GetSelectList<EntranceListType>().OrderBy(x => Convert.ToInt16(x.Value));
+    ADMEntranceLists entranceList = null;
+    string filePath = "";
+    int year = DateTime.UtcNow.Year-1;
+    string email = $"admissions{year}@cusrinagar.edu.in";
+}
+
+<div class="page-wrapper pager-table-text">
+    <header class="page-heading clearfix" style="margin-bottom:2px;">
+        <h1 class="heading-title pull-left">
+            Entrance @year - Answer Keys / Points / Lists
+        </h1>
+    </header>
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="col-sm-12" style="overflow:auto">
+                <h3 style="color:red;text-align:center">Aspirants having any query related to below Keys can mail at <a href="mailto:@email"> @email </a>within two days after the Entrance test upto 4:00 PM</h3>
+                <table class="table table-hover table-bordered js-table">
+                    <thead style="white-space: nowrap;">
+                        <tr>
+                            <th>Subject</th>
+                            @foreach (SelectListItem item in EntranceListTypeColumns)
+                            {
+                                <th>@item.Text</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.IsNotNullOrEmpty())
+                        {
+                            foreach (IEnumerable<ADMEntranceLists> Group in Model.GroupBy(x => x.Course_ID))
+                            {
+                                <tr>
+                                    <td>@Group.First().CourseFullName.Replace("Integrated", "").Replace("Honor's", "")</td>
+                                    @foreach (SelectListItem item in EntranceListTypeColumns)
+                                    {
+                                        entranceList = Group.FirstOrDefault(x => ((short)x.ListType).ToString() == item.Value);
+                                        if (entranceList != null)
+                                        {
+                                            filePath = ADMEntranceLists.DirectoryPath + "/" + entranceList.ListURL;
+                                            <td><a href="@Url.Content(filePath)">View @item.Text</a> </td>
+                                        }
+                                        else
+                                        {
+                                            <td></td>
+                                        }
+                                    }
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

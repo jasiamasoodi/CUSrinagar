@@ -1,0 +1,104 @@
+﻿@model List<CUSrinagar.Models.CollegeCourseCategoryStatistics>
+@{
+    Layout = null;
+    List<SelectListItem> Categories = ViewBag.Category;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Course Statistics</title>
+    <link href="~/Content/ThemePublic/Libraries/css/printer-frndly.css" rel="stylesheet" type="text/css" />
+    <style type="text/css" media="print">
+        @@page {
+            size: landscape;
+        }
+    </style>
+</head>
+<body class="A4 middle landscape">
+    @if (Model != null)
+    {
+        foreach (var college in Model)
+        {
+            <section class="sheet padding-5mm compact">
+                <div class="center">
+                    <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                    <h4>College - @college.CollegeFullName</h4>
+                    <h4>Category - Wise Date of UG Ist Semester</h4>
+                </div>
+                <table border="1" class="center">
+                    @if (Model != null)
+                    {
+                        <thead style="">
+                            <tr>
+                                <th rowspan="2" class="text-center">College</th>
+                                <th rowspan="2">Course</th>
+                                <th rowspan="2">M</th>
+                                <th rowspan="2">F</th>
+                                <th rowspan="2">Total</th>
+                                @foreach (var cat in Categories)
+                                {
+                                    string catValue = cat.Value;
+                                    <th colspan="2">
+                                        @catValue.Substring(0, catValue.Length < 4 ? catValue.Length : 4).ToUpper()
+                                    </th>
+                                }
+                            </tr>
+                            <tr>
+                                @foreach (var cat in Categories)
+                                {
+                                    <th>M</th>
+                                    <th>F</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @*@foreach (var college in Model)*@
+                            @{
+                                bool NewCollege = true;
+                                var CourseCount = college.CourseCategory == null ? 0 : college.CourseCategory.Count;
+                                if (college.CourseCategory != null)
+                                {
+                                    foreach (var item in college.CourseCategory)
+                                    {
+                                        <tr class="line-height-50">
+                                            @if (NewCollege)
+                                    {
+                                                <td rowspan="@CourseCount" class=""><span>@college.CollegeFullName</span></td>
+                                            }
+                                            <td class="">@item.EntityID</td>
+                                            <td>@item.Male</td>
+                                            <td>@item.Female</td>
+                                            <td>@item.Total</td>
+                                            @foreach (var cat in Categories)
+                                    {
+                                        var catCount = item.Categories.FirstOrDefault(i => i.CategoryName.ToLower() == cat.Value.ToLower());
+                                                <td>@(catCount == null ? 0 : catCount.Male)</td>
+                                                <td>@(catCount == null ? 0 : catCount.Female)</td>
+                                            }
+
+                                        </tr>
+                                        NewCollege = false;
+                                    }
+                                }
+                            }
+                        </tbody>
+                    }
+                </table>
+            </section>
+        }
+
+
+        <div class="noneOnPrint print-download-strip">
+            <button href="#" class="btn btn-default" onclick="window.print();"><b>Download / Print Statistics </b></button>
+        </div>
+    }
+    else
+    {
+        <section class="sheet padding-5mm">
+            <p>Form Not Found .... </p>
+        </section>
+    }
+
+</body>
+</html>

@@ -1,0 +1,764 @@
+﻿@model CUSrinagar.Models.ARGPersonalInformation
+@using Nut
+@using CUSrinagar.Extensions
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@Model.StudentFormNo - CUSrinagar</title>
+    <style type="text/css">
+        .btn-theme {
+            background: #011c27;
+            border: 1px solid #84aac9;
+            color: #fff;
+        }
+
+            .btn-theme:hover {
+                background: #545677;
+                border: 1px solid #84aac9;
+                color: #fff;
+            }
+
+        .QRCode {
+            width: 95px;
+            position: absolute;
+            margin-top: -60px;
+            margin-left: 176px;
+        }
+
+        @@media print {
+            .QRCode {
+                width: 95px;
+                position: absolute;
+                margin-top: -60px;
+                margin-left: 176px;
+            }
+
+            .noneOnPrint {
+                display: none;
+            }
+
+            .dontbreakInside {
+                page-break-inside: avoid;
+            }
+
+            .breakpagehere {
+                page-break-after: always !important;
+            }
+
+            .blankspace {
+                height: 350px !important;
+            }
+        }
+
+        .breakpagehere {
+            height: 10px;
+            background-color: grey !important;
+        }
+
+        table tr td {
+            padding: 10px;
+        }
+
+        table tr td, table tr th {
+            max-width: 150px;
+            word-wrap: break-word !important;
+        }
+
+        table, table tr, table tr td, table tr th {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        div {
+            background-color: #fff;
+        }
+
+        .center {
+            text-align: center !important;
+        }
+
+        .pull-right {
+            float: right !important;
+        }
+
+        .pull-left {
+            float: left !important;
+        }
+    </style>
+</head>
+<body style="background-color:grey">
+    @{
+        var base64 = Convert.ToBase64String(Model.QRCode);
+        var QRImgSrc = $"data:image/png;base64,{base64}";
+        string courseNames = "";
+    }
+    <div style="margin:0 auto;width:909px;padding:10px 10px">
+        <div class="center">
+            <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" style="width:90px;height:68px;" />
+            <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+            <br />
+
+            <strong style="font-size:20px;">
+                Provisional Admission Form @Model.Batch &nbsp;&nbsp;&nbsp;@*(@ViewBag.AppliedFor)*@
+                <img src="@QRImgSrc" class="QRCode" />
+            </strong>
+
+        </div>
+        <table>
+            <tr>
+                <td colspan="2">
+                    <strong>
+                        <Text>Entrance RollNo :</Text> @Model.EntranceRollNo
+                    </strong>
+                </td>
+                <th>Batch : @Model.Batch</th>
+                <td colspan="3">
+                    <b style="float:right !important;">Form No. : @Model.StudentFormNo</b>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">Board Registration No.: @Model.BoardRegistrationNo</td>
+                <td rowspan="5" class="center">
+                    <img class="img-responsive" src="@Url.Content(Model.Photograph)" width="150" />
+                </td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td>@Model.FullName</td>
+                <td>Gender</td>
+                <td>@Model.Gender</td>
+            </tr>
+            <tr>
+                <td>Father's Name</td>
+                <td>@Model.FathersName</td>
+                <td>Religion</td>
+                <td>@Model.Religion</td>
+
+            </tr>
+            <tr>
+                <td>Mother's Name</td>
+                <td>@Model.MothersName</td>
+                <td>Mobile</td>
+                <td>@Model.StudentAddress.Mobile</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>@Model.StudentAddress.Email</td>
+
+                <td>Category</td>
+                <td>@Model.Category</td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td colspan="2">@Model.StudentAddress.PermanentAddress</td>
+                <td>DOB</td>
+                <td><b>@Model.DOB.ToString("dd-MM-yyyy")</b> </td>
+            </tr>
+            <tr>
+                <td>Pincode</td>
+                <td>@Model.StudentAddress.PinCode</td>
+                <td>Block</td>
+                <td colspan="2">@Model.StudentAddress.Block</td>
+            </tr>
+            <tr>
+                <td>Tehsil</td>
+                <td>@Model.StudentAddress.Tehsil</td>
+                <td>District</td>
+                <td colspan="2">@Model.StudentAddress.District</td>
+            </tr>
+            <tr>
+                <td>Assembly Constituency</td>
+                <td colspan="2">@Model.StudentAddress.AssemblyConstituency</td>
+                <td>Parliamentary Constituency</td>
+                <td>@Model.StudentAddress.ParliamentaryConstituency</td>
+            </tr>
+            <tr>
+                <td>State</td>
+                <td colspan="4">@Model.StudentAddress.State</td>
+            </tr>
+            @if (!((ViewBag.AppliedFor + "").ToLower().Trim() == "graduation") && !string.IsNullOrWhiteSpace(Model.PreviousUniversityRegnNo))
+            {
+                <tr>
+                    <td><strong>Previous University Regn. No.</strong></td>
+                    <td colspan="4">
+                        <strong>
+                            @Model.PreviousUniversityRegnNo
+                        </strong>
+                    </td>
+                </tr>
+            }
+        </table>
+
+        @if (Model.AcademicDetails.IsNotNullOrEmpty())
+        {
+            <h3>Academic Details</h3>
+            <table>
+                <tr>
+                    <th>Exam Name</th>
+                    <th>Stream</th>
+                    <th>Session</th>
+                    <th>Year</th>
+                    <th>Roll No</th>
+                    <th>Max Marks</th>
+                    <th>Marks Obt</th>
+                    <th>%age</th>
+                </tr>
+                @if (Model.AcademicDetails != null)
+                {
+                    foreach (var item in Model.AcademicDetails)
+                    {
+                        <tr>
+                            <td rowspan="2">@item.ExamName</td>
+                            <td>@item.Stream</td>
+                            <td>@item.Session</td>
+                            <td>@item.Year</td>
+                            <td>@item.RollNo</td>
+                            <td>@item.MaxMarks</td>
+                            <td>@item.MarksObt</td>
+                            <td>@item.Percentage</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"><b>Subject(s)</b>: @item.Subjects</td>
+                            <td colspan="3"><b>Board/University</b>: @item.ExamBody</td>
+                        </tr>
+                    }
+                }
+            </table>
+        }
+
+        <div>
+            <h3>Courses Applied / Appeared in Entrance</h3>
+            <table>
+                <tr>
+                    <th style="width:60px">
+                        S.No.
+                    </th>
+                    <th>
+                        Course Name
+                    </th>
+                    @if ((Model.CoursesApplied?.Any(x => x.Preference != 0) ?? false))
+                    {
+                        <th style="width:180px">
+                            Preference
+                        </th>
+                    }
+                    @if (((ViewBag.AppliedFor + "").ToLower().Trim() == "graduation") && Model.CoursesApplied.Any(x => x.Course_ID != new Guid("FC32E138-4EE2-4DA2-9453-5C8368180BC3")))
+                    {
+                        <th style="width:180px">
+                            Consolidated Points
+                        </th>
+                    }
+                    else
+                    {
+                        <th style="width:180px">
+                            Entrance Points
+                        </th>
+                    }
+                    @if (((ViewBag.AppliedFor + "").ToLower().Trim().Contains("integrated")) && Model.CoursesApplied.Any(x => x.Course_ID != new Guid("FC32E138-4EE2-4DA2-9453-5C8368180BC3")))
+                    {
+                        <th style="width:180px">
+                            CAT Points
+                        </th>
+                    }
+                </tr>
+
+                <tbody>
+                    @{
+                        int sno = 1;
+                        bool spanAdded = false;
+
+                        List<CUSrinagar.Models.ARGCoursesApplied> aRGCoursesApplieds = Model.CoursesApplied.Where(x => x.AppearedInEntrance && (x.StudentSelectionStatus == CUSrinagar.Enums.StudentSelectionStatus.Provisional || x.StudentSelectionStatus == CUSrinagar.Enums.StudentSelectionStatus.Joined))?.ToList() ?? new List<CUSrinagar.Models.ARGCoursesApplied>();
+
+                        int CatSpan = aRGCoursesApplieds.Count();
+                    }
+                    @foreach (var item in aRGCoursesApplieds)
+                    {
+                        <tr class="dontbreakInside">
+                            <td> @sno.</td>
+                            <td><strong> @item.CourseName</strong></td>
+                            @if ((Model.CoursesApplied?.Any(x => x.Preference != 0) ?? false))
+                            {
+                                <th>@item.Preference</th>
+                            }
+                            <th>@item.SubjectEntrancePoints.ToString("F2")</th>
+
+                            @if (((ViewBag.AppliedFor + "").ToLower().Trim().Contains("integrated")) && item.Course_ID != new Guid("FC32E138-4EE2-4DA2-9453-5C8368180BC3"))
+                            {
+                                if (!spanAdded)
+                                {
+                                    <th rowspan="@CatSpan">
+                                        @Model.CATEntrancePoints
+                                    </th>
+                                    spanAdded = true;
+                                }
+                            }
+
+                            @{courseNames += item.CourseName + ", "; }
+                            @{sno++;}
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+
+            <br />
+        </div>
+        <div class="dontbreakInside" style="width:100% !important">
+            <h3>Declaration by the Applicant</h3>
+            <p style="width:100%;text-align:justify">
+                I hereby declare that all statements made in this application form are true and the copies of the testimonials
+
+                enclosed are genuine to the best of my knowledge, and in case the above information or my eligibility is found incorrect at any
+
+                stage my Admission & Application Form shall be rejected summarily without any notice in this regard..
+
+                <br /><br />
+                <span class="pull-left ">Place:<br />Dated :</span>
+
+                <strong class="pull-right">
+                    <br />
+                    Signature of the Applicant
+                </strong>
+            </p>
+        </div>
+        @*------------------- university Fee challan ----------------------*@
+        <div class="universityFEECopy">
+            <br />
+            <p class="breakpagehere"></p>
+
+            <div class="dontbreakInside">
+                <div class="center">
+                    <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                    <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" class="pull-left" style="width:90px;height:68px;" />
+                    <img src="@QRImgSrc" class="pull-left" />
+                    <img src="/Content/ThemePublic/PrintImages/JKB.jpg" class="pull-right" style="width:180px;height:60px;" />
+                    <p></p>
+                    <strong style="text-align:center">University Copy Bank Challan / Course Joining Proforma</strong>
+                </div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="width:150px">Total Points Scored/100</td>
+                            <td>
+                                @if (ViewBag.UGConsolidatedPoinsts != null)
+                                {
+                                    <b>
+                                        @ViewBag.UGConsolidatedPoinsts.ToString("F2")
+                                    </b>
+                                }
+                            </td>
+                            <td style="width:100px">Entrance RollNo</td>
+                            <td><b>@Model.EntranceRollNo</b></td>
+                        </tr>
+                        <tr>
+                            <td>Form No. </td>
+                            <td>@Model.StudentFormNo</td>
+                            <td style="width:100px"><b>Account No.</b></td>
+                            <td><b>0005040500047772</b></td>
+                        </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td>@Model.FullName</td>
+                            <td>Parentage</td>
+                            <td>@Model.FathersName</td>
+                        </tr>
+
+                        <tr>
+                            <td>Courses Applied</td>
+                            <td></td>
+                            <td>Contact</td>
+                            <td>@Model.StudentAddress.Mobile</td>
+                        </tr>
+                        <tr>
+                            <th>Amount <br />(University Component)</th>
+                            <td>&#8377; </td>
+                            <td>Date</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="center">
+                                <br />
+                                Signature of Applicant
+                            </td>
+                            <td colspan="2" class="center">
+                                <br />
+                                Bank Seal and Sign
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br />
+            <fieldset class="center" style="border:0;border-top:1px dashed black;">
+                <legend>Cut here</legend>
+            </fieldset>
+
+            <div class="dontbreakInside">
+                <div class="center">
+                    <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                    <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" class="pull-left" style="width:90px;height:68px;" />
+                    <img src="@QRImgSrc" class="pull-left" />
+                    <img src="/Content/ThemePublic/PrintImages/JKB.jpg" class="pull-right" style="width:180px;height:60px;" />
+                    <p></p>
+                    <strong style="text-align:center">Student Copy Bank Challan / Course Joining Proforma</strong>
+                </div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="width:150px">Total Points Scored/100</td>
+                            <td>
+                                @if (ViewBag.UGConsolidatedPoinsts != null)
+                                {
+                                    <b>
+                                        @ViewBag.UGConsolidatedPoinsts.ToString("F2")
+                                    </b>
+                                }
+                            </td>
+                            <td style="width:100px">Entrance RollNo</td>
+                            <td><b>@Model.EntranceRollNo</b></td>
+                        </tr>
+                        <tr>
+                            <td>Form No. </td>
+                            <td>@Model.StudentFormNo</td>
+                            <td style="width:100px"><b>Account No.</b></td>
+                            <td><b>0005040500047772</b></td>
+                        </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td>@Model.FullName</td>
+                            <td>Parentage</td>
+                            <td>@Model.FathersName</td>
+                        </tr>
+
+                        <tr>
+                            <td>Courses Applied</td>
+                            <td></td>
+                            <td>Contact</td>
+                            <td>@Model.StudentAddress.Mobile</td>
+                        </tr>
+                        <tr>
+                            <th>Amount <br />(University Component)</th>
+                            <td>&#8377; </td>
+                            <td>Date</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="center">
+                                <br />
+                                Signature of Applicant
+                            </td>
+                            <td colspan="2" class="center">
+                                <br />
+                                Bank Seal and Sign
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br />
+            <fieldset class="center" style="border:0;border-top:1px dashed black;">
+                <legend>Cut here</legend>
+            </fieldset>
+
+            <div class="dontbreakInside">
+                <div class="center">
+                    <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                    <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" class="pull-left" style="width:90px;height:68px;" />
+                    <img src="@QRImgSrc" class="pull-left" />
+                    <img src="/Content/ThemePublic/PrintImages/JKB.jpg" class="pull-right" style="width:180px;height:60px;" />
+                    <p></p>
+                    <strong style="text-align:center">Bank Copy Bank Challan / Course Joining Proforma</strong>
+                </div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="width:150px">Total Points Scored/100</td>
+                            <td>
+                                @if (ViewBag.UGConsolidatedPoinsts != null)
+                                {
+                                    <b>
+                                        @ViewBag.UGConsolidatedPoinsts.ToString("F2")
+                                    </b>
+                                }
+                            </td>
+                            <td style="width:100px">Entrance RollNo</td>
+                            <td><b>@Model.EntranceRollNo</b></td>
+                        </tr>
+                        <tr>
+                            <td>Form No. </td>
+                            <td>@Model.StudentFormNo</td>
+                            <td style="width:100px"><b>Account No.</b></td>
+                            <td><b>0005040500047772</b></td>
+                        </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td>@Model.FullName</td>
+                            <td>Parentage</td>
+                            <td>@Model.FathersName</td>
+                        </tr>
+
+                        <tr>
+                            <td>Courses Applied</td>
+                            <td></td>
+                            <td>Contact</td>
+                            <td>@Model.StudentAddress.Mobile</td>
+                        </tr>
+                        <tr>
+                            <th>Amount <br />(University Component)</th>
+                            <td>&#8377; </td>
+                            <td>Date</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="center">
+                                <br />
+                                Signature of Applicant
+                            </td>
+                            <td colspan="2" class="center">
+                                <br />
+                                Bank Seal and Sign
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        @if (((ViewBag.AppliedFor + "").ToLower().Trim() == "graduation") && Model.CoursesApplied.Any(x => x.Course_ID != new Guid("FC32E138-4EE2-4DA2-9453-5C8368180BC3")))
+        {
+            @*------------------- College Fee challan ----------------------*@
+            <div class="collegeFEECopy">
+                <br />
+                <p class="breakpagehere"></p>
+
+                <div class="dontbreakInside">
+                    <div class="center">
+                        <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                        <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" class="pull-left" style="width:90px;height:68px;" />
+                        <img src="@QRImgSrc" class="pull-left" />
+                        <img src="/Content/ThemePublic/PrintImages/JKB.jpg" class="pull-right" style="width:180px;height:60px;" />
+                        <p></p>
+                        <strong style="text-align:center">College Copy Bank Challan / Course Joining Proforma</strong>
+                    </div>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td colspan="4" style="font-weight:bold;font-size:16px;">College Full Name :</td>
+                            </tr>
+                            <tr>
+                                <td style="width:150px">Total Points Scored/100</td>
+                                <td>
+                                    @if (ViewBag.UGConsolidatedPoinsts != null)
+                                    {
+                                        <b>
+                                            @ViewBag.UGConsolidatedPoinsts.ToString("F2")
+                                        </b>
+                                    }
+                                </td>
+                                <td style="width:100px">Entrance RollNo</td>
+                                <td><b>@Model.EntranceRollNo</b></td>
+                            </tr>
+                            <tr>
+                                <td>Form No. </td>
+                                <td>@Model.StudentFormNo</td>
+                                <td style="width:100px"><b>Account No.</b></td>
+                                <td><b> </b></td>
+                            </tr>
+                            <tr>
+                                <td>Name</td>
+                                <td>@Model.FullName</td>
+                                <td>Parentage</td>
+                                <td>@Model.FathersName</td>
+                            </tr>
+
+                            <tr>
+                                <td>Courses Applied</td>
+                                <td></td>
+                                <td>Contact</td>
+                                <td>@Model.StudentAddress.Mobile</td>
+                            </tr>
+                            <tr>
+                                <th>Amount <br />(College Component)</th>
+                                <td>&#8377; </td>
+                                <td>Date</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="center">
+                                    <br />
+                                    Signature of Applicant
+                                </td>
+                                <td colspan="2" class="center">
+                                    <br />
+                                    Bank Seal and Sign
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <br />
+                <fieldset class="center" style="border:0;border-top:1px dashed black;">
+                    <legend>Cut here</legend>
+                </fieldset>
+
+                <div class="dontbreakInside">
+                    <div class="center">
+                        <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                        <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" class="pull-left" style="width:90px;height:68px;" />
+                        <img src="@QRImgSrc" class="pull-left" />
+                        <img src="/Content/ThemePublic/PrintImages/JKB.jpg" class="pull-right" style="width:180px;height:60px;" />
+                        <p></p>
+                        <strong style="text-align:center">Student Copy Bank Challan / Course Joining Proforma</strong>
+                    </div>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td colspan="4" style="font-weight:bold;font-size:16px;">College Full Name :</td>
+                            </tr>
+                            <tr>
+                                <td style="width:150px">Total Points Scored/100</td>
+                                <td>
+                                    @if (ViewBag.UGConsolidatedPoinsts != null)
+                                    {
+                                        <b>
+                                            @ViewBag.UGConsolidatedPoinsts.ToString("F2")
+                                        </b>
+                                    }
+                                </td>
+                                <td style="width:100px">Entrance RollNo</td>
+                                <td><b>@Model.EntranceRollNo</b></td>
+                            </tr>
+                            <tr>
+                                <td>Form No. </td>
+                                <td>@Model.StudentFormNo</td>
+                                <td style="width:100px"><b>Account No.</b></td>
+                                <td><b> </b></td>
+                            </tr>
+                            <tr>
+                                <td>Name</td>
+                                <td>@Model.FullName</td>
+                                <td>Parentage</td>
+                                <td>@Model.FathersName</td>
+                            </tr>
+
+                            <tr>
+                                <td>Courses Applied</td>
+                                <td></td>
+                                <td>Contact</td>
+                                <td>@Model.StudentAddress.Mobile</td>
+                            </tr>
+                            <tr>
+                                <th>Amount <br />(College Component)</th>
+                                <td>&#8377; </td>
+                                <td>Date</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="center">
+                                    <br />
+                                    Signature of Applicant
+                                </td>
+                                <td colspan="2" class="center">
+                                    <br />
+                                    Bank Seal and Sign
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <br />
+                <fieldset class="center" style="border:0;border-top:1px dashed black;">
+                    <legend>Cut here</legend>
+                </fieldset>
+
+                <div class="dontbreakInside">
+                    <div class="center">
+                        <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                        <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" class="pull-left" style="width:90px;height:68px;" />
+                        <img src="@QRImgSrc" class="pull-left" />
+                        <img src="/Content/ThemePublic/PrintImages/JKB.jpg" class="pull-right" style="width:180px;height:60px;" />
+                        <p></p>
+                        <strong style="text-align:center">Bank Copy Bank Challan / Course Joining Proforma</strong>
+                    </div>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td colspan="4" style="font-weight:bold;font-size:16px;">College Full Name :</td>
+                            </tr>
+                            <tr>
+                                <td style="width:150px">Total Points Scored/100</td>
+                                <td>
+                                    @if (ViewBag.UGConsolidatedPoinsts != null)
+                                    {
+                                        <b>
+                                            @ViewBag.UGConsolidatedPoinsts.ToString("F2")
+                                        </b>
+                                    }
+                                </td>
+                                <td style="width:100px">Entrance RollNo</td>
+                                <td><b>@Model.EntranceRollNo</b></td>
+                            </tr>
+                            <tr>
+                                <td>Form No. </td>
+                                <td>@Model.StudentFormNo</td>
+                                <td style="width:100px"><b>Account No.</b></td>
+                                <td><b> </b></td>
+                            </tr>
+                            <tr>
+                                <td>Name</td>
+                                <td>@Model.FullName</td>
+                                <td>Parentage</td>
+                                <td>@Model.FathersName</td>
+                            </tr>
+
+                            <tr>
+                                <td>Courses Applied</td>
+                                <td></td>
+                                <td>Contact</td>
+                                <td>@Model.StudentAddress.Mobile</td>
+                            </tr>
+                            <tr>
+                                <th>Amount <br />(College Component)</th>
+                                <td>&#8377; </td>
+                                <td>Date</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="center">
+                                    <br />
+                                    Signature of Applicant
+                                </td>
+                                <td colspan="2" class="center">
+                                    <br />
+                                    Bank Seal and Sign
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        <br />
+        <br />
+    </div>
+
+    <div class="noneOnPrint" style="margin-left:-14px;height:40px;background-color:lightslategrey;width:100%;position:fixed;bottom:0;z-index:100;text-align:center;padding-top:10px">
+        @Html.ActionLink("Go Back", "ProvAdmForm", "Entrance", null, new { style = "color:white;" })
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <button style="height: 32px;" href="#" class="btn btn-theme" onclick="window.print();"><b>Download or Print Form</b></button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a style="height: 32px;color:white" href="https://www.wikihow.com/Save-a-Web-Page-as-a-PDF-in-Google-Chrome" target="_blank"><b>See How to Save as PDF</b></a>
+    </div>
+
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/Libraries/jquery-2.1.4.min.js")"></script>
+    <script src="@Url.Content("~/Content/ThemePublic/Libraries/disableBack.js")"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+﻿@model CUSrinagar.Models.UserActivity
+
+Created By : @Model.CreatedByUser
+<br />
+
+Created Date : @(Model.CreationDate == null ? "" : ((DateTime)Model.CreationDate).ToString("dd-MM-yyyy hh:mm tt"))
+<br />
+
+Updated By : @Model.UpdatedByUser
+<br />
+
+Updated Date :@(Model.UpdatedDate == null ? "" : ((DateTime)Model.UpdatedDate).ToString("dd-MM-yyyy hh:mm tt"))

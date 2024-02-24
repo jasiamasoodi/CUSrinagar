@@ -1,0 +1,176 @@
+﻿@{
+    ViewBag.Title = "Transcript List";
+}
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUSrinagarAdminPanel"})">Home</a>
+            </li>
+            <li class="active">Transcript</li>
+        </ul>
+    </div>
+    <div class="col-md-7"></div>
+    <div class="col-md-4"></div>
+}
+<div class="row">
+    <div class="col-md-12 jsTableContent">
+        <div class="panel panel-primary js-pager-table" data-otherparam1="@CUSrinagar.Enums.PrintProgramme.UG">
+            <div class="panel-heading hidden-print">
+                <h3 class="panel-title">
+                    Transcript
+                    <i class="ace-icon fa fa-angle-double-right"></i>
+                    List of Student
+                    <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                        <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                    </span>
+                </h3>
+            </div>
+            <div class="panel-body hidden-print">
+                <div class="search-box">
+                    <div class="form-inline">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <span style="color:red">*</span> Semester Batch<span id="BatchValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span><br />
+                                @Html.DropDownList("Batch", new SelectList(ViewBag.Batches, "Value", "Text", 1), new
+                           {
+                               @data_column = "SemesterBatch",
+                               @class = "jsfilterelement form-control jsBatch",
+                               @required = "required"
+                           })
+                            </div>
+                            <div class="form-group">
+                                College
+                                <div class="jsDDLContainer wd-200">
+                                    @Html.DropDownList("College", new SelectList(ViewBag.College, "Value", "Text"), "--select--", new
+                               {
+                                   @class = "chosen-select form-control jsfilterelement jsCollegeDDL",
+                                   @data_column = "AcceptCollege_ID",
+                                   @data_defaulttextvalue = "--select--,",
+                                   @data_operator = "EqualTo",
+                                   @data_scope = "row1"
+                               })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <span style="color:red">*</span> Programme<span id="PrintProgrammeValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span><br />
+                                @Html.DropDownList("PrintProgramme", new SelectList(ViewBag.PrintProgrammes, "Value", "Text", 1), new { @class = "chosen-select jsfilterelement form-control jsPrintProgrammeDDL", @data_column = "PrintProgramme", @data_operator = "EqualTo", @data_tablealias = "", @data_scope = "row1" })
+                            </div>
+
+                            <div class="form-group">
+                                Course<br />
+                                <div class="jsDDLContainer wd-200">
+                                    @Html.DropDownList("Course", new SelectList(ViewBag.Courses, "Value", "Text"), "--select--", new
+                               {
+                                   @class = "chosen-select form-control jsfilterelement jsCourseDDL",
+                                   @data_column = "Course_ID",
+                                   @data_defaulttextvalue = "--select--,",
+                                   @data_tablealias = "VW",
+                                   @data_operator = "EqualTo",
+                                   @data_scope = "row1",
+
+                               })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                Validated<br />
+                                <select class="form-control chosen-select jsfilterelement" data-column="ValidatedOn" data-operator="NULL">
+                                    <option value="">All</option>
+                                    <option value="1">Validated</option>
+                                    <option value="0">Not Validated</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                Printed<br />
+                                <select class="form-control chosen-select jsfilterelement" data-column="PrintedOn" data-operator="NULL">
+                                    <option value="">All</option>
+                                    <option value="1">Printed</option>
+                                    <option value="0">Not Printed</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                Handed Over<br />
+                                <select class="form-control chosen-select jsfilterelement" data-column="HandedOverOn" data-operator="NULL">
+                                    <option value="">All</option>
+                                    <option value="1">Handed Over</option>
+                                    <option value="0">Not HandedOver On</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                Greater Than<br />
+                                @Html.TextBox("GreaterThanDate", "", new { @data_tablealias = "MSCGPA", @data_column = "CreatedOn", @data_operator = "GreaterThanEqualTo", @class = "form-control jsfilterelement datetime", @type = "date" })
+                            </div>
+                            <div class="form-group">
+                                Less Than<br />
+                                @Html.TextBox("LessThanDate", "", new { @data_tablealias = "MSCGPA", @data_column = "CreatedOn", @data_operator = "LessThanEqualTo", @class = "form-control jsfilterelement datetime", @type = "date" })
+                            </div>
+
+                            <div class="form-group">
+                                CUSRegistartionNO<br />
+                                <div class="jsDDLContainer">
+                                    @Html.TextBox("CUSRegistrationNo", "", new { @class = "form-control jsfilterelement ", @data_column = "CUSRegistrationNo", @data_operator = "EqualTo" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div style="padding-top:20px !important;">
+                                    <button type="button" class="btn btn-primary btn-sm fa-search-btn js-search"><i class="fa fa-search"></i>&nbsp;Search</button>
+
+                                    <button type="button" id="btnSubmitView" class="btn btn-sm btn-primary">&nbsp;View</button>
+
+                                    <div class="btn-group">
+                                        <button data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle" type="button">
+                                            Action
+                                            <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-default dropdown-info">
+                                            <li>
+                                                <a href="javascript:void(0)" class="js-exportToCSV" data-url="@Url.Action("TranscriptCSV","Transcript",new { area="CUSrinagarAdminPanel"})" data-otherparam1="printProgramme=@CUSrinagar.Enums.PrintProgramme.UG">
+                                                    Download Excel (CSV)
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)" class="js-exportToCSV" data-url="@Url.Action("NadDegreeCertificateCSV","Transcript",new { area="CUSrinagarAdminPanel"})" data-otherparam1="printProgramme=@CUSrinagar.Enums.PrintProgramme.UG">
+                                                    NAD DigiLocker Data (CSV)
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <a href="@Url.Action("ProgramStructure","Transcript")" target="_blank" class="btn btn-sm btn-primary">&nbsp;Program Structure</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="js-table-content tbl" data-url="/CUSrinagarAdminPanel/Transcript/TranscriptList" data-DefaultOrderByColumn="VW.CreatedOn">
+            </div>
+            @{Html.RenderPartial("_JSPagerTableFooter");}
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJSFiles
+{
+    <script src="~/Scripts/Pages/admin-transcript.js"></script>
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

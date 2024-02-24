@@ -1,0 +1,113 @@
+﻿
+@{
+    ViewBag.Title = "FormList";
+    var ProgrammeID = ViewBag.Programme_Id ?? CUSrinagar.Enums.PrintProgramme.UG;
+}
+
+<div class="page-wrapper pager-table-text">
+
+    <div class="page-header">
+        <div style="padding-bottom: 30px;">
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <h1 class="heading-title pull-left">
+                        All Forms
+                    </h1>
+
+                </div>
+
+                <div class="col-sm-6">
+
+                </div>
+                <div class="col-sm-6 align-right">
+
+                    @*@Html.ActionLink("Add New", "Create", "UserProfile", new { area = "CUCollegeAdminPanel", @class = "btn btn-sm btn-primary white" })*@
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table" data-otherparam1="@CUSrinagar.Enums.PrintProgramme.UG">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Migration Forms
+                            <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                            </span>
+
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="col-sm-12 search-box">
+                            <label class="col-sm-12">Advance Search</label>
+
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span>Programme<span id="ProgrammeIdValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div>
+                                    @Html.DropDownList("Programme", new SelectList(ViewBag.ProgrammeDDLList, "Value", "Text", ProgrammeID),
+                                      new { @class = "required chosen-select tag-input-style jsfilterelement form-control ",@data_tablealias= "MI", @data_column = "Programme", @data_operator = "EqualTo", data_ddltype = "Course", @data_ddlchildtype = "Semester", @data_ddlsubchildtype = "" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                CUS Registration No.
+                                <div id="Course">
+                                    @Html.TextBox("CUSRegistrationNo", "", new { @class = "form-control jsfilterelement", @data_column = "CUSRegistrationNo", @data_operator = "Contains" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                Student Name
+                                <div>
+                                    @Html.TextBox("FullName", "", new { @class = " form-control jsfilterelement", @data_column = "FullName", @data_operator = "Contains" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-1 " style="padding-top: 17px;">
+                                <button type="button" class="btn btn-primary fa-search-btn"><i class="fa fa-search"></i>&nbsp;Search</button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="js-table-content" data-url="@Url.Action("FormListTable", "Migration", new { area = "CUCollegeAdminPanel" })" data-DefaultOrderByColumn="FormStatus" >
+
+                    </div>
+                    @{Html.RenderPartial("_JSPagerTableFooter");}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var $pagertable = $(".js-pager-table");
+
+        });
+    </script>
+    <script src="~/Content/ThemeAdmin/Content/Scripts/JSMigration/JSMigration.js"></script>
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

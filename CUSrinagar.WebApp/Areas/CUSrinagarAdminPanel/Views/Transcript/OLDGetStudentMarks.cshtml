@@ -1,0 +1,49 @@
+﻿@model List<CUSrinagar.Models.MSStudentMarks>
+@{
+    Layout = null;
+}
+<table class="table table-hover table-bordered js-table">
+
+    <thead>
+        <tr>
+            <th>Student Name</th>
+            <th>Semester</th>
+            <th>SubjectTitle</th>
+            <th>InternalMarksObt</th>
+            <th>Semester</th>
+            <th>ExternalMarksObt</th>
+            <th>GradeLetter</th>
+            <th>GradePoints</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            if (Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+        <tr>
+            <td>@item.FullName</td>
+            <td>@item.Semester</td>
+            <td>@item.SubjectTitle</td>
+            <td>@item.InternalMarksObt</td>
+            <td>@item.Semester</td>
+            <td>@item.ExternalMarksObt</td>
+            <td>@item.GradeLetter</td>
+            <td>@item.GradePoints</td>
+        </tr>
+                }
+            }
+            else
+            {
+                <tr><td colspan="10">No Record Found</td></tr>
+ }
+        }
+        else
+        {
+            <tr><td colspan="10">No Record Found</td></tr>
+        }
+    </tbody>
+</table>

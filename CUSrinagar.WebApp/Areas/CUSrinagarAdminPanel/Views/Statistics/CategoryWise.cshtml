@@ -1,0 +1,181 @@
+﻿@{
+    ViewBag.Title = "CUS :: Reports";
+}
+@section PageSpecificStyle{
+    <style type="text/css">
+        @@media print {
+            .panel-default {
+                border-color: white !important;
+            }
+        }
+    </style>
+}
+
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUSrinagarAdminPanel"})">Home</a>
+            </li>
+            <li class="active">Course Wise Statistics List</li>
+        </ul><!-- /.breadcrumb -->
+    </div>
+    <div class="col-md-7">
+        @*<h2 class="no-margins">
+                Result Reports
+            </h2>*@
+    </div>
+    <div class="col-md-4">
+    </div>
+}
+<div class="row">
+    <div class="col-md-12 jsTableContent ">
+        <div class="js-pager-table" data-otherparam1="@CUSrinagar.Enums.PrintProgramme.UG">
+            <div class="hidden-print">
+                <div class="search-box">
+                    <form class="form-inline" action="@Url.Action("SubjectWise","Result")">
+                        <div class="form-group">
+                            <label>From Batch</label><br />
+                            <div class="jsDDLContainer">
+                                @Html.DropDownList("FromBatch", new SelectList(ViewBag.Batches, "Value", "Text"), "-- All --",
+                             new
+                             {
+                                 @class = "chosen-select jsfilterelement",
+                                 @data_column = "SemesterBatch",
+                                 @data_operator = "GreaterThanEqualTo",
+                                 @data_scope = "row1"
+                             })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>To Batch</label><br />
+                            <div class="jsDDLContainer">
+                                @Html.DropDownList("ToBatch", new SelectList(ViewBag.Batches, "Value", "Text"), "-- All --",
+                             new
+                             {
+                                 @class = "chosen-select jsfilterelement",
+                                 @data_column = "SemesterBatch",
+                                 @data_operator = "LessThanEqualTo",
+                                 @data_scope = "row1"
+                             })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Choose College</label><br />
+                            <div class="jsDDLContainer">
+                                @Html.DropDownList("CollegeDDL", new SelectList(ViewBag.College, "Value", "Text"), "-- All --",
+                               new
+                               {
+                                   @class = "chosen-select jsfilterelement jsCollegeDDL",
+                                   @data_column = "AcceptCollege_ID",
+                                   @data_operator = "EqualTo",
+                                   @data_scope = "row1"
+                               })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Programme</label><br />
+                            <div class="form-group">
+                                <div class="jsDDLContainer wd-200">
+                                    @Html.DropDownList("ProgrammeDDL", new SelectList(ViewBag.Programmes, "Value", "Text"), "-- All --",
+                                           new
+                                           {
+                                               @class = "form-control chosen-select jsProgrammeDDL jsfilterelement",
+                                               @data_column = "Programme",
+                                               @data_defaulttextvalue= "-- All --,",
+                                               @data_operator = "EqualTo",
+                                               @data_scope = "row1"
+                                           })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Choose Course</label><br />
+                            <div class="jsDDLContainer wd-200">
+                                @Html.DropDownList("Course", new SelectList(ViewBag.Courses, "Value", "Text"), "-- All --",
+                                           new
+                                           {
+                                               @class = "form-control chosen-select jsCourseDDL jsfilterelement",
+                                               @data_column = "Course_ID",
+                                               @data_operator = "EqualTo",
+                                               @data_tablealias = "ADMCourseMaster",
+                                               @data_defaulttextvalue = "-- All --,",
+                                               @data_scope = "row1"
+                                           })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Choose Semester</label><br />
+                            <div class="jsDDLContainer">
+                                @Html.DropDownList("Semester", new SelectList(ViewBag.Semesters, "Value", "Text"),
+                                           new
+                                           {
+                                               @class = "form-control chosen-select jsSemesterDDL jsfilterelement",
+                                               @data_column = "Semester",
+                                               @data_tablealias = "Comb",
+                                               @data_operator = "EqualTo",
+                                               @data_scope = "row1"
+                                           })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="invisible">for styling purpose</label><br />
+                            <button type="button" class="btn btn-inverse btn-sm fa-search-btn js-search"><i class="fa fa-search"></i>&nbsp;Search</button>
+                            <div class="btn-group">
+                                <button data-toggle="dropdown" class="btn btn-inverse btn-sm dropdown-toggle" type="button">
+                                    Action
+                                    <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-default dropdown-info">
+                                    <li>
+                                        <a onclick="printAll()" href="javascript:void(0)" class="">Print</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <hr />
+            </div>
+            <div class="js-table-content" data-url=@Url.Action("CategoryWiseListPartial") data-DefaultOrderByColumn="Batch">
+            </div>
+            @*@{Html.RenderPartial("_JSPagerTableFooter");}*@
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJS
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(document).on('click', '.jsPrintTable', function () {
+                $('.jsPrintTable').closest('.panel.panel-default').addClass('hidden-print');
+                var $currentTable = $(this);
+                $currentTable.closest('.panel.panel-default').removeClass('hidden-print');
+                window.print();
+            });
+        });
+
+        function printAll() {
+            $('.jsPrintTable').closest('.panel.panel-default').removeClass('hidden-print');
+            $('.collapse').each(function (index, element) {
+                if (!$(element).hasClass('in')) {
+                    $(element).collapse('show');
+                }
+            });
+            $('.panel-heading').click();
+            setTimeout(function () {
+                window.print();
+            }, 1000);
+        }
+
+
+
+    </script>
+}
+
+
+
+

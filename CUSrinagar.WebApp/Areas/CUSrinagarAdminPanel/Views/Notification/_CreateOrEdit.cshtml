@@ -1,0 +1,178 @@
+﻿@model  CUSrinagar.Models.Notification
+@{
+    var routeValues = HttpContext.Current.Request.RequestContext.RouteData.Values;
+    string actionName = "";
+    if (routeValues != null)
+    {
+        if (routeValues.ContainsKey("controller"))
+        {
+            actionName = routeValues["action"].ToString();
+        }
+    }
+    var AllowedTypes = System.Web.Configuration.WebConfigurationManager.AppSettings["NotificationFileAllowedTypes"];
+    AllowedTypes = (AllowedTypes != null) ? AllowedTypes : ".pdf";
+    var MaxUploadLimitInKB = Convert.ToInt64(System.Web.Configuration.WebConfigurationManager.AppSettings["NotificationFileSizeInKB"]);
+    MaxUploadLimitInKB = (MaxUploadLimitInKB > 1000) ? MaxUploadLimitInKB : 700000;
+    var MaxUploadLimitInBytes = MaxUploadLimitInKB * 1024;
+    var MaxUploadLimitInMB = MaxUploadLimitInKB / 1024;
+}
+@Html.AntiForgeryToken()
+<style>
+    .disableDDL {
+        pointer-events: none;
+    }
+</style>
+@if (!ViewData.ModelState.IsValidField("ErrorMessage"))
+{
+    <div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong>@Html.ValidationMessage("ErrorMessage", "", new { @class = "red " })</strong></div>
+}
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.NotificationType)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.DropDownListFor(model => model.NotificationType, new SelectList(ViewBag.NotificationTypesList, "Value", "Text"),
+                                      "--Select--", new
+                                      {
+                                          @class = "width-100",
+                                          id = "NotificationType"
+                                      })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.NotificationType, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Description)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.TextAreaFor(model => model.Description, new { @class = "width-100",cols="20",rows="5" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.StartDate)
+    </label>
+    <div class="col-sm-9">
+        <div class="width-50">
+             @Html.TextBoxFor(model => model.StartDate, new {@type="date", @class = "width-50", @autocomplete = "off" })
+            @*<i class="fa fa-calendar bigger-110">MM-DD-YYYY</i>*@
+            @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.EndDate)
+    </label>
+    <div class="col-sm-9">
+        <div class="width-50">
+            @Html.TextBoxFor(model => model.EndDate,new { @type = "date", @class = "width-50", @autocomplete = "off" })
+            @*<i class="fa fa-calendar bigger-110">MM-DD-YYYY</i>*@
+            @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.IsLink)
+    </label>
+    <div class="col-sm-9">
+        <div class="width-50" style="padding-top:10px">
+            @Html.CheckBoxFor(model => model.IsLink, new { @id = "IsLink" })
+            @Html.ValidationMessageFor(model => model.IsLink, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+        </div>
+    </div>
+</div>
+<div class="form-group" id="AttachmentDiv">
+    <label class="col-sm-3 control-label no-padding-right">
+        Attachment
+    </label>
+    <div class="col-sm-6">
+
+        <input type="file" id="Files" name="Files" />
+
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.Files, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+<div class="form-group hidden" id="LinkDiv">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span>Link
+    </label>
+    <div class="col-sm-6">
+        @Html.TextBoxFor(model => model.Link, new { @class = "width-100" })
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.Link, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right"></label>
+    <div class="col-sm-8">
+        <button type="submit" class="btn btn-sm btn-primary save-button" onclick=" uploadFile()" id="sub">
+            <i class="ace-icon fa fa-check"></i>
+            Save
+        </button>
+        @Html.ActionLink("Cancel", "Index", "Notification", new { area = "CUSrinagarAdminPanel", @class = "fm-button ui-state-default ui-corner-all fm-button-icon-left btn btn-sm btn-danger" })
+
+
+
+    </div>
+</div>
+
+<input type="text" hidden="hidden" style="width: 329px!important" />
+<iframe id="myframe" name="myframe" hidden="hidden"></iframe>
+
+@*@section PageSpecificJS{*@
+<script>
+    ShowHideLink();
+     var _AllowedTypes = "@AllowedTypes";
+     var _MaxUploadLimitInBytes = "@MaxUploadLimitInBytes"
+     var _MaxUploadLimitInMB = "@MaxUploadLimitInMB";
+     $('.date-picker').datepicker({
+         autoclose: true,
+         todayHighlight: true,
+         dateFormat: 'mm-dd-yy',
+         format: 'mm-dd-yy'
+     })
+         //show datepicker when clicking on the icon
+         .next().on(ace.click_event, function () {
+             $(this).prev().focus();
+         });
+     $("#IsLink").change(function () {
+         ShowHideLink();
+     });
+    function ShowHideLink()
+    {
+        var isChecked = $('#IsLink').is(':checked');
+         if (isChecked)
+         {
+             $("#AttachmentDiv").hide();
+             $("#LinkDiv").removeClass("hidden");}
+         else {
+             $("#LinkDiv").addClass("hidden");
+             $("#AttachmentDiv").show();
+      }
+    }
+</script>
+<script src="@Url.Content("~/Scripts/JSNotification/NotificationCreateOrEdit.js")"></script>
+
+@*  }*@

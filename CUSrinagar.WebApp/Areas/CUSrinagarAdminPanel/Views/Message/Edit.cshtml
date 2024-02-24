@@ -1,0 +1,136 @@
+﻿@model CUSrinagar.Models.Message
+@{
+    ViewBag.Title = "Edit Message";
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area= "CUSrinagarAdminPanel" })">Home</a>
+        </li>
+        <li>
+            <a href="@Url.Action("Message","Message",new { area= "CUSrinagarAdminPanel" })" class="">Message</a>
+        </li>
+        <li>
+            <a href="$" class="active">Edit</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+
+<div class="row">
+    <div class="col-md-12 jsTableContent">
+        @using (Html.BeginForm("Edit", "Message", FormMethod.Post, new { @class = "jsMainForm form-horizontal", @id = "SendMessageForm" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.Date)
+            @Html.HiddenFor(model => model.Message_ID)
+            <div class="col-sm-8">
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Colleges</label>
+                    <div class="col-sm-9">
+                        <div class="col-sm-2">
+                            <label class="middle">
+                                <input class="ace" type="checkbox" id="ASC" @(Model.ASC ? "checked='checked'" : "")>
+                                <label for="ASC" class="lbl"> ASC</label>
+                                @Html.HiddenFor(model => model.ASC)
+                            </label>
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="middle">
+                                <input class="ace" type="checkbox" id="GWC" @(Model.GWC ? "checked='checked'" : "")>
+                                <label for="GWC" class="lbl"> GWC</label>
+                                @Html.HiddenFor(model => model.GWC)
+                            </label>
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="middle">
+                                <input class="ace" type="checkbox" id="AAA" @(Model.AAA ? "checked='checked'" : "")>
+                                <label for="AAA" class="lbl"> AAA</label>
+                                @Html.HiddenFor(model => model.AAA)
+                            </label>
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="middle">
+                                <input class="ace" type="checkbox" id="IASE" @(Model.IASE ? "checked='checked'" : "")>
+                                <label for="IASE" class="lbl"> IASE</label>
+                                @Html.HiddenFor(model => model.IASE)
+                            </label>
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="middle">
+                                <input class="ace" type="checkbox" id="SPC" @(Model.SPC ? "checked='checked'" : "")>
+                                <label for="SPC" class="lbl"> SPC</label>
+                                @Html.HiddenFor(model => model.SPC)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Courses</label>
+                    <div class="col-sm-9">
+                        <select class="multiselect form-control" id="Course" name="Course" multiple required>
+                            <option value="" @(string.IsNullOrEmpty(Model.Courses_ID) ? "selected" : "")>All Courses</option>
+                            @foreach (var item in (List<SelectListItem>)ViewBag.Courses)
+                            {
+                                <option value="@item.Value" @(!string.IsNullOrEmpty(Model.Courses_ID) && Model.Courses_ID.Contains(item.Value) ? "selected" : "")>@item.Text</option>
+                            }
+                        </select>
+
+                        @*@Html.DropDownList("Course", new SelectList(ViewBag.Courses, "Value", "Text", Model.Courses_ID),
+                            "All Courses", new
+                            {
+                                @multiple = "",
+                                @class = "multiselect form-control",
+                                required = "required"
+                            })*@
+                        @Html.HiddenFor(model => model.Courses_ID)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Date</label>
+                    <div class="col-sm-9">
+                        @Html.TextBox("MessageDate", DateTime.Now.ToString("dd/MMMM/yyyy"), new { @readonly = "readonly", @placeholder = "Date", @class = "form-control", @required = "required" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Date</label>
+                    <div class="col-sm-9">
+                        @Html.TextBox("MessageTitle", Model.MessageTitle, new { @placeholder = "Message title", @class = "form-control", @required = "required" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Message</label>
+                    <div class="col-sm-9">
+                        @Html.TextArea("MessageBody", Model.MessageBody, new { @rows = 5, @placeholder = "Enter your message here", @class = "form-control", @required = "required" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">&nbsp;</label>
+                    <div class="col-sm-9">
+                        <button type="submit" id="submitForm" class="btn btn-primary pull-right">
+                            Send Message
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#SendMessageForm").submit(function (event) {
+                var $form = $("#SendMessageForm");
+                var courses = $("#Course").val().indexOf("") == 0 ? "" : $("#Course").val().toString();
+                $("#Courses_ID").val(courses);
+            });
+
+        });
+    </script>
+}

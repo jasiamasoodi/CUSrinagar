@@ -1,0 +1,329 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard - CUS";
+    bool allowAllDashboard = !(HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Evaluator.ToString())
+         || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.College_AssistantProfessor.ToString())
+         || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.College_Principal.ToString()));
+}
+
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area= "CUSrinagarAdminPanel" })">Home</a>
+        </li>
+        <li>
+            <a href="#" class="active">Dashboard</a>
+        </li>
+    </ul>
+}
+
+@*<div class="clearfix">
+        <div class="no-margin">
+            <h1 style="text-align:center"><b>Welcome to Cluster University Admin Panel</b></h1>
+        </div>
+    </div>*@
+<div class="row jsWidgetContainer">
+
+</div>
+<!-- /.col -->
+
+<div class="col-sm-12">
+    <hr />
+</div>
+@if (allowAllDashboard)
+{
+    @*<div class="col-sm-6">
+            <div class="widget-box transparent">
+                <div class="widget-header widget-header-flat">
+                    <h4 class="widget-title lighter">
+                        <i class="ace-icon fa fa-star orange"></i>
+                        Top 5 Performing Courses (Integrated/Professional) - Semester 1
+                    </h4>
+
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="ace-icon fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="widget-body" style="display: block;">
+                    <div class="widget-main no-padding" id="PerformingCourses">
+
+                    </div>
+                </div>
+                <hr />
+            </div>
+        </div>*@
+
+
+    @*<div class="col-sm-6">
+            <div class="widget-box transparent">
+                <div class="widget-header widget-header-flat">
+                    <h4 class="widget-title lighter">
+                        <i class="ace-icon fa fa-star orange"></i>
+                        Top 5 Non Performing Courses (Integrated/Professional) - Semester 1
+                    </h4>
+
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="ace-icon fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="widget-body" style="display: block;">
+                    <div class="widget-main no-padding" id="NonPerformingCourses">
+
+                    </div>
+                    <hr />
+                </div>
+            </div>
+        </div>*@
+
+
+    @*<div class="col-sm-6">
+            <div class="widget-box transparent">
+                <div class="widget-header widget-header-flat">
+                    <h4 class="widget-title lighter">
+                        <i class="ace-icon fa fa-star orange"></i>
+                        Programme Wise Admissions (Latest Batch Only)
+                    </h4>
+
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="ace-icon fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="widget-body" style="display: block;">
+                    <div class="widget-main no-padding" id="ProgrammesCount">
+                    </div><!-- /.widget-main -->
+                </div><!-- /.widget-body -->
+
+                <hr />
+            </div><!-- /.widget-box -->
+        </div>*@
+}
+<div class="col-sm-6 ">
+    <div class="widget-box transparent">
+        <div class="widget-header widget-header-flat">
+            <h4 class="widget-title lighter">
+                <i class="ace-icon fa fa-star orange"></i>
+                Current Open Examinations Form links
+            </h4>
+
+            <div class="widget-toolbar">
+                <a href="#" data-action="collapse">
+                    <i class="ace-icon fa fa-chevron-up"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="widget-body" style="display: block;">
+            <div class="widget-main no-padding" id="OpenExaminations">
+            </div><!-- /.widget-main -->
+        </div><!-- /.widget-body -->
+
+        <hr />
+
+    </div><!-- /.widget-box -->
+</div>
+
+@if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.RapidEntry.ToString()) || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()))
+{
+    <div class="col-sm-6">
+        <div class="widget-box transparent">
+            <div class="widget-header widget-header-flat">
+                <h4 class="widget-title lighter">
+                    <i class="ace-icon fa fa-star orange"></i>
+                    Current Award Links
+                </h4>
+
+                <div class="widget-toolbar">
+                    <a href="#" data-action="collapse">
+                        <i class="ace-icon fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="widget-body" style="display: block;">
+                <div class="widget-main no-padding" id="OpenAwardLinks">
+                </div><!-- /.widget-main -->
+            </div><!-- /.widget-body -->
+
+            <hr />
+        </div><!-- /.widget-box -->
+    </div>
+}
+@if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString()))
+{
+    <div class="col-sm-6">
+        <div class="widget-box transparent">
+            <div class="widget-header widget-header-flat">
+                <h4 class="widget-title lighter">
+                    <i class="ace-icon fa fa-star orange"></i>
+                    Current Running Semesters
+                </h4>
+
+                <div class="widget-toolbar">
+                    <a href="#" data-action="collapse">
+                        <i class="ace-icon fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="widget-body" style="display: block;">
+                <div class="widget-main no-padding" id="CurrentRunningSemesters">
+                </div><!-- /.widget-main -->
+            </div><!-- /.widget-body -->
+
+            <hr />
+        </div><!-- /.widget-box -->
+    </div>
+
+}
+@section PageSpecificJS{
+    <script src="~/Content/ThemeAdmin/Content/Scripts/Pages/admin-dashboard.js"></script>
+    <script src="~/Content/ThemeAdmin/Content/Scripts/Libraries/jquery.easypiechart.min.js"></script>
+    <script src="~/Content/ThemeAdmin/Content/Scripts/Libraries/jquery.flot.min.js"></script>
+    <script src="~/Content/ThemeAdmin/Content/Scripts/Libraries/jquery.flot.pie.min.js"></script>
+    <script src="~/Content/ThemeAdmin/Content/Scripts/Libraries/jquery.flot.resize.min.js"></script>
+
+
+    <script type="text/javascript">
+
+        getOpenExaminationsList();
+        GetProgrammeWiseCount();
+        GetOpenAwardLinks();
+        CurrentRunningSemesters();
+        GetPassingCourses();
+        GetFailingCourses();
+
+
+
+
+        function getOpenExaminationsList() {
+            var _url = getBaseUrlAdmin() + "Dashboard/GetOpenExaminations";
+            $.ajax({
+                url: _url,
+                async: true,
+                success: function (html) {
+                    if ($("#OpenExaminations").length != 0) {
+                        $("#OpenExaminations").html(html);
+                    }
+                },
+                error: function (e) {
+                    console.log(e);
+                },
+                beforeSend: function () { },
+                complete: function () {
+                }
+            });
+        }
+
+
+
+        function GetOpenAwardLinks() {
+            var _url = getBaseUrlAdmin() + "Dashboard/GetOpenAwardLinks";
+            $.ajax({
+                url: _url,
+                async: true,
+                success: function (html) {
+                    if ($("#OpenAwardLinks").length != 0) {
+                        $("#OpenAwardLinks").html(html);
+                    }
+                },
+                error: function (e) {
+                    console.log(e);
+                },
+                beforeSend: function () { },
+                complete: function () {
+                }
+            });
+        }
+
+
+        function CurrentRunningSemesters() {
+            var _url = getBaseUrlAdmin() + "Dashboard/CurrentRunningSemesters";
+            $.ajax({
+                url: _url,
+                async: true,
+                success: function (html) {
+                    if ($("#CurrentRunningSemesters").length != 0) {
+                        $("#CurrentRunningSemesters").html(html);
+                    }
+                },
+                error: function (e) {
+                    console.log(e);
+                },
+                beforeSend: function () { },
+                complete: function () {
+                }
+            });
+        }
+
+        function GetProgrammeWiseCount() {
+            var _url = getBaseUrlAdmin() + "Dashboard/GetProgrammeWiseCount";
+            $.ajax({
+                url: _url,
+                async: true,
+                success: function (html) {
+                    if ($("#ProgrammesCount").length != 0) {
+                        $("#ProgrammesCount").html(html);
+                    }
+                },
+                error: function (e) {
+                    console.log(e);
+                },
+                beforeSend: function () { },
+                complete: function () {
+                }
+            });
+        }
+
+        function GetPassingCourses() {
+            var _url = getBaseUrlAdmin() + "Dashboard/GetPassingCourses";
+            $.ajax({
+                url: _url,
+                async: true,
+                success: function (html) {
+                    if ($("#PerformingCourses").length != 0) {
+                        $("#PerformingCourses").html(html);
+                    }
+                },
+                error: function (e) {
+                    console.log(e);
+                },
+                beforeSend: function () { },
+                complete: function () {
+                }
+            });
+        }
+
+
+        function GetFailingCourses() {
+            var _url = getBaseUrlAdmin() + "Dashboard/GetFailingCourses";
+            $.ajax({
+                url: _url,
+                async: true,
+                success: function (html) {
+                    if ($("#NonPerformingCourses").length != 0) {
+                        $("#NonPerformingCourses").html(html);
+                    }
+                },
+                error: function (e) {
+                    console.log(e);
+                },
+                beforeSend: function () { },
+                complete: function () {
+                }
+            });
+        }
+
+    </script>
+}
+
+

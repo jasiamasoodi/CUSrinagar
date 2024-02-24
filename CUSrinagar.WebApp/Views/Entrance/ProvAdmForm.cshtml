@@ -1,0 +1,116 @@
+﻿@using CUSrinagar.Models;
+@using CUSrinagar.Extensions;
+@using CUSrinagar.Enums;
+
+@model ARGReprint
+
+@{
+    ViewBag.Title = $"Download Provisional Adm Form-{DateTime.UtcNow.Year}";
+    IEnumerable<SelectListItem> PrintProgrammeOption = Helper.GetSelectList(PrintProgramme.BED, PrintProgramme.PG, PrintProgramme.IH);
+    foreach (var item in PrintProgrammeOption)
+    {
+        if (item.Value == ((short)PrintProgramme.IH).ToString())
+        {
+            item.Text = item.Text.Replace(" / Engineering", "");
+            break;
+        }
+    }
+}
+
+<div class="page-header">
+    <h2>
+        Download Provisional Admission Form-@DateTime.UtcNow.Year
+    </h2>
+</div>
+@if (PrintProgrammeOption != null)
+{
+    <div class="row">
+        <div id="response">
+            @if (TempData["error2"] != null)
+            {
+                @Html.Raw(TempData["error2"])
+            }
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-7" style="border:2px solid #947f0b;border-radius:6px;">
+            <br />
+
+            @using (Html.BeginForm("ProvAdmForm", "Entrance", FormMethod.Post, new { @class = "rnd5", @id = "frmAdmitCard" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("Batch", "2000")
+
+                @*------------------------------------Print Section-----------------------------------*@
+                <div class="col-lg-2">    </div>
+                <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                    <div class="content-wrapper">
+
+                        <label class="col-sm-7 lbl bigger-120 no-padding-right">
+                            <label for="FormNo" class="small-70">CUS Form No. Or Entrance RollNo. Or Board Regn No.</label>
+                            <span class="required">
+                                *
+                                @Html.ValidationMessageFor(model => model.FormNo)
+                            </span><br />
+                            @Html.TextBoxFor(model => model.FormNo, new { @class = "form-control", @maxlength = "150", @autocomplete = "off", @onkeypress = "return forAdmissionRollNo(event);" })
+                        </label>
+
+                    </div>
+                </div>
+
+
+                <div class="col-lg-2">    </div>
+                <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                    <div class="content-wrapper">
+                        <label class="col-sm-7 lbl bigger-120 no-padding-right">
+                            @Html.LabelFor(model => Model.EnteredDOB, new { @class = "small-70" })
+                            <span class="required">
+                                *
+                                @Html.ValidationMessageFor(model => model.EnteredDOB)
+                            </span><br />
+                            @Html.TextBoxFor(model => model.EnteredDOB, new { @class = "form-control dateDDMMYYY", @maxlength = "10", placeholder = "dd-mm-yyyy" })
+                        </label>
+                    </div>
+                </div>
+
+
+
+                <div class="col-lg-2">    </div>
+                <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                    <div class="content-wrapper">
+                        <label class="col-sm-7 lbl bigger-120 no-padding-right">
+                            @Html.LabelFor(model => Model.PrintProgrammeOption, new { @class = "small-70" })
+                            <span class="required">
+                                *
+                                @Html.ValidationMessageFor(model => model.PrintProgrammeOption)
+                            </span><br />
+                            @Html.DropDownListFor(model => model.PrintProgrammeOption, PrintProgrammeOption, string.Empty, new { @class = "form-control" })
+                        </label>
+                    </div>
+                </div>
+
+                <br />
+                <p class="text-center">
+                    <span id="hideButtons6">
+                        <button type="submit" id="jsAdmitCard" class="btn btn-primary"><i class="fa fa-download"></i>Download Form</button>
+                    </span>
+                </p>
+
+                @*------------------------------------End Print Section-----------------------------------*@
+
+            }
+        </div>
+        <div class="col-md-3"></div>
+
+        <div class="col-lg-12"><br /><br /><br /><br /></div>
+    </div>
+}
+else
+{
+    <h1 class="quadraText">
+        The process of downloading Provisional Admission Forms is either closed or will be allowed soon.
+    </h1>
+}
+@section PageSpecificJS
+{
+    @Scripts.Render("~/bundles/Libraries/jqueryval", "~/bundles/Libraries/jqueryAdmitCard")
+}

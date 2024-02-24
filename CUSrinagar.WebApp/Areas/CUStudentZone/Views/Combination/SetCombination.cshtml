@@ -1,0 +1,41 @@
+﻿@using CUSrinagar.Extensions;
+@{
+    ViewBag.Title = "Combination";
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area="CUStudentZone"})">Home</a>
+        </li>
+        <li>
+            <a href="#" class="active">Update Subject Combination</a>
+        </li>
+    </ul>
+}
+<div class="page-header">
+    <br />
+    <h1>
+        &nbsp;&nbsp;
+        <i class="fa fa-credit-card"></i> Update Subject Combination
+    </h1>
+</div>
+<div class="row page-content">
+    <h6 class="text-danger">@ViewBag.ErrorMessage</h6>
+    <div class="col-md-12">
+        <h4>Please mail your query on the below mentioned emails in case any problem.</h4>
+        <h4>Breifly explain your problem with personal details as well as with references.</h4>
+        <ul>
+            <li>Amar Sing College:&ensp; <a href="mailto:deo_asc@cusrinagar.edu.in">deo_asc@cusrinagar.edu.in</a> </li>
+            <li>Degree College Bemina:&ensp; <a href="mailto:deo_aaa@cusrinagar.edu.in">deo_aaa@cusrinagar.edu.in</a> </li>
+        </ul>
+    </div>
+</div>
+@section PageSpecificJSFiles
+{
+    <script>
+        $(document).ready(function () {
+
+        });
+    </script>
+}

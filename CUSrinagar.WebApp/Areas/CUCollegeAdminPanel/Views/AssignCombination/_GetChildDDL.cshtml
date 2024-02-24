@@ -1,0 +1,14 @@
+﻿@{
+    var issubjects = ViewBag.ReturnPath.ToString().Contains("GetSubjectsCount");
+    string Type = ViewBag.Type;
+    var required = (Type.ToUpper() != "COMBINATION" && Type.ToUpper() != "SUBJECT") ? "required" : "";
+    required = issubjects ? "" : required;
+    Type = (Type.ToUpper() == "SUBJECT") ? "SUBJECT_ID" : Type;
+    string childType = ViewBag.ChildType;
+    string childSubType = ViewBag.ChildSubType;
+    string typeName = Type;
+    var ValuesDDL = ViewBag.ChildValues != null ? ViewBag.ChildValues : new List<SelectListItem>();
+
+}
+@Html.DropDownList(typeName, new SelectList(ValuesDDL, "Value", "Text"),
+                                     "--Select--", new { @class = " chosen-select SearchDDL  form-control jsfilterelement " + required, @data_column = @typeName, @data_operator = "EqualTo", @data_ddltype = @childType, @data_ddlchildtype = @childSubType })

@@ -1,0 +1,27 @@
+﻿
+@model  CUSrinagar.Models.ADMCourseMaster
+@{
+    ViewBag.Title = "CUS :: Add Course";
+
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header">
+
+                <h4 class="widget-title"><i class='menu-icon fa fa-pencil-square-o'></i>Add Course</h4>
+             
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+
+                    @using (Html.BeginForm("Create", "Course", FormMethod.Post, new { enctype = "multipart/form-data", @name = "validation-form", @id = "validation-form", @class = "form-horizontal", @role = "form" }))
+                    {
+                        @Html.Partial("_CreateOrEdit", Model)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

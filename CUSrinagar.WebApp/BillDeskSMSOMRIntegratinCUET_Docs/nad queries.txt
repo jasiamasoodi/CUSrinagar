@@ -1,0 +1,211 @@
+
+
+
+SELECT DISTINCT 
+	   'CUS' ORG_CODE,
+	   'Cluster University, Srinagar'	ORG_NAME,
+	   	'' ORG_NAME_L,
+		'Gogji-Bagh'	ORG_ADDRESS,
+		'Srinagar'	ORG_CITY,
+		'Jammu and Kashmir'	ORG_STATE,
+		'190008'	ORG_PIN,
+		dbo.ADMCourseMaster.CourseCode	ACADEMIC_COURSE_ID,
+		ADMCourseMaster.DegreeCourseTitle	COURSE_NAME,
+		''	COURSE_NAME_L,
+		''	COURSE_SUBTITLE,
+		''	STREAM,
+		''	STREAM_L,
+		''	STREAM_SECOND,
+		''	STREAM_SECOND_L,
+		(P.batch)	SESSION,
+		P.CUSRegistrationNo	REGN_NO,
+		E.ExamRollNumber	RROLL,
+		''	AADHAAR_NO,
+		''	LOCKER_ID,
+		trim(S.FullName)	CNAME,
+		dbo.fngender(gender) GENDER,
+			   CAST(FORMAT(S.DOB,'dd/MM/yyyy') AS NVARCHAR(max)) DOB,
+			   ''	BLOOD_GROUP,
+			  dbo.fncategory(P.Category) CASTE,
+			  dbo.FNReligion(P.Religion) RELIGION,
+			  'IN'	NATIONALITY,
+			 (CASE WHEN SpecailAP.Student_ID IS NULL THEN 'N' ELSE 'Y' END)	PH,
+			(CASE WHEN Trim(A.Mobile) IS NULL	OR LEN(TRIM(A.Mobile))<10 THEN '' ELSE TRIM(A.Mobile) END)	MOBILE,
+			Trim(A.Email)EMAIL,
+			Trim(P.FathersName)	FNAME,
+			Trim(P.MothersName)	MNAME,
+			''	GNAME,
+			Trim(A.PermanentAddress)	STUDENT_ADDRESS,
+			P.CUSRegistrationNo	PHOTO,
+			'O' MRKS_REC_STATUS,
+			'QUALIFIED' RESULT,
+			YEAR(T.DateofDeclaration)	YEAR,
+				 FORMAT(T.DateofDeclaration,'MMMM') [Month],
+				 ''	DIVISION,
+				 ''	GRADE,
+				 ''	[PERCENT],
+				 ''	DOR,
+				 ''	DOI,
+				 ''	DOV,
+				 ''	CERT_NO,
+				 'Regular'	EXAM_TYPE,
+				 t.CGPA	CGPA,
+				 t.CGPA	OGPA,
+				 ''	THESIS,
+				 'UG'	GRADUATION_LEVEL,
+				 'Degree completion date:'+FORMAT(T.DateofDeclaration,'dd-mm-yyyy')	REMARKS
+FROM  dbo.MSCGPA T
+    JOIN dbo.VWStudentCourse S
+        ON S.Student_ID = T.Student_ID
+		JOIN dbo.ARGStudentExamForm_UG E ON E.Student_ID = S.Student_ID AND E.ExamRollNumber IS NOT NULL AND E.ExamRollNumber NOT LIKE '%T%'
+		JOIN dbo.ARGPersonalInformation_UG P ON P.Student_ID = S.Student_ID
+		JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = S.Course_ID
+		JOIN dbo.ARGStudentAddress_UG A ON A.Student_ID = P.Student_ID
+		LEFT JOIN SpeciallyAbledStudents SpecailAP ON SpecailAP.Student_ID=P.Student_ID
+WHERE S.CourseFullName IN
+(
+'B.Sc. Medical',
+'B.A',
+'B.Sc. Non-Medical',
+'B.Com',
+'B.Sc. Home-Science'
+)
+ORDER BY P.CUSRegistrationNo
+
+
+
+
+go
+TRANSCRIPT
+SELECT DISTINCT CollegeFullName ORG_NAME,
+       NULL ACADEMIC_COURSE_ID,
+       CourseFullName COURSE_NAME,
+       NULL STREAM,
+       P.CUSRegistrationNo REGN_NO,
+       E.ExamRollNumber RROLL,
+       Trim(P.FullName) CNAME,
+       dbo.fngender(gender) GENDER,
+       CAST(FORMAT(P.DOB,'dd/MM/yyyy') AS NVARCHAR(max)) DOB,
+       Trim(P.FathersName)	FNAME,
+			Trim(P.MothersName)	MNAME,
+       'O' MRKS_REC_STATUS,
+       'QUALIFIED' RESULT,
+       YEAR(DateofDeclaration) [YEAR],
+       T.GradeLetter GRADE,
+       dbo.MSCGPA.CGPA*10 [PERCENT],
+       T.Semester SEM,
+       'Regular' EXAM_TYPE,
+       10 TOT,
+       T.GradePoints TOT_CREDIT_POINTS,
+       dbo.MSCGPA.CGPA CGPA,
+       UPPER(TRIM(T.SubjectTitle)) SUB1NM,
+       UPPER(TRIM(T.SubjectTitle)) SUB1,
+       NULL SUB1_TH_MAX,
+       NULL SUB1_PR_MAX,
+       NULL SUB1_CE_MAX,
+       NULL SUB1_TH_MRKS,
+       NULL SUB1_PR_MRKS,
+       NULL SUB1_CE_MRKS,
+       T.GradeLetter SUB1_GRADE,
+       T.GradePoints SUB1_GRADE_POINTS,
+       T.Credit SUB1_CREDIT,
+       T.Credit*T.GradePoints SUB1_CREDIT_POINTS
+FROM dbo.MSStudentMarks T
+    JOIN dbo.MSSGPA
+        ON MSSGPA.Student_ID = T.Student_Id AND MSSGPA.Semester = T.Semester
+    JOIN dbo.MSCGPA
+        ON MSCGPA.Student_ID = MSSGPA.Student_ID
+    JOIN dbo.VWStudentCourse
+        ON VWStudentCourse.Student_ID = MSCGPA.Student_ID
+		JOIN dbo.ARGStudentExamForm_UG E ON E.Student_ID = MSCGPA.Student_ID AND E.ExamRollNumber IS NOT NULL AND E.ExamRollNumber NOT LIKE '%T%'
+		JOIN dbo.ARGPersonalInformation_UG P ON P.Student_ID = dbo.MSCGPA.Student_ID
+WHERE P.CUSRegistrationNo = 'cus-17-aaa-10446'
+ORDER BY [YEAR],ORG_NAME,COURSE_NAME,REGN_NO,SEM
+
+
+
+ALTER TABLE dbo.ARGPersonalInformation_UG ADD UploadedOnNadDigilocker BIT DEFAULT 0
+GO
+ALTER TABLE dbo.ARGPersonalInformation_IH ADD UploadedOnNadDigilocker BIT DEFAULT 0
+GO
+ALTER TABLE dbo.ARGPersonalInformation_PG ADD UploadedOnNadDigilocker BIT DEFAULT 0
+GO
+UPDATE dbo.ARGPersonalInformation_UG set UploadedOnNadDigilocker =0
+go
+UPDATE dbo.ARGPersonalInformation_IH set UploadedOnNadDigilocker  =0
+go
+UPDATE dbo.ARGPersonalInformation_PG set UploadedOnNadDigilocker  =0
+
+go
+
+SELECT DISTINCT 
+	   'CUS' ORG_CODE,
+	   'Cluster University, Srinagar'	ORG_NAME,
+	   	'' ORG_NAME_L,
+		'Gogji-Bagh'	ORG_ADDRESS,
+		'Srinagar'	ORG_CITY,
+		'Jammu and Kashmir'	ORG_STATE,
+		'190008'	ORG_PIN,
+		C.CourseCode	ACADEMIC_COURSE_ID,
+		C.DegreeCourseTitle	COURSE_NAME,
+		''	COURSE_NAME_L,
+		''	COURSE_SUBTITLE,
+		''	STREAM,
+		''	STREAM_L,
+		''	STREAM_SECOND,
+		''	STREAM_SECOND_L,
+		(S.batch)	SESSION,
+		S.CUSRegistrationNo	REGN_NO,
+		E.ExamRollNumber	RROLL,
+		''	AADHAAR_NO,
+		''	LOCKER_ID,
+		trim(S.FullName)	CNAME,
+		dbo.fngender(gender) GENDER,
+			   CAST(FORMAT(S.DOB,'dd/MM/yyyy') AS NVARCHAR(max)) DOB,
+			   ''	BLOOD_GROUP,
+			  dbo.fncategory(S.Category) CASTE,
+			  dbo.FNReligion(S.Religion) RELIGION,
+			  'IN'	NATIONALITY,
+			 (CASE WHEN SP.Student_ID IS NULL THEN 'N' ELSE 'Y' END)	PH,
+			(CASE WHEN Trim(A.Mobile) IS NULL	OR LEN(TRIM(A.Mobile))<10 THEN '' ELSE TRIM(A.Mobile) END)	MOBILE,
+			Trim(A.Email)EMAIL,
+			Trim(S.FathersName)	FNAME,
+			Trim(S.MothersName)	MNAME,
+			''	GNAME,
+			Trim(A.PermanentAddress)	STUDENT_ADDRESS,
+			S.CUSRegistrationNo	PHOTO,
+			'O' MRKS_REC_STATUS,
+			'QUALIFIED' RESULT,
+			YEAR(T.DateofDeclaration)	YEAR,
+				 FORMAT(T.DateofDeclaration,'MMMM') [Month],
+				 ''	DIVISION,
+				 ''	GRADE,
+				 ''	[PERCENT],
+				 ''	DOR,
+				 ''	DOI,
+				 ''	DOV,
+				 ''	CERT_NO,
+				 'Regular'	EXAM_TYPE,
+				 t.CGPA	CGPA,
+				 t.CGPA	OGPA,
+				 ''	THESIS,
+				 'UG'	GRADUATION_LEVEL,
+				 'Degree completion date:'+FORMAT(T.DateofDeclaration,'dd-MM-yyyy')	REMARKS
+FROM  dbo.ARGPersonalInformation_UG S
+JOIN dbo.ARGSelectedCombination_UG Comb ON Comb.Student_ID = S.Student_ID AND comb.Semester=1
+JOIN dbo.ARGStudentExamForm_UG E ON E.Student_ID = S.Student_ID AND e.ExamRollNumber IS NOT NULL AND ISNUMERIC(E.ExamRollNumber)=1
+JOIN ARGStudentAddress_UG A ON A.Student_ID=S.Student_ID
+JOIN dbo.ADMCombinationMaster CM ON CM.Semester=1 AND CM.Combination_ID = Comb.Combination_ID
+JOIN dbo.ADMCourseMaster C ON C.Course_ID = CM.Course_ID
+JOIN dbo.ADMCollegeMaster College ON College.College_ID = S.AcceptCollege_ID
+JOIN dbo.MSCGPA T ON T.Student_ID = S.Student_ID
+LEFT JOIN SpeciallyAbledStudents SP ON SP.Student_ID=S.Student_ID
+WHERE C.CourseFullName IN
+(
+'B.Sc. Medical',
+'B.A',
+'B.Sc. Non-Medical',
+'B.Com',
+'B.Sc. Home-Science'
+) 
+ORDER BY SESSION,[year],course_name,S.CUSRegistrationNo

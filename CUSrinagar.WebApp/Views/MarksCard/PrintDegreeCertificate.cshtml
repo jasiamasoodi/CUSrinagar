@@ -1,0 +1,132 @@
+﻿@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@using CUSrinagar.Models
+@model List<DegreeCertificate>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Degree Certificate</title>
+    <style type="text/css">
+        .background {
+            position: absolute;
+            top: 0%;
+            left: 7%;
+            z-index: 0;
+            background: white;
+            display: block;
+            opacity: 0.35;
+        }
+
+        .bg-text {
+            color: darkgray;
+            font-size: 40px;
+            /*transform: rotate(300deg);
+            -webkit-transform: rotate(300deg);*/
+        }
+    </style>
+</head>
+<body style="background: #e0e0e0;margin: auto;vertical-align: middle;display: table;">
+    @if (Model.IsNotNullOrEmpty())
+    {
+        foreach (var item in Model)
+        {
+            var base64 = Convert.ToBase64String(item.QRCode);
+            var QRImgSrc = $"data:image/png;base64,{base64}";
+            <section id="product_sheet" style="background: white;padding:0;margin: 0;overflow: hidden;box-sizing: border-box;width: 210mm;height: 297mm;position:relative;page-break-after: always;">
+                <div id="" style="position:absolute;top:8%;left:10%;z-index:99;opacity:0.3;">
+                    <p style="color: lightgrey; font-size: 65px; transform: rotate(300deg); -webkit-transform: rotate(300deg);">Sample Degree Certificate<br />Sample Degree Certificate</p>
+                </div>
+
+                <p class="text-da">
+                    <ol>
+                        <li style="color:red;font-size:large;">Please check whether all the details are correct like Photograph, Name, Course, CGPA, Registration, ExamRollNumber, College, Date of passing.</li>
+                        <li style="color:red;font-size:large">Check QR Code details using QR Code scanners.</li>
+                    </ol>
+                </p>
+
+                <div style="margin:0mm;margin-right: 9.5mm;margin-left: 9.5mm;margin-top:5.0mm;">
+                    <!---Header Sign Section Begins-->
+                    <center>
+                        <table border="0" class="" style="margin-top:5mm;font-size:3.4mm;">
+                            <tbody>
+                                <tr>
+                                    <td style="width:107mm;text-align:left;">
+                                        <b>Sr.No.:- @item.DispatchNumber.ToUpper()</b><span style="font-size:4.7mm">/</span>
+                                    </td>
+                                    <td style="width:72mm;text-align:right;">
+                                        <b>@item.ExamRollNumber/@item.CUSRegistrationNo.ToUpper()</b>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr style="margin:0mm;margin-top:0.3mm;margin-bottom: 0mm;width:180mm;" />
+                    </center>
+                    <!---Footer Sign Section Ends-->
+                    <!--General Info Section Begins-->
+                    <center>
+                        <table border="0" style="text-align:center;line-height:11.5mm;">
+                            <tbody style="">
+                                <tr>
+                                    <td>
+                                        <img src="@Url.Content(item.Photograph)" height="180">
+                                    </td>
+                                </tr>
+                                <tr><td style="font-size: 10mm;letter-spacing: 0.4mm;"><u><b>@(string.IsNullOrEmpty(item.FullName) ? "$ ############## $" : item.FullName)</b></u></td></tr>
+                                <tr><td style="letter-spacing:0mm;font-size: 6mm;">is admitted to the</td></tr>
+                                <tr><td style="font-size: 10mm;letter-spacing: 0.4mm;"><u><b>Degree of @(string.IsNullOrEmpty(item.DegreeCourseTitle) ? "$ ############## $" : item.DegreeCourseTitle)</b></u> </td></tr>
+                                @if (!string.IsNullOrEmpty(item.SchoolOf))
+                                {
+                                    <tr><td style="font-size: 8mm;letter-spacing: 0.4mm;">in the <span>@(string.IsNullOrEmpty(item.SchoolOf) ? "$ ############## $" : item.SchoolOf)</span></td></tr>
+                                }
+
+                                @if (!string.IsNullOrEmpty(item.DegreeCourseTitle) && item.DegreeCourseTitle.ToLower().Contains("education") && !item.DegreeCourseTitle.ToLower().Contains("master"))
+                                {
+                                    <tr>
+                                        <td style="font-size: 6mm;letter-spacing: 0.4mm;">
+                                            with grade<b> "@item.CGPA_Type1_Grade"</b> <b>(CGPA </b>of<b> @(item.CGPA_Type1 < 0 ? 0 : item.CGPA_Type1))</b> in Theory
+                                            & grade<b> "@item.CGPA_Type2_Grade"</b> <b>(CGPA </b>of<b> @(item.CGPA_Type2 < 0 ? 0 : item.CGPA_Type2))</b> in Practice of Teaching
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr style="line-height:10mm;"><td style="font-size: 7mm;letter-spacing: 0.2mm;">with <b>CGPA </b>of<b> @(item.CGPA_Type1 < 0 ? 0 : item.CGPA_Type1)</b></td></tr>
+                                }
+                                <tr><td style="font-size: 8mm;letter-spacing: 0.2mm;">(@item.Mode Mode)</td></tr>
+                                <tr><td style="font-size: 6mm;">through</td></tr>
+                                <tr><td style="font-size: 8mm;letter-spacing: 0.2mm;">@(string.IsNullOrEmpty(item.CollegeFullName) ? "$ ############## $" : item.CollegeFullName)</td></tr>
+                                <tr><td style="font-size: 6mm;letter-spacing: 0.3mm;">on <b>@item.DegreeCompletionDate.ToString("dd-MMMM-yyyy")</b> </td></tr>
+                                <tr></tr>
+                            </tbody>
+                        </table>
+                    </center>
+                    <!---General Info Section Ends-->
+                    <!---Footer Sign Section Begins-->
+                    <table border="0" class="" style="position:absolute;bottom:50mm;text-align:center;">
+                        <tbody>
+                            <tr>
+                                <td style="width:45mm;">
+                                    <img style="width:45mm;position:absolute;top:-20mm;left:79mm;" src="@QRImgSrc" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!---Footer Sign Section Ends-->
+                    <p><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><b><small>Errors &amp; Omissions Excepted.</small> </b></p>
+
+                </div>
+            </section>
+        }
+    }
+    else
+    {
+        <section class="sheet padding-5mm">
+            <p>Not Found .... </p>
+        </section>
+    }
+</body>
+</html>

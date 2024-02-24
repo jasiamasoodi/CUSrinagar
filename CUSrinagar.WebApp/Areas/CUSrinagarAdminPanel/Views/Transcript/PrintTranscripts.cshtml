@@ -1,0 +1,552 @@
+﻿@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@using CUSrinagar.Models
+@model List<Transcript>
+@{
+    Layout = null;
+    bool editable = HttpContext.Current.User.IsInRole(AppRoles.University.ToString()) || HttpContext.Current.User.IsInRole(AppRoles.University_TransScript.ToString());
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Transcript</title>
+    <style type="text/css">
+        @@media print {
+            .noneOnPrint {
+                display: none;
+            }
+        }
+
+        .line-height {
+            line-height: 4.1mm;
+        }
+    </style>
+</head>
+<body style="background: #e0e0e0;margin: auto;vertical-align: middle;display: table;">
+    @if (Model.IsNotNullOrEmpty())
+    {
+        foreach (var transcript in Model)
+        {
+            if (transcript != null && transcript.Subject.IsNotNullOrEmpty() && transcript.SGPA.IsNotNullOrEmpty() && transcript.CGPA.IsNotNullOrEmpty() && transcript.Subject.All(x => x.GradePoints > 0))
+            {
+                var lineHeight = transcript.SGPA.Count == 10 ? "3.9mm" : (Math.Round(200 / (transcript.Subject.Count * 1.74), 1) - 0.1).ToString("n1") + "mm";
+                <section style="size:A4;background: white;padding:0;margin: 0;overflow: hidden;box-sizing: border-box;width: 210mm;height: 297mm;position:relative;page-break-after: always;">
+                    @if (transcript.CGPA.First().IsValidated)
+                    {
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+
+                    }
+                    else
+                    {
+                        <ol>
+
+                            <li style="color:red;font-size:large">Transcript not validated.</li>
+                            <li style="color:red;font-size:large;">Check credits of each subject and there type.</li>
+                            <li style="color:red;font-size:large;">Check credits of each semester and total credits.</li>
+                        </ol>
+                    }
+                    @if (transcript.CGPA.First().IsPrinted)
+                    {
+                        <ol>
+                            <li style="color:red;font-size:large">Already Printed On @(transcript.CGPA.FirstOrDefault().PrintedOn.Value.ToString("dd-MMM-yyyy")).</li>
+                        </ol>
+                    }
+
+                    <div style="margin:0mm;margin-right: 5.5mm;margin-left: 5.5mm;font-family: monospace;">
+                        <!--Serial No Section Begins-->
+                        <table border="0">
+                            <tbody>
+                                <tr style="margin:0 !important;padding:0 !important;">
+                                    <td style="width: 200mm;padding-left:17mm;vertical-align:bottom;text-align:center;margin:0 !important;">
+                                        @{
+                                            var base64 = Convert.ToBase64String(Helper.GradeTableQRCode());
+                                            var QRImgSrc = $"data:image/png;base64,{base64}";
+                                        }
+                                        <img src="@QRImgSrc" style="width:75px;position:absolute;margin-top: -13mm" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 150mm;padding-left:60mm;font-size:4mm;vertical-align:bottom;">
+                                        <b>Transcript of Academic Record</b>
+                                    </td>
+                                    <td style="text-align:right;margin:0mm;width: 50mm;">
+                                        <small><i>Serial No:</i> </small> <br />
+                                        <b><i><small> @transcript.CGPA.FirstOrDefault().MarksSheetNo</small></i></b>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!--Serial No Section Ends-->
+
+                        <hr style="margin:0mm;margin-top:0.3mm;margin-bottom: 0mm;" />
+
+                        <!--Header General Info Section Begins-->
+                        <table border="0" style="line-height: 4mm;">
+                            <tbody style="text-align: left;">
+                                <tr>
+                                    <td style="width: 20mm;">Name:</td>
+                                    <td style="width: 100mm;font-weight: bold;">@transcript.FullName.ToUpper()</td>
+                                    <td style="width: 50mm;">Registration No:</td>
+                                    <td style="width: 45mm;font-weight: bold;">@transcript.CUSRegistrationNo.ToUpper().Trim()</td>
+                                </tr>
+                                <tr>
+                                    <td style="">Father:</td>
+                                    <td style="font-weight: bold;">@transcript.FathersName.ToUpper()</td>
+                                    <td style="">Exam Roll No:</td>
+                                    <td style="font-weight: bold;">@transcript.ExamRollNumber</td>
+                                </tr>
+                                <tr>
+                                    @if (!string.IsNullOrEmpty(transcript.TranscriptDegreeSettings.AWARDEDTRANSCRIPTTITLE))
+                                    {
+                                        <td style="">Award:</td>
+                                        <td style="font-weight: bold;">@transcript.TranscriptDegreeSettings.AWARDEDTRANSCRIPTTITLE.ToUpper()</td>
+                                    }
+                                    <td style="">Batch:</td>
+                                    <td style="font-weight: bold;">@transcript.Batch</td>
+                                </tr>
+                                <tr>
+                                    <td style="">Programme:</td>
+                                    <td style="font-weight: bold;">@transcript.TranscriptDegreeSettings.ProgramTitle.ToUpper()</td>
+                                    <td style="">Mode:</td>
+                                    <td style="font-weight: bold;"> Regular@(transcript.IsLateralEntry?"(Lateral Entry)":"")</td>
+                                </tr>
+                                <tr>
+                                    @if ((transcript.printProgramme == PrintProgramme.IH || transcript.printProgramme == PrintProgramme.PG) && !transcript.CourseFullName.Contains("Engineering"))
+                                    {
+                                        <td style="">Institute:</td>
+                                        <td style="font-weight: bold;">
+                                            @transcript.SchoolFullName.ToUpper()
+
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td style="">College:<br />   &nbsp;</td>
+                                        <td style="font-weight: bold;">
+                                            @transcript.CollegeFullName.ToUpper()
+                                            <br />
+                                            <small>@transcript.CollegeAddress.ToUpper()</small>
+                                        </td>
+                                    }
+                                    <td style="">Medium Of Instruction</td>
+                                    <td style="font-weight: bold;">
+                                        English
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!---Header General Info Section Ends-->
+                        <!--Subject Section Begins-->
+                        <table class="line-height" border="1" style="line-height:@lineHeight;border-collapse: collapse;border: 0.1mm solid;border-color: lightgray;width: 197mm;display: inline-table;">
+                            <tbody>
+                                <tr>
+                                    <th style="padding:0mm;">Course</th>
+                                    <th style="padding:0mm;"><small>Credit</small></th>
+                                    <th style="padding:0mm;vertical-align: middle;text-align:center;width:15mm;"><small>Grade Letter</small></th>
+                                    <th style="padding:0mm;vertical-align: middle;text-align:center;width:15mm;"><small>Grade Points</small></th>
+                                    <th style="padding:0mm;vertical-align: middle;text-align:center;width:15mm;"><small>Credit Points</small></th>
+                                    <th><small>SGPA</small></th>
+                                </tr>
+                                @{
+                                    var Semesters = transcript.SGPA.Select(x => x.Semester).Distinct().OrderBy(x => x)?.ToList();
+                                    var StartingSemester = Semesters?.OrderBy(x => x)?.FirstOrDefault() ?? 1;
+                                    var EndingSemester = Semesters?.OrderByDescending(x => x)?.FirstOrDefault() ?? 10;
+                                    if (Semesters.Count == 10)
+                                    {
+                                        StartingSemester = (short)((transcript.printProgramme == PrintProgramme.PG) ? 7 : 1);
+                                        EndingSemester = (short)((transcript.printProgramme == PrintProgramme.PG) ? 10 : 6);
+                                    }
+                                    if (Semesters.IsNotNullOrEmpty())
+                                    {
+                                        for (int Semester = StartingSemester; Semester <= EndingSemester; Semester++)
+                                        {
+                                            <tr>
+                                                <th style="text-align: left;padding-left: 10px;vertical-align: middle;border: 0.1mm solid slategray;" colspan="6">@(CUSrinagar.Extensions.Helper.GetEnumDescription((Semester)(Semester))) </th>
+                                            </tr>
+                                            var _SGPATypes = transcript.SGPA.Where(x => x.Semester == Semester)?.ToList();
+                                            if (_SGPATypes.IsNotNullOrEmpty())
+                                            {
+                                                foreach (var _SGPAType in _SGPATypes.OrderBy(x => x.SGPAType).ToList())
+                                                {
+                                                    var _Subjects = transcript.Subject.Where(x => x.Semester == Semester && x.SGPAType == _SGPAType.SGPAType).ToList();
+                                                    if (_Subjects.IsNotNullOrEmpty())
+                                                    {
+                                                        _Subjects = (from m in _Subjects orderby m.SortOrder select m).ToList();
+                                                        foreach (var item in _Subjects)
+                                                        {
+                                                            string code = CUSrinagar.DataManagers.GeneralFunctions.GetSubjectTypeCode(item.SubjectType);
+                                                            <tr style="">
+                                                                <td style="text-align: left;padding-left: 10px;vertical-align: middle;">
+                                                                    <span>@item.SubjectTitle.ToUpper().Trim()</span> @(string.IsNullOrEmpty(code) ? "" : "(" + code.ToUpper() + ")")
+                                                                </td>
+                                                                <td style="vertical-align: middle;text-align:center;">@item.Credit.ToString("N0")</td>
+                                                                <td style="vertical-align: middle;padding-left:6mm">@item.GradeLetter.ToUpper()</td>
+                                                                <td style="vertical-align: middle;text-align:center;">@item.GradePoints</td>
+                                                                <td style="vertical-align: middle;text-align:center;">@((item.Credit * item.GradePoints).ToString("N0"))</td>
+                                                                <td style="vertical-align: middle;text-align:center;"></td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                    <tr>
+                                                        <th title="Total" style="text-align:center;border: 0.1mm solid slategray;">Total</th>
+                                                        <th title="Total Credit" style="text-align:center;border: 0.1mm solid slategray;">@_SGPAType.Credits</th>
+                                                        <th colspan="2" style="border: 0.1mm solid slategray;"></th>
+                                                        <th title="Total Credit Points" style="text-align:center;border: 0.1mm solid slategray;">@_SGPAType.CreditPoints</th>
+                                                        <th title="SGPA" style="text-align:center;border: 0.1mm solid slategray;">@_SGPAType.SGPA</th>
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <!--Subject Section Ends-->
+                        <!---Footer Points Section Begins-->
+                        @if (Semesters.Count == 10)
+                        {
+                            decimal tcp = transcript.printProgramme == PrintProgramme.PG ? 96 : 148;
+                            <table border="0" style="margin-top: 1mm;line-height: 7mm;">
+                                <tbody>
+                                    @if (transcript.CGPA.IsNotNullOrEmpty())
+                                    {
+                                        foreach (var item in transcript.CGPA.Where(x => (int)x.TotalCreditsEarned == tcp).ToList())
+                                        {
+                                            <tr>
+                                                <td style="width: 100mm;">
+                                                    Total Credits Earned: <b> @item.TotalCreditsEarned</b>
+                                                </td>
+                                                <td style="width: 70mm;">
+                                                    Total Credit Points: <b> @item.TotalCreditPoints</b>
+                                                </td>
+                                                <td style="width: 50mm;">      Grading Scale: <b>10</b></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 100mm;">
+                                                    Commulative Grade Point Average(CGPA): <b> @item.CGPA</b>
+                                                </td>
+                                                <td style="width: 120mm;" colspan="2">
+                                                    Percentage Equivalent: <b>@item.Percentage</b>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    <tr>
+
+                                        <td style="width: 100mm;">
+                                            Date of Passing: <b>
+                                                @if (@transcript.CGPA.FirstOrDefault().DateofDeclaration == null)
+                                                {<span></span>}
+                                                else
+                                                {<span>@transcript.CGPA.FirstOrDefault().DateofDeclaration.ToString("dd-MMM-yyyy")</span>}
+                                            </b>
+                                        </td>
+                                        <td style="width: 120mm;" colspan="2">
+                                            Notification No.: <b> @transcript.CGPA.FirstOrDefault().NotificationNo.ToUpper()</b>
+                                        </td>
+                                    </tr>
+                                    @if (transcript.CGPA.FirstOrDefault().DivImpNotificationNo != null)
+                                    {
+                                        <tr>
+                                            <td style="width: 100mm;">
+                                                Div Imp Date of Passing: <b>
+                                                    @if (@transcript.CGPA.FirstOrDefault().DivImpDateofDeclaration == null)
+                                                    {<span></span>}
+                                                    else
+                                                    {<span>@transcript.CGPA.FirstOrDefault().DivImpDateofDeclaration.ToString("dd-MMM-yyyy")</span>}
+                                                </b>
+                                            </td>
+                                            <td style="width: 120mm;" colspan="2">
+                                                Div Imp Notification No.: <b> @transcript.CGPA.FirstOrDefault().DivImpNotificationNo.ToUpper()</b>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        }
+                        else if (transcript.printProgramme == PrintProgramme.PG)
+                        {
+                            <table border="0" style="margin-top: 1mm;line-height: 7mm;">
+                                <tbody>
+                                    @if (transcript.CGPA.IsNotNullOrEmpty())
+                                    {
+                                        foreach (var item in transcript.CGPA.OrderBy(x => x.SGPAType).ToList())
+                                        {
+                                            <tr>
+                                                <td style="width: 100mm;">
+                                                    Total Credits Earned: <b> @item.TotalCreditsEarned</b>
+                                                </td>
+                                                <td style="width: 70mm;">
+                                                    Total Credit Points: <b> @item.TotalCreditPoints</b>
+                                                </td>
+                                                <td style="width: 50mm;">      Grading Scale: <b>10</b></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 100mm;">
+                                                    Commulative Grade Point Average(CGPA): <b> @item.CGPA</b>
+                                                </td>
+                                                <td style="width: 120mm;" colspan="2">
+                                                    Percentage Equivalent: <b>@item.Percentage</b>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    <tr>
+
+                                        <td style="width: 100mm;">
+                                            Date of Passing: <b>
+                                                @if (@transcript.CGPA.FirstOrDefault().DateofDeclaration == null)
+                                                {<span></span>}
+                                                else
+                                                {<span>@transcript.CGPA.FirstOrDefault().DateofDeclaration.ToString("dd-MMM-yyyy")</span>}
+                                            </b>
+                                        </td>
+                                        <td style="width: 120mm;" colspan="2">
+                                            Notification No.: <b> @transcript.CGPA.FirstOrDefault().NotificationNo.ToUpper()</b>
+                                        </td>
+                                    </tr>
+                                    @if (transcript.CGPA.FirstOrDefault().DivImpNotificationNo != null)
+                                    {
+                                        <tr>
+                                            <td style="width: 100mm;">
+                                                Div Imp Date of Passing: <b>
+                                                    @if (@transcript.CGPA.FirstOrDefault().DivImpDateofDeclaration == null)
+                                                    {<span></span>}
+                                                    else
+                                                    {<span>@transcript.CGPA.FirstOrDefault().DivImpDateofDeclaration.ToString("dd-MMM-yyyy")</span>}
+                                                </b>
+                                            </td>
+                                            <td style="width: 120mm;" colspan="2">
+                                                Div Imp Notification No.: <b> @transcript.CGPA.FirstOrDefault().DivImpNotificationNo.ToUpper()</b>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        }
+
+                        else if (transcript.printProgramme == PrintProgramme.UG)
+                        {
+
+                            {
+                                <table border="0" style="margin-top: 1mm;line-height: 4mm;">
+                                    <tbody>
+                                        @if (transcript.CGPA.IsNotNullOrEmpty())
+                                        {
+                                            foreach (var item in transcript.CGPA.OrderBy(x => x.SGPAType).ToList())
+                                            {
+                                                <tr>
+                                                    <td style="width: 100mm;">
+                                                        Total Credits Earned: <b> @item.TotalCreditsEarned</b>
+                                                    </td>
+                                                    <td style="width: 70mm;">
+                                                        Total Credit Points: <b> @item.TotalCreditPoints</b>
+                                                    </td>
+                                                    <td style="width: 50mm;">      Grading Scale: <b>10</b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width: 100mm;">
+                                                        Commulative Grade Point Average(CGPA): <b> @item.CGPA</b>
+                                                    </td>
+                                                    <td style="width: 120mm;" colspan="2">
+                                                        Percentage Equivalent: <b>@item.Percentage</b>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                        <tr>
+
+                                            <td style="width: 100mm;">
+                                                Date of Passing: <b>
+                                                    @if (@transcript.CGPA.FirstOrDefault().DateofDeclaration == null)
+                                                    {<span></span>}
+                                                    else
+                                                    {<span>@transcript.CGPA.FirstOrDefault().DateofDeclaration.ToString("dd-MMM-yyyy")</span>}
+                                                </b>
+                                            </td>
+                                            <td style="width: 120mm;" colspan="2">
+                                                Notification No.: <b> @transcript.CGPA.FirstOrDefault().NotificationNo.ToUpper()</b>
+                                            </td>
+                                        </tr>
+                                        @if (transcript.CGPA.FirstOrDefault().DivImpNotificationNo != null)
+                                        {
+                                            <tr>
+                                                <td style="width: 100mm;">
+                                                    Div Imp Date of Passing: <b>
+                                                        @if (@transcript.CGPA.FirstOrDefault().DivImpDateofDeclaration == null)
+                                                        {<span></span>}
+                                                        else
+                                                        {<span>@transcript.CGPA.FirstOrDefault().DivImpDateofDeclaration.ToString("dd-MMM-yyyy")</span>}
+                                                    </b>
+                                                </td>
+                                                <td style="width: 120mm;" colspan="2">
+                                                    Div Imp Notification No.: <b> @transcript.CGPA.FirstOrDefault().DivImpNotificationNo.ToUpper()</b>
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            }
+                        }
+                        else
+                        {
+                            <table border="0" style="margin-top: 1mm;line-height: 3mm;">
+                                <tbody>
+                                    @if (transcript.CGPA.IsNotNullOrEmpty())
+                                    {
+                                        foreach (var item in transcript.CGPA.OrderBy(x => x.SGPAType).ToList())
+                                        {
+                                            <tr>
+                                                <td style="width: 100mm;">
+                                                    Total Credits Earned: <b> @item.TotalCreditsEarned</b>
+                                                </td>
+                                                <td style="width: 70mm;">
+                                                    Total Credit Points: <b> @item.TotalCreditPoints</b>
+                                                </td>
+                                                <td style="width: 50mm;">      Grading Scale: <b>10</b></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 100mm;">
+                                                    Commulative Grade Point Average(CGPA): <b> @item.CGPA</b>
+                                                </td>
+                                                <td style="width: 120mm;" colspan="2">
+                                                    Percentage Equivalent: <b>@item.Percentage</b>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    <tr>
+
+                                        <td style="width: 100mm;">
+                                            Date of Passing: <b>
+                                                @if (@transcript.CGPA.FirstOrDefault().DateofDeclaration == null)
+                                                {<span></span>}
+                                                else
+                                                {<span>@transcript.CGPA.FirstOrDefault().DateofDeclaration.ToString("dd-MMM-yyyy")</span>}
+                                            </b>
+                                        </td>
+                                        <td style="width: 120mm;" colspan="2">
+                                            Notification No.: <b> @transcript.CGPA.FirstOrDefault().NotificationNo.ToUpper()</b>
+                                        </td>
+                                    </tr>
+                                    @if (transcript.CGPA.FirstOrDefault().DivImpNotificationNo != null)
+                                    {
+                                        <tr>
+                                            <td style="width: 100mm;">
+                                                Div Imp Date of Passing: <b>
+                                                    @if (@transcript.CGPA.FirstOrDefault().DivImpDateofDeclaration == null)
+                                                    {<span></span>}
+                                                    else
+                                                    {<span>@transcript.CGPA.FirstOrDefault().DivImpDateofDeclaration.ToString("dd-MMM-yyyy")</span>}
+                                                </b>
+                                            </td>
+                                            <td style="width: 120mm;" colspan="2">
+                                                Div Imp Notification No.: <b> @transcript.CGPA.FirstOrDefault().DivImpNotificationNo.ToUpper()</b>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        }
+                        <!---Footer Points Section Ends-->
+                        <!---Footer Sign Section Begins-->
+                        <table border="0" style="position: fixed; width: 90%;height:0%; bottom:-12px; left: 50PX; right: 0; background-color: gray; text-align: center; ">
+                            <tbody>
+                                <tr>
+                                    <td style="text-align:center;">
+                                        <img style="height:15mm;width:30mm;" src="~/FolderManager/Transcript/Prog.png" /><br />
+                                        Dealing Assistant
+                                        <span style="text-align:left;">
+                                            <br />
+                                            <small><b><small>Errors and Omissions Excepted.</small> </b></small>
+                                        </span>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <img style="height:15mm;width:30mm;" src="~/FolderManager/Transcript/gulzar_ar.png" /><br />
+                                        Assistant Controller
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <img style="height:15mm;width:30mm;" src="~/FolderManager/Transcript/Controller.png" /><br />
+                                        Controller Of Examination
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!---Footer Sign Section Ends-->
+                    </div>
+                </section>
+                <p style="height:35px" class="noneOnPrint"></p>
+            }
+        }
+        <div class="noneOnPrint" style="height:40px;background-color:lightslategrey;width:795px;position:fixed;bottom:0;z-index:100;text-align:center;padding-top:10px">
+            <span style="float:left;color:white">&nbsp;&nbsp;Developed &amp; Maintained by I.T Cell</span>
+            @if (Model.Count == 1 && !Model.First().CGPA.First().IsValidated && editable)
+            {
+                <button value="@Model.First().Student_ID" style="height: 32px;" href="#" class="btn btn-success jsIsValidated" type="button"><b>Validate-Good</b></button>
+            }
+            @if (Model.Count == 1 && !Model.First().CGPA.First().IsPrinted && editable)
+            {
+                <button value="@Model.First().Student_ID" style="height: 32px;" href="#" class="btn btn-success jsIsPrinted" type="button"><b>Printed</b></button>
+            }
+            @if (Model.Count == 1 && !Model.First().CGPA.First().IsHandedOver && editable)
+            {
+                <button value="@Model.First().Student_ID" style="height: 32px;" href="#" class="btn btn-success jsIsHandedOver" type="button"><b>Handed Over</b></button>
+            }
+            <button style="height: 32px;" href="#" class="btn btn-theme" onclick="window.print();"><b>Download or Print</b></button>
+        </div>
+    }
+    else
+    {
+        <section class="sheet padding-5mm">
+            <p>Result Not Found .... </p>
+        </section>
+    }
+
+    <script src="~/Content/ThemeAdmin/Content/Scripts/Libraries/jquery-3.2.1.min.js"></script>
+    <script src="~/Scripts/General/general.js"></script>
+    <script src="~/Scripts/Pages/admin-transcript.js"></script>
+</body>
+</html>
+
+
+
+@*<script type="text/javascript">
+        $(document).on('click', '.jsValidated', function () {
+            var student_id = $(this).val();
+            var _url = "/CUSrinagarAdminPanel/Transcript/Validated";
+            print_Validate(_url, student_id);
+        });
+        $(document).on('click', '.jsPrinted', function () {
+            var student_id = $(this).val();
+            var _url = "/CUSrinagarAdminPanel/Transcript/Printed";
+            print_Validate(_url, student_id);
+        });
+
+        function print_Validate(_url, student_id) {
+            $.ajax({
+                url: _url,
+                type: "POST",
+                datatype: "Json",
+                async: false,
+                data: { Student_ID: student_id },
+                success: function (responseData) {
+                    if (responseData.IsSuccess) {
+                        console.log('done successfully');
+                    } else {
+                        console.log(responseData.ErrorMessage);
+                    }
+                },
+                error: function (xhr, error, msg) {
+                    console.log(msg);
+                }
+            });
+        }
+    </script>*@

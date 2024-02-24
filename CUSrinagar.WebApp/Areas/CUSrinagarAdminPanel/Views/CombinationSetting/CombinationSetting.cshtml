@@ -1,0 +1,228 @@
+﻿@{
+    ViewBag.Title = "Combination Setting";
+}
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUSrinagarAdminPanel"})">Home</a>
+            </li>
+            <li class="active">Combination Setting</li>
+        </ul><!-- /.breadcrumb -->
+    </div>
+    @*<div class="col-md-7">
+            <h2 class="no-margins">
+                Combination Setting
+            </h2>
+        </div>*@
+    <div class="col-md-4">
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12 jsTableContent">
+        <div class="panel panel-primary js-pager-table" data-otherparam1="">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Combination Setting
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        List
+                    </small>
+                    <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                        <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                    </span>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="search-box">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label>Batch</label><br />
+                            <div class="jsDDLContainer">
+                                <select class="jsfilterelement form-control" data-column="Batch" data-operator="EqualTo" id="BatchDDL" data-scope="row1">
+                                    <option value="">-- All --</option>
+                                    @for (int i = DateTime.Now.Year + 1; i >= 2017; i--)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Choose Programme</label><br />
+                            <div class="form-group">
+                                @Html.DropDownList("PrintProgrammeDDL", new SelectList(ViewBag.PrintProgrammes, "Value", "Text", (short)CUSrinagar.Enums.PrintProgramme.IH), "  -- All -- ",
+                                           new
+                                           {
+                                               @class = "form-control jsfilterelement",
+                                               @data_column = "PrintProgramme",
+                                               @data_operator = "EqualTo",
+                                               @data_scope = "row1"
+                                           })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Semester</label><br />
+                            <div class="">
+                                <select class="jsfilterelement form-control" data-column="Semester" data-operator="EqualTo" id="SemesterDDL" data-scope="row1">
+                                    <option value="">-- All --</option>
+                                    <option value="1" selected="selected">Semester-I</option>
+                                    <option value="2">Semester-II</option>
+                                    <option value="3">Semester-III</option>
+                                    <option value="4">Semester-IV</option>
+                                    <option value="5">Semester-V</option>
+                                    <option value="6">Semester-VI</option>
+                                    <option value="7">Semester-VII</option>
+                                    <option value="8">Semester-VIII</option>
+                                    <option value="9">Semester-IX</option>
+                                    <option value="10">Semester-X</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Course</label><br />
+                            <input type="text" placeholder="Course" name="CourseFullName" class="form-control jsfilterelement" data-column="CourseFullName" data-operator="Contains" data-scope="row1" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="invisible">for styling purpose</label><br />
+                            <button type="button" class="btn btn-sm btn-primary fa-search-btn js-search"><i class="fa fa-search"></i>&nbsp;Search</button>
+                            <div class="btn-group">
+                                <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle">
+                                    Action
+                                    <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-default dropdown-info">
+                                    <li>
+                                        <a href="javascript:void(0)" class="" id="jsToggleCollegeChangeCombination">
+                                            Toggle College Change Combination
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="form-group pull-right">
+                            <label class="invisible">for styling purpose</label><br />
+                            <a class="btn btn-sm btn-primary" target="_blank" href="@Url.Action("CombinationSettingStructure","CombinationSetting")">Structures</a>
+                        </div>
+                        <div class="form-group pull-right">
+                            <label class="invisible">for styling purpose</label><br />
+                            <a class="btn btn-sm btn-primary" target="_blank" href="@Url.Action("CreateEdit","CombinationSetting")">Create</a>
+                        </div>
+
+                        <div class="form-group pull-right">
+                            &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                            <label class="invisible">for styling purpose</label><br />
+                            <input type="button" class="btn btn-primary btn-sm" id="jssetclosingdate" value="Set Closing Date" />
+                            @*class='ace ace-switch ace-switch-5 jsAllowDownloadForm'*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="js-table-content" data-url=@Url.Action("CombinationSettingList", "CombinationSetting", new { area = "CUSrinagarAdminPanel" }) data-DefaultOrderByColumn="Batch">
+            </div>
+            @{Html.RenderPartial("_JSPagerTableFooter");}
+        </div>
+    </div>
+</div>
+
+
+
+<div id="AllowFormsModal" tabindex="-1" role="dialog" aria-hidden="true" class="modal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="bootbox-close-button close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Enter End Date</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <tbody>
+
+                        @Html.Hidden("Awardfilter_Id", "")
+                        @Html.Hidden("RecieverMail", "khrshdmir@gmail.com")
+
+                        <tr>
+                            <td>End Date</td>
+                            <td>
+                                @{
+
+                                    string parsedDate = (DateTime.Now.Year + "-" + (DateTime.Now.Month.ToString().Length == 1 ? "0" + DateTime.Now.Month : DateTime.Now.Month.ToString()) + "-" + (DateTime.Now.Day.ToString().Length == 1 ? "0" + DateTime.Now.Day : DateTime.Now.Day.ToString()) + "T" + (DateTime.Now.Hour.ToString().Length == 1 ? "0" + DateTime.Now.Hour : DateTime.Now.Hour.ToString()) + ":" + (DateTime.Now.Minute.ToString().Length == 1 ? "0" + DateTime.Now.Minute : DateTime.Now.Minute.ToString())).Trim();
+                                }
+                                <input type="datetime-local" id="Model_EndDate" name="Model_EndDate" value="@parsedDate" class="form-control" />
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" type="button" class="btn btn-default jscancelModel">Cancel</button>
+                <button type="button" class="btn btn-primary jsAllowDownloadForm" id="enddateBtn">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section PageSpecificJS{
+
+
+    <script src="~/Content/ThemeAdmin/Content/Scripts/JSAward/AwardSetting.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            var $pagertable = $(".js-pager-table");
+
+            loadpagertable();
+        });
+    </script>
+
+
+    <script>
+        $(document).ready(function () {
+            loadpagertableWithDefaultParams();
+
+            $('#jssetclosingdate').click(function () {
+                $("#AllowFormsModal").modal('show');
+            });
+
+            $('#jsToggleCollegeChangeCombination').click(function () {
+                var list = getEntityList();
+                if (list.length == 0) {
+                    showAlertDialog('Please choose combination');
+                    retun;
+                }
+                var _url = getBaseUrlAdmin() + 'CombinationSetting/ToggleCollegeChangeCombination';
+                $.ajax({
+                    url: _url,
+                    method: 'post',
+                    contentType: 'application/json; charset=UTF-8',
+                    data: JSON.stringify(list),
+                    beforeSend: function () { showLoader() },
+                    datatype: 'json',
+                    success: function (data) {
+                        if (data.IsSuccess)
+                            showSuccessAlertMessage(data.NumberOfRecordsEffected + " " + data.SuccessMessage);
+                        else
+                            showErrorMessage(data.ErrorMessage, 10000);
+                    },
+                    error: function (xhr, error, msg) {
+                        showErrorMessage(msg);
+                    },
+                    complete: function () {
+                        hideLoader();
+                    }
+
+                });
+            });
+        });
+    </script>
+
+}
+
+

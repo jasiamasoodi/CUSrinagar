@@ -1,0 +1,189 @@
+﻿@{
+    ViewBag.Title = "Examination Form";
+}
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUCollegeAdminPanel"})">Home</a>
+            </li>
+            <li class="active">Form</li>
+        </ul><!-- /.breadcrumb -->
+    </div>
+    <div class="col-md-7">
+        @*<h2 class="no-margins">
+                Examination Forms
+            </h2>*@
+    </div>
+    <div class="col-md-4">
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12 infobox-container">
+        <div class="infobox infobox-grey infobox-small infobox-dark">
+            <div class="infobox-icon">
+                <i class="ace-icon fa fa-download"></i>
+            </div>
+
+            <div class="infobox-data">
+                <div class="infobox-content jsTotalStudentLabel">Total Students</div>
+                <div class="infobox-content jsTotalStudent">00</div>
+            </div>
+        </div>
+
+        <div class="infobox infobox-grey infobox-small infobox-dark">
+            <div class="infobox-icon">
+                <i class="ace-icon fa fa-download"></i>
+            </div>
+            <div class="infobox-data">
+                <div class="infobox-content">Accepted</div>
+                <div class="infobox-content jsTotalStudentAccepted">00</div>
+            </div>
+        </div>
+
+        <div class="infobox infobox-grey infobox-small infobox-dark">
+            <div class="infobox-icon">
+                <i class="ace-icon fa fa-download"></i>
+            </div>
+            <div class="infobox-data">
+                <div class="infobox-content">In Process</div>
+                <div class="infobox-content jsTotalStudentInProcess">00</div>
+            </div>
+        </div>
+
+        <div class="infobox infobox-grey infobox-small infobox-dark">
+            <div class="infobox-icon">
+                <i class="ace-icon fa fa-download"></i>
+            </div>
+
+            <div class="infobox-data">
+                <div class="infobox-content">Not Downloaded</div>
+                <div class="infobox-content jsTotalStudentNotDownloaded">00</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="clearfix"> <br /> </div>
+<div class="row">
+    <div class="col-md-12 jsTableContent">
+        <div class="panel panel-primary js-pager-table" data-otherparam1="@CUSrinagar.Enums.PrintProgramme.UG">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Examination Forms
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        List of Student
+                    </small>
+                    <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                        <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                    </span>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="search-box">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label>Program</label><br />
+                            <div class="jsDDLContainer">
+                                @Html.DropDownList("PrintProgramme", new SelectList(ViewBag.PrintProgrammeList, "Value", "Text", (short)CUSrinagar.Enums.PrintProgramme.UG),
+                               null, new
+                               {
+                                   @class = "form-control",
+                                   @data_column = "PrintProgramme",
+                                   @data_operator = "EqualTo"
+                               })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <span style="color:red">*</span>Batch<span id="BatchValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                            <div>
+                                @Html.TextBox("Batch", "2017", new { @class = " required form-control jsfilterelement", @data_column = "Batch", @data_operator = "EqualTo", @readonly = "readonly" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <span style="color:red">*</span>Exam Year<span id="YearValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                            <div>
+                                @Html.TextBox("Year", "2018", new { @class = " required form-control jsfilterelement", @data_column = "Year", @data_operator = "EqualTo", @readonly = "readonly" })
+                            </div>
+                        </div>
+                        <div class="form-group hidden">
+                            <label>Current Sem</label><br />
+                            <div class="jsDDLContainer">
+                                <select id="Semester" name="Semester" class="form-control jsfilterelement" data-column="CurrentSemesterOrYear" data-operator="EqualTo">
+                                    @*<option value="1">Sem-I</option>*@
+                                    <option value="2" selected="selected">Sem-II</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Exam Of Sem</label><br />
+                            <div class="jsDDLContainer">
+                                <select id="Semester" name="Semester" class="form-control jsfilterelement" data-column="Semester" data-operator="EqualTo">
+                                    @*<option value="1">Sem-I</option>*@
+                                    <option value="2" selected="selected">Sem-II</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label><br />
+                            <div class="jsDDLContainer">
+                                <select id="ExamFormStatus" name="ExamFormStatus" class="form-control jsfilterelement" data-column="Status" data-operator="EqualTo">
+                                    <option value="">All</option>
+                                    <option value="@((short)CUSrinagar.Enums.FormStatus.Accepted)">Accepted</option>
+                                    <option value="@((short)CUSrinagar.Enums.FormStatus.InProcess)">InProcess</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Registration No.</label><br />
+                            <input type="text" placeholder="Registration No" id="SearchRegNoFormNumber" name="SearchRegNo" class="form-control jsfilterelement" autofocus data-column="CUSRegistrationNo" data-operator="EqualTo" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="invisible">for styling purpose</label><br />
+                            <button type="button" class="btn btn-sm btn-primary fa-search-btn js-search"><i class="fa fa-search"></i>&nbsp;Search</button>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="invisible">for styling purpose</label><br />
+                            <div class="btn-group">
+                                <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle">
+                                    Action
+                                    <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-default dropdown-info">
+                                    <li>
+                                        <a href="javascript:void(0)" class="js-exportToCSV" data-url="@Url.Action("ExamFormCSV","Examination",new { area="CUSrinagarAdminPanel"})" data-otherparam1="printProgramme=@CUSrinagar.Enums.PrintProgramme.UG">
+                                            Download Excel(CSV)
+                                        </a>
+                                    </li>
+                                    <li class="divider"></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="js-table-content" data-afterappendingrows="examformlistloaded" data-url=@Url.Action("ExaminationFormListPartail", "AssignRollNumber", new { area = "CUSrinagarAdminPanel" }) data-DefaultOrderByColumn="FormNumber">
+            </div>
+            @{Html.RenderPartial("_JSPagerTableFooter");}
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJS{
+   @*<script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/Pages/clg-examination-form.js")"></script>*@
+    <script>
+        $(document).ready(function () {
+            loadpagertableWithDefaultParams();
+            $(".e2").addClass("active");
+            $(".exmlt").addClass("active open");
+        });
+    </script>
+}

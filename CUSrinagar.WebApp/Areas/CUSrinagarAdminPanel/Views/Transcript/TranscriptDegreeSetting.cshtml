@@ -1,0 +1,211 @@
+﻿
+@model  CUSrinagar.Models.MSTranscriptDegreeSettings
+@{
+    ViewBag.Title = "CUS :: Transcript Degree Setting";
+}
+
+<div class="widget-box">
+    <div class="widget-header">
+        <h4 class="widget-title"><i class='menu-icon fa fa-pencil-square-o'></i>Transcript Degree Setting</h4>
+    </div>
+    <div class="widget-body">
+        <div class="widget-main">
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger" id="errorMessage">
+                    <a href="#" class="close">&times;</a>
+                    <strong>Error!&nbsp;</strong><span>  @Html.Raw(TempData["ErrorMessage"])</span>
+                </div>
+            }
+            @using (Html.BeginForm("SaveTranscriptDegreeSettings", "Transcript", FormMethod.Post, new { enctype = "multipart/form-data", @name = "validation-form", @id = "validation-form", @class = "form-horizontal", @role = "form" }))
+            {
+
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.Setting_ID)
+                if (!ViewData.ModelState.IsValidField("ErrorMessage"))
+                {
+                    <div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong>@Html.ValidationMessage("ErrorMessage", "", new { @class = "red " })</strong></div>
+                }
+                <div class="form-group">
+                    <label class="col-sm-4">
+                        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Programme)
+                    </label>
+                    <div class="col-sm-6 no-padding ">
+                        @Html.DropDownList("Programme", new SelectList(ViewBag.Programmes, "Value", "Text", (short)Model.Programme),
+                    "Choose Program", new
+                    {
+                        @class = "form-control chosen-select jsProgrammeDDL ",
+                        @required = "required",
+                        @id = "ProgrammeDDL",
+                        @data_scope = "row1"
+                    })
+                    </div>
+                </div>
+
+
+
+                <div class="form-group" id="jsCourseField">
+                    <label class="col-sm-4">
+                        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Course_ID)
+                    </label>
+                    <div class="col-sm-6 no-padding  jsDDLContainer">
+                        @Html.DropDownListFor(model => model.Course_ID, new SelectList(ViewBag.Courses, "Value", "Text", Model.Course_ID),
+                            "choose course", new
+                            {
+                                @class = "form-control chosen-select jsCourseDDL width-100",
+                                @data_defaulttextvalue = "choose course,",
+                                @id = "CourseDDL",
+                                @data_scope = "row1"
+                            })
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <label class="col-sm-4">
+                        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.BatchFrom)
+
+                    </label>
+                    <div class=" col-sm-6  no-padding ">
+                        @Html.TextBoxFor(model => model.BatchFrom, new { @class = "width-100", @maxlength = "100" })
+                    </div>
+                    <div class="  col-sm-2  no-padding">
+                        @Html.ValidationMessageFor(model => model.BatchFrom, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <label class="col-sm-4">
+                        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.BatchTo)
+
+                    </label>
+                    <div class=" col-sm-6  no-padding ">
+                        @Html.TextBoxFor(model => model.BatchTo, new { @class = "width-100", @maxlength = "100" })
+                    </div>
+                    <div class="  col-sm-2  no-padding">
+                        @Html.ValidationMessageFor(model => model.BatchTo, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <label class="col-sm-4">
+                        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.SemesterFrom)
+
+                    </label>
+                    <div class=" col-sm-6  no-padding ">
+                        @Html.TextBoxFor(model => model.SemesterFrom, new { @class = "width-100", @maxlength = "50" })
+                    </div>
+                    <div class="  col-sm-2  no-padding">
+                        @Html.ValidationMessageFor(model => model.SemesterFrom, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <label class="col-sm-4">
+                        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.SemesterTo)
+
+                    </label>
+                    <div class=" col-sm-6  no-padding ">
+                        @Html.TextBoxFor(model => model.SemesterTo, new { @class = "width-100", @maxlength = "50" })
+                    </div>
+                    <div class="  col-sm-2  no-padding">
+                        @Html.ValidationMessageFor(model => model.SemesterTo, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <label class="col-sm-4">
+                        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.TotalCredits)
+
+                    </label>
+                    <div class=" col-sm-6  no-padding ">
+                        @Html.TextBoxFor(model => model.TotalCredits, new { @class = "width-100" })
+                    </div>
+                    <div class="  col-sm-2  no-padding">
+                        @Html.ValidationMessageFor(model => model.TotalCredits, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <label class="col-sm-4">
+                    @Html.LabelFor(model => model.LateralEntryTotalCredits)
+
+                    </label>
+                    <div class=" col-sm-6  no-padding ">
+                        @Html.TextBoxFor(model => model.LateralEntryTotalCredits, new { @class = "width-100" })
+                    </div>
+                    <div class="  col-sm-2  no-padding">
+                        @Html.ValidationMessageFor(model => model.LateralEntryTotalCredits, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <label class="col-sm-4">
+                        @Html.LabelFor(model => model.AWARDEDTRANSCRIPTTITLE)
+
+                    </label>
+                    <div class=" col-sm-6  no-padding ">
+                        @Html.TextBoxFor(model => model.AWARDEDTRANSCRIPTTITLE, new { @class = "width-100", @maxlength = "500" })
+                    </div>
+                    <div class="  col-sm-2  no-padding">
+                        @Html.ValidationMessageFor(model => model.AWARDEDTRANSCRIPTTITLE, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <label class="col-sm-4">
+                        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.AwardedDegreeTitle)
+
+                    </label>
+                    <div class=" col-sm-6  no-padding ">
+                        @Html.TextBoxFor(model => model.AwardedDegreeTitle, new { @class = "width-100", @maxlength = "500" })
+                    </div>
+                    <div class="  col-sm-2  no-padding">
+                        @Html.ValidationMessageFor(model => model.AwardedDegreeTitle, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <label class="col-sm-4">
+                        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.ProgramTitle)
+
+                    </label>
+                    <div class=" col-sm-6  no-padding ">
+                        @Html.TextBoxFor(model => model.ProgramTitle, new { @class = "width-100", @maxlength = "500" })
+                    </div>
+                    <div class="  col-sm-2  no-padding">
+                        @Html.ValidationMessageFor(model => model.ProgramTitle, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                    </div>
+                </div>
+                <div class=" text-center">
+                    <div class="form-group">
+                        <div class=" col-sm-6  align-right">
+                            <button type="submit" class="btn btn-sm btn-primary save-button">
+                                <i class="ace-icon fa fa-check"></i>
+                                Save
+                            </button>
+                            <a id="cData1" href="/CUSrinagarAdminPanel/Transcript/TranscriptDegreeSettingsSearch/" class="fm-button ui-state-default ui-corner-all fm-button-icon-left btn btn-sm btn-danger">
+                                <i class="ace-icon fa fa-times"></i>Cancel
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class=" text-center">
+                    <h4> <b>Note:</b> Transcript will be displayed from semsterFrom but Set passing credits always  from  semester 1 to  SemesterTo as previous semester need to be clear also.</h4>
+                </div>
+
+            }
+
+        </div>
+            </div>
+</div>
+
+
+
+@section PageSpecificJS{
+    @Scripts.Render("~/bundles/Libraries/jqueryval")
+
+    <script src="@Url.Content("~/Scripts/JSChosen.js")"></script>
+    <script src="~/Scripts/General/custom-select.js"></script>
+}
+
+

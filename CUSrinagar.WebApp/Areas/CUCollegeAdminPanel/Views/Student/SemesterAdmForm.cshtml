@@ -1,0 +1,568 @@
+﻿@using CUSrinagar.Models
+@using CUSrinagar.Extensions
+
+@{
+    Layout = null;
+    var MessageForAlert = TempData["alert"] ?? "";
+    Tuple<string, string, List<ADMSubjectMaster>, ARGPersonalInformation, short, string, CombinationSetting> SemesterAdmFormDetails
+        = (Tuple<string, string, List<ADMSubjectMaster>, ARGPersonalInformation, short, string, CombinationSetting>)ViewBag.SemesterAdmFormDetails;
+
+    var base64 = Convert.ToBase64String(SemesterAdmFormDetails.Item4.QRCode);
+    var QRImgSrc = String.Format($"data:image/png" + ";base64,{0}", base64);
+    string frmTitle = $"Semester {ViewBag.AdmSemester} & {ViewBag.AdmSemester + 1}";
+    int nextSem = ViewBag.AdmSemester + 1;
+    bool ShowCoordinatorSign = true;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@SemesterAdmFormDetails.Item4.CUSRegistrationNo @frmTitle Admission Form - CUSrinagar</title>
+    <style type="text/css">
+        .btn-theme {
+            background: #011c27;
+            border: 1px solid #84aac9;
+            color: #fff;
+        }
+
+            .btn-theme:hover {
+                background: #545677;
+                border: 1px solid #84aac9;
+                color: #fff;
+            }
+
+        .QRCode {
+            width: 95px;
+            margin-top: 20px;
+            margin-left: 0
+        }
+
+        @@media print {
+            .QRCode {
+                width: 95px;
+                margin-top: -60px;
+                margin-left: 0
+            }
+
+            .noneOnPrint {
+                display: none;
+            }
+
+            .dontbreakInside {
+                page-break-inside: avoid;
+            }
+
+            .breakpagehere {
+                page-break-after: always !important;
+            }
+
+            .blankspace {
+                height: 350px !important;
+            }
+        }
+
+        .breakpagehere {
+            height: 10px;
+            background-color: grey !important;
+        }
+
+        table tr td {
+            padding: 10px 10px;
+        }
+
+        table tr td, table tr th {
+            max-width: 150px;
+            word-wrap: hyphenate !important;
+        }
+
+        table, table tr, table tr td, table tr th {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        div {
+            background-color: #fff;
+        }
+
+        .center {
+            text-align: center !important;
+        }
+
+        .pull-right {
+            float: right !important;
+        }
+
+        .pull-left {
+            float: left !important;
+        }
+    </style>
+</head>
+<body style="background-color:grey">
+    <div style="margin:0 auto;width:909px;padding:10px 10px">
+        <div class="center">
+            <div style="width:100%;margin-bottom:-20px;">
+                <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" class="pull-left" style="width:90px;height:68px;" />
+                <img src="@QRImgSrc" class="pull-right" style="width:100px;height:60px;" />
+            </div>
+            <br />
+            <strong style="font-size:32px">@SemesterAdmFormDetails.Item4.AcceptCollegeID</strong>
+            <br />
+            <strong style="font-size:18px;">
+                @frmTitle Admission Form-(@SemesterAdmFormDetails.Item1)
+            </strong>
+        </div>
+        <table>
+            <tr>
+                <td colspan="6"><strong style="float:right !important;font-size:17px;">CUS Form No.: @SemesterAdmFormDetails.Item4.StudentFormNo</strong></td>
+            </tr>
+            <tr>
+                <td>Exam RollNo</td>
+                <td><strong>@SemesterAdmFormDetails.Item6</strong></td>
+                <td>Class RollNo</td>
+                <td colspan="2"><strong>@SemesterAdmFormDetails.Item4.ClassRollNo</strong></td>
+                <td rowspan="6" class="center">
+                    <img class="img-responsive" src="@Url.Content(SemesterAdmFormDetails.Item4.Photograph)" width="150" />
+                </td>
+            </tr>
+            <tr>
+                <td style="width:140px">Name</td>
+                <td colspan="2">@SemesterAdmFormDetails.Item4.FullName</td>
+                <td>Gender</td>
+                <td>@SemesterAdmFormDetails.Item4.Gender</td>
+            </tr>
+            <tr>
+                <td>Father's Name</td>
+                <td>@SemesterAdmFormDetails.Item4.FathersName</td>
+
+            </tr>
+            <tr>
+                <td>DOB (dd-mm-yyyy)</td>
+                <td colspan="4">@SemesterAdmFormDetails.Item4.DOB.ToString("dd-MM-yyyy")</td>
+            </tr>
+            <tr>
+                <td>Mobile</td>
+                <td>@SemesterAdmFormDetails.Item4.StudentAddress.Mobile</td>
+                <td>Course Name</td>
+                <th colspan="2">@SemesterAdmFormDetails.Item1</th>
+            </tr>
+
+            @if (string.IsNullOrWhiteSpace(SemesterAdmFormDetails.Item2))
+            {
+                <tr>
+                    <td>Batch</td>
+                    <th colspan="4">@SemesterAdmFormDetails.Item4.Batch</th>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td>Batch</td>
+                    <th>@SemesterAdmFormDetails.Item4.Batch</th>
+                    <td colspan="2">Selected Combination Code</td>
+                    <th>@SemesterAdmFormDetails.Item2</th>
+                </tr>
+            }
+
+            @if (SemesterAdmFormDetails.Item3.IsNotNullOrEmpty() && (SemesterAdmFormDetails.Item3?.Count() ?? 0) > 3)
+            {
+                ShowCoordinatorSign = false;
+                <tr>
+                    <td>Selected Subjects (Semester-@ViewBag.AdmSemester)</td>
+                    <td colspan="5"><strong>@SemesterAdmFormDetails.Item3.Select(x => x.SubjectFullName).ToSingleString(',').Replace(",", " , ")</strong></td>
+                </tr>
+            }
+            else if (ViewBag.AdmSemester > 4 && SemesterAdmFormDetails.Item3.IsNullOrEmpty())
+            {
+                <tr>
+                    <th>Core Subjects</th>
+                    <td colspan="5"><p><br /><br /><br /></p></td>
+                </tr>
+            }
+            else
+            {
+                if (ViewBag.AdmSemester < 5)
+                {
+                    <tr style="margin:0;padding:0;">
+                        <td colspan="6" style="margin:0;padding:0;">
+                            <table style="margin:0;padding:0;">
+                                <tr>
+                                    <th>
+                                        Write down your Subjects along with Type for<br />
+                                        Semester-@ViewBag.AdmSemester
+                                    </th>
+                                    <th>
+                                        Write down your Subjects along with Type for<br />
+                                        Semester-@(ViewBag.AdmSemester + 1)
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <p><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /></p>
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                }
+            }
+
+            @if (ViewBag.StudentAddionalSubjects != null)
+            {
+                List<StudentAdditionalSubject> studentAddionalSubjects = (List<StudentAdditionalSubject>)ViewBag.StudentAddionalSubjects;
+                <tr>
+                    <td>Additional Subject</td>
+                    <td colspan="5"><strong>@studentAddionalSubjects.Select(x => x.Subject?.SubjectFullName ?? "").ToSingleString(',').Replace(",", " , ")</strong></td>
+                </tr>
+            }
+
+        </table>
+        @if (ViewBag.AdmSemester > 4 && (SemesterAdmFormDetails.Item3?.Count() ?? 0) < 3)
+        {
+            <br />
+            <table>
+                <thead>
+                    <tr>
+                        <th>Semester-@ViewBag.AdmSemester Optional Subjects</th>
+                        <th>Semester-@nextSem Optional Subjects</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (SemesterAdmFormDetails.Item7.CombinationSettingStructure.DCE_DSE_Count > 0)
+                    {
+                        <tr>
+                            <th colspan="2">Descipline Centric Electives</th>
+                        </tr>
+                        for (int i = 1; i <= SemesterAdmFormDetails.Item7.CombinationSettingStructure.DCE_DSE_Count; i++)
+                        {
+                            <tr>
+                                <td>DCE-@i :</td>
+                                <td>DCE-@i :</td>
+                            </tr>
+                        }
+                    }
+
+                    @if (SemesterAdmFormDetails.Item7.CombinationSettingStructure.GE_OE_Count > 0)
+                    {
+                        <tr>
+                            <th colspan="2">Generic Electives</th>
+                        </tr>
+                        for (int i = 1; i <= SemesterAdmFormDetails.Item7.CombinationSettingStructure.GE_OE_Count; i++)
+                        {
+                            <tr>
+                                <td>GE-@i :</td>
+                                <td>GE-@i :</td>
+                            </tr>
+                        }
+                    }
+
+                    @if (SemesterAdmFormDetails.Item7.CombinationSettingStructure.SEC_Count > 0)
+                    {
+                        <tr>
+                            <th colspan="2">Skill Enhancement Courses</th>
+                        </tr>
+                        for (int i = 1; i <= SemesterAdmFormDetails.Item7.CombinationSettingStructure.SEC_Count; i++)
+                        {
+                            <tr>
+                                <td>SEC-@i :</td>
+                                <td>SEC-@i :</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <br />
+        }
+
+        <p style="width:100%;text-align:justify;">
+            <fieldset style="padding:10px;">
+                <legend style="font-weight:bold;font-size:20px;text-align:center"> Undertaking </legend>
+                I <b>@SemesterAdmFormDetails.Item4.FullName</b> S/D/o <b>@SemesterAdmFormDetails.Item4.FathersName</b>
+                Stream <b>@SemesterAdmFormDetails.Item1</b> Class Roll No <b>@SemesterAdmFormDetails.Item4.ClassRollNo</b> CUSForm No. <b>@SemesterAdmFormDetails.Item4.StudentFormNo</b> do hereby submit : <br />
+                <ol style="font-size:18px">
+                    <li>That I am seeking admission provisionally for @frmTitle solely on my own responsiblity.</li>
+                    <li>That in case I fail to fullfill the eligibility criteria, my admission will be liable to be cancelled and I will not claim for refund/admission.</li>
+                </ol>
+                <br /><br />
+                <span class="pull-left ">Printed on : @DateTime.UtcNow.ToLongDateString()</span>
+                <strong class="pull-right">
+                    Signature of the Applicant
+                </strong>
+            </fieldset>
+        </p><br />
+
+        <p style="width:100%;text-align:justify">
+            <fieldset style="padding:0;">
+                <legend style="font-weight:bold;font-size:16px;color:red;text-align:center"> Important </legend>
+                <ol>
+                    <li>College component Fee is to be deposited in the respective college.</li>
+                    <li>In case of any variation in particulars, the candidate shall contact College Admission Section.</li>
+                    <li>This form should be submitted in your college (Admission block)</li>
+                </ol>
+            </fieldset>
+        </p>
+        @if (ShowCoordinatorSign)
+        {
+            <br />
+            <p>
+                <strong class="pull-right center">
+                    (Signature with date)<br />
+                    Verified by College Admission Coordinator
+                </strong>
+            </p>
+            <br />
+        }
+        <div class="breakpagehere"></div>
+        <br />
+        @{
+            if (SemesterAdmFormDetails.Item4.PaymentDetail.IsNotNullOrEmpty())
+            {
+                <div class="dontbreakInside">
+                    <div class="center">
+                        <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                        <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" class="pull-left" style="width:90px;height:68px;" />
+                        <img src="@QRImgSrc" class="pull-left" />
+                        @*<img src="/Content/ThemePublic/PrintImages/JKB.jpg" class="pull-right" style="width:180px;height:60px;" />*@
+                        <h3 style="margin:0 !important;padding-bottom:0 !important">@SemesterAdmFormDetails.Item4.AcceptCollegeID</h3>
+                        <h3 style="margin:0 !important;padding-bottom:0 !important">Student Copy</h3>
+                        <strong style="text-align:center">@frmTitle Admission Form Fee Receipt-(@SemesterAdmFormDetails.Item1)</strong>
+                    </div>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" style="text-align:right"><strong>CUS Form No.: @SemesterAdmFormDetails.Item4.StudentFormNo &nbsp;&nbsp;</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Name  </td>
+                                <td colspan="2">  @SemesterAdmFormDetails.Item4.FullName</td>
+                                <td>Father's Name  </td>
+                                <td colspan="2">  @SemesterAdmFormDetails.Item4.FathersName</td>
+                            </tr>
+                            <tr>
+                                <td>Contact No. </td>
+                                <td colspan="2">  @SemesterAdmFormDetails.Item4.StudentAddress.Mobile</td>
+                                <td>Email  </td>
+                                <td colspan="2">  @SemesterAdmFormDetails.Item4.StudentAddress.Email.ToLower()</td>
+                            </tr>
+                            <tr style="border:0 !important;padding:0">
+                                <td style="border:0 !important;padding:0" colspan="6">
+                                    <table style="width:100%;border:0">
+                                        <tr>
+                                            <td><strong>TxnReference No. </strong></td>
+                                            <th>Dated  </th>
+                                            <th><strong>Amount Paid</strong></th>
+                                        </tr>
+                                        @foreach (var item in SemesterAdmFormDetails.Item4.PaymentDetail)
+                                        {
+                                            <tr>
+                                                <td><strong> @item.TxnReferenceNo</strong></td>
+                                                <th>  @item.TxnDate.ToString("dd-MM-yyyy")</th>
+                                                <th> &#x20b9; @item.TxnAmount</th>
+                                            </tr>
+                                        }
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="center">
+                                </td>
+                                <td colspan="3" class="center">
+                                    <br />
+                                    <br />
+                                    Signature of Applicant
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            }
+        }
+        <br />
+        <div class="breakpagehere"></div>
+        <br />
+        @*-------------------------------- Total Fee -----------------------------------*@
+        <div class="dontbreakInside">
+            <div class="center">
+                <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" class="pull-left" style="width:90px;height:68px;" />
+                <img src="@QRImgSrc" class="pull-left" />
+                <img src="/Content/ThemePublic/PrintImages/JKB.jpg" class="pull-right" style="width:180px;height:60px;" />
+                <h3 style="margin:0 !important;padding-bottom:0 !important">@SemesterAdmFormDetails.Item4.AcceptCollegeID</h3>
+                <h3 style="margin:0 !important;padding-bottom:0 !important">College Copy</h3>
+                <strong style="text-align:center">@frmTitle Admission Form Fee Receipt-(@SemesterAdmFormDetails.Item1)</strong>
+            </div>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>College FullName</td>
+                        <td colspan="3"></td>
+                    </tr>
+                    <tr>
+                        <td>CUS Registration No.</td>
+                        <td>@SemesterAdmFormDetails.Item4.CUSRegistrationNo</td>
+                        <td>Account No.</td>
+                        <td><b>@ViewBag.AccountNo</b></td>
+                    </tr>
+                    <tr>
+                        <td>Name</td>
+                        <td>@SemesterAdmFormDetails.Item4.FullName</td>
+                        <td>Parentage</td>
+                        <td>@SemesterAdmFormDetails.Item4.FathersName</td>
+                    </tr>
+                    <tr>
+                        <td>Amount</td>
+                        <td>&#8377; </td>
+                        <td>Contact</td>
+                        <td colspan="3">@SemesterAdmFormDetails.Item4.StudentAddress.Mobile</td>
+                    </tr>
+                    <tr>
+                        <td>Amount in words</td>
+                        <td colspan="3"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="center">
+                            <br />
+                            Signature of Applicant
+                        </td>
+                        <td colspan="2" class="center">
+                            <br />
+                            Bank Seal and Sign
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <br />
+        <fieldset class="center" style="border:0;border-top:1px dashed black;">
+            <legend>Cut here</legend>
+        </fieldset>
+
+        <div class="dontbreakInside">
+            <div class="center">
+                <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" class="pull-left" style="width:90px;height:68px;" />
+                <img src="@QRImgSrc" class="pull-left" />
+                <img src="/Content/ThemePublic/PrintImages/JKB.jpg" class="pull-right" style="width:180px;height:60px;" />
+                <h3 style="margin:0 !important;padding-bottom:0 !important">@SemesterAdmFormDetails.Item4.AcceptCollegeID</h3>
+                <h3 style="margin:0 !important;padding-bottom:0 !important">Student Copy</h3>
+                <strong style="text-align:center">@frmTitle Admission Form Fee Receipt-(@SemesterAdmFormDetails.Item1)</strong>
+            </div>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>College FullName</td>
+                        <td colspan="3"></td>
+                    </tr>
+                    <tr>
+                        <td>CUS Registration No.</td>
+                        <td>@SemesterAdmFormDetails.Item4.CUSRegistrationNo</td>
+                        <td>Account No.</td>
+                        <td><b>@ViewBag.AccountNo</b></td>
+                    </tr>
+                    <tr>
+                        <td>Name</td>
+                        <td>@SemesterAdmFormDetails.Item4.FullName</td>
+                        <td>Parentage</td>
+                        <td>@SemesterAdmFormDetails.Item4.FathersName</td>
+                    </tr>
+                    <tr>
+                        <td>Amount</td>
+                        <td>&#8377; </td>
+                        <td>Contact</td>
+                        <td colspan="3">@SemesterAdmFormDetails.Item4.StudentAddress.Mobile</td>
+                    </tr>
+                    <tr>
+                        <td>Amount in words</td>
+                        <td colspan="3"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="center">
+                            <br />
+                            Signature of Applicant
+                        </td>
+                        <td colspan="2" class="center">
+                            <br />
+                            Bank Seal and Sign
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <br />
+        <fieldset class="center" style="border:0;border-top:1px dashed black;">
+            <legen>Cut here</legen>
+        </fieldset>
+
+        <div class="dontbreakInside">
+            <div class="center">
+                <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" class="pull-left" style="width:90px;height:68px;" />
+                <img src="@QRImgSrc" class="pull-left" />
+                <img src="/Content/ThemePublic/PrintImages/JKB.jpg" class="pull-right" style="width:180px;height:60px;" />
+                <h3 style="margin:0 !important;padding-bottom:0 !important">@SemesterAdmFormDetails.Item4.AcceptCollegeID</h3>
+                <h3 style="margin:0 !important;padding-bottom:0 !important">Bank Copy</h3>
+                <strong style="text-align:center">@frmTitle Admission Form Fee Receipt-(@SemesterAdmFormDetails.Item1)</strong>
+            </div>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>College FullName</td>
+                        <td colspan="3"></td>
+                    </tr>
+                    <tr>
+                        <td>CUS Registration No.</td>
+                        <td>@SemesterAdmFormDetails.Item4.CUSRegistrationNo</td>
+                        <td>Account No.</td>
+                        <td><b>@ViewBag.AccountNo</b></td>
+                    </tr>
+                    <tr>
+                        <td>Name</td>
+                        <td>@SemesterAdmFormDetails.Item4.FullName</td>
+                        <td>Parentage</td>
+                        <td>@SemesterAdmFormDetails.Item4.FathersName</td>
+                    </tr>
+                    <tr>
+                        <td>Amount</td>
+                        <td>&#8377; </td>
+                        <td>Contact</td>
+                        <td colspan="3">@SemesterAdmFormDetails.Item4.StudentAddress.Mobile</td>
+                    </tr>
+                    <tr>
+                        <td>Amount in words</td>
+                        <td colspan="3"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="center">
+                            <br />
+                            Signature of Applicant
+                        </td>
+                        <td colspan="2" class="center">
+                            <br />
+                            Bank Seal and Sign
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <div class="noneOnPrint" style="margin-left:-14px;height:40px;background-color:lightslategrey;width:100%;position:fixed;bottom:0;z-index:100;text-align:center;padding-top:10px">
+        @Html.ActionLink("Go Back", "ViewFormDetail", "AssignCombination", new { area = "CUCollegeAdminPanel" }, new { style = "color:white;" })
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <button style="height: 32px;" href="#" class="btn btn-theme" onclick="window.print();"> <b> Download or Print Form</b></button>
+    </div>
+
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/Libraries/jquery-2.1.4.min.js")"></script>
+    <script src="@Url.Content("~/Content/ThemePublic/Libraries/disableBack.js")"></script>
+    <script type="text/javascript">
+        window.oncontextmenu = function () { return false; }
+    </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+﻿@model CUSrinagar.Models.Grievance
+
+@{
+    ViewBag.Title = "Confirmation - ";
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area= "CUStudentZone" })">Home</a>
+        </li>
+        <li>
+            <a href="@Url.Action("Grievance","Grievance",new { area= "CUStudentZone" })" class="active">Feedback</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+<div class="page-content">
+    <div class="row">
+        @if (ViewBag.IsVerified == true)
+            {
+            <h2 class="text-success">Feedback Confirmation</h2>
+            <hr />
+                <h4 class="text-success"> Your feedback has been registered successfully. </h4>
+                <hr />
+                <h4>Please note the Feedback Id for future reference: <span class="text-danger"><b>@ViewBag.GrievanceID</b></span></h4>
+        }
+        else
+        {
+            <h4 class="text-danger">Error: @ViewBag.ErrorMessage</h4>
+        }
+    </div>
+</div>
+
+
+@section PageSpecificJSFiles{
+    @Scripts.Render("~/bundles/Libraries/jqueryvalidation")
+}

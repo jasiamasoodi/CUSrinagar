@@ -1,0 +1,49 @@
+﻿@model  CUSrinagar.Models.ADMCombinationMaster
+@{
+    ViewBag.Title = "CUS :: Edit Combination Code";
+
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header">
+                <h4 class="widget-title"><i class='menu-icon fa fa-pencil-square-o'></i>Edit User</h4>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    @using (Html.BeginForm("EditCombnationCode", "Combination", FormMethod.Post, new { enctype = "multipart/form-data", @name = "validation-form", @id = "validation-form", @class = "form-horizontal", @role = "form" }))
+                    {
+                        @Html.HiddenFor(model => model.Combination_ID);
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right">
+                                Combination Code
+                            </label><div class="col-sm-7">   @Html.TextBoxFor(model => model.CombinationCode)</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right"></label>
+                            <div class="col-sm-7">
+                                <br /><br /><br />
+                                <button type="submit" class="btn btn-sm btn-primary save-button">
+                                    <i class="ace-icon fa fa-check"></i>
+                                    Save
+                                </button>
+
+                                <a id="cData1" href="/CUCollegeAdminPanel/Combination/Combination/" class="fm-button ui-state-default ui-corner-all fm-button-icon-left btn btn-sm btn-danger">
+                                    <i class="ace-icon fa fa-times"></i>Cancel
+                                </a>
+
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+

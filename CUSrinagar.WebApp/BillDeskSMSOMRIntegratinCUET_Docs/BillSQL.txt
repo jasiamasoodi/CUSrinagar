@@ -1,0 +1,136 @@
+﻿USE [CUS2018]
+GO
+DROP TABLE dbo.BIL_BankAccountDetails
+DROP TABLE dbo.BIL_PaperSetterInstitute
+DROP TABLE dbo.BIL_PaperSetterSettings
+GO
+DROP TABLE  dbo.BIL_BillDetails
+GO
+/****** Object:  Table [dbo].[BIL_BankAccountDetails]    Script Date: 03/11/2023 12:35:25 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[BIL_BankAccountDetails](
+	[Account_ID] [uniqueidentifier] NOT NULL,
+	[BankName] [varchar](100) NOT NULL,
+	[Branch] [varchar](100) NOT NULL,
+	[AccountNo] [varchar](16) NOT NULL,
+	[IFSCode] [varchar](11) NOT NULL,
+	[User_ID] [uniqueidentifier] NOT NULL,
+	[IsEditable] [bit] NOT NULL,
+	[CreatedOn] [datetime] NOT NULL,
+	[CreatedBy] [uniqueidentifier] NOT NULL,
+	[UpdatedOn] [datetime] NULL,
+ CONSTRAINT [PK_BIL_BankAccountDetails] PRIMARY KEY CLUSTERED 
+(
+	[Account_ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[BIL_BillDetails]    Script Date: 03/11/2023 12:35:25 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[BIL_BillDetails](
+	[Bill_ID] [uniqueidentifier] NOT NULL,
+	[BillNo] [varchar](22) NOT NULL,
+	[BillType] [smallint] NOT NULL,
+	[User_ID] [uniqueidentifier] NOT NULL,
+	[SamplePaper_ID] [uniqueidentifier] NOT NULL,
+	[PaperPattern_ID] [uniqueidentifier] NOT NULL,
+	[Subject_ID] [uniqueidentifier] NOT NULL,
+	[Batch] [varchar](100) NOT NULL,
+	[Examination] [varchar](100) NOT NULL,
+	[Session] [varchar](50) NOT NULL,
+	[AmountPerSet] [smallint] NOT NULL,
+	[NoOfSets] [smallint] NOT NULL,
+	[ConveyanceCharges] [smallint] NULL,
+	[TotalAssignmentCompletionDays] [smallint] NOT NULL,
+	[PaperReceiverEmail] [varchar](100) NOT NULL,
+	[SyllabusLink] [nvarchar](MAX) NULL,
+	[BillStatus] [smallint] NOT NULL,
+	[Institute] [varchar](200) NOT NULL,
+	[RevenueStampAmount] [smallint] NOT NULL,
+	[PaymentDate] [datetime] NULL,
+	[PaymentAccount] [varchar](16) NULL,
+	[PaymentBranch] [varchar](100) NULL,
+	[PaymentBank] [varchar](100) NULL,
+	[PaymentIFSCode] [varchar](11) NULL,
+	[CreatedOn] [datetime] NOT NULL,
+	[CreatedBy] [uniqueidentifier] NOT NULL,
+	[UpdatedOn] [datetime] NULL,
+	[UpdatedBy] [uniqueidentifier] NULL,
+ CONSTRAINT [PK_BIL_BillDetails_1] PRIMARY KEY CLUSTERED 
+(
+	[Bill_ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+ CONSTRAINT [UQ_BillNo] UNIQUE NONCLUSTERED 
+(
+	[BillNo] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE dbo.BIL_BillDetails
+DROP CONSTRAINT UQ_BillNo
+GO
+/****** Object:  Table [dbo].[BIL_PaperSetterInstitute]    Script Date: 03/11/2023 12:35:25 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[BIL_PaperSetterInstitute](
+	[User_ID] [uniqueidentifier] NOT NULL,
+	[Institute] [varchar](200) NOT NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[BIL_PaperSetterSettings]    Script Date: 03/11/2023 12:35:25 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[BIL_PaperSetterSettings](
+	[Setting_ID] [uniqueidentifier] NOT NULL,
+	[Type] [smallint] NOT NULL,
+	[Title] [varchar](100) NOT NULL,
+	[FilePath] [varchar](300) NOT NULL,
+	[IsActive] [bit] NOT NULL,
+	[CreatedOn] [datetime] NOT NULL,
+	[CreatedBy] [uniqueidentifier] NOT NULL,
+ CONSTRAINT [PK_BIL_PaperSetterSettings] PRIMARY KEY CLUSTERED 
+(
+	[Setting_ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[BIL_BankAccountDetails] ADD  CONSTRAINT [DF_BIL_BankAccountDetails_IsEditable]  DEFAULT ((1)) FOR [IsEditable]
+GO
+ALTER TABLE [dbo].[BIL_BillDetails] ADD  CONSTRAINT [DF__BIL_BillD__Reven__01430CDD]  DEFAULT ((2)) FOR [RevenueStampAmount]
+GO
+ALTER TABLE [dbo].[BIL_PaperSetterSettings] ADD  CONSTRAINT [DF_BIL_PaperSetterSettings_IsActive]  DEFAULT ((1)) FOR [IsActive]
+GO
+ALTER TABLE [dbo].[BIL_BankAccountDetails]  WITH CHECK ADD  CONSTRAINT [FK_BIL_BankaccountDetails_AppUsers] FOREIGN KEY([User_ID])
+REFERENCES [dbo].[AppUsers] ([User_ID])
+GO
+ALTER TABLE [dbo].[BIL_BankAccountDetails] CHECK CONSTRAINT [FK_BIL_BankaccountDetails_AppUsers]
+GO
+ALTER TABLE [dbo].[BIL_BillDetails]  WITH CHECK ADD  CONSTRAINT [FK_BIL_BillDetails_ADMSubjectMaster] FOREIGN KEY([Subject_ID])
+REFERENCES [dbo].[ADMSubjectMaster] ([Subject_ID])
+GO
+ALTER TABLE [dbo].[BIL_BillDetails] CHECK CONSTRAINT [FK_BIL_BillDetails_ADMSubjectMaster]
+GO
+ALTER TABLE [dbo].[BIL_BillDetails]  WITH CHECK ADD  CONSTRAINT [FK_BIL_BillDetails_AppUsers] FOREIGN KEY([User_ID])
+REFERENCES [dbo].[AppUsers] ([User_ID])
+GO
+ALTER TABLE [dbo].[BIL_BillDetails] CHECK CONSTRAINT [FK_BIL_BillDetails_AppUsers]
+GO
+ALTER TABLE [dbo].[BIL_PaperSetterInstitute]  WITH CHECK ADD  CONSTRAINT [FK_BIL_PaperSetterInstitute_AppUsers] FOREIGN KEY([User_ID])
+REFERENCES [dbo].[AppUsers] ([User_ID])
+GO
+ALTER TABLE [dbo].[BIL_PaperSetterInstitute] CHECK CONSTRAINT [FK_BIL_PaperSetterInstitute_AppUsers]
+GO
+ALTER TABLE [dbo].[BIL_BankAccountDetails]  WITH CHECK ADD  CONSTRAINT [DigiConstraint] CHECK  ((NOT [AccountNo] like '%[^0-9]%'))
+GO
+ALTER TABLE [dbo].[BIL_BankAccountDetails] CHECK CONSTRAINT [DigiConstraint]
+GO

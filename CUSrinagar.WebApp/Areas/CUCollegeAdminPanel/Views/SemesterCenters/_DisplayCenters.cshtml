@@ -1,0 +1,69 @@
+﻿
+@model  List<CUSrinagar.Models.ARGEntranceCentersMaster>
+@using CUSrinagar.Extensions
+
+@{
+    Layout = null;
+    var NotificationDescription = "";
+    var NotificationURL = "";
+    var ISChecked = "";
+}
+
+<table class="table table-hover table-bordered">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th style="width:20%">Center Name &amp; Address</th>
+            <th>Center Code</th>
+            <th>Details</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody style="background-color:#e5e5e5">
+        @if (Model != null)
+        {
+            foreach (var item in Model.OrderBy(x => x.CenterCode.SortAlphaNumeric()))
+            {
+                <tr>
+                    <td>@item.CenterName</td>
+                    <th class="text-center">@item.CenterCode</th>
+                    <td>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th style="width:30%">Notification</th>
+                                <th>Course</th>
+                                <th>Total Students Alloted</th>
+                                <th>Semester</th>
+                                <th>Exam Year</th>
+                            </tr>
+                            @foreach (var centerDetail in item.CenterAllotmentDetails ?? new List<CUSrinagar.Models.CenterAllotmentDetail>())
+                            {
+                                NotificationURL = centerDetail.NotificationURL ?? "javascript:void(0);";
+                                NotificationDescription = centerDetail.NotificationDescription ?? "No info avaliable";
+                                <tr>
+                                    <td><a href="@NotificationURL" target="_blank" title="click to view">@NotificationDescription</a></td>
+                                    <td>@centerDetail.CourseFullName</td>
+                                    <td style="text-align:center">@centerDetail.TotalStudentsAssigned</td>
+                                    <td style="text-align:center">@centerDetail.Semester</td>
+                                    <td style="text-align:center">@centerDetail.Year</td>
+                                </tr>
+                            }
+                        </table>
+                    </td>
+                    <td class="text-center">
+                        @if (item.Status)
+                        {
+                            ISChecked = "Active";
+                        }
+                        else
+                        { ISChecked = "In-Active"; }
+                        <strong>@ISChecked</strong>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr><th colspan="5">No Centers found</th></tr>
+        }
+    </tbody>
+</table>

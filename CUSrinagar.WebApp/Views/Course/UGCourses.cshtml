@@ -1,0 +1,54 @@
+﻿@model List<CUSrinagar.Models.CourseList>
+@{
+    ViewBag.Title = "Courses - ";
+}
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <header class="page-heading clearfix">
+            <h1 class="heading-title pull-left">
+                Courses
+                <small>
+                    <i class="ace-icon fa fa-angle-double-right"></i>
+                    List of UG Courses Offered
+                </small>
+            </h1>
+        </header>
+        <div class="col-md-12 col-sm-12 col-xs-12" style="overflow:auto !important">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center" rowspan="2">College</th>
+                        <th class="text-center" rowspan="2">Course</th>
+                        <th class="text-center" rowspan="2">Duration</th>
+                        <th class="text-center" colspan="3">Total Seats</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var CollegeFullName = "";
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                @if (item.CollegeFullName != CollegeFullName)
+                                {
+                                    CollegeFullName = item.CollegeFullName;
+                                    <td rowspan="4">@item.CollegeFullName</td>
+                                }
+                                <td>@item.CourseFullName</td>
+                                <td>@item.Duration</td>
+                                <td>@item.MeritBasislInTackCapacity</td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section PageSpecificJS{
+    <script>
+        var _CurrentSection = "Academics";
+    </script>
+}

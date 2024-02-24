@@ -1,0 +1,52 @@
+﻿@{
+    Layout = null;
+}
+<table id="simple-table" class="table  table-bordered table-hover">
+    <thead>
+        <tr>
+         
+            <th class="">Description</th>
+            <th>Date</th>
+            <th>View Result</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+         
+
+            <td>B.A Ist semester Examination held in Nov, 2017</td>
+
+            <td>@DateTime.Now.ToString("d")</td>
+
+            <td>
+                <div class="hidden-sm hidden-xs btn-group">
+                    <a href="\CUCollegeAdminPanel\Result\ResultList?semesterName=UG1" class="btn btn-xs btn-success">
+                        <i class="ace-icon fa fa-check bigger-120" title="view result"></i>
+                    </a>
+                </div>
+            </td>
+
+        </tr>
+
+        <tr>
+            
+
+            <td>B.A 2nd semester Examination held in Nov, 2017</td>
+
+            <td>@DateTime.Now.ToString("d")</td>
+
+            <td>
+                <div class="hidden-sm hidden-xs btn-group">
+                    <a href="\CUCollegeAdminPanel\Result\ResultList?semesterName=UG2" class="btn btn-xs btn-success">
+                        <i class="ace-icon fa fa-check bigger-120" title="view result"></i>
+                    </a>
+                </div>
+            </td>
+
+        </tr>
+
+   
+
+    </tbody>
+</table>

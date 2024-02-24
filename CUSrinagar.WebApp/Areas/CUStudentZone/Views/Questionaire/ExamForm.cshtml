@@ -1,0 +1,122 @@
+﻿@{
+    ViewBag.Title = "Exam Form";
+    var examFormSemester = (List<SelectListItem>)ViewBag.ExamForSemester;
+    int currentSemester = ViewBag.CurrentSemester;
+    int selectedSemester = (int)ViewBag.SelectedSemester;
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area="CUStudentZone"})">Home</a>
+        </li>
+        <li>
+            <a href="#" class="active">Examination Form</a>
+        </li>
+    </ul>
+}
+<div class="page-header">
+    <br />
+    <h1>
+        &nbsp;&nbsp;
+        <i class="fa fa-credit-card"></i> Examination Form
+    </h1>
+</div>
+@if (examFormSemester != null && examFormSemester.Count > 0)
+{
+    <div class="row page-content">
+        <div class="col-md-2"></div>
+        <div class="col-md-7" style="border:2px solid #cacaca;border-radius:6px;">
+            <br />
+            <p class="text-danger"><strong>Those candidates who have not appeared in internal/continous assesment are not eligible to appear in exam and their forms will be cancelled.</strong></p>
+            <br />
+            @using (Html.BeginForm("GetCombination", "Examination", FormMethod.Get, new { area = "CUStudentZone", @class = "", @id = "frmExamForm" }))
+            {
+            <div class="col-lg-2">    </div>
+            <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                <div class="content-wrapper">
+                    <label class="col-sm-7 lbl bigger-120 no-padding-right">
+                        <span class="required">Semester*</span><br />
+                                                          
+                                                                   <select name="semester">
+
+                                                                       <option value="@selectedSemester" selected>Semester-@selectedSemester</option>
+
+                                                                   </select>
+                                                              
+                        @*@Html.DropDownListFor(model => model.Semester, (IEnumerable<SelectListItem>)ViewBag.Semester, string.Empty, new { @class = "form-control" })*@
+                        @*@Html.DropDownList("semester", new SelectList(examFormSemester, "Value", "Text"), new
+                            {
+                                @class = "form-control",
+                                required = "required",
+                            })*@
+                    </label>
+                </div>
+            </div>
+            <br />
+            <p class="text-center">
+                <span id="hideButtons6">
+                    <button type="submit" id="jsSemAdmitCard" class="btn btn-success"><i class="fa fa-download"></i> Download Examination Form</button>
+                </span>
+            </p>
+            }
+        </div>
+        <div class="col-md-3"></div>
+        <div class="col-lg-12"><br /><br /><br /><br /></div>
+    </div>
+}
+else
+{
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
+        <h1 class="text-danger"></h1>
+    </div>
+
+    <div class="row page-content">
+        <div class="col-md-2"></div>
+        <div class="col-md-7" style="border:2px solid #cacaca;border-radius:6px;">
+            <br />
+            <p class="text-danger"><strong>The process of downloading examination form is either closed or will be allowed soon.</strong></p>
+            <br />
+            @using (Html.BeginForm("PrintExaminationFormReceipt", "Examination", FormMethod.Get, new { area = "CUStudentZone", @class = "", @id = "frmExamForm" }))
+                                    {
+            <div class="col-lg-2">    </div>
+            <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                <div class="content-wrapper">
+                    <label class="col-sm-7 lbl bigger-120 no-padding-right">
+                        <span class="required">Semester*</span><br />
+                                                         
+                                                                   <select name="semester">
+
+                                                                       <option value="@selectedSemester" selected>Semester-@selectedSemester</option>
+
+                                                                   </select>
+                                                             
+                    </label>
+                </div>
+            </div>
+            <br />
+            <p class="text-center">
+                <span id="hideButtons6">
+                    <button type="submit" id="jsSemAdmitCard" class="btn btn-success"><i class="fa fa-download"></i> Download Examination Form</button>
+                </span>
+            </p>
+                                    }
+        </div>
+        <div class="col-md-3"></div>
+        <div class="col-lg-12"><br /><br /><br /><br /></div>
+    </div>
+
+
+}
+@section PageSpecificJSFiles
+{
+    <script>
+        $(document).ready(function () {
+            $("[id*=Section]").removeClass("active");
+            $("#ExaminationFormSection").addClass("active");
+            $("label.lbl select").val(@selectedSemester);
+            $("#jsSemAdmitCard").trigger("click");
+        });
+    </script>
+}

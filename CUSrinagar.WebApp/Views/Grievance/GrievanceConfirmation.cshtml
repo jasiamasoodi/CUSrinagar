@@ -1,0 +1,27 @@
+﻿@model CUSrinagar.Models.Grievance
+
+@{
+    ViewBag.Title = "Confirmation - ";
+}
+
+<div class="page-content">
+    <div class="row">
+        @if (ViewBag.IsVerified == true)
+            {
+            <h2 class="text-success">Feedback/Grievance Confirmation</h2>
+            <hr />
+                <h4 class="text-success"> Your feedback/grievance has been registered successfully. </h4>
+                <hr />
+                <h4>Please note the Feedback/Grievance Id for future reference: <span class="text-danger"><b>@ViewBag.GrievanceID</b></span></h4>
+        }
+        else
+        {
+            <h4 class="text-danger">Error: @ViewBag.ErrorMessage</h4>
+        }
+    </div>
+</div>
+
+
+@section PageSpecificJS{
+    @Scripts.Render("~/bundles/Libraries/jqueryvalidation")
+}

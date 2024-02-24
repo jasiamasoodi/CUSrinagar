@@ -1,0 +1,91 @@
+﻿@model  List<CUSrinagar.Models.AwardFilterSettings>
+@using CUSrinagar.Extensions
+
+@{
+    Layout = null;
+    var ISChecked = "";
+}
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th>S.No</th>
+            <th data-property="AwardType" id="awardtype">Award Type</th>
+            <th data-property="Programme">Programme</th>
+            <th data-property="Semester">Semester</th>
+            <th data-property="FilterColumn">Filter Column</th>
+            <th data-property="FilterValue">Filter Value</th>
+            <th data-property="EndDate">Start Date</th>
+            <th data-property="EndDate">End Date</th>
+            <th data-property="Colleges">Colleges</th>
+            <th data-property="Courses">Courses</th>
+            <th data-property="IsInternalPassed">Update Internal Status</th>
+            <th data-property="IsExternalPassed">Update External Status</th>
+            <th data-property="IsActive">Award Open</th>
+            <td>Edit</td>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var row in Model)
+            {
+
+
+                <tr>
+                    <td class="js-sno"></td>
+                    <td>@row.AwardType  </td>
+                    <td id="programme">@row.Programme</td>
+                    <td id="semester">@row.Semester  </td>
+                    <td>@row.FilterColumn</td>
+                    <td id="examyear">@row.FilterValue</td>
+                    <td>
+                        @if (row.StartDate == DateTime.MinValue)
+                        {
+                            <span>-Date Not Mentioned--</span>
+                        }
+                        else
+                        {<span> @row.StartDate</span>}
+                    </td>
+                    <td>@row.EndDate</td>
+                    <td>
+                        @if (string.IsNullOrEmpty(row.Colleges))
+                        {
+                            <span>--ALL--</span>
+                        }
+                        else
+                        {<span> @row.CollegesName</span>}
+                    </td>
+                    <td id="course">
+                        @if (string.IsNullOrEmpty(row.Courses))
+                        {
+                            <span>--ALL--</span>
+                        }
+                        else
+                        {<span>@row.CoursesName</span>}
+                    </td>
+                    <td><a href='#abc' class="jsUploadStatus" id='@row.AwardFilterSettingsID' Typeis='internal'>Update Internals</a></td>
+                    <td><a href='#abc' class="jsUploadStatus" id='@row.AwardFilterSettingsID' Typeis='external'>Update Externals</a></td>
+
+                    <td>
+                        @if (row.IsActive)
+                        {
+                            ISChecked = "checked = 'checked'";
+                        }
+                        else
+                        { ISChecked = ""; }
+                        <label class='pull-center inline'>
+                            <input class='ace ace-switch ace-switch-5 jsAllowDownloadForm' id='@row.AwardFilterSettingsID' type='checkbox' @ISChecked />
+                            @*<input type="button" class="btn btn-primary btn-sm" id="jssetclosingdate" value="Set Closing Date" />*@
+                            @*<input class='ace ace-switch ace-switch-5 jsAllowDownloadForm' id="awardtype" type='checkbox' @ISChecked />*@
+                            <span class='lbl middle'></span>
+                        </label>
+                    </td>
+                    <td><a href='@Url.Action("EditFilters","AwardSetting",new { area = "CUSrinagarAdminPanel", @id = row.AwardFilterSettingsID })' target="_blank" id="awardtype"><i class="fa fa-edit fa-lg"></i></a></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+ 

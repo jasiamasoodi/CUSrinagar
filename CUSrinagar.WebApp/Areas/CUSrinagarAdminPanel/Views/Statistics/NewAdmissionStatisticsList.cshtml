@@ -1,0 +1,138 @@
+﻿@model IEnumerable<CUSrinagar.Models.NewAdmissionsWidget>
+@{ Layout = null;}
+<hr />
+<h3 class="center">
+    <button class="btn btn-inverse"> Applications With Fee = @ViewBag.NoOfStudentsWithFees</button>
+    <button class="btn btn-inverse"> Applications Without Fee = @ViewBag.NoOfStudentsWithoutFees</button>
+</h3>
+<hr />
+
+<div class="col-md-12">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th data-property="CourseFullName">
+                    Course Full Name
+                </th>
+                <th data-property="NoOfStudents">
+                    @Html.DisplayNameFor(model => model.NoOfStudents)
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    Graduation Only
+                </td>
+                <td>
+                    @ViewBag.GraduationOnly
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Integrated / Professional / Honor's
+                </td>
+                <td>
+                    @if ((Model.Where(i => i.CourseFullName == "Graduation")?.Count()??0)>0)
+                    {
+                        @((Model.Where(i => i.CourseFullName == "Graduation").First().NoOfStudents - ViewBag.GraduationOnly))
+                    }
+                    else
+                    {
+                        <text>@Model.First().NoOfStudents</text>
+                    }
+                </td>
+            </tr>
+
+            @foreach (var item in Model.Where(i => i.CourseFullName == "Graduation" || i.CourseFullName == "Integrated B.Ed-M.Ed"))
+            {
+
+                @*if (item.CourseFullName == "Graduation")
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CourseFullName) and Other Courses (Includes Applications with Integrated Courses)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NoOfStudents)
+                            </td>
+                        </tr>
+                    }
+                    else*@
+
+                if (item.CourseFullName == "Integrated B.Ed-M.Ed")
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CourseFullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NoOfStudents)
+                        </td>
+                    </tr>
+                }
+                else
+                {
+
+                }
+            }
+
+        </tbody>
+
+    </table>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th data-property="CourseFullName">
+                    Course Full Name
+                </th>
+                <th data-property="NoOfStudents">
+                    No of Applications
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+
+                if (item.CourseFullName == "Graduation" || item.CourseFullName == "Common Aptitude Test" || item.CourseFullName == "Integrated B.Ed-M.Ed")
+                {
+                    continue;
+                }
+                else
+                {
+
+                    if (item.CourseFullName.Contains("Honor's") && item.CourseFullName != "Journalism & Mass Communication Honor's")
+
+                    {
+                        continue;
+                    }
+
+                    if (item.CourseFullName == "BBA" || item.CourseFullName == "BCA")
+
+                    {
+                        continue;
+                    }
+
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CourseFullName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NoOfStudents)
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+
+
+        </tbody>
+
+    </table>
+</div>

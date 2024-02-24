@@ -1,0 +1,437 @@
+﻿@using CUSrinagar.Extensions
+
+@{
+    ViewBag.Title = "";
+    string marqueeText = ViewBag.MarqueeText;
+}
+
+<link rel="apple-touch-icon" href='@Url.Content("~/Content/ThemePublic/Libraries/plugins/tabs/apple-touch-icon.png")'>
+
+<input id="currentDate" type="hidden" value="@DateTime.Now.ToString("yyyy/MM/dd")" />
+<div class="row">
+    <div class="col-md-8">
+        <div id="promo-slider" class="slider flexslider">
+            <ul class="slides">
+                @if (DateTime.Now.Date <= new DateTime(2023, 01, 24))
+                {
+                    <li>
+                        <a target="_blank" href="javascript:void(0);">
+                            <img src='@Url.Content("~/Content/ThemePublic/Libraries/images/slides/cusnta_23.png")' alt="" />
+                            <p class="flex-caption">
+                                <span class="secondary clearfix">
+                                    Apply for Common University Entrance Test CUET (PG) - 2023
+                                    <a target="_blank" class="btn btn-danger btn-block btn-link-breaked"
+                                       href="https://cuet.nta.nic.in/">
+                                        <strong>
+                                            Apply Online
+                                        </strong>
+                                    </a>
+                                </span>
+                                @*<br />
+                                    <span class="secondary clearfix">
+                                        Common University Entrance Test CUET (UG) - 2023
+                                        <a target="_blank" class="btn btn-danger btn-block btn-link-breaked"
+                                               href="https://cuet.samarth.ac.in/index.php/app/registration/instructions">
+                                                <strong>
+                                                    Apply Online
+                                                </strong>
+                                            </a>
+                                    </span>*@
+                                @*<span class="secondary clearfix margin-top-5">
+                                        Last date of successful transaction of fee 12 March 2023 (upto 11:50 PM)
+                                    </span>*@
+                            </p>
+                        </a>
+                    </li>
+                    <li>
+                        <iframe class="vbcomp" width="730" height="350" src="https://www.youtube.com/embed/IXQUC3dC7ZY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </li>
+                    <li>
+                        <iframe class="vbcomp" width="730" height="350" src="https://www.youtube.com/embed/Vdomyk9YozM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </li>
+                }
+
+                @*<li>
+                        <a href="javascript:void(0);">
+                            <iframe class="vbcomp"
+                                    width="730" height="345"
+                                    src="https://www.youtube.com/embed/sJhLtJM3WeM?controls=0"
+                                    title="Clusete University Srinagar “Viksit Bharat@2047  Voice of Youth” campaign"
+                                    frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen></iframe>
+                            <p class="flex-caption">
+                                <span class="main" style="background-color:#353030">
+                                    “Watch Viksit Bharat@2047  Voice of Youth” campaign
+                                </span>
+                            </p>
+                        </a>
+                    </li>*@
+                <li>
+                    <a target="_blank" href="https://auth.mygov.in/user/login?destination=oauth2/authorize">
+                        <img src='@Url.Content("~/Content/ThemePublic/Libraries/images/slides/VB2047.jpg")' />
+                        <p class="flex-caption">
+                        </p>
+                    </a>
+                </li>
+                <li>
+                    <img src='@Url.Content("~/Content/ThemePublic/Libraries/images/slides/Cricket_Team_cus2024-min.jpg")' alt="" />
+                    <p class="flex-caption">
+                        @*<span class="main"></span>
+                            <br />*@
+                        <span class="secondary clearfix">Cricket Team - 2024</span>
+                    </p>
+                </li>
+                <li>
+                    <img src='@Url.Content("~/Content/ThemePublic/Libraries/images/slides/iuniv-min.jpg")' />
+                    <p class="flex-caption">
+                        @*<span class="main"></span>
+                            <br />*@
+                        <span class="secondary clearfix">Winners of Pencak Silat - 2024</span>
+                    </p>
+                </li>
+
+                <li>
+                    <img src='@Url.Content("~/Content/ThemePublic/Libraries/images/slides/Slide77.jpg")' alt="" />
+                    <p class="flex-caption">
+                        @*<span class="main"></span>
+                            <br />*@
+                        <span class="secondary clearfix">4<sup>th</sup> Academic Council Meeting - 2023</span>
+                    </p>
+                </li>
+                <li>
+                    <img src='@Url.Content("~/Content/ThemePublic/Libraries/images/slides/Slide6.jpg")' alt="" />
+                    <p class="flex-caption">
+                        @*<span class="main"></span>
+                            <br />*@
+                        <span class="secondary clearfix">2<sup>nd</sup> Academic Council Meeting</span>
+                    </p>
+                </li>
+                <li>
+                    <img src='@Url.Content("~/Content/ThemePublic/Libraries/images/slides/slide0.jpg")' alt="" />
+                    <p class="flex-caption">
+                        <span class="secondary clearfix">2nd Academic Council Meeting - 2022</span>
+                    </p>
+                </li>
+                <li>
+                    <img src='@Url.Content("~/Content/ThemePublic/Libraries/images/slides/slide_1.jpg")' alt="" />
+                </li>
+                <li>
+                    <img src='@Url.Content("~/Content/ThemePublic/Libraries/images/slides/slide-5.jpg")' alt="" />
+                    <p class="flex-caption">
+                        <span class="main">Prize Distribution</span><br />
+                        <span class="secondary clearfix">Annual College Road Race (women) - 2022</span>
+                    </p>
+                </li>
+            </ul>
+        </div>
+        @*marque mobile*@
+        @if (!string.IsNullOrWhiteSpace(marqueeText))
+        {
+            <div class="marquee-sm">
+                <div class="immediate-notify">
+                    <marquee>
+                        <span id="actual-span">
+                            @Html.Raw(marqueeText)
+                        </span>
+                    </marquee>
+                </div>
+            </div>
+        }
+        @*marque mobile*@
+    </div>
+
+    <div class="col-md-4 centered no-padding-left">
+        <div id="nt-example1-container" style="border:0px solid red; margin:0; padding:0; ">
+            <div class="panel panel-default no-margin-bottom">
+                <div class="panel-heading" style="border:0px dashed blue;padding:5px 0 5px 10px;margin:0; display:inline-block;width:100%;">
+                    <div style="display: inline-block;width: 50%;float: left; padding-top:5px;border: 0px solid red;">
+                        <h4 class="panel-title">Latest Notifications</h4>
+                    </div>
+                    <div style="display:inline-block; text-align:left; padding-left:10px; width: 49%;border: 0px solid cyan;">
+                        <i class="fa fa-arrow-up" id="nt-example1-prev" style="border:0px dashed #CCC; color:#fff;"></i>
+                    </div>
+                </div>
+                <div class="panel-body no-padding">
+                    <ul id="nt-example1" class="js-quick-notification"></ul>
+                </div>
+                <div class="panel-heading" style="border:0px dashed blue;padding:5px 0 5px 10px;margin:0; display:inline-block;width:100%;">
+                    <div style="display: inline-block;width: 50%;float: left;border: 0px solid red; text-align:left;">
+                        <a style="padding:0; border:0px solid red;" href='@Url.Action("Notification", "Notification", new { area = string.Empty })'>View all...</a>
+                    </div>
+                    <div style="display:inline-block; text-align:left; padding-left:10px; width: 49%;border: 0px solid cyan;">
+                        <i class="fa fa-arrow-down" id="nt-example1-next" style="border:0px dashed #CCC; color:#fff;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*marque desktop*@
+    @if (!string.IsNullOrWhiteSpace(marqueeText))
+    {
+        <div class="col-md-12 marquee-md">
+            <div class="immediate-notify">
+                <marquee>
+                    <span id="actual-span">
+                        <span id="actual-span ">
+                            @Html.Raw(marqueeText)
+                        </span>
+                    </span>
+                </marquee>
+            </div>
+        </div>
+    }
+    @*marque desktop*@
+
+</div>@*news scroller end*@
+
+@*testimonials*@
+<div class="row cols-wrapper" style="margin-bottom:15px;">
+    <div class="col-md-3 Home margin-top-10">
+        <a class="btn btn-block btn-primary margin-bttom-15" href="https://jobs.cusrinagar.edu.in/" target="_blank">Jobs / Recruitment<br />Advertisements, Call Letters</a>
+
+        @*<a class="btn btn-block btn-danger margin-bttom-15" href="/Home/NEPRegulations">
+                <i class="fa fa-file-pdf-o"></i> <strong>NEP-2020 Draft Regulations</strong>
+            </a>*@
+        <a class="btn btn-block btn-success margin-bttom-15" href="@Url.Content("~/FolderManager/Notification/CUSBulletinofInformation110420231.pdf")" target="_blank">
+            <i class="fa fa-file-pdf-o"></i> Bulletin of Information
+        </a>
+        <a class="btn btn-block btn-danger margin-bttom-15" href="https://www.antiragging.in/affidavit_registration_disclaimer.html" target="_blank">
+            <i class="fa fa-file-pdf-o"></i>  Submit Anti-Ragging Affidavit
+        </a>
+        <a class="btn btn-block btn-success margin-bttom-15" href="/Home/CUSApprovedBooksCourses/" target="_blank"><i class="fa fa-book"></i> Approved Books and Courses</a>
+        <a class="btn btn-block btn-success margin-bttom-15" href="/Account/StudentZone?R=/CUStudentZone/Grievance/AddAlumni" target="_blank"><i class="fa fa-user-plus"></i> Alumni Employment Status</a>
+
+        <div class="margin-top-5">
+            @{ Html.RenderPartial("~/Views/Shared/_CUWebAppRightNavigation.cshtml");}
+        </div>
+    </div>
+    <div class="col-md-6 margin-top-10">
+        @*tabs*@
+        @*<main class="o-main">*@
+        @*<div class="o-container">*@
+        <div class="">
+            <div id="tabs" class="c-tabs no-js">
+                <div class="c-tabs-nav">
+
+                    <a href="" class="c-tabs-nav__link is-active" onclick="getTabContent('@CUSrinagar.Enums.NotificationType.General','@CUSrinagar.Enums.NotificationType.General.ToString()')">
+                        <i class="fa fa-puzzle-piece"></i>
+                        <span>General</span>
+                    </a>
+                    <a href="" class="c-tabs-nav__link" onclick="getTabContent('@CUSrinagar.Enums.NotificationType.Examination','@CUSrinagar.Enums.NotificationType.Examination.ToString()')">
+
+                        <i class="fa fa-list"></i>
+                        <span>Examination</span>
+                    </a>
+                    <a href="" class="c-tabs-nav__link " onclick="getTabContent('@CUSrinagar.Enums.NotificationType.Admission','@CUSrinagar.Enums.NotificationType.Admission.ToString()')">
+                        <i class="fa fa-user"></i>
+                        <span>Admission</span>
+                    </a>
+                    <a href="" class="c-tabs-nav__link" onclick="getTabContent('@CUSrinagar.Enums.NotificationType.Jobs','@CUSrinagar.Enums.NotificationType.Jobs.ToString()')">
+
+                        <i class="fa fa-address-card-o"></i>
+                        <span>Jobs</span>
+                    </a>
+                    <a href="" class="c-tabs-nav__link" onclick="getTabContent('@CUSrinagar.Enums.NotificationType.Tenders','@CUSrinagar.Enums.NotificationType.Tenders.ToString()')">
+                        <i class="fa fa-th-list"></i>
+                        <span>Tenders</span>
+                    </a>
+                    <a href="" class="c-tabs-nav__link" onclick="getTabContent('@CUSrinagar.Enums.NotificationType.Circulars', '@CUSrinagar.Enums.NotificationType.Circulars.ToString()')">
+                        <i class="fa fa-university"></i>
+                        <span>Circulars</span>
+                    </a>
+                </div>
+
+                <div class="c-tab is-active">
+                    <div class="c-tab__content tab-height">
+
+                        @if (DateTime.Now.Date <= new DateTime(2024, 02, 10))
+                        {
+                            <a target="_blank" class="btn btn-block btn-link-breaked"
+                               style="border: 2px dashed red; background-color: white;
+                                      color: black;padding:10px;font-size:15px;
+                                      box-shadow: rgba(0, 0, 0, 0.20) 2px 3px 3px;"
+                               href="https://pgcuet.samarth.ac.in/index.php/app/registration/instructions">
+                                <strong>
+                                    Apply for Common University Entrance Test CUET (PG)-2024
+                                </strong>
+                            </a>
+                            <br />
+                        }
+
+                        @if (DateTime.Now.Date <= new DateTime(2024, 01, 04))
+                        {
+                            <a target="_blank" class="btn btn-block btn-link-breaked"
+                               style="border: 2px dashed green; background-color: white;
+                                      color: black;
+                                      box-shadow: rgba(0, 0, 0, 0.20) 2px 3px 3px;"
+                               href="https://jobs.cusrinagar.edu.in/">
+                                <strong>
+                                    Apply for Academic Arrangement for Session 2024-25
+                                </strong>
+                            </a>
+                            <br />
+                        }
+                        <ul style="padding-top:10px;" id="@CUSrinagar.Enums.NotificationType.General.ToString()"></ul>
+                    </div>
+                </div>
+
+
+                <div class="c-tab ">
+                    <div class="c-tab__content tab-height ">
+                        <ul id="@CUSrinagar.Enums.NotificationType.Examination.ToString()"></ul>
+                    </div>
+                </div>
+                <div class="c-tab">
+                    <div class="c-tab__content tab-height ">
+                        <ul id="@CUSrinagar.Enums.NotificationType.Admission.ToString()"></ul>
+                    </div>
+                </div>
+
+                <div class="c-tab">
+                    <div class="c-tab__content tab-height">
+                        <ul id="@CUSrinagar.Enums.NotificationType.Jobs.ToString()"></ul>
+                    </div>
+                </div>
+                <div class="c-tab">
+                    <div class="c-tab__content tab-height">
+                        <ul id="@CUSrinagar.Enums.NotificationType.Tenders.ToString()"></ul>
+                    </div>
+                </div>
+                <div class="c-tab">
+                    <div class="c-tab__content tab-height">
+                        <ul id="@CUSrinagar.Enums.NotificationType.Circulars.ToString()"></ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="panel-heading" style="border:0px dashed blue;padding:5px 0 5px 10px;margin:0; display:inline-block;width:100%;">
+                <div style="display: inline-block;width: 50%;float: left;border: 0px solid red; text-align:left;">
+                    <a class="text-right" id="JsviewAll" style="padding:0; border:0px solid red;" href='@Url.Action("Notification", "Notification", new { area = string.Empty })'>View all...</a>
+                </div>
+                <div style="display:inline-block; text-align:left; padding-left:10px; width: 49%;border: 0px solid cyan;">
+                </div>
+            </div>
+
+            @*</div>*@
+        </div>
+        @*</main>*@
+
+        @*tabs end*@
+    </div>
+
+    <div class="col-md-3 Home margin-top-10">
+        <a class="btn btn-block btn-danger margin-bttom-15" href="~/FolderManager/Downloads/ACBGuidlines.pdf">
+            <i class="fa fa-file-pdf-o"></i> <strong>ABC Registration Guidelines</strong>
+        </a>
+        <a class="btn btn-block btn-primary margin-bttom-15" href="https://www.abc.gov.in" target="_blank">
+            <i class="fa fa-file-pdf-o"></i> Academic Bank of Credits Portal
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <div class="accordion" id="myAccordionMesg">
+            <div class="panel">
+                <div class="panel-heading" data-toggle="collapse" data-target="#collapsible-VC" data-parent="#myAccordionMesg">
+                    Vice Chancellor's Message
+                </div>
+                <div id="collapsible-VC" class="collapse in">
+                    <p style="padding:8px;">
+                        A very warm welcome to all the stakeholders, including students, who aspire to be a part of Cluster University Srinagar.<br /><br />
+                        The establishment of Cluster University in 2016 was an innovative and a strategic intervention in the higher education sector of J&K.
+                        The change was driven by the need to decongest the Universities since the State Universities were overburdened with hundreds of affiliated colleges..
+                        <a href='@Url.Action("vcdesk","Home")'> Read more <i class="fa fa-chevron-right"></i></a>
+                    </p>
+                </div>
+            </div>
+            @*<div class="panel">
+                    <div class="panel-heading" data-toggle="collapse" data-target="#collapsible-Reg" data-parent="#myAccordionMesg">Registrars Message</div>
+                    <div id="collapsible-Reg" class="collapse">
+                        <img class="img-rounded img-responsive" style="float:left; padding-right:5px;" width="130" src='@Url.Content("~/Content/ThemePublic/Libraries/images/team/administration/registrar-110X110.jpg")' alt="Registrar" />
+                        <p style="padding:0 0 5px 5px;">
+                            It is a great honour for me to have been given the responsibility of the founding Registrar of the Cluster University of Srinagar. This should go without saying that establishing a new institution is a challenge and requires a cohesive and coordinated effort of all the stake holders.
+                            <a href='@Url.Action("RegistrarDesk","Home")'>Read more<i class="fa fa-chevron-right"></i></a>
+                        </p>
+                    </div>
+                </div>*@
+        </div>
+    </div>
+</div>
+
+<section class="awards" style="background-color:#F5F5F5;padding:10px">
+    <div id="Enrollments"></div>
+</section>
+@section PageSpecificJS{
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-messaging.js"></script>
+    @Scripts.Render("~/Content/ThemePublic/CloudPushNotification/PushNoti", "~/Content/ThemePublic/Libraries/plugins/jsIndex")
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $(document).find('dl').accordion({
+                header: "dt",
+                collapsible: true,
+                active: false
+            });
+            var wWidth = $(window).width();
+            if (wWidth <= 500) {
+                $(".vbcomp").removeAttr("width");
+                $(".vbcomp").removeAttr("height");
+            }
+        });
+          var _enrollmentUrl = '@Url.Action("TotalEnrollments", "Home", new { area = string.Empty })';
+        var _notificationUrl = '@Url.Action("Notification", "Notification", new { area = string.Empty })';
+        var _TabContentUrl = '@Url.Action("GetTabContents", "Home", new {area=string.Empty })';
+            var _QuickNotifications = '@Url.Action("GetQuickNotifications", "Home", new {area=string.Empty })';
+            getquicknotifications();
+            getenrollments();
+        getTabContent('@CUSrinagar.Enums.NotificationType.General','@CUSrinagar.Enums.NotificationType.General.ToString()');
+        $('a[href*="#"]').click(function (e) {
+            var href = $.attr(this, 'href');
+            if (href != "#") {
+                $('html, body').animate({
+                    scrollTop: $(href).offset().top - 81
+                }, 500);
+            }
+            else {
+                $('html, body').animate({
+                    scrollTop: 0
+                }, 900);
+            }
+            return false;
+        });
+        var nt_example1 = $('#nt-example1').newsTicker({
+            row_height: 54,
+            max_rows: 5,
+            duration: 3000,
+            prevButton: $('#nt-example1-prev'),
+            nextButton: $('#nt-example1-next')
+        });
+        var myTabs = tabs({
+            el: '#tabs',
+            tabNavigationLinks: '.c-tabs-nav__link',
+            tabContentContainers: '.c-tab'
+        });
+        myTabs.init();
+
+
+
+    </script>
+}
+
+
+@section PageSpecificCSS{
+    <style>
+        #myAccordionMesg .panel {
+            margin-bottom: 2px !important;
+        }
+
+        .maq:first-letter {
+            text-transform: capitalize;
+        }
+    </style>
+}
+
+

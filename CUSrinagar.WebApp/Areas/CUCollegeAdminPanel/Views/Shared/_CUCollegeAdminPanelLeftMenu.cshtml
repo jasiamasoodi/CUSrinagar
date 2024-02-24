@@ -1,0 +1,520 @@
+﻿<ul class="nav nav-list">
+    <li>
+        <a href="/" target="_blank">
+            <i class="menu-icon fa fa-globe"></i>
+            <span class="menu-text" style="color:#ff6a00">
+                Goto Main Site
+            </span>
+        </a>
+    </li>
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.College_AssignCombination.ToString())
+        || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.College.ToString())
+        || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.eGovCUET.ToString()))
+    {
+        <li class="dts" id="li_admission">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text">
+                    Admissions
+                </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.College_AssignCombination.ToString()))
+                {
+                    <li class="asc">
+                        <a id="li_assign_comb" href='@Url.Action("AssignCombination", "AssignCombination", new { area = "CUCollegeAdminPanel" })' title="Assign Combination to student">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Assign Comb
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    if (CUSrinagar.Models.AppUserHelper.CollegeCode.ToUpper() == "GCET")
+                    {
+                        <li class="asc">
+                            <a href='@Url.Action("GetLateralEntry", "AssignCombination", new { area = "CUCollegeAdminPanel" })' title="Assign Combination to student">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Lateral Entry<br />Assign Combination
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                    }
+                    <li class="cwl">
+                        <a href='@Url.Action("Forms", "AssignCombination", new { area = "CUCollegeAdminPanel" })'>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Student List
+                        </a>
+                    </li>
+                    <li class="swc">
+                        <a href='@Url.Action("GetSubjectsCount", "AssignCombination", new { area = "CUCollegeAdminPanel" })'>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Subject Wise Enrollments
+                        </a>
+                    </li>
+                }
+                @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.College.ToString())
+                    || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.eGovCUET.ToString()))
+                {
+                    <li class="swc">
+                        <a href='@Url.Action("Search", "EGovCUET", new { area = "CUCollegeAdminPanel" })'>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            eGov CUET Search
+                        </a>
+                    </li>
+                }
+
+
+                @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.College_EditStudent.ToString())
+                    || HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.College.ToString()))
+                {
+                    <li class="ES">
+                        <a href='@Url.Action("Index", "Student", new { area = "CUCollegeAdminPanel" })'>
+                            <i class="menu-icon fa fa-edit"></i>
+                            Edit Student
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                }
+                @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.College.ToString()))
+                {
+                    if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.AllowBOPEERegistration.ToString()))
+                    {
+                        <li class="ES">
+                            <a href='@Url.Action("AddStudentDetails", "BOPEERegistration", new { area = "CUCollegeAdminPanel" })'>
+                                <i class="menu-icon fa fa-edit"></i>
+                                New Registration
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                    }
+                    <li class="combDetail">
+                        <a href='@Url.Action("DownloadPhotographs", "Statistics", new { area = "CUCollegeAdminPanel" })'>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Download Photographs
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    if (CUSrinagar.Models.AppUserHelper.College_ID == Guid.Parse("9D03A374-4398-4A48-BE2A-FD9911EC6F82"))
+                    {
+                        <li class="asc">
+                            <a href='@Url.Action("ChangeCourse", "AssignCombination", new { area = "CUCollegeAdminPanel" })' title="">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Change Course
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                    }
+
+                    <li class="cc">
+                        <a href='@Url.Action("GetCombinationsCount", "AssignCombination", new { area = "CUCollegeAdminPanel" })'>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Combination Wise Enrollments
+                        </a>
+                    </li>
+                    <li class="asa">
+                        <a href='@Url.Action("Index", "CollegeClass", new { area = "CUCollegeAdminPanel" })'>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Assign Class RollNo
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="acr">
+                        <a href='@Url.Action("DownloadSemesterAdmissionDetails", "RR", new { area = "CUCollegeAdminPanel" })'>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            3<sup>rd</sup> Semester &amp; onwards Admission Details
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="acr">
+                        <a href='/CUCollegeAdminPanel/Admission/NewUGAdmissionForms' title="Only UG 1st Semester Admission Details">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            only 1<sup>st</sup> Semester Admission Details
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                }
+            </ul>
+        </li>
+    }
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.College.ToString()))
+    {
+        <li class="dts">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text">
+                    Combination
+                </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li class="asc">
+                    <a href='@Url.Action("Combination", "Combination", new { area = "CUCollegeAdminPanel" })'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        List
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li class="cwl">
+                    <a href='@Url.Action("Index", "Combination", new { area = "CUCollegeAdminPanel" })'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Create
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+
+        <li class="lf">
+            <a href='@Url.Action("Students", "Library", new { area = "CUCollegeAdminPanel" })'>
+                <i class="menu-icon fa fa-caret-right"></i>
+                Library Forms
+            </a>
+        </li>
+
+        <li class="exmlt">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text">
+                    Examination
+                </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li class="e1">
+                    @*<a href='@Url.Action("ViewFormDetail", "AssignCombination", new { area = "CUCollegeAdminPanel",@fromAcceptExamFormScreen=true })'>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Accept Exam Form
+                        </a>*@
+                    @*<a href='@Url.Action("AcceptExaminationForm","Examination",new { area = "CUCollegeAdminPanel" })'>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Accept Exam Form
+                        </a>*@
+                    <b class="arrow"></b>
+                </li>
+                <li class="e2">
+                    <a href='@Url.Action("ExaminationForm", "Examination", new { area = "CUCollegeAdminPanel", @programme = CUSrinagar.Enums.PrintProgramme.UG })'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Exam Form List
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+                <li class="e3">
+                    <a href='@Url.Action("ViewStudents", "AttendanceSheet", new { area = "CUCollegeAdminPanel" })'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Attendance Sheets
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+
+        //----------------------------- semester centers ----------------------
+
+        <li class="" id="SemesterCentersSection">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text">Exam Centers</span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li class="">
+                    <a href=@Url.Action("Centers", "SemesterCenters", new { area = "CUCollegeAdminPanel" })>
+                        <i class="menu-icon fa fa-home"></i>
+                        <span class="menu-text"> Semester Centers </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+
+        <li class="">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text"> Result </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li class="">
+                    <a href=@Url.Action("Statistics", "Result", new { area = "CUCollegeAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Result Statistics
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                @*<li class="">
+                        <a href=@Url.Action("SubjectWise", "Result", new { area = "CUCollegeAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Subject Wise
+                        </a>
+                        <b class="arrow"></b>
+                    </li>*@
+                @*   <li class="">
+                                <a href=@Url.Action("SubjectWiseStatistics", "Result", new { area = "CUCollegeAdminPanel" })>
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    Subject Wise Statistics
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                           <li class="">
+                        <a href=@Url.Action("CourseWiseStatistics", "Result", new { area = "CUCollegeAdminPanel" })>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Course Wise Statistics
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="">
+                            <a href=@Url.Action("Result", "CUSReports", new { area = "CUSrinagarAdminPanel" })>
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Report
+                            </a>
+                            <b class="arrow"></b>
+                        </li>*@
+            </ul>
+
+            <ul class="submenu">
+                <li class="">
+                    <a href=@Url.Action("ResultData", "Result", new { area = "CUCollegeAdminPanel" })>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Result Data
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+            </ul>
+
+
+        </li>
+
+        @*<li id="result">
+                <a href="#" class="dropdown-toggle">
+                   <i class="menu-icon fa fa-caret-right"></i>
+                    <span class="menu-text">
+                        Result
+                    </span>
+                    <b class="arrow fa fa-angle-down"></b>
+                </a>
+                <b class="arrow"></b>
+                <ul class="submenu">
+                    <li id="resultitem2">
+                        <a href='@Url.Action("Result", "Result", new { area = "CUCollegeAdminPanel" })'>
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            List
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+
+                </ul>
+            </li>*@
+        @*<li class="lf">
+
+                <a href='@Url.Action("FormList", "Migration", new { area = "CUCollegeAdminPanel" })'>
+                    <i class="menu-icon fa fa-caret-right"></i>
+                    Migration Forms
+                </a>
+            </li>*@
+    }
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.College_Statistics.ToString()))
+    {
+        <li id="StatisticsSection" class="">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text">
+                    Statistics
+                </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li id="CourseCategoryWise" class="">
+                    <a href='@Url.Action("Enrollment", "Statistics", new { area = "CUCollegeAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        Enrollment
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li id="CourseCategoryWise" class="">
+                    <a href='@Url.Action("CategoryWise", "Statistics", new { area = "CUCollegeAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        Category Wise
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li id="CourseCategoryWise" class="">
+                    <a href='@Url.Action("DistrictWise", "Statistics", new { area = "CUCollegeAdminPanel" })'>
+                        <i class="menu-icon "></i>
+                        District Wise
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+    }
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_GrievanceFeedback.ToString()))
+    {
+        <li class="" id="GrievanceListItem">
+            <a href=@Url.Action("Grievance", "Grievance", new { area = "CUCollegeAdminPanel" })>
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text"> Grievances </span>
+            </a>
+            <b class="arrow"></b>
+        </li>
+    }
+
+
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.College_Clerk.ToString()))
+    {
+        <li class="augf">
+            <a href='@Url.Action("Graduation", "CollegeRegistration", new { area = "CUCollegeAdminPanel" })'>
+                <i class="menu-icon fa fa-caret-right"></i>
+                Add UG Form
+            </a>
+        </li>
+
+        <li class="">
+            <a href='@Url.Action("instructions", "Registration", new { cell = "reprint", area = "" })' target="_blank">
+                <i class="menu-icon fa fa-caret-right"></i>
+                Re-Print Form
+            </a>
+        </li>
+    }
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.College_Principal.ToString()))
+    {
+        <li class="augf">
+            <a href='@Url.Action("Instructions", "UserProfile", new { area = "CUCollegeAdminPanel" })'>
+                <i class="menu-icon fa fa-caret-right"></i>
+                Instructions
+            </a>
+        </li>
+        <li class="augf">
+            <a href='@Url.Action("UserList", "UserProfile", new { area = "CUCollegeAdminPanel" })'>
+                <i class="menu-icon fa fa-caret-right"></i>
+                Users
+            </a>
+        </li>
+    }
+
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.College_RR.ToString()))
+    {
+        <li class="RR">
+            <a href='@Url.Action("Report", "RR", new { area = "CUCollegeAdminPanel" })'>
+                <i class="menu-icon fa fa-file-text"></i>
+                Download RR
+            </a>
+        </li>
+    }
+
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.College_AssistantProfessor.ToString()))
+    {
+
+
+        <li class="ad">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text">
+                    Awards
+                </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li class="ug">
+                    <a href='@Url.Action("Award", "Award", new { Programme = CUSrinagar.Enums.Programme.UG, area = "CUCollegeAdminPanel" })'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        UG Award
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li class="ig">
+                    <a href='@Url.Action("Award", "Award", new { Programme = CUSrinagar.Enums.Programme.IG, area = "CUCollegeAdminPanel" })'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        IG Award
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li class="pg">
+                    <a href='@Url.Action("Award", "Award", new { Programme = CUSrinagar.Enums.Programme.HS, area = "CUCollegeAdminPanel" })'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Honor's Award
+                    </a><b class="arrow"></b>
+                </li>
+                <li class="pg">
+                    <a href='@Url.Action("Award", "Award", new { Programme = CUSrinagar.Enums.Programme.Engineering, area = "CUCollegeAdminPanel" })'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Engineering Award
+                    </a><b class="arrow"></b>
+                </li>
+                <li class="pg">
+                    <a href='@Url.Action("Award", "Award", new { Programme = CUSrinagar.Enums.Programme.Professional, area = "CUCollegeAdminPanel" })'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Professional Award
+                    </a><b class="arrow"></b>
+                </li>
+                <li class="pg">
+                    <a href='@Url.Action("Award", "Award", new { Programme = CUSrinagar.Enums.Programme.PG, area = "CUCollegeAdminPanel" })'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        PG Award
+                    </a><b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+    }
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.College_AssistantProfessor.ToString()))
+    {
+
+
+        <li class="ad">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text">
+                    Class Details
+                </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li class="">
+                    <a href='@Url.Action("ProfessorSubjectList", "AssignSubject")'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Subject List
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+    }
+    @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.College_ClassRepresentative.ToString()))
+    {
+
+
+        <li class="ad">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                <span class="menu-text">
+                    Class Details
+                </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li class="">
+                    <a href='@Url.Action("CRSubjectList", "AssignSubject")'>
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Subject List
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+    }
+</ul>

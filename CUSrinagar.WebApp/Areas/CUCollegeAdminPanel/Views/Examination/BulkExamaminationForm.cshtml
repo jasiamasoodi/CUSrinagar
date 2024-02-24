@@ -1,0 +1,135 @@
+﻿@model IEnumerable<CUSrinagar.Models.CourseWiseList>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Examination Form</title>
+    <link href="~/Content/ThemePublic/Libraries/plugins/news-ticker/assets/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/ThemePublic/Libraries/css/printer-frndly.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        ol li {
+            line-height: 31px;
+        }
+    </style>
+</head>
+<body class="A4 middle">
+    @if (Model != null)
+    {
+        foreach (CUSrinagar.Models.CourseWiseList item in Model)
+        {
+            <section class="sheet padding-5mm">
+                <div class="page-content ">
+                    <div class="">
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <div class="row panel panel-body well">
+                                <div class="">
+                                    <div class="text-center">
+                                        <img src="@Url.Content("~/Content/ThemePublic/Libraries/images/cus-logo1.svg")" width="500" height="50" />
+                                        <h4 class="text-success"><b><u>Examination Form Sem-III</u></b></h4>
+                                    </div>
+
+                                    <div class="table-bordered" style="margin:20px">
+                                        <table class="table no-margin-bottom">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="col-md-9">Course:<b> @item.CourseFullName </b></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="col-md-9">Registration Number:<b> @item.CUSRegistrationNo <span style="float:right">DOB : @item.DOB.ToString("dd-MM-yyyy")</span></b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="col-md-9">Name:<b> @item.FullName </b></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="col-md-9">Parentage:<b> @item.FathersName </b></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Mobile No (Working) :</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <b>Examination subjects opted by the student</b> (tick the appropriate subjects)<br />
+
+                                                        <ol>
+                                                            <li><input type="checkbox" class="checkbox checkbox-inline" style="width:15px;height:15px;margin-top:0px;" />&nbsp;&nbsp;Building Materials & Construction </li>
+                                                            <li><input type="checkbox" class="checkbox checkbox-inline" style="width:15px;height:15px;margin-top:0px;" />&nbsp;&nbsp;Surveying – I </li>
+                                                            <li><input type="checkbox" class="checkbox checkbox-inline" style="width:15px;height:15px;margin-top:0px;" />&nbsp;&nbsp;Engineering Geology</li>
+                                                            <li><input type="checkbox" class="checkbox checkbox-inline" style="width:15px;height:15px;margin-top:0px;" />&nbsp;&nbsp;Fluid Mechanics-I </li>
+                                                            <li><input type="checkbox" class="checkbox checkbox-inline" style="width:15px;height:15px;margin-top:0px;" />&nbsp;&nbsp;Mechanical Engineering-I </li>
+                                                            <li><input type="checkbox" class="checkbox checkbox-inline" style="width:15px;height:15px;margin-top:0px;" />&nbsp;&nbsp;Building Drawing </li>
+                                                            <li> ....................................................</li>
+                                                            <li> ....................................................</li>
+                                                        </ol>
+
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="text-right float-right right">
+
+                                                        Amount to be paid : <strong>Rs.2475/-</strong>
+
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="clearfix hidden-print"></div>
+                                <div>
+                                    <b>Important: </b>
+                                    <h5><strong>This form should be submitted in Cluster University Srinagar office for verification of selected subjects.</strong> </h5>
+                                    <hr />
+                                    <h5>WARNING!</h5>
+                                    <ol>
+                                        <li>Candidates who have not appeared in internal/continous assesment shall not be allowed to appear in examination and their forms will be cancelled.</li>
+                                    </ol>
+                                    <hr />
+                                    <b>Address</b>
+                                    <address>
+                                        <p class="adr clearfix col-md-12  col-sm-4">
+                                            <span class="adr-group pull-left">
+                                                <span class="street-address">Cluster University Srinagar</span><br>
+                                                <span class="region">Gogji-Bagh, Srinagar-190008</span><br>
+                                                <span class="email">info@cusrinagar.edu.in</span><br />
+                                                <span class="phone">Phone number: - 0194-2475603</span>
+                                            </span>
+                                        </p>
+                                    </address>
+                                    <hr />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        }
+
+
+        <div class="noneOnPrint print-download-strip">
+            <a style="color: #ffffff;background-color: #080808;border-color: #59f908;" href="@Url.Action("BulkExamaminationForm", "Examination")" class="btn btn-default">Back</a>
+            <button style="color: #ffffff;background-color: #080808;border-color: #59f908;" href="#" class="btn btn-default" onclick="window.print();"><b>Download / Print Examination Form </b></button>
+        </div>
+    }
+    else
+    {
+        <section class="sheet padding-5mm">
+            <hr />
+            <hr />
+            <h1 class="center">No Form Found.</h1>
+            <hr />
+            <hr />
+        </section>
+    }
+
+</body>
+</html>

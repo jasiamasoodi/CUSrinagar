@@ -1,0 +1,386 @@
+﻿@{
+    ViewBag.Title = "Dashboard ";
+}
+
+@model CUSrinagar.Models.ARGPersonalInformation
+
+@section CUSSitemap{
+<ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area="CUStudentZone"})">Home</a>
+        </li>
+        <li>
+            <a href="#" class="active">Student Profile</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+<div class="page-content">
+    <div class="row panel panel-success" style="margin-top:2%;">
+        <div class="panel-heading lead">
+            <div class="row">
+                <div class="col-lg-8 col-md-8"><i class="fa fa-users"></i> View Student Details</div>
+                <div class="col-lg-4 col-md-4 text-right">
+                    <div class="btn-group text-center">
+                        <a href="#" class="btn btn-success btn-sm btn-default"><i class="fa fa-print fa-1x"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="row">
+
+                        <div class="col-lg-9 col-md-9">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a data-toggle="tab" href="#Summery" class="text-success"><i class="fa fa-indent"></i> Summery</a></li>
+                                <li><a data-toggle="tab" href="#PersonalInfo" class="text-success"><i class="fa fa-bookmark-o"></i> Info</a></li>
+                                <li><a data-toggle="tab" href="#Address" class="text-success"><i class="fa fa-home"></i> Address</a></li>
+                                <li><a data-toggle="tab" href="#AccademicDetail" class="text-success"><i class="fa fa-info"></i> Accademic Detail</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="Summery" class="tab-pane fade in active">
+                                    <div class="table-responsive panel">
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-user"></i> Registration No</td>
+                                                    <td>@Model.CUSRegistrationNo</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-book"></i> Course</td>
+                                                    <td>@ViewBag.CourseName</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-list-ol"></i> Combination</td>
+                                                    <td>@ViewBag.StudentSubjects</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-group"></i> Class &amp; Section</td>
+                                                    <td>12-F</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-calendar"></i> DOB</td>
+                                                    <td>@Model.DOB.ToString("dd-MMMM-yyyy")</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-university"></i> College</td>
+                                                    <td>
+                                                        @Model.AcceptCollegeID
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-thumbs-up"></i> Status</td>
+                                                    <td>@Model.FormStatus</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div id="PersonalInfo" class="tab-pane fade">
+                                    <div class="table-responsive panel">
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-user"></i> Full Name</td>
+                                                    <td>@Model.FullName</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-user"></i> Father's Name</td>
+                                                    <td>@Model.FathersName</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-user"></i> Mother's Name</td>
+                                                    <td>@Model.MothersName</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-user"></i> Gender</td>
+                                                    <td>@Model.Gender</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-user"></i> Religion</td>
+                                                    <td>@Model.Religion</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-user"></i> Category</td>
+                                                    <td>@Model.Category</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-envelope-o"></i> Email ID</td>
+                                                    <td><a href="mailto:@Model.StudentAddress.Email ?subject=Cluster University">@Model.StudentAddress.Email</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="glyphicon glyphicon-phone"></i> Mobile Number</td>
+                                                    <td><a class="phone" href="tel: @Model.StudentAddress.Mobile">@Model.StudentAddress.Mobile</a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div id="Address" class="tab-pane fade">
+                                    <div class="table-responsive panel">
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-home"></i> Address</td>
+                                                    <td colspan="4">@Model.StudentAddress.PermanentAddress</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa "></i>Pincode</td>
+                                                    <td colspan="2">@Model.StudentAddress.PinCode</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa "></i>Block</td>
+                                                    <td>@Model.StudentAddress.Block</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa "></i>Tehsil</td>
+                                                    <td colspan="2">@Model.StudentAddress.Tehsil</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa "></i>Assembly Constituency</td>
+                                                    <td colspan="2">@Model.StudentAddress.AssemblyConstituency</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa "></i>Parliamentary Constituency</td>
+                                                    <td>@Model.StudentAddress.ParliamentaryConstituency</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa "></i>District</td>
+                                                    <td>@Model.StudentAddress.District</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-flag"></i> State</td>
+                                                    <td colspan="2">@Model.StudentAddress.State</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div id="AccademicDetail" class="tab-pane fade">
+                                    <div class="table-responsive panel">
+                                        <table class="table">
+                                            <tbody>
+                                                @if (Model.AcademicDetails != null)
+                                                {
+                                                    foreach (var item in Model.AcademicDetails)
+                                                    {
+                                                        <tr>
+                                                            <td class="text-success"><i class="fa fa-university"></i> Last School</td>
+                                                            <td>@item.ExamBody</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-success"><i class="fa fa-book"></i> Stream</td>
+                                                            <td>@item.Stream</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-success"><i class="fa fa-list-ol"></i> Subjects</td>
+                                                            <td>@item.Subjects</td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td class="text-success"><i class="fa fa-calendar"></i> Roll Number</td>
+                                                            <td>@item.RollNo </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-success"><i class="fa fa-calendar"></i>Sessoin / Academic Year</td>
+                                                            <td>@item.Session /  @item.Year</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-success">Marks </td>
+                                                            <td>@item.MarksObt.ToString()  /  @item.MaxMarks.ToString() =  @item.Percentage %</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="col-lg-3 col-md-3">
+                            <center>
+                                <span class="text-left">
+                                    <img src="@Url.Content(Model.Photograph)" class="img-responsive img-thumbnail"/>
+                                  
+                                    <div class="modal fade" id="PhotoOption" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                        <div class="modal-dialog" style="width:30%;height:30%;">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                    <h4 class="modal-title text-success" id="myModalLabel"><i class="fa fa-gear"></i> <span class="text-right">@Model.FullName</span></h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <center>
+                                                        <img src="upload/profile_pic/701b4263f7d38604699b7c1f89a3e6a6.jpg" class="img-responsive img-thumbnail">
+                                                    </center>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a href="upload/upload-view.php?id=68" class="btn btn-success"><i class="fa fa-photo"></i> Upload</a>
+                                                    <a href="upload/upload-view.php?id=68&amp;name=Viddhyut Mall&amp;src=view" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
+                                                </div>
+                                            </div>
+                                            <!-- /.modal-content -->
+                                        </div>
+                                        <!-- /.modal-dialog -->
+                                    </div>
+                                    <!-- /.modal -->
+                                </span>
+                                @Model.FullName
+                            </center>
+
+                            <div class="table-responsive panel">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-center">
+                                                @*<span class="btn btn-danger text-success btn-block"><i class="fa fa-rupee"></i> Unpaid</span>*@
+                                                <a href="#" class="btn btn-success btn-block" data-toggle="modal" data-target="#PhotoOption"><i class="fa fa-photo"></i> Change</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+    </div>
+</div>
+
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            Student
+            <small>
+                <i class="ace-icon fa fa-angle-double-right"></i>
+                Profile
+            </small>
+        </h1>
+    </div><!-- /.page-header -->
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- PAGE CONTENT BEGINS -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="">
+                        <div style="margin:0 auto;width:909px;padding:10px 10px;font-family:'Times New Roman'">
+
+                            <div class="center">
+                                <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" style="width:90px;height:68px;" />
+                                <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+
+                            </div>
+                            <br />
+
+                            <div style="margin-left:10px;color:darkblue;font-size: 15px;text-align: center !important;font-weight:bold;">
+                                In-case your Profile Information is Incorrect,Contact IT-Section Cluster University Srinagar<br />
+                                Camp Office- Zoology Block SP College, MA Road,Srinagar
+                            </div>
+
+
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td colspan="3">
+                                        <b style="float:left !important;">CUS Registration No.: @Model.CUSRegistrationNo </b>
+                                    </td>
+                                    <td colspan="3">
+                                        <b style="float:left !important;">Board Registration No.: @Model.BoardRegistrationNo</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="5" class="center">
+                                        <img class="img-responsive" src="@Url.Content(Model.Photograph)" width="150" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>@Model.FullName</td>
+                                    <td>Gender</td>
+                                    <td>@Model.Gender</td>
+                                </tr>
+                                <tr>
+                                    <td>Father's Name</td>
+                                    <td>@Model.FathersName</td>
+                                    <td>Religion</td>
+                                    <td>@Model.Religion</td>
+
+                                </tr>
+                                <tr>
+                                    <td>Mother's Name</td>
+                                    <td>@Model.MothersName</td>
+                                    <td>Mobile</td>
+                                    <td>@Model.StudentAddress.Mobile</td>
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
+                                    <td>@Model.StudentAddress.Email</td>
+
+                                    <td>Category</td>
+                                    <td>@Model.Category</td>
+                                </tr>
+                                <tr>
+                                    <td>Address</td>
+                                    <td colspan="4">@Model.StudentAddress.PermanentAddress</td>
+
+                                </tr>
+                                <tr>
+                                    <td>Pincode</td>
+                                    <td colspan="2">@Model.StudentAddress.PinCode</td>
+                                    <td>Block</td>
+                                    <td>@Model.StudentAddress.Block</td>
+                                </tr>
+                                <tr>
+                                    <td>Tehsil</td>
+                                    <td colspan="2">@Model.StudentAddress.Tehsil</td>
+                                    <td>District</td>
+                                    <td>@Model.StudentAddress.District</td>
+                                </tr>
+                                <tr>
+                                    <td>Assembly Constituency</td>
+                                    <td colspan="2">@Model.StudentAddress.AssemblyConstituency</td>
+                                    <td>Parliamentary Constituency</td>
+                                    <td>@Model.StudentAddress.ParliamentaryConstituency</td>
+                                </tr>
+                                <tr>
+
+                                    <td>State</td>
+                                    <td colspan="2">@Model.StudentAddress.State</td>
+                                    <td>DOB</td>
+                                    <td><b>@Model.DOB.ToString("dd-MM-yyyy")</b> </td>
+
+                                </tr>
+                            </table>
+                            <br />
+                            <table>
+                                <tr>
+                                    <td style="width:10px;">CourseName</td>
+                                    <td style="width:115px;"><b>@ViewBag.CourseName</b></td>
+                                    <td style="width:218px;">Course Combination</td>
+                                    <td>@ViewBag.StudentSubjects</td>
+
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.row -->
+        </div>
+        <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+</div>
+
+
+@section PageSpecificJSFiles{
+
+}

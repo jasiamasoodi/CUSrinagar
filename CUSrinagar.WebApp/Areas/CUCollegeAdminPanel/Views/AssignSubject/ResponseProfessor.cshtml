@@ -1,0 +1,57 @@
+﻿@model  CUSrinagar.Models.ProfessorCRClassDetails
+@{ CUSrinagar.Models.ProfessorCRClassDetails row = Model;
+    int serial = ViewBag.serial;}
+
+<tr>
+
+    @Html.Hidden("ProfessorCRClassDetails[0].CRResponseOn", row.CRResponseOn)
+    @Html.Hidden("ProfessorCRClassDetails[0].ProfessorCRClassDetails_ID", row.ProfessorCRClassDetails_ID)
+    @Html.Hidden("ProfessorCRClassDetails[0].ProfessorCRClasses_ID", Model.ProfessorCRClasses_ID)
+    @{
+        var resdateprof = "";
+        if (row.ProfessorResponseOn.HasValue)
+        {
+            resdateprof = row.ProfessorResponseOn.Value.ToShortDateString();
+        }
+    }
+    <td>@serial</td>
+    <td>
+        <div class="col-sm-12 rowheight">
+            Professor
+        </div>
+        <div class="col-sm-12 rowheight">
+            CR
+        </div>
+    </td>
+    <td class="paddingtop">@Html.TextBox("ProfessorCRClassDetails[0].ProfessorResponseOn", resdateprof,new { @class= "date-picker", @required = "required" })</td>
+    <td>
+        <div class="col-sm-12 rowheight">
+            @Html.DropDownList("ProfessorCRClassDetails[0].professorStatus", new SelectList(ViewBag.ProfessorStatusList, "Value", "Text", (int)row.professorStatus)
+, new
+{
+@class = "chosen-select"
+})
+        </div>
+        <div class="col-sm-12 rowheight">@row.crStatus@Html.Hidden("ProfessorCRClassDetails[0].crStatus", row.crStatus)</div>
+    </td>
+    <td style="width: 30px">
+        <div class="col-sm-12 rowheight">
+            @Html.TextBox("ProfessorCRClassDetails[0].DurationByProfessor", row.DurationByProfessor, new { @min = "0", @type = "number", @required = "required" })
+        </div>
+        <div class="col-sm-12 rowheight">@row.DurationByCR@Html.Hidden("ProfessorCRClassDetails[0].DurationByCR", row.DurationByCR)</div>
+    </td>
+
+    <td>
+        <div class="col-sm-12 rowheight">
+            @Html.TextArea("ProfessorCRClassDetails[0].ProfessorRemarks", row.ProfessorRemarks, new { @rows = 2, @cols = 50, @required = "required" })
+        </div>
+        <div class="col-sm-12 rowheight">@row.CRRemarks@Html.Hidden("ProfessorCRClassDetails[0].CRRemarks", row.CRRemarks)</div>
+    </td>
+     <td class="paddingtop">
+        <button type="button" class="btn btn-sm btn-primary save-button jsSaveUpdate">
+            <i class="ace-icon fa fa-check"></i>
+            Save
+        </button>
+    </td>
+</tr>
+

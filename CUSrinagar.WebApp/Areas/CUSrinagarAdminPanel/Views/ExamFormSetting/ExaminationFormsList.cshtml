@@ -1,0 +1,128 @@
+﻿@using CUSrinagar.Extensions;
+@model List<CUSrinagar.Models.StudentExamFormList>
+@{
+    Layout = null;
+}
+@if (Model != null)
+{
+    <table class="table table-hover table-bordered js-table">
+        <thead style="white-space: nowrap;">
+
+            <tr>
+                @{
+                    string CommaSeparatedColumns = (string)ViewBag.Columns;
+
+                    string[] columns = null;
+
+                    if (!string.IsNullOrEmpty(CommaSeparatedColumns))
+                    {
+                        columns = CommaSeparatedColumns.Split(',');
+                    }
+                    if (string.IsNullOrEmpty(CommaSeparatedColumns))
+                    {
+                        <th>S.No</th>
+                        <th data-property="CreatedOn">Applied Date</th>
+                        <th data-property="ExamRollNumber">Course</th>
+                        <th data-property="FormNumber">Registration No.</th>
+                        <th data-property="FullName">Name</th>
+                        <th data-property="">Form No</th>
+                        <th data-property="FeeAmount">Exam Roll No.</th>
+                        <th data-property="FormStatus">Amount</th>
+                        <th data-property="Status">Status</th>
+                        <th data-property="Semester">Semester</th>
+                        <th data-property="SemesterBatch">Batch</th>
+                        <th data-property="Year">Year</th>
+                        <th data-property="Verified">Verified</th>
+                    }
+                    else
+                    {
+                        foreach (var column in columns)
+                        {
+                            if (column.Contains("."))
+                            {
+                                <th data-property="@column.Substring((column.IndexOf('.') + 1), (column.Length - column.IndexOf('.') - 1))">@column.Substring((column.IndexOf('.') + 1), (column.Length - column.IndexOf('.') - 1))</th>
+                            }
+                            else
+                            {
+                                <th data-property="@column">@column</th>
+                            }
+                        }
+                    }
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                var index = 1;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        @{
+                            if (string.IsNullOrEmpty(CommaSeparatedColumns))
+                            {
+                                <td class="center">@index</td>
+                                <td>@item.CreatedOn.ToShortDateString()</td>
+                                <td>@item.CourseFullName</td>
+                                <td>@item.CUSRegistrationNo</td>
+                                <td>@item.FullName</td>
+                                <td>@item.FormNumber</td>
+                                <td>@item.ExamRollNumber</td>
+                                <td>@item.AmountPaid</td>
+                                <td>@item.Status.ToString()</td>
+                                <td>@item.Semester</td>
+                                <td>@item.SemesterBatch</td>
+                                <td>@item.Year</td>
+                                <td>@item.IsVerified.ToString()</td>
+                            }
+                            else
+                            {
+                                var properties = item.GetType().GetProperties();
+
+                                foreach (var property in properties)
+                                {
+                                    if (CommaSeparatedColumns.Contains(property.Name))
+                                    {
+                                        <td>
+                                            @{
+                                                object tdValue = null;
+                                                if (property.PropertyType == typeof(Boolean))
+                                                {
+                                                    if (property.GetValue(item)?.ToString() == "True")
+                                                    {
+                                                        tdValue = "YES";
+                                                    }
+                                                    else
+                                                    {
+                                                        tdValue = "NO";
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    tdValue = property.GetValue(item)?.ToString();
+                                                }
+                                            }
+                                            @tdValue
+                                        </td>
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                }
+                            }
+                        }
+                    </tr>
+                    index++;
+                }
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <hr />
+    <h3 class="center"> <i>No Data found for the specified filters. Please try again with different filter combinations.</i></h3>
+    <hr />
+}
+

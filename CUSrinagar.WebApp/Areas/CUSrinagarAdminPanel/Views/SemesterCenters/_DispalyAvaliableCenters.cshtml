@@ -1,0 +1,67 @@
+﻿@using CUSrinagar.Extensions
+@model CUSrinagar.Models.AssignSemesterCenters
+
+<table class="table-bordered table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Center Number / Code</th>
+            <th>Assignment Order</th>
+            <th>Has Already Some Students</th>
+        </tr>
+    </thead>
+    <tbody class="DelOnChange">
+        @if ((Model?.AssignCentersAs.IsNotNullOrEmpty() ?? false))
+        {
+            if (Model.TotalExamFormsAvailable > 0)
+            {
+                @Html.HiddenFor(m => m.TotalExamFormsAvailable)
+                <tr>
+                    <td class="text-center" colspan="4">
+                        <strong style="font-size:16px;">
+                            Total Exam Forms :
+                            @Html.DisplayFor(m => m.TotalExamFormsAvailable)
+                        </strong>
+                    </td>
+                </tr>
+                string _HasAlreadySomeStudents = string.Empty;
+                for (int i = 0; i < Model.AssignCentersAs.Count; i++)
+                {
+                    <tr>
+                        <td class="text-center">
+                            @Html.CheckBoxFor(m => m.AssignCentersAs[i].HasToBeAssigned, new { @class = "HasToBeAssigned ace checkbox checkbox-inline" })
+
+                            @Html.HiddenFor(m => m.AssignCentersAs[i].Center_ID)
+                        </td>
+                        <td class="text-center">
+                            @Html.DisplayFor(m => m.AssignCentersAs[i].CenterCode)
+                        </td>
+                        <td class="text-center">
+                            <span class="required">
+                                <span class="errMsg"></span>
+                                @Html.ValidationMessageFor(m => m.AssignCentersAs[i].AssignmentOrder)
+                            </span>
+                            @Html.TextBoxFor(m => m.AssignCentersAs[i].AssignmentOrder, new { @class = "AssignCentersAs", @type = "Number", min = "1", max = "999" })
+                        </td>
+                        <td class="text-center">
+                            @{_HasAlreadySomeStudents = Model.AssignCentersAs[i].HasAlreadySomeStudents ? "Yes" : "No";}
+                            @_HasAlreadySomeStudents
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <th colspan="4" class="text-center quadraText">There are no Exam forms avaliable for this exam form setting</th>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <th colspan="4" class="text-center">No centers are available</th>
+            </tr>
+        }
+    </tbody>
+</table>

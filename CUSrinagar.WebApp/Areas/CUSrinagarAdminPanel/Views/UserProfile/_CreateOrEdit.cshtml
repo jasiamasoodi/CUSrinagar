@@ -1,0 +1,179 @@
+﻿@model  CUSrinagar.Models.AppUsers
+@{
+    var routeValues = HttpContext.Current.Request.RequestContext.RouteData.Values;
+    string actionName = "";
+    if (routeValues != null)
+    {
+        if (routeValues.ContainsKey("controller"))
+        {
+            actionName = routeValues["action"].ToString();
+        }
+    }
+    bool IsEdit = false;
+    if (actionName == "Edit")
+    { IsEdit = true; }
+
+}
+@Html.AntiForgeryToken()
+
+@if (!ViewData.ModelState.IsValidField("ErrorMessage"))
+{
+    <div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong>@Html.ValidationMessage("ErrorMessage", "", new { @class = "red " })</strong></div>
+}
+<div class="col-sm-12">
+    @Html.ValidationMessageFor(model => model.College_ID, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.UserName)
+
+    </label>
+    <div class="col-sm-6 ">
+        @Html.TextBoxFor(model => model.UserName, new { @class = "width-100", @maxlength = "35" })
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+@if (IsEdit)
+{@Html.HiddenFor(model => model.Password)}
+else
+{
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Password)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.PasswordFor(model => model.Password, new { @class = "width-100", @maxlength = "35" })
+
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+}
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.FullName)
+
+    </label>
+    <div class="col-sm-6 ">
+        @Html.TextBoxFor(model => model.FullName, new { @class = "width-100", @maxlength = "150", @onkeypress = "return forNameOnly(event);" })
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.FullName, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Email)
+
+    </label>
+    <div class="col-sm-6 ">
+        @Html.TextBoxFor(model => model.Email, new { @class = "width-100", @maxlength = "150" })
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Designation)
+
+    </label>
+    <div class="col-sm-6 ">
+        @Html.TextBoxFor(model => model.Designation, new { @class = "width-100", @maxlength = "150" })
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.Designation, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.PhoneNumber)
+
+    </label>
+    <div class="col-sm-6 ">
+        @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "width-100", @maxlength = "10", @onkeypress = "return numbersOnly(event);" })
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.UserRoles)
+
+    </label>
+    <div class="col-sm-6 ">
+        @{ int i = 0;}
+        @foreach (var role in ViewBag.RolesList)
+        {
+            i++;
+
+            CUSrinagar.Enums.AppRoles roleis = (CUSrinagar.Enums.AppRoles)Enum.ToObject(typeof(CUSrinagar.Enums.AppRoles), Convert.ToInt32(role.Value));
+            var classrole = (roleis == CUSrinagar.Enums.AppRoles.College || roleis == CUSrinagar.Enums.AppRoles.College_Principal || roleis == CUSrinagar.Enums.AppRoles.University_Coordinator || roleis == CUSrinagar.Enums.AppRoles.College_ClassRepresentative || roleis == CUSrinagar.Enums.AppRoles.College_AssistantProfessor || roleis == CUSrinagar.Enums.AppRoles.College_AssignCombination) ? "collegeRole" : "";
+            var class1role = (roleis == CUSrinagar.Enums.AppRoles.University_FileTracking) ? "fileRole" : "";
+            var ischecked = (Model != null) ? (((Model.UserRoles ?? new List<CUSrinagar.Models.AppUserRoles>()).Where(x => x.RoleID == roleis).Count() > 0) ? "checked" : "") : "";
+            <div class="col-sm-6">
+                <input @ischecked class="@classrole @class1role" type="checkbox" value="@role.Value" name="UserRoles_IDs" />
+                @role.Text
+            </div>
+        }
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.UserRoles, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+<div class="form-group DepartmentDDL hidden">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Department_ID)
+
+    </label>
+    <div class="col-sm-6 ">
+        @Html.DropDownListFor(model => model.Department_ID, new SelectList(ViewBag.DepartmentList, "Value", "Text"),
+                                           "--Select--")
+
+    </div>
+
+</div>
+<div class="form-group CollegeDDL hidden">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.College_ID)
+
+    </label>
+    <div class="col-sm-6 ">
+        @Html.DropDownListFor(model => model.College_ID, new SelectList(ViewBag.CollegeList, "College_ID", "CollegeFullName"),
+        "--Select--")
+
+    </div>
+
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right"></label>
+    <div class="col-sm-8">
+        <button type="submit" class="btn btn-sm btn-primary save-button">
+            <i class="ace-icon fa fa-check"></i>
+            Save
+        </button>
+
+        <a id="cData1" href="/CUSrinagarAdminPanel/UserProfile/UserList/" class="fm-button ui-state-default ui-corner-all fm-button-icon-left btn btn-sm btn-danger">
+            <i class="ace-icon fa fa-times"></i>Cancel
+        </a>
+
+    </div>
+</div>

@@ -1,0 +1,201 @@
+
+@page {
+    size: A4 portrait;
+    width: 210mm;
+    height: 297mm;
+    margin: 0px;
+    padding: 0px;
+}
+
+/** Fix for Chrome issue #273306 **/
+@media print {
+    .noneOnPrint {
+        display: none;
+    }
+}
+
+/** For screen preview **/
+@media screen {
+    body {
+        background: #e0e0e0;
+    }
+
+    .sheet {
+        background: white;
+    }
+}
+
+body {
+    margin: 0;
+}
+
+    body.middle {
+        margin: auto;
+        vertical-align: middle;
+        display: table;
+    }
+
+.sheet {
+    margin: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+    width: 210mm;
+    height: 297mm;
+    page-break-after: always;
+    /*border: 1px solid red;*/
+}
+
+/*.page-break-after-auto {
+    page-break-after: auto;
+}*/
+
+.printable-section {
+    margin-right: 8mm;
+    margin-left: 5mm;
+    font-family: monospace;
+    /*border:1px solid green;*/
+}
+
+
+
+
+/*Header LOGO Section Begins*/
+table.logo-section {
+    line-height: 0px;
+    display: block;
+    width: 100%;
+    height: 10mm;
+}
+
+    table.logo-section tbody {
+        width: 100%
+    }
+
+        table.logo-section tbody tr {
+        }
+
+            table.logo-section tbody tr td {
+                margin: 0px;
+                padding: 0px;
+            }
+
+                table.logo-section tbody tr td:nth-child(1) {
+                    text-align: right;
+                    line-height: 4mm;
+                    width: 200mm;
+                    padding-top: 0mm;
+                }
+/*Header LOGO Section Ends*/
+
+/*Header General Info Section Begins*/
+table.general-info-section {
+    line-height: 4mm;
+}
+
+    table.general-info-section tbody {
+        text-align: left;
+    }
+
+        table.general-info-section tbody tr td:nth-child(1) {
+            width: 20mm;
+        }
+
+        table.general-info-section tbody tr td:nth-child(2) {
+            width: 100mm;
+            font-weight: bold;
+        }
+
+        table.general-info-section tbody tr td:nth-child(3) {
+            width: 35mm;
+        }
+
+        table.general-info-section tbody tr td:nth-child(4) {
+            width: 45mm;
+            font-weight: bold;
+        }
+
+
+/*Header General Info Section Ends*/
+
+/*Subject Section Begins*/
+table.subject-section {
+    border-collapse: collapse;
+    border: 0.1mm solid;
+    border-color: lightgray;
+    width: 197mm;
+    display: inline-table;
+}
+
+    table.subject-section th {
+        border: 0.1mm solid slategray;
+    }
+
+    table.subject-section tbody tr td:nth-child(1), table.subject-section tbody tr th:nth-child(1) {
+        text-align: left;
+        padding-left: 10px;
+    }
+
+    table.subject-section tbody tr td {
+        vertical-align: middle;
+    }
+/*Subject Section Ends*/
+/*Footer Points Section Begins*/
+table.footer-points-section {
+    margin-top: 1mm;
+    line-height: 4mm;
+}
+
+    table.footer-points-section td:nth-child(odd) {
+        width: 100mm;
+    }
+
+    table.footer-points-section td:nth-child(even) {
+        width: 120mm;
+    }
+/*Footer Points Section Ends*/
+
+/*Footer Sign Section Begins*/
+table.footer-sign-section {
+}
+
+    table.footer-sign-section td {
+        width: 65mm;
+        text-align: center;
+    }
+
+    table.footer-sign-section img {
+        height: 15mm;
+        width: 30mm;
+    }
+/*Footer Sign Section Ends*/
+
+
+.margin-top-0 {
+    margin-top: 0px;
+}
+
+.margin-bottom-0 {
+    margin-bottom: 0px;
+}
+
+.no-margin {
+    margin: 0px;
+}
+
+.no-padding {
+    padding: 0px;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.capitalize {
+    text-transform: capitalize !important;
+}
+
+
+.footer {
+    position: relative;
+    bottom: -12.5mm;
+}

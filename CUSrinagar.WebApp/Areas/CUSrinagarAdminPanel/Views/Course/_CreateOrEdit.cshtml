@@ -1,0 +1,365 @@
+﻿
+@model  CUSrinagar.Models.ADMCourseMaster
+@{
+    var routeValues = HttpContext.Current.Request.RequestContext.RouteData.Values;
+    string actionName = "";
+    if (routeValues != null)
+    {
+        if (routeValues.ContainsKey("controller"))
+        {
+            actionName = routeValues["action"].ToString();
+        }
+    }
+    bool IsEdit = false;
+    if (actionName == "Edit")
+    { IsEdit = true; }
+}
+@Html.AntiForgeryToken()
+
+@if (!ViewData.ModelState.IsValidField("ErrorMessage"))
+{
+    <div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong>@Html.ValidationMessage("ErrorMessage", "", new { @class = "red " })</strong></div>
+}
+
+
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Programme)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.DropDownListFor(model => model.Programme, new SelectList(ViewBag.ProgrammeDDLList, "Value", "Text"),
+                    "--Select--", new { @class = "chosen-select tag-input-style ParentDDL", data_ddltype = "Course", @data_ddlchildtype = "Semester", @data_ddlsubchildtype = "Subject" })
+
+
+
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.Programme, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.PrintProgramme)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.DropDownListFor(model => model.PrintProgramme, new SelectList(ViewBag.PrintProgrammeDDLList, "Value", "Text"),
+                        "--Select--", new { @class = "chosen-select tag-input-style ParentDDL", data_ddltype = "Course", @data_ddlchildtype = "Semester", @data_ddlsubchildtype = "Subject" })
+
+
+
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.PrintProgramme, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.SchoolCode)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.TextBoxFor(x => x.SchoolCode)
+
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.SchoolCode, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.SchoolFullName)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.TextBoxFor(x => x.SchoolFullName)
+
+
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.SchoolFullName, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.CourseNumber)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.TextBoxFor(x => x.CourseNumber)
+
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.CourseNumber, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.CourseFullName)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.TextBoxFor(model => model.CourseFullName, new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.CourseFullName, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        @Html.LabelFor(model => model.GroupName)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.TextBoxFor(model => model.GroupName, new { @class = "width-100" })
+
+    </div>
+
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Scheme)
+
+    </label>
+    <div class="col-sm-6 ">
+        @Html.DropDownListFor(model => model.Scheme, new SelectList(ViewBag.SchemeDDLList, "Value", "Text"),
+                        "--Select--", new { @class = "chosen-select tag-input-style" })
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.Scheme, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.CourseCategory)
+
+    </label>
+    <div class="col-sm-6 ">
+        @Html.DropDownListFor(model => model.CourseCategory, new SelectList(ViewBag.CourseCategoryDDLList, "Value", "Text"),
+                        "--Select--", new { @class = "chosen-select tag-input-style " })
+
+
+
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.CourseCategory, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.CourseCode)
+
+    </label>
+    <div class="col-sm-6 " id="Course">
+        @Html.TextBoxFor(model => model.CourseCode, new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.CourseCode, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Duration)
+
+    </label>
+    <div class="col-sm-6 " id="Course">
+        @Html.TextBoxFor(model => model.Duration, new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.Duration, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.AllowExaminationForm)
+
+    </label>
+    <div class="col-sm-6 " id="Course">
+        @Html.CheckBoxFor(model => model.AllowExaminationForm, new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.AllowExaminationForm, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+    </div>
+</div>
+@*<div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+            <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Status)
+
+        </label>
+        <div class="col-sm-6 " id="Course">
+            @if (IsEdit)
+            {  @Html.CheckBoxFor(model => model.Status.Value, new { @class = "width-100" })}
+            else
+            {  @Html.CheckBoxFor(model => model.Status, new { @class = "width-100" })}
+
+        </div>
+        <div class="col-sm-2">
+            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+        </div>
+    </div>*@
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.MaxCombinationSubjects)
+
+    </label>
+    <div class="col-sm-6 " id="Course">
+        @Html.TextBoxFor(model => model.MaxCombinationSubjects, new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.MaxCombinationSubjects, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.MinCombinationSubjects)
+
+    </label>
+    <div class="col-sm-6 " id="Course">
+        @Html.TextBoxFor(model => model.MinCombinationSubjects, new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.MinCombinationSubjects, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.RegistrationOpen)
+
+    </label>
+    <div class="col-sm-6 " id="Course">
+        @Html.CheckBoxFor(model => model.RegistrationOpen, new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.RegistrationOpen, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.HasCombination)
+
+    </label>
+    <div class="col-sm-6 " id="Course">
+        @Html.CheckBoxFor(model => model.HasCombination, new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.HasCombination, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.StartingYear)
+    </label>
+    <div class="col-sm-9">
+        <div class="width-50">
+            @Html.TextBoxFor(model => model.StartingYear)
+            @Html.ValidationMessageFor(model => model.StartingYear, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.EndingYear)
+    </label>
+    <div class="col-sm-9">
+        <div class="width-50">
+            @Html.TextBoxFor(model => model.EndingYear)
+            @Html.ValidationMessageFor(model => model.EndingYear, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.AllowNewSelectionList)
+
+    </label>
+    <div class="col-sm-6 " id="Course">
+        @Html.CheckBoxFor(model => model.AllowNewSelectionList, new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.AllowNewSelectionList, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.CurrentSelectionListNo)
+
+    </label>
+    <div class="col-sm-6 " id="Course">
+        @Html.TextBoxFor(model => model.CurrentSelectionListNo, new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.CurrentSelectionListNo, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+    </div>
+</div>
+
+    <div class="form-group" style="margin:0px !important; ">
+
+        <div class="col-sm-12" style="border:1px solid #c5d0dc;font-size:62% !important">
+
+            @Html.Partial("CourseMapping", Model)
+        </div>
+
+    </div>
+  
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right"></label>
+    <div class="col-sm-8">
+        <button type="submit" class="btn btn-sm btn-primary save-button" onclick=" uploadFile()" id="sub">
+            <i class="ace-icon fa fa-check"></i>
+            Save
+        </button>
+
+        <a id="cData1" href="/CUSrinagarAdminPanel/Course/Courses/" class="fm-button ui-state-default ui-corner-all fm-button-icon-left btn btn-sm btn-danger">
+            <i class="ace-icon fa fa-times"></i>Cancel
+        </a>
+
+    </div>
+</div>
+
+<script>
+   $(document).ready(function () {
+            @*@if (Model.Colleges != null)
+            {
+                foreach (var d in Model.Colleges)
+                {
+                     @:var val = "@d".toUpperCase();
+                        @:$("#Colleges option[value='" + val + "']").prop("selected", true);
+                }
+            }*@
+      });
+</script>

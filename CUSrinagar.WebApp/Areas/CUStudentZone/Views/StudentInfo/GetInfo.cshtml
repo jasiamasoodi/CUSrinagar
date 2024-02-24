@@ -1,0 +1,56 @@
+﻿
+@{
+    string printProgramme = ViewBag.PrintProgramme.ToString();
+    string Student_ID = (ViewBag.Student_ID ?? Guid.Empty).ToString();
+}
+@Html.Hidden("StudentPrintProgramme", printProgramme)
+@Html.Hidden("StudentID", Student_ID)
+
+<div class="col-sm-12">
+    <a data-toggle="tab" href="#PersonalDetail" id="default-tab" class="text-success tab-click no-padding no-margin" data-tab="PersonalDetail"></a>
+    <div class="tab-content no-border no-padding no-margin">
+        <div id="PersonalDetail" class="tab-pane fade in active no-padding no-margin">
+            Loading...
+        </div>
+    </div>
+</div>
+@section PageSpecificStyle{
+    <style>
+        @@media only screen and (max-width: 600px) {
+            .panTop {
+                margin-top: -50px !important;
+            }
+        }
+    </style>
+}
+
+@section PageSpecificJSFiles{
+    <script>
+        $(document).ready(function () {
+            $("#default-tab").trigger("click");
+            $("#menu-toggler").trigger("click");
+        });
+        $(document).on('click', '.tab-click', function () {
+            var action = "PersonalDetail";
+            var student_Id = $("#StudentID").val();
+            var printProgramme = $("#StudentPrintProgramme").val();
+
+            var _url = "/CUStudentZone/StudentInfo/" + action;
+            $.ajax({
+                url: _url,
+                dataType: "html",
+                type: "GET",
+                data: { student_Id: student_Id, printProgramme: printProgramme },
+                success: function (data) {
+                    if (data != null) {
+                        $("#" + action).html(data);
+                    }
+                },
+                error: function (xhr, error, msg) {
+
+                }
+            });
+        });
+    </script>
+}
+

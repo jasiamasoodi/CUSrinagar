@@ -1,0 +1,201 @@
+﻿@{
+    ViewBag.Title = "CUS :: Statistics";
+}
+
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUSrinagarAdminPanel"})">Home</a>
+            </li>
+            <li class="active">Reports</li>
+        </ul><!-- /.breadcrumb -->
+    </div>
+    <div class="col-md-7">
+        <h2 class="no-margins"></h2>
+    </div>
+    <div class="col-md-4">
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12 jsTableContent">
+        <div class="panel panel-primary js-pager-table" data-otherparam1="Batch">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Statistics
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        List of Student
+                    </small>
+                    <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                        <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                    </span>
+                </h3>
+            </div>
+            <div class="panel-body hidden-print">
+                <div class="search-box">
+                    <div class="col-sm-10">
+                        <div class="form-inline col-sm-12">
+                            <div class="form-group col-sm-12">
+                                <label>Show Column</label>
+                                <div class="input-group col-sm-6">
+                                    <select class="chosen-select jsCustomFilter" multiple="">
+                                        <option value="Batch" selected="selected">Batch</option>
+                                        <option value="CollegeFullName">College</option>
+                                        <option value="Programme">Programme</option>
+                                        <option value="CourseFullName">Course</option>
+                                        <option value="ARGStudentAddress.District">District</option>
+                                        <option value="Gender">Gender</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <br />
+                            <br />
+                        </div>
+
+                        <div class="form-inline col-sm-12">
+                            <div class="form-group">
+                                <label>Filters</label>
+                                @Html.DropDownList("Batch", CUSrinagar.Extensions.Helper.GetYearsDDL(), "-- All --", new { @class = "jsfilterelement", @data_column = "Batch", @data_operator = "EqualTo" })
+                            </div>
+                            <input type="hidden" value="@ViewBag.College_ID" class="jsfilterelement" data-column="AcceptCollege_ID" data-operator="EqualTo" />
+                            @*<div class="form-group">
+
+                                    @Html.DropDownList("Colleges", new SelectList(ViewBag.Colleges, "Value", "Text"), "All College",
+                                               new
+                                               {
+                                                   @class = "jsfilterelement",
+                                                   @data_column = "AcceptCollege_ID",
+                                                   @data_operator = "EqualTo"
+                                               })
+                                </div>*@
+
+                            <div class="form-group">
+                                @Html.DropDownList("PrintProgramme", new SelectList(ViewBag.PrintProgrammes, "Value", "Text"), "All Program",
+                                           new
+                                           {
+                                               @class = "jsfilterelement",
+                                               @data_column = "Programme",
+                                               @data_operator = "EqualTo"
+                                           })
+                            </div>
+
+                            <div class="form-group">
+                                <select id="Courses" data-defaulttextvalue="All Course," class="jsfilterelement" data-column="Course_ID" data-operator="EqualTo" data-tablealias="ADMCourseMaster">
+                                    <option value="">All Courses</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="jsDDLContainer wd-200">
+                                    @Html.DropDownList("District", new SelectList(ViewBag.Districts, "Text", "Text"), "All Districts",
+                                           new
+                                           {
+                                               @class = "chosen-select jsCCDD jsfilterelement",
+                                               @data_column = "District",
+                                               @data_operator = "EqualTo",
+                                               @data_TableAlias = "ARGStudentAddress"
+                                           })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <select class="jsfilterelement" data-column="Gender" data_operator="EqualTo">
+                                    <option value="">All Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-sm btn-primary fa-search-btn js-search"><i class="fa fa-search"></i>&nbsp;Search</button>
+                            <div class="btn-group">
+                                <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle">
+                                    Action
+                                    <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-default dropdown-info">
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a href="javascript:void(0)" class="js-exportToCSV" data-url="@Url.Action("StatisticCSV","Statistics",new { area="CUSrinagarAdminPanel"})">
+                                            Download Excel(CSV)
+                                        </a>
+                                    </li>
+                                    <li class="divider"></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="js-table-content" data-url=@Url.Action("StudentListPartial", "Statistics", new { area = "CUCollegeAdminPanel" }) data-DefaultOrderByColumn="Count">
+            </div>
+            @{Html.RenderPartial("_JSPagerTableFooter");}
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJS{
+    <script src="~/Scripts/General/custom-select.js"></script>
+    <script src="~/Scripts/JSChosen.js"></script>
+    <script>
+        $(document).ready(function () {
+            loadpagertableWithDefaultParams();
+            $('.js-pager-table').data('otherparam1', $(".jsCustomFilter").val());
+
+            $("#StatisticsSection").addClass("active open");
+
+            $("#StudentStatistics").addClass("active");
+
+            $(".jsCustomFilter").change(function () {
+                var $element = $(this);
+                var groupByClauseList = $element.val();
+                $('.js-pager-table').data('otherparam1', (groupByClauseList));
+            });
+
+            $("#Colleges").change(function () {
+                var $element = $(this);
+                $("#PrintProgramme").trigger('change');
+            });
+
+            $("#PrintProgramme").change(function () {
+                var $element = $(this);
+                var $targetSelect = $("#Courses");
+                clearDDOptions($targetSelect);
+                fillDDLDefaultOption($targetSelect);
+                var college_id = $("#Colleges").find('option:selected').val();
+                var programme = $element.find('option:selected').val();
+                if (isNullOrEmpty(college_id) || college_id == emptyGuid() || isNullOrEmpty(programme)) {
+                    return;
+                }
+                clearDDOptions($targetSelect);
+                var _url = "/CUSrinagarAdminPanel/General/CollegeProgramCourses";
+                $.ajax({
+                    url: _url,
+                    type: "POST",
+                    datatype: "Json",
+                    data: { College_ID: college_id, printProgramme: programme },
+                    success: function (data) {
+                        fillDDLDefaultOption($targetSelect);
+                        if (data != null) {
+                            $.each(data, function (index, item) {
+                                $targetSelect.append('<option value="' + item.Value + '">' + item.Text.trim() + '</option>');
+                            });
+                        }
+                    },
+                    error: function (xhr, error, msg) {
+                        fillDDLOptions($targetSelect, null);
+                        showErrorMessage(msg);
+                    }
+                });
+            });
+
+        });
+    </script>
+}

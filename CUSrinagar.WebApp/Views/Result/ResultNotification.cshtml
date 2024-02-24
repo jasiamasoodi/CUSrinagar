@@ -1,0 +1,97 @@
+﻿@{
+    ViewBag.Title = "Result Notification";
+
+}
+<div class="page-wrapper pager-table-text">
+    @*<header class="page-heading clearfix margin-bottom-10">
+            <h1 class="heading-title pull-left">
+                Result Notification @(((CUSrinagar.Enums.PrintProgramme)ViewBag.printProgramme).ToString())
+                <small>
+                    <i class="ace-icon fa fa-angle-double-right"></i>
+                    List of notifications
+                </small>
+            </h1>
+        </header>*@
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="col-sm-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Result
+                            <small>
+                                <i class="ace-icon fa fa-angle-double-right"></i>
+                                List of Result Notifications
+                            </small>
+                            <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                            </span>
+                        </h3>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="search-box">
+                            <div class="form-inline">
+                                <input type="hidden" value="@((short)ViewBag.printProgramme)" class="jsfilterelement" data-column="PrintProgramme" data-operator="EqualTo" data-scope="row1" />
+                                @*<div class="form-group">
+                                        Programme
+                                        <select class="form-control jsfilterelement" data-column="PrintProgramme" data-operator="EqualTo" data-scope="row1">
+                                            <option value="1">UG</option>
+                                            <option value="2">IG</option>
+                                            <option value="3">PG</option>
+                                        </select>
+                                    </div>*@
+                                <div class="form-group">
+                                    <label>Batch</label><br />
+                                    <select class="form-control jsfilterelement" data-column="Batch" data-operator="EqualTo" data-scope="row1">
+                                        <option value="">-- choose batch--</option>
+                                        @for (int i = DateTime.Now.Year; i > 2016; i--)
+                                        {
+                                            <option value="@i">@i</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Semester</label><br />
+                                    <select class="form-control jsfilterelement" data-column="Semester" data-operator="EqualTo" data-scope="row1">
+                                        <option value="">-- choose semester--</option>
+                                        <option value="1">Semester-I</option>
+                                        <option value="2">Semester-II</option>
+                                        <option value="3">Semester-III</option>
+                                        <option value="4">Semester-IV</option>
+                                        <option value="5">Semester-V</option>
+                                        <option value="6">Semester-VI</option>
+                                        <option value="7">Semester-VII</option>
+                                        <option value="8">Semester-VIII</option>
+                                        <option value="9">Semester-IX</option>
+                                        <option value="10">Semester-X</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Notification Title</label><br />
+                                    <input type="text" placeholder="Enter part of notification title" name="Title" style="width:100% !important" class="form-control jsfilterelement" data-column="Title" data-operator="Contains" data-scope="row1" />
+                                </div>
+                                <div class="form-group">
+                                    <label></label><br />
+                                    @*&nbsp;&nbsp;
+                                        <span id="jsPrintCombination"><i class="fa fa-print pull-right"></i></span>*@
+                                    <button type="button" class="btn btn-theme fa-search-btn pull-right"><i class="fa fa-search"></i>&nbsp;Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="js-table-content" data-url='@Url.Action("ResultNotificationList","Result",new { area = string.Empty})' data-DefaultOrderByColumn="Dated">
+                    </div>
+                    @{Html.RenderPartial("_JSPagerTableFooter");}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script src="~/Scripts/Pages/resultnotification.js"></script>
+    <script type="text/javascript">
+        var _CurrentSection = "Result";
+    </script>
+}

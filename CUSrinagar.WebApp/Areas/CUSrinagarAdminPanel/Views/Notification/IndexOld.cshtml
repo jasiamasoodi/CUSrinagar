@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "ITOMS :: Notification List";
+    string currentYear = DateTime.Now.Year + "";
+  
+}
+<div class="row">
+    <div class="page-header">
+        <div style="padding-bottom: 30px;">
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <h1>
+                        Notification
+                    </h1>
+
+                </div>
+
+                <div class="col-sm-6">
+
+                </div>
+
+
+                <div class="col-sm-6 align-right">
+
+
+                    <button class="btn btn-sm btn-primary  white" type="button" onclick="window.location.href='/CUSrinagarAdminPanel/Notification/Create'" title="Add New Notification">
+                        <i class="ace-icon fa fa-plus  bigger-110"></i>
+                        <span>&nbsp;Add New</span>
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <table id="grid-table"></table>
+
+    <div id="grid-pager"></div>
+</div>
+
+<!-- PAGE CONTENT ENDS -->
+<!-- /.col -->
+
+@section PageSpecificJSFiles{
+    <script>
+        var NotificationPath = "/CUSrinagarAdminPanel/Notification/List";
+      </script>
+   <script src="@Url.Content("~/Scripts/JSNotification/NotificationIndex.js")"></script>
+
+}
+
+

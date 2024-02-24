@@ -1,0 +1,1573 @@
+﻿@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@using CUSrinagar.Models
+@model List<CUSrinagar.Models.ResultCompact>
+
+@if (Model.IsNotNullOrEmpty())
+{
+    ViewBag.Title = "Result Statistics";
+    string StatisticsType = ViewBag.StatisticsType;
+
+    var batches = Model.Select(x => x.Batch).Distinct().OrderBy(x => x).ToList();
+    var listOfCourses = Model.Select(x => new { x.Programme, x.CourseFullName }).OrderBy(x => x.CourseFullName).OrderBy(x => x.Programme).Select(x => x.CourseFullName).Distinct().ToList();
+    var listOfProgrammes = Model.Select(x => x.Programme).Distinct().OrderBy(x => x).ToList();
+    var listOfColleges = Model.Select(x => x.AcceptCollege_ID).Distinct().ToList();
+    var maxSemesters = Model.SelectMany(x => x.SubjectResults).Max(x => x.Semester);
+    var listOfCategories = Model.Select(x => x.Category).Distinct().OrderBy(x => x).ToList();
+    var count = 1;
+
+
+
+    <div class="page-content">
+        <div id="accordion" class="accordion-style1 panel-group">
+
+            @if (StatisticsType == "CourseWise")
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading hidden-print">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                                <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                &nbsp;Statisitics: Batch Wise
+                            </a>
+                        </h4>
+                    </div>
+
+                    <div class="panel-collapse collapse" id="collapse1" style="page-break-after: always; font-size: 10px;">
+                        <div class="panel-body">
+                            <table class="table table-bordered table-hover jsPrintTabContent">
+                                <thead>
+                                    <tr>
+                                        <th colspan="99">
+                                            <b>Statisitics: Batch Wise</b>
+                                            <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>S.No</th>
+                                        <th>Batch</th>
+                                        <th>
+                                            <center>
+                                                <b><u>Total</u> </b>
+                                                <br />
+                                                [M|F]
+                                            </center>
+                                        </th>
+                                        <th>
+                                            <center>
+                                                <b><u>Status</u> </b>
+                                            </center>
+                                        </th>
+
+                                        <th>
+                                            <center>
+                                                Result
+                                            </center>
+                                        </th>
+                                        @foreach (var cat in listOfCategories)
+                                        {
+                                            <th>
+                                                <center>
+                                                    <b><u>@cat</u> </b>
+                                                    <br />
+                                                    [M|F]
+                                                </center>
+                                            </th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        count = 1;
+                                        foreach (short batch in batches)
+                                        {
+                                            var _listOfStudents = Model.Where(x => x.Batch == batch).ToList();
+
+                                            if (_listOfStudents.IsNotNullOrEmpty())
+                                            {
+                                                var _passedStudents = _listOfStudents.Where(x => x.HasTranscript || (x.SubjectResults.All(y => y.OverallResultStatus == ResultStatus.P && y.ShowPublic) && x.SubjectResults.Max(y => y.Semester) == maxSemesters)).ToList();
+                                                var _failedStudents = _listOfStudents.Where(x => x.Transcript == null && x.SubjectResults.Any(y => y.OverallResultStatus != ResultStatus.P || !y.ResultNotification_ID.HasValue || !y.ExamForm_ID.HasValue) || x.SubjectResults.Max(y => y.Semester) != maxSemesters).ToList();
+
+                                                var discrepencyList = _passedStudents.Where(x => _failedStudents.Where(y => y.Student_ID == x.Student_ID) != null);
+
+                                                var innerJoin = from p in _passedStudents // outer sequence
+                                                                join f in _failedStudents //inner sequence
+                                                                on p.Student_ID equals f.Student_ID // key selector
+                                                                select new
+                                                                { // result selector
+                                                                    CUSRegistrationNo = p.CUSRegistrationNo,
+                                                                    Student_ID = p.Student_ID
+                                                                };
+
+                                                <tr>
+                                                    <td rowspan="2">@(count++)</td>
+                                                    <td rowspan="2">
+                                                        @batch
+                                                        <h6>@(string.Join(",", innerJoin.Select(x => x.CUSRegistrationNo)))</h6>
+                                                    </td>
+                                                    <td rowspan="2">
+                                                        <center>
+                                                            <b><u>@_listOfStudents.Select(x => x.Student_ID).Distinct().Count()</u> </b>
+                                                            <br />
+                                                            [<span title="Male">@_listOfStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                            |
+                                                            <span title="Female">@_listOfStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                        </center>
+                                                    </td>
+                                                    <td>
+                                                        <b>Pass</b>
+                                                    </td>
+                                                    <td>
+                                                        <center>
+                                                            <b><u>@_passedStudents.Select(x => x.Student_ID).Distinct().Count()</u></b>
+                                                            <br />
+                                                            [<span title="Male">@_passedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                            |
+                                                            <span title="Female">@_passedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                        </center>
+                                                    </td>
+                                                    @foreach (var cat in listOfCategories)
+                                                    {
+                                                        var catStudents = _passedStudents.Where(x => x.Category == cat);
+                                                        <th>
+                                                            <center>
+                                                                <b><u>@catStudents.Count()</u></b>
+                                                                <br />
+                                                                [<span title="Male">@catStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                |
+                                                                <span title="Female">@catStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                            </center>
+                                                        </th>
+                                                    }
+                                                </tr>
+                                                <tr>
+
+                                                    <td>
+                                                        <b>Fail</b>
+                                                    </td>
+                                                    <td>
+                                                        <center>
+                                                            <b><u>@_failedStudents.Count()</u></b>
+                                                            <br />
+                                                            [<span title="Male">@_failedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                            |
+                                                            <span title="Female">@_failedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                        </center>
+                                                    </td>
+
+                                                    @foreach (var cat in listOfCategories)
+                                                    {
+                                                        var catStudents = _failedStudents.Where(x => x.Category == cat);
+
+                                                        <th>
+                                                            <center>
+                                                                <b><u>@catStudents.Count()</u></b>
+                                                                <br />
+                                                                [<span title="Male">@catStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                |
+                                                                <span title="Female">@catStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                            </center>
+                                                        </th>
+                                                    }
+                                                </tr>
+
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading hidden-print">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse-college-batch">
+                                <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                &nbsp;Statisitics: College / Batch Wise
+                            </a>
+                        </h4>
+                    </div>
+
+                    <div class="panel-collapse collapse" id="collapse-college-batch" style="page-break-after: always; font-size: 10px;">
+                        <div class="panel-body">
+                            <table class="table table-bordered table-hover jsPrintTabContent">
+                                <thead>
+                                    <tr>
+                                        <th colspan="99">
+                                            <b>Statisitics: College / Batch Wise</b>
+                                            <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>S.No</th>
+                                        <th>College</th>
+                                        <th>Batch</th>
+                                        <th>
+                                            <center>
+                                                <b><u>Total</u> </b>
+                                                <br />
+                                                [M|F]
+                                            </center>
+                                        </th>
+                                        <th>
+                                            <center>
+                                                <b><u>Status</u> </b>
+                                            </center>
+                                        </th>
+
+                                        <th>
+                                            <center>
+                                                Result
+                                            </center>
+                                        </th>
+                                        @foreach (var cat in listOfCategories)
+                                        {
+                                            <th>
+                                                <center>
+                                                    <b><u>@cat</u> </b>
+                                                    <br />
+                                                    [M|F]
+                                                </center>
+                                            </th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        count = 1;
+                                        foreach (short batch in batches)
+                                        {
+                                            var _listOfStudentsBatchWise = Model.Where(x => x.Batch == batch).ToList();
+
+                                            if (_listOfStudentsBatchWise.IsNotNullOrEmpty())
+                                            {
+                                                var _listOfColleges = _listOfStudentsBatchWise.Select(x => x.CollegeFullName).Distinct().OrderBy(x => x);
+
+                                                foreach (var college in _listOfColleges)
+                                                {
+                                                    var _listOfStudentsCollegeWise = _listOfStudentsBatchWise.Where(x => x.CollegeFullName == college).ToList();
+
+                                                    var _passedStudents = _listOfStudentsCollegeWise.Where(x => x.HasTranscript || (x.SubjectResults.All(y => y.OverallResultStatus == ResultStatus.P && y.ShowPublic) && x.SubjectResults.Max(y => y.Semester) == maxSemesters)).ToList();
+                                                    var _failedStudents = _listOfStudentsCollegeWise.Where(x => x.Transcript == null && x.SubjectResults.Any(y => y.OverallResultStatus != ResultStatus.P || !y.ResultNotification_ID.HasValue || !y.ExamForm_ID.HasValue) || x.SubjectResults.Max(y => y.Semester) != maxSemesters).ToList();
+
+                                                    <tr>
+                                                        <td rowspan="2">@(count++)</td>
+                                                        <td rowspan="2">@college</td>
+                                                        <td rowspan="2">
+                                                            @batch
+                                                        </td>
+                                                        <td rowspan="2">
+                                                            <center>
+                                                                <b><u>@_listOfStudentsCollegeWise.Select(x => x.Student_ID).Distinct().Count()</u> </b>
+                                                                <br />
+                                                                [<span title="Male">@_listOfStudentsCollegeWise.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                |
+                                                                <span title="Female">@_listOfStudentsCollegeWise.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                            </center>
+                                                        </td>
+                                                        <td>
+                                                            <b>Pass</b>
+                                                        </td>
+                                                        <td>
+                                                            <center>
+                                                                <b><u>@_passedStudents.Select(x => x.Student_ID).Distinct().Count()</u></b>
+                                                                <br />
+                                                                [<span title="Male">@_passedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                |
+                                                                <span title="Female">@_passedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                            </center>
+                                                        </td>
+                                                        @foreach (var cat in listOfCategories)
+                                                        {
+                                                            var catStudents = _passedStudents.Where(x => x.Category == cat);
+                                                            <th>
+                                                                <center>
+                                                                    <b><u>@catStudents.Count()</u></b>
+                                                                    <br />
+                                                                    [<span title="Male">@catStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                    |
+                                                                    <span title="Female">@catStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                </center>
+                                                            </th>
+                                                        }
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>
+                                                            <b>Fail</b>
+                                                        </td>
+                                                        <td>
+                                                            <center>
+                                                                <b><u>@_failedStudents.Count()</u></b>
+                                                                <br />
+                                                                [<span title="Male">@_failedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                |
+                                                                <span title="Female">@_failedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                            </center>
+                                                        </td>
+
+                                                        @foreach (var cat in listOfCategories)
+                                                        {
+                                                            var catStudents = _failedStudents.Where(x => x.Category == cat);
+
+                                                            <th>
+                                                                <center>
+                                                                    <b><u>@catStudents.Count()</u></b>
+                                                                    <br />
+                                                                    [<span title="Male">@catStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                    |
+                                                                    <span title="Female">@catStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                </center>
+                                                            </th>
+                                                        }
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading hidden-print">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+                                <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                &nbsp;Statistics: Program Wise
+                            </a>
+                        </h4>
+                    </div>
+
+                    <div class="panel-collapse collapse" id="collapse2" style="page-break-after: always; font-size: 10px; font-size: 10px;">
+                        <div class="panel-body">
+                            <table class="table table-bordered table-hover jsPrintTabContent">
+                                <thead>
+                                    <tr>
+                                        <th colspan="99">
+                                            <b>Statistics: Program Wise</b>
+                                            <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align:center;">S.No</th>
+                                        <th>Program</th>
+                                        <th>
+                                            <center>
+                                                <b><u>Total</u> </b>
+                                                <br />
+                                                [M|F]
+                                            </center>
+                                        </th>
+
+                                        <th>
+                                            <center>
+                                                <b><u>Status</u> </b>
+                                            </center>
+                                        </th>
+                                        <th>Result</th>
+
+                                        @foreach (var cat in listOfCategories)
+                                        {
+                                            <th>
+                                                <center>
+                                                    <b><u>@cat</u> </b>
+                                                    <br />
+                                                    [M|F]
+                                                </center>
+                                            </th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        count = 1;
+                                        foreach (var program in listOfProgrammes)
+                                        {
+                                            if (program == CUSrinagar.Enums.Programme.UG)
+                                            {
+                                                var _listOfStudents = Model.Where(x => x.PrintProgramme == PrintProgramme.UG && x.Programme == program).ToList();
+                                                if (_listOfStudents.IsNotNullOrEmpty())
+                                                {
+                                                    var _passedStudents = _listOfStudents.Where(x => x.Transcript != null || x.SubjectResults.All(y => y.OverallResultStatus == ResultStatus.P && y.ResultNotification_ID.HasValue && y.ExamForm_ID.HasValue) && x.SubjectResults.Max(y => y.Semester) == maxSemesters).ToList();
+                                                    var _failedStudents = _listOfStudents.Where(x => x.Transcript == null && x.SubjectResults.Any(y => y.OverallResultStatus != ResultStatus.P || !y.ResultNotification_ID.HasValue || !y.ExamForm_ID.HasValue) || x.SubjectResults.Max(y => y.Semester) != maxSemesters).ToList();
+
+                                                    <tr>
+                                                        <td rowspan="2">@(count++)</td>
+                                                        <td rowspan="2">UG</td>
+                                                        <td rowspan="2">
+                                                            <center>
+                                                                <b><u>@_listOfStudents.Count()</u> </b>
+                                                                <br />
+                                                                [<span title="Male">@_listOfStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                |
+                                                                <span title="Female">@_listOfStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                            </center>
+                                                        </td>
+                                                        <td>
+                                                            <b>Pass</b>
+                                                        </td>
+                                                        <td>
+                                                            <center>
+                                                                <b><u>@_passedStudents.Count()</u></b>
+                                                                <br />
+                                                                [<span title="Male">@_passedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                |
+                                                                <span title="Female">@_passedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                            </center>
+                                                        </td>
+
+
+                                                        @foreach (var cat in listOfCategories)
+                                                        {
+                                                            var catStudents = _passedStudents.Where(x => x.Category == cat);
+
+                                                            <th>
+                                                                <center>
+                                                                    <b><u>@catStudents.Count()</u></b>
+                                                                    <br />
+                                                                    [<span title="Male">@catStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                    |
+                                                                    <span title="Female">@catStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                </center>
+                                                            </th>
+                                                        }
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <b>Fail</b>
+                                                        </td>
+                                                        <td>
+                                                            <center>
+                                                                <b><u>@_failedStudents.Count()</u></b>
+                                                                <br />
+                                                                [<span title="Male">@_failedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                |
+                                                                <span title="Female">@_failedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                            </center>
+                                                        </td>
+
+                                                        @foreach (var cat in listOfCategories)
+                                                        {
+                                                            var catStudents = _failedStudents.Where(x => x.Category == cat);
+
+                                                            <th>
+                                                                <center>
+                                                                    <b><u>@catStudents.Count()</u></b>
+                                                                    <br />
+                                                                    [<span title="Male">@catStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                    |
+                                                                    <span title="Female">@catStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                </center>
+                                                            </th>
+                                                        }
+                                                    </tr>
+                                                }
+
+                                                _listOfStudents = Model.Where(x => x.PrintProgramme == PrintProgramme.BED && x.Programme == program).ToList();
+                                                if (_listOfStudents.IsNotNullOrEmpty())
+                                                {
+                                                    var _passedStudents = _listOfStudents.Where(x => x.Transcript != null || x.SubjectResults.All(y => y.OverallResultStatus == ResultStatus.P && y.ResultNotification_ID.HasValue && y.ExamForm_ID.HasValue) && x.SubjectResults.Max(y => y.Semester) == maxSemesters).ToList();
+                                                    var _failedStudents = _listOfStudents.Where(x => x.Transcript == null && x.SubjectResults.Any(y => y.OverallResultStatus != ResultStatus.P || !y.ResultNotification_ID.HasValue || !y.ExamForm_ID.HasValue) || x.SubjectResults.Max(y => y.Semester) != maxSemesters).ToList();
+
+                                                    <tr>
+                                                        <td rowspan="2">@(count++)</td>
+                                                        <td rowspan="2">BED</td>
+                                                        <td rowspan="2">
+                                                            <center>
+                                                                <b><u>@_listOfStudents.Count()</u> </b>
+                                                                <br />
+                                                                [<span title="Male">@_listOfStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                |
+                                                                <span title="Female">@_listOfStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                            </center>
+                                                        </td>
+                                                        <td>
+                                                            <b>Pass</b>
+                                                        </td>
+                                                        <td>
+                                                            <center>
+                                                                <b><u>@_passedStudents.Count()</u></b>
+                                                                <br />
+                                                                [<span title="Male">@_passedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                |
+                                                                <span title="Female">@_passedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                            </center>
+                                                        </td>
+
+
+                                                        @foreach (var cat in listOfCategories)
+                                                        {
+                                                            var catStudents = _passedStudents.Where(x => x.Category == cat);
+
+                                                            <th>
+                                                                <center>
+                                                                    <b><u>@catStudents.Count()</u></b>
+                                                                    <br />
+                                                                    [<span title="Male">@catStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                    |
+                                                                    <span title="Female">@catStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                </center>
+                                                            </th>
+                                                        }
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>
+                                                            <b>Fail</b>
+                                                        </td>
+                                                        <td>
+                                                            <center>
+                                                                <b><u>@_failedStudents.Count()</u></b>
+                                                                <br />
+                                                                [<span title="Male">@_failedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                |
+                                                                <span title="Female">@_failedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                            </center>
+                                                        </td>
+
+                                                        @foreach (var cat in listOfCategories)
+                                                        {
+                                                            var catStudents = _failedStudents.Where(x => x.Category == cat);
+
+                                                            <th>
+                                                                <center>
+                                                                    <b><u>@catStudents.Count()</u></b>
+                                                                    <br />
+                                                                    [<span title="Male">@catStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                    |
+                                                                    <span title="Female">@catStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                </center>
+                                                            </th>
+                                                        }
+                                                    </tr>
+                                                }
+                                            }
+                                            else
+                                            {
+
+                                                var _listOfStudents = Model.Where(x => x.Programme == program).ToList();
+                                                if (_listOfStudents.IsNotNullOrEmpty())
+                                                {
+                                                    var _passedStudents = _listOfStudents.Where(x => x.Transcript != null || x.SubjectResults.All(y => y.OverallResultStatus == ResultStatus.P && y.ResultNotification_ID.HasValue && y.ExamForm_ID.HasValue) && x.SubjectResults.Max(y => y.Semester) == maxSemesters).ToList();
+                                                    var _failedStudents = _listOfStudents.Where(x => x.Transcript == null && x.SubjectResults.Any(y => y.OverallResultStatus != ResultStatus.P || !y.ResultNotification_ID.HasValue || !y.ExamForm_ID.HasValue) || x.SubjectResults.Max(y => y.Semester) != maxSemesters).ToList();
+
+                                                    <tr>
+                                                        <td rowspan="2">@(count++)</td>
+                                                        <td rowspan="2">@(program.ToString())</td>
+                                                        <td rowspan="2">
+                                                            <center>
+                                                                <b><u>@_listOfStudents.Count()</u> </b>
+                                                                <br />
+                                                                [<span title="Male">@_listOfStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                |
+                                                                <span title="Female">@_listOfStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                            </center>
+                                                        </td>
+                                                        <td>
+                                                            <b>Pass</b>
+                                                        </td>
+                                                        <td>
+                                                            <center>
+                                                                <b><u>@_passedStudents.Count()</u></b>
+                                                                <br />
+                                                                [<span title="Male">@_passedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                |
+                                                                <span title="Female">@_passedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                            </center>
+                                                        </td>
+
+
+                                                        @foreach (var cat in listOfCategories)
+                                                        {
+                                                            var catStudents = _passedStudents.Where(x => x.Category == cat);
+
+                                                            <th>
+                                                                <center>
+                                                                    <b><u>@catStudents.Count()</u></b>
+                                                                    <br />
+                                                                    [<span title="Male">@catStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                    |
+                                                                    <span title="Female">@catStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                </center>
+                                                            </th>
+                                                        }
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>
+                                                            <b>Fail</b>
+                                                        </td>
+                                                        <td>
+                                                            <center>
+                                                                <b><u>@_failedStudents.Count()</u></b>
+                                                                <br />
+                                                                [<span title="Male">@_failedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                |
+                                                                <span title="Female">@_failedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                            </center>
+                                                        </td>
+
+                                                        @foreach (var cat in listOfCategories)
+                                                        {
+                                                            var catStudents = _failedStudents.Where(x => x.Category == cat);
+
+                                                            <th>
+                                                                <center>
+                                                                    <b><u>@catStudents.Count()</u></b>
+                                                                    <br />
+                                                                    [<span title="Male">@catStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                    |
+                                                                    <span title="Female">@catStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                </center>
+                                                            </th>
+                                                        }
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading hidden-print">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse434">
+                                <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                &nbsp;Statistics: Batch / Program Wise
+                            </a>
+                        </h4>
+                    </div>
+
+                    <div class="panel-collapse collapse" id="collapse434" style="page-break-after: always; font-size: 10px; font-size: 10px;">
+                        <div class="panel-body">
+                            <table class="table table-bordered table-hover jsPrintTabContent">
+                                <thead>
+                                    <tr>
+                                        <th colspan="99">
+                                            <b>Statistics: Batch / Program Wise</b>
+                                            <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align:center;">S.No</th>
+                                        <th>Batch</th>
+                                        <th>Program</th>
+                                        <th>
+                                            <center>
+                                                <b><u>Total</u> </b>
+                                                <br />
+                                                [M|F]
+                                            </center>
+                                        </th>
+                                        <th>
+                                            <center>
+                                                <b><u>Status</u> </b>
+                                            </center>
+                                        </th>
+                                        <th>Result</th>
+                                        @foreach (var cat in listOfCategories)
+                                        {
+                                            <th>
+                                                <center>
+                                                    <b><u>@cat</u> </b>
+                                                    <br />
+                                                    [M|F]
+                                                </center>
+                                            </th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        count = 1;
+                                        foreach (var batch in batches)
+                                        {
+                                            var mainList = Model.Where(x => x.Batch == batch)?.ToList();
+
+                                            foreach (var program in listOfProgrammes)
+                                            {
+                                                if (program == CUSrinagar.Enums.Programme.UG)
+                                                {
+                                                    var _listOfStudents = mainList.Where(x => x.PrintProgramme == PrintProgramme.UG && x.Programme == program).ToList();
+                                                    if (_listOfStudents.IsNotNullOrEmpty())
+                                                    {
+                                                        var _passedStudents = _listOfStudents.Where(x => x.Transcript != null || x.SubjectResults.All(y => y.OverallResultStatus == ResultStatus.P && y.ResultNotification_ID.HasValue && y.ExamForm_ID.HasValue) && x.SubjectResults.Max(y => y.Semester) == maxSemesters).ToList();
+                                                        var _failedStudents = _listOfStudents.Where(x => x.Transcript == null && x.SubjectResults.Any(y => y.OverallResultStatus != ResultStatus.P || !y.ResultNotification_ID.HasValue || !y.ExamForm_ID.HasValue) || x.SubjectResults.Max(y => y.Semester) != maxSemesters).ToList();
+
+                                                        <tr>
+                                                            <td rowspan="2">@(count++)</td>
+                                                            <td rowspan="2">@batch</td>
+                                                            <td rowspan="2">UG</td>
+                                                            <td rowspan="2">
+                                                                <center>
+                                                                    <b><u>@_listOfStudents.Count()</u> </b>
+                                                                    <br />
+                                                                    [<span title="Male">@_listOfStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                    |
+                                                                    <span title="Female">@_listOfStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                </center>
+                                                            </td>
+                                                            <td>
+                                                                <b>Pass</b>
+                                                            </td>
+                                                            <td>
+                                                                <center>
+                                                                    <b><u>@_passedStudents.Count()</u></b>
+                                                                    <br />
+                                                                    [<span title="Male">@_passedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                    |
+                                                                    <span title="Female">@_passedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                </center>
+                                                            </td>
+
+
+                                                            @foreach (var cat in listOfCategories)
+                                                            {
+                                                                var catStudents = _passedStudents.Where(x => x.Category == cat);
+
+                                                                <th>
+                                                                    <center>
+                                                                        <b><u>@catStudents.Count()</u></b>
+                                                                        <br />
+                                                                        [<span title="Male">@catStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                        |
+                                                                        <span title="Female">@catStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                    </center>
+                                                                </th>
+                                                            }
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <b>Fail</b>
+                                                            </td>
+                                                            <td>
+                                                                <center>
+                                                                    <b><u>@_failedStudents.Count()</u></b>
+                                                                    <br />
+                                                                    [<span title="Male">@_failedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                    |
+                                                                    <span title="Female">@_failedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                </center>
+                                                            </td>
+
+                                                            @foreach (var cat in listOfCategories)
+                                                            {
+                                                                var catStudents = _failedStudents.Where(x => x.Category == cat);
+
+                                                                <th>
+                                                                    <center>
+                                                                        <b><u>@catStudents.Count()</u></b>
+                                                                        <br />
+                                                                        [<span title="Male">@catStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                        |
+                                                                        <span title="Female">@catStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                    </center>
+                                                                </th>
+                                                            }
+                                                        </tr>
+                                                    }
+
+                                                    _listOfStudents = mainList.Where(x => x.PrintProgramme == PrintProgramme.BED && x.Programme == program).ToList();
+                                                    if (_listOfStudents.IsNotNullOrEmpty())
+                                                    {
+                                                        var _passedStudents = _listOfStudents.Where(x => x.Transcript != null || x.SubjectResults.All(y => y.OverallResultStatus == ResultStatus.P && y.ResultNotification_ID.HasValue && y.ExamForm_ID.HasValue) && x.SubjectResults.Max(y => y.Semester) == maxSemesters).ToList();
+                                                        var _failedStudents = _listOfStudents.Where(x => x.Transcript == null && x.SubjectResults.Any(y => y.OverallResultStatus != ResultStatus.P || !y.ResultNotification_ID.HasValue || !y.ExamForm_ID.HasValue) || x.SubjectResults.Max(y => y.Semester) != maxSemesters).ToList();
+
+                                                        <tr>
+                                                            <td rowspan="2">@(count++)</td>
+                                                            <td rowspan="2">@batch</td>
+                                                            <td rowspan="2">BED</td>
+                                                            <td rowspan="2">
+                                                                <center>
+                                                                    <b><u>@_listOfStudents.Count()</u> </b>
+                                                                    <br />
+                                                                    [<span title="Male">@_listOfStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                    |
+                                                                    <span title="Female">@_listOfStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                </center>
+                                                            </td>
+                                                            <td>
+                                                                <b>Pass</b>
+                                                            </td>
+                                                            <td>
+                                                                <center>
+                                                                    <b><u>@_passedStudents.Count()</u></b>
+                                                                    <br />
+                                                                    [<span title="Male">@_passedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                    |
+                                                                    <span title="Female">@_passedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                </center>
+                                                            </td>
+
+
+                                                            @foreach (var cat in listOfCategories)
+                                                            {
+                                                                var catStudents = _passedStudents.Where(x => x.Category == cat);
+
+                                                                <th>
+                                                                    <center>
+                                                                        <b><u>@catStudents.Count()</u></b>
+                                                                        <br />
+                                                                        [<span title="Male">@catStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                        |
+                                                                        <span title="Female">@catStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                    </center>
+                                                                </th>
+                                                            }
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <b>Fail</b>
+                                                            </td>
+                                                            <td>
+                                                                <center>
+                                                                    <b><u>@_failedStudents.Count()</u></b>
+                                                                    <br />
+                                                                    [<span title="Male">@_failedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                    |
+                                                                    <span title="Female">@_failedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                </center>
+                                                            </td>
+
+                                                            @foreach (var cat in listOfCategories)
+                                                            {
+                                                                var catStudents = _failedStudents.Where(x => x.Category == cat);
+
+                                                                <th>
+                                                                    <center>
+                                                                        <b><u>@catStudents.Count()</u></b>
+                                                                        <br />
+                                                                        [<span title="Male">@catStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                        |
+                                                                        <span title="Female">@catStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                    </center>
+                                                                </th>
+                                                            }
+                                                        </tr>
+                                                    }
+                                                }
+                                                else
+                                                {
+
+                                                    var _listOfStudents = mainList.Where(x => x.Programme == program).ToList();
+                                                    if (_listOfStudents.IsNotNullOrEmpty())
+                                                    {
+                                                        var _passedStudents = _listOfStudents.Where(x => x.Transcript != null || x.SubjectResults.All(y => y.OverallResultStatus == ResultStatus.P && y.ResultNotification_ID.HasValue && y.ExamForm_ID.HasValue) && x.SubjectResults.Max(y => y.Semester) == maxSemesters).ToList();
+                                                        var _failedStudents = _listOfStudents.Where(x => x.Transcript == null && x.SubjectResults.Any(y => y.OverallResultStatus != ResultStatus.P || !y.ResultNotification_ID.HasValue || !y.ExamForm_ID.HasValue) || x.SubjectResults.Max(y => y.Semester) != maxSemesters).ToList();
+
+                                                        <tr>
+                                                            <td rowspan="2">@(count++)</td>
+                                                            <td rowspan="2">@batch</td>
+                                                            <td rowspan="2">@(program.ToString())</td>
+                                                            <td rowspan="2">
+                                                                <center>
+                                                                    <b><u>@_listOfStudents.Count()</u> </b>
+                                                                    <br />
+                                                                    [<span title="Male">@_listOfStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                    |
+                                                                    <span title="Female">@_listOfStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                </center>
+                                                            </td>
+                                                            <td>
+                                                                <b>Pass</b>
+                                                            </td>
+                                                            <td>
+                                                                <center>
+                                                                    <b><u>@_passedStudents.Count()</u></b>
+                                                                    <br />
+                                                                    [<span title="Male">@_passedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                    |
+                                                                    <span title="Female">@_passedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                </center>
+                                                            </td>
+
+
+                                                            @foreach (var cat in listOfCategories)
+                                                            {
+                                                                var catStudents = _passedStudents.Where(x => x.Category == cat);
+
+                                                                <th>
+                                                                    <center>
+                                                                        <b><u>@catStudents.Count()</u></b>
+                                                                        <br />
+                                                                        [<span title="Male">@catStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                        |
+                                                                        <span title="Female">@catStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                    </center>
+                                                                </th>
+                                                            }
+                                                        </tr>
+                                                        <tr>
+
+                                                            <td>
+                                                                <b>Fail</b>
+                                                            </td>
+                                                            <td>
+                                                                <center>
+                                                                    <b><u>@_failedStudents.Count()</u></b>
+                                                                    <br />
+                                                                    [<span title="Male">@_failedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                    |
+                                                                    <span title="Female">@_failedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                </center>
+                                                            </td>
+
+                                                            @foreach (var cat in listOfCategories)
+                                                            {
+                                                                var catStudents = _failedStudents.Where(x => x.Category == cat);
+
+                                                                <th>
+                                                                    <center>
+                                                                        <b><u>@catStudents.Count()</u></b>
+                                                                        <br />
+                                                                        [<span title="Male">@catStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                        |
+                                                                        <span title="Female">@catStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                    </center>
+                                                                </th>
+                                                            }
+                                                        </tr>
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading hidden-print">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+                                <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                &nbsp;Statistics: Course Wise
+                            </a>
+                        </h4>
+                    </div>
+
+                    <div class="panel-collapse collapse" id="collapse3" style="page-break-after: always; font-size: 10px;">
+                        <div class="panel-body">
+                            <table class="table table-bordered table-hover jsPrintTabContent">
+                                <thead>
+                                    <tr>
+                                        <th colspan="99">
+                                            <b>Statistics: Course Wise</b>
+                                            <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align:center;">S.No</th>
+                                        <th>Course</th>
+                                        <th>
+                                            <center>
+                                                <b><u>Total</u> </b>
+                                                <br />
+                                                [M|F]
+                                            </center>
+                                        </th>
+
+                                        <th>
+                                            <center>
+                                                <b><u>Status</u> </b>
+                                            </center>
+                                        </th>
+                                        <th>Result</th>
+
+                                        @foreach (var cat in listOfCategories)
+                                        {
+                                            <th>
+                                                <center>
+                                                    <b><u>@cat</u> </b>
+                                                    <br />
+                                                    [M|F]
+                                                </center>
+                                            </th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        count = 1;
+                                        foreach (string course in listOfCourses)
+                                        {
+                                            var _listOfStudents = Model.Where(x => x.CourseFullName == course).ToList();
+                                            if (_listOfStudents.IsNotNullOrEmpty())
+                                            {
+                                                var _passedStudents = _listOfStudents.Where(x => x.Transcript != null || x.SubjectResults.All(y => y.OverallResultStatus == ResultStatus.P && y.ResultNotification_ID.HasValue && y.ExamForm_ID.HasValue) && x.SubjectResults.Max(y => y.Semester) == maxSemesters).ToList();
+                                                var _failedStudents = _listOfStudents.Where(x => x.Transcript == null && x.SubjectResults.Any(y => y.OverallResultStatus != ResultStatus.P || !y.ResultNotification_ID.HasValue || !y.ExamForm_ID.HasValue) || x.SubjectResults.Max(y => y.Semester) != maxSemesters).ToList();
+
+                                                <tr>
+                                                    <td rowspan="2">@(count++)</td>
+                                                    <td rowspan="2">@_listOfStudents.First().CourseFullName</td>
+                                                    <td rowspan="2">
+                                                        <center>
+                                                            <b><u>@_listOfStudents.Count()</u> </b>
+                                                            <br />
+                                                            [<span title="Male">@_listOfStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                            |
+                                                            <span title="Female">@_listOfStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                        </center>
+                                                    </td>
+                                                    <td>
+                                                        <b>Pass</b>
+                                                    </td>
+                                                    <td>
+                                                        <center>
+                                                            <b><u>@_passedStudents.Count()</u></b>
+                                                            <br />
+                                                            [<span title="Male">@_passedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                            |
+                                                            <span title="Female">@_passedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                        </center>
+                                                    </td>
+
+
+                                                    @foreach (var cat in listOfCategories)
+                                                    {
+                                                        var catStudents = _passedStudents.Where(x => x.Category == cat);
+
+                                                        <th>
+                                                            <center>
+                                                                <b><u>@catStudents.Count()</u></b>
+                                                                <br />
+                                                                [<span title="Male">@catStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                |
+                                                                <span title="Female">@catStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                            </center>
+                                                        </th>
+                                                    }
+                                                </tr>
+                                                <tr>
+
+                                                    <td>
+                                                        <b>Fail</b>
+                                                    </td>
+                                                    <td>
+                                                        <center>
+                                                            <b><u>@_failedStudents.Count()</u></b>
+                                                            <br />
+                                                            [<span title="Male">@_failedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                            |
+                                                            <span title="Female">@_failedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                        </center>
+                                                    </td>
+
+                                                    @foreach (var cat in listOfCategories)
+                                                    {
+                                                        var catStudents = _failedStudents.Where(x => x.Category == cat);
+
+                                                        <th>
+                                                            <center>
+                                                                <b><u>@catStudents.Count()</u></b>
+                                                                <br />
+                                                                [<span title="Male">@catStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                |
+                                                                <span title="Female">@catStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                            </center>
+                                                        </th>
+                                                    }
+                                                </tr>
+
+                                            }
+
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading hidden-print">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse5">
+                                <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                &nbsp;Statistics: Batch / Course Wise/ Category Wise
+                            </a>
+                        </h4>
+                    </div>
+
+                    <div class="panel-collapse collapse" id="collapse5" style="page-break-after: always; font-size: 10px;">
+                        <div class="panel-body">
+                            <table class="table table-bordered table-hover jsPrintTabContent">
+                                <thead>
+                                    <tr>
+                                        <th colspan="99">
+                                            <b>Statistics: Batch / Course Wise / Category Wise</b>
+                                            <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align:center;">S.No</th>
+                                        <th>Batch</th>
+                                        <th>Course</th>
+                                        <th>
+                                            <center>
+                                                <b><u>Total</u> </b>
+                                                <br />
+                                                [M|F]
+                                            </center>
+                                        </th>
+
+                                        <th>
+                                            <center>
+                                                <b><u>Status</u> </b>
+                                            </center>
+                                        </th>
+                                        <th>Result</th>
+
+                                        @foreach (var cat in listOfCategories)
+                                        {
+                                            <th>
+                                                <center>
+                                                    <b><u>@cat</u> </b>
+                                                    <br />
+                                                    [M|F]
+                                                </center>
+                                            </th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        count = 1;
+                                        foreach (var batch in batches)
+                                        {
+                                            var mainList = Model.Where(x => x.Batch == batch);
+                                            foreach (string course in listOfCourses)
+                                            {
+                                                var _listOfStudents = mainList.Where(x => x.CourseFullName == course).ToList();
+                                                if (_listOfStudents.IsNotNullOrEmpty())
+                                                {
+                                                    var _passedStudents = _listOfStudents.Where(x => x.Transcript != null || x.SubjectResults.All(y => y.OverallResultStatus == ResultStatus.P && y.ResultNotification_ID.HasValue && y.ExamForm_ID.HasValue) && x.SubjectResults.Max(y => y.Semester) == maxSemesters).ToList();
+                                                    var _failedStudents = _listOfStudents.Where(x => x.Transcript == null && x.SubjectResults.Any(y => y.OverallResultStatus != ResultStatus.P || !y.ResultNotification_ID.HasValue || !y.ExamForm_ID.HasValue) || x.SubjectResults.Max(y => y.Semester) != maxSemesters).ToList();
+
+                                                    <tr>
+                                                        <td rowspan="2">@(count++)</td>
+                                                        <td rowspan="2">@batch</td>
+                                                        <td rowspan="2">@_listOfStudents.First().CourseFullName</td>
+                                                        <td rowspan="2">
+                                                            <center>
+                                                                <b><u>@_listOfStudents.Count()</u> </b>
+                                                                <br />
+                                                                [<span title="Male">@_listOfStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                |
+                                                                <span title="Female">@_listOfStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                            </center>
+                                                        </td>
+                                                        <td>
+                                                            <b>Pass</b>
+                                                        </td>
+                                                        <td>
+                                                            <center>
+                                                                <b><u>@_passedStudents.Count()</u></b>
+                                                                <br />
+                                                                [<span title="Male">@_passedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                |
+                                                                <span title="Female">@_passedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                            </center>
+                                                        </td>
+
+
+                                                        @foreach (var cat in listOfCategories)
+                                                        {
+                                                            var catStudents = _passedStudents.Where(x => x.Category == cat);
+
+                                                            <th>
+                                                                <center>
+                                                                    <b><u>@catStudents.Count()</u></b>
+                                                                    <br />
+                                                                    [<span title="Male">@catStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                    |
+                                                                    <span title="Female">@catStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                </center>
+                                                            </th>
+                                                        }
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>
+                                                            <b>Fail</b>
+                                                        </td>
+                                                        <td>
+                                                            <center>
+                                                                <b><u>@_failedStudents.Count()</u></b>
+                                                                <br />
+                                                                [<span title="Male">@_failedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                |
+                                                                <span title="Female">@_failedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                            </center>
+                                                        </td>
+
+                                                        @foreach (var cat in listOfCategories)
+                                                        {
+                                                            var catStudents = _failedStudents.Where(x => x.Category == cat);
+
+                                                            <th>
+                                                                <center>
+                                                                    <b><u>@catStudents.Count()</u></b>
+                                                                    <br />
+                                                                    [<span title="Male">@catStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                                    |
+                                                                    <span title="Female">@catStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                                                </center>
+                                                            </th>
+                                                        }
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+
+
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @if (StatisticsType == "SubjectWise")
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading hidden-print">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse6">
+                                <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                &nbsp;Statistics: Batch / Course / Subject Tile Wise
+                            </a>
+                        </h4>
+                    </div>
+
+                    <div class="panel-collapse collapse" id="collapse6" style="page-break-after: always; font-size: 10px;">
+                        <div class="panel-body">
+                            <table class="table table-bordered table-hover jsPrintTabContent">
+                                <thead>
+                                    <tr>
+                                        <th colspan="99">
+                                            <b>Statistics: Batch / Course / Subject Tile Wise</b>
+                                            <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align:center;">S.No</th>
+                                        <th>Batch</th>
+                                        <th>Course</th>
+                                        <th>Sem</th>
+                                        <th>Subject</th>
+                                        <th>
+                                            <center>
+                                                <b><u>Total</u> </b>
+                                            </center>
+                                        </th>
+                                        <th title="male">M</th>
+                                        <th title="female">F</th>
+
+                                        <th>
+                                            <center>
+                                                <b><u>Status</u> </b>
+                                            </center>
+                                        </th>
+                                        <th>Count</th>
+                                        <th title="male">M</th>
+                                        <th title="female">F</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        count = 1;
+                                        foreach (var batch in batches)
+                                        {
+                                            var _listOfStudentBatchWise = Model.Where(x => x.Batch == batch).ToList();
+                                            var _listOfCourses = _listOfStudentBatchWise.Select(x => new { x.Programme, x.CourseFullName }).Distinct().OrderBy(x => x.CourseFullName).OrderBy(x => x.Programme).Select(x => x.CourseFullName).Distinct().ToList();
+                                            foreach (string course in _listOfCourses)
+                                            {
+                                                var _listOfStudentCourseWise = _listOfStudentBatchWise.Where(x => x.CourseFullName == course).ToList();
+
+                                                var _semesters = _listOfStudentCourseWise.SelectMany(x => x.SubjectResults.Select(x => x.Semester)).Distinct().OrderBy(x => x).ToList();
+                                                foreach (var _semester in _semesters)
+                                                {
+                                                    var _listOfSubjectsdeleted = _listOfStudentCourseWise.Where(x => x.SubjectResults.Where(y => y.Semester == _semester) != null).SelectMany(x => x.SubjectResults.Select(y => new { y.SubjectType, y.SubjectFullName, y.Subject_ID })).Distinct().OrderBy(x => x.SubjectFullName).OrderBy(x => x.SubjectType.ToString()).Select(x => x.Subject_ID).Distinct().ToList();
+
+                                                    var _listOfSubjects = _listOfStudentCourseWise.SelectMany(x => x.SubjectResults.Select(y => new { y.Subject_ID, y.SubjectFullName, y.SubjectType, y.Semester })).ToList().Where(x => x.Semester == _semester).Distinct().OrderBy(x => x.SubjectType.ToString()).ThenBy(x => x.SubjectFullName).ToList();
+
+                                                    if (_listOfStudentCourseWise.IsNotNullOrEmpty())
+                                                    {
+                                                        var _listOfStudentSemesterWise = _listOfStudentCourseWise.Select(x => new
+                                                        {
+                                                            x.Student_ID,
+                                                            x.Gender,
+                                                            x.HasTranscript,
+                                                            SubjectResults = x.SubjectResults.Where(y => y.Semester == _semester).ToList()
+                                                        }).ToList();
+
+                                                        foreach (var _subject in _listOfSubjects)
+                                                        {
+                                                            var _listOfStudentSubjectWiseWise = _listOfStudentSemesterWise.Select(x => new
+                                                            {
+                                                                x.Student_ID,
+                                                                x.Gender,
+                                                                x.HasTranscript,
+                                                                SubjectResults = x.SubjectResults.Where(y => y.Subject_ID == _subject.Subject_ID).ToList()
+                                                            }).Where(x => x.SubjectResults.IsNotNullOrEmpty()).ToList();
+
+                                                            if (_listOfStudentSubjectWiseWise.IsNotNullOrEmpty())
+                                                            {
+                                                                var _passedStudents = _listOfStudentSubjectWiseWise.Where(x => x.HasTranscript || x.SubjectResults.All(y => y.OverallResultStatus == ResultStatus.P && y.ResultNotification_ID.HasValue && y.ExamForm_ID.HasValue))?.ToList();
+                                                                var _failedStudents = _listOfStudentSubjectWiseWise.Where(x => !x.HasTranscript && x.SubjectResults.Any(y => y.OverallResultStatus != ResultStatus.P || !y.ResultNotification_ID.HasValue || !y.ExamForm_ID.HasValue))?.ToList();
+
+                                                                <tr>
+                                                                    <td rowspan="2">@(count++)</td>
+                                                                    <td rowspan="2">@batch</td>
+                                                                    <td rowspan="2">@course</td>
+                                                                    <td rowspan="2">@_semester</td>
+                                                                    <td rowspan="2">
+                                                                        @_subject.SubjectFullName (@_subject.SubjectType.ToString())
+                                                                    </td>
+                                                                    <td rowspan="2">
+                                                                        <center>
+                                                                            <b><u>@_listOfStudentSubjectWiseWise.Count()</u> </b>
+                                                                        </center>
+                                                                    </td>
+                                                                    <td rowspan="2">@_listOfStudentSubjectWiseWise.Where(x => x.Gender.ToLower() == "male").Count()</td>
+                                                                    <td rowspan="2">@_listOfStudentSubjectWiseWise.Where(x => x.Gender.ToLower() == "female").Count()</td>
+                                                                    <td>
+                                                                        <b>Pass</b>
+                                                                    </td>
+                                                                    <td>
+                                                                        <center>
+                                                                            <b><u>@_passedStudents.Count()</u></b>
+                                                                        </center>
+                                                                    </td>
+                                                                    <td>
+                                                                        @_passedStudents.Where(x => x.Gender.ToLower() == "male").Count()
+                                                                    </td>
+                                                                    <td>
+                                                                        @_passedStudents.Where(x => x.Gender.ToLower() == "female").Count()
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+
+                                                                    <td>
+                                                                        <b>Fail</b>
+                                                                    </td>
+                                                                    <td>
+                                                                        <center>
+                                                                            <b><u>@_failedStudents.Count()</u></b>
+                                                                        </center>
+                                                                    </td>
+                                                                    <td>
+                                                                        @_failedStudents.Where(x => x.Gender.ToLower() == "male").Count()
+                                                                    </td>
+                                                                    <td>
+                                                                        @_failedStudents.Where(x => x.Gender.ToLower() == "female").Count()
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    }
+
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @if (StatisticsType == "ChoosenSubjectWise")
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading hidden-print">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse6">
+                                <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                &nbsp;Statistics: Subject Tile Wise
+                            </a>
+                        </h4>
+                    </div>
+
+                    <div class="panel-collapse collapse" id="collapse6" style="page-break-after: always; font-size: 10px;">
+                        <div class="panel-body">
+                            <table class="table table-bordered table-hover jsPrintTabContent">
+                                <thead>
+                                    <tr>
+                                        <th colspan="99">
+                                            <b>Statistics: Batch / Course / Subject Tile Wise</b>
+                                            <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align:center;">S.No</th>
+                                        <th>Batch</th>
+                                        <th>Course</th>
+                                        <th>Sem</th>
+                                        <th>Subject</th>
+                                        <th title="">Internal</th>
+                                        <th title="">External</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        count = 1;
+                                        foreach (var batch in batches)
+                                        {
+                                            var _listOfStudentBatchWise = Model.Where(x => x.Batch == batch).ToList();
+                                            var _listOfCourses = _listOfStudentBatchWise.Select(x => new { x.Programme, x.CourseFullName }).Distinct().OrderBy(x => x.CourseFullName).OrderBy(x => x.Programme).Select(x => x.CourseFullName).Distinct().ToList();
+                                            foreach (string course in _listOfCourses)
+                                            {
+                                                var _listOfStudentCourseWise = _listOfStudentBatchWise.Where(x => x.CourseFullName == course).ToList();
+
+                                                var _semesters = _listOfStudentCourseWise.SelectMany(x => x.SubjectResults.Select(x => x.Semester)).Distinct().OrderBy(x => x).ToList();
+                                                foreach (var _semester in _semesters)
+                                                {
+                                                    var _listOfSubjectsdeleted = _listOfStudentCourseWise.Where(x => x.SubjectResults.Where(y => y.Semester == _semester) != null).SelectMany(x => x.SubjectResults.Select(y => new { y.SubjectType, y.SubjectFullName, y.Subject_ID })).Distinct().OrderBy(x => x.SubjectFullName).OrderBy(x => x.SubjectType.ToString()).Select(x => x.Subject_ID).Distinct().ToList();
+
+                                                    var _listOfSubjects = _listOfStudentCourseWise.SelectMany(x => x.SubjectResults.Select(y => new { y.Subject_ID, y.SubjectFullName, y.SubjectType, y.Semester })).ToList().Where(x => x.Semester == _semester).Distinct().OrderBy(x => x.SubjectType.ToString()).ThenBy(x => x.SubjectFullName).ToList();
+
+                                                    if (_listOfStudentCourseWise.IsNotNullOrEmpty())
+                                                    {
+                                                        var _listOfStudentSemesterWise = _listOfStudentCourseWise.Select(x => new
+                                                        {
+                                                            x.Student_ID,
+                                                            x.Gender,
+                                                            x.HasTranscript,
+                                                            SubjectResults = x.SubjectResults.Where(y => y.Semester == _semester).ToList()
+                                                        }).ToList();
+
+                                                        foreach (var _subject in _listOfSubjects)
+                                                        {
+                                                            var _listOfStudentSubjectWiseWise = _listOfStudentSemesterWise.Select(x => new
+                                                            {
+                                                                x.Student_ID,
+                                                                x.Gender,
+                                                                x.HasTranscript,
+                                                                SubjectResults = x.SubjectResults.Where(y => y.Subject_ID == _subject.Subject_ID).ToList()
+                                                            }).Where(x => x.SubjectResults.IsNotNullOrEmpty()).ToList();
+
+                                                            if (_listOfStudentSubjectWiseWise.IsNotNullOrEmpty())
+                                                            {
+                                                                foreach (var item_row in _listOfStudentSubjectWiseWise.SelectMany(x => x.SubjectResults).ToList())
+                                                                {
+                                                                    bool showOnPublicView = item_row.ResultNotification_ID.HasValue && item_row.ExamForm_ID.HasValue && item_row.HasResult;
+                                                                    <tr>
+                                                                        <td>@(count++)</td>
+                                                                        <td>@batch</td>
+                                                                        <td>@course</td>
+                                                                        <td>@_semester</td>
+                                                                        <td>
+                                                                            @item_row.SubjectFullName (@item_row.SubjectType.ToString())
+                                                                        </td>
+                                                                        <td title="Total Internal marks">
+                                                                            @if (item_row.HasInternalComponent && showOnPublicView)
+                                                                            {
+                                                                                if ((item_row.InternalStatus == ResultStatus.P || item_row.InternalStatus == ResultStatus.F))
+                                                                                {
+                                                                                    <span>@item_row.TotalInternalMarksObtained.Value.ToString("f0")</span>
+                                                                                    <sup>@item_row.InternalStatus.ToString()</sup>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <span>@item_row.InternalStatus.ToString()</span>
+                                                                                }
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <span>-</span>
+                                                                            }
+                                                                        </td>
+                                                                        <td title="">
+                                                                            @if (item_row.HasExternalComponent && showOnPublicView)
+                                                                            {
+                                                                                if (item_row.HasInternalComponent)
+                                                                                {
+                                                                                    if (item_row.InternalStatus == ResultStatus.P)
+                                                                                    {
+                                                                                        if (item_row.TotalExternalMarksObtained.HasValue && (item_row.ExternalStatus == ResultStatus.P || item_row.ExternalStatus == ResultStatus.F))
+                                                                                        {
+                                                                                            <span>@item_row.TotalExternalMarksObtained.Value.ToString("f0")</span>
+                                                                                            <sup>@item_row.ExternalStatus.ToString()</sup>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <span>@item_row.ExternalStatus.ToString()</span>
+                                                                                        }
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <sup>F</sup>
+                                                                                    }
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    if (item_row.TotalExternalMarksObtained.HasValue && (item_row.ExternalStatus == ResultStatus.P || item_row.ExternalStatus == ResultStatus.F))
+                                                                                    {
+                                                                                        <span>@item_row.TotalExternalMarksObtained.Value.ToString("f0")</span>
+                                                                                        <sup>@item_row.ExternalStatus.ToString()</sup>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <span>@item_row.ExternalStatus.ToString()</span>
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <span>-</span>
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+                                                                            @if (item_row.OverallResultStatus == ResultStatus.P && showOnPublicView)
+                                                                            {<span>P</span> }
+                                                                            else
+                                                                            { <span title="@(Helper.GetEnumDescription<ResultStatus>(item_row.OverallResultStatus))">F</span>}
+                                                                        </td>
+
+                                                                    </tr>
+                                                                }
+
+
+
+                                                            }
+                                                        }
+                                                    }
+
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+}
+else
+{
+    <h3> No, records found</h3>
+    <hr />
+}
+

@@ -1,0 +1,38 @@
+﻿
+@model  List<CUSrinagar.Models.ProfessorCRClasses>
+@using CUSrinagar.Extensions
+@{
+    Layout = null;
+    var ISChecked = "";
+}
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th>Batch</th>
+            <th>Subject</th>
+            <th>Semester</th>
+            <th>Professor</th>
+            <th>CR</th>
+            <th>View Detail</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var row in Model)
+            {
+        <tr>
+            <td>@row.Batch</td>
+            <td>@row.SubjectFullName</td>
+            <td>@row.Semester</td>
+            <td>@row.Professor</td>
+            <td>@row.CR</td>
+            <td><a href='@Url.Action("SubjectClassDetailList","AssignSubject",new { area = "CUCollegeAdminPanel", @ProfessorCRClasses_ID= row.ProfessorCRClasses_ID })'><i class="fa fa-edit"></i></a></td>
+        </tr>
+            }
+        }
+    </tbody>
+</table>

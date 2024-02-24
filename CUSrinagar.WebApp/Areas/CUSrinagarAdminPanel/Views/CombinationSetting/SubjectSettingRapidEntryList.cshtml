@@ -1,0 +1,146 @@
+﻿@*@model IEnumerable<CUSrinagar.Models.SubjectCombinationSetting>
+@Html.Hidden("RapidEntryResponse", Newtonsoft.Json.JsonConvert.SerializeObject((GeneralModels.ResponseData)ViewBag.RapidEntryResponse))
+@{ 
+    Layout = null;
+}
+@if (ViewBag._ID != null)
+{
+    var TopIndex = Model == null ? 0 : Model.Count();
+    CUSrinagar.Models.SubjectCombinationSetting mainItem = ViewBag.SubjectSetting;
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>S.No.</th>
+                <th>Course</th>
+                <th>Sem</th>
+                <th>Subject Full Name</th>
+                <th>IsActive</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr id="jsNewRow">
+                <td>
+                    0
+                    @Html.Hidden("model[" + TopIndex + "].BaseSemester", mainItem.BaseSemester)
+                    @Html.Hidden("model[" + TopIndex + "].BaseSubjectFullName", mainItem.BaseSubjectFullName)
+                    @Html.Hidden("model[" + TopIndex + "].BaseSubject_ID", mainItem.BaseSubject_ID)
+                    @Html.Hidden("model[" + TopIndex + "].Batch", mainItem.Batch)
+                    @Html.Hidden("model[" + TopIndex + "].CourseFullName", mainItem.CourseFullName)
+                    @Html.Hidden("model[" + TopIndex + "]._ID", mainItem._ID)
+                    @Html.Hidden("model[" + TopIndex + "].BaseSemester", mainItem.BaseSemester)
+                </td>
+                <td>
+                    <div class="jsDDLContainer">
+                        @Html.DropDownList("model[" + TopIndex + "]._ID", new SelectList(ViewBag.Courses, "Value", "Text"),
+                                   "Select course", new
+                                   {
+                                       @class = "form-control chosen-select jsCourseDDL",
+                                       required = "required",
+                                       @data_scope = "row0"
+                                   })
+                    </div>
+                </td>
+                <td>
+                    <div class="jsDDLContainer">
+                        @Html.DropDownList("model[" + TopIndex + "].DependentSemester", new SelectList(ViewBag.Semesters, "Value", "Text"), new
+                   {
+                       @class = "form-control jsSemesterDDL",
+                       required = "required",
+                       @data_scope = "row0"
+                   })
+                    </div>
+                </td>
+                <td>
+                    <div class="col-sm-12 wd-650  jsDDLContainer">
+                        @Html.DropDownList("model[" + TopIndex + "].DependentSubject_ID", new SelectList(ViewBag.CurrentSemSubject ?? new List<SelectListItem>(), "Value", "Text"),
+                "--Select--", new
+                {
+                    @class = "form-control chosen-select jsSubjectDDL",
+                    @data_defaulttextvalue = "--Select--,",
+                    @data_scope = "row0"
+                })
+                    </div>
+                </td>
+                <td title="">
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label class="block">
+                                <input type="checkbox" name="IsActive" class="ace input-lg" Checked="checked" />
+                                <span class="lbl bigger"></span>
+                                @Html.Hidden("model[" + TopIndex + "].IsActive")
+                            </label>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-success btn-sm js-save-row"> Save </button>
+                    <button type="button" class="btn btn-primary btn-sm hidden">Cancel</button>
+
+                </td>
+            </tr>
+            @if (Model != null)
+            {
+                int i = 1;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @(i++)
+                            @Html.Hidden("model[" + TopIndex + "]._ID", item._ID)
+                            @Html.Hidden("model[" + TopIndex + "].BaseSubjectFullName", item.BaseSubjectFullName)
+                            @Html.Hidden("model[" + TopIndex + "].BaseSubject_ID", item.BaseSubject_ID)
+                            @Html.Hidden("model[" + TopIndex + "].Batch", item.Batch)
+                            @Html.Hidden("model[" + TopIndex + "].CourseFullName", item.CourseFullName)
+                            @Html.Hidden("model[" + TopIndex + "].Course_ID", item.Course_ID)
+                            @Html.Hidden("model[" + TopIndex + "].Dated", item.Dated)
+                            @Html.Hidden("model[" + TopIndex + "].BaseSemester", item.BaseSemester)
+                        </td>
+                        <td>
+                            <div class="col-sm-9 jsDDLContainer">
+                                @Html.DropDownList("model[" + TopIndex + "].Course_ID", new SelectList(ViewBag.Courses, "Value", "Text", item.Course_ID),
+                                           "Select course", new
+                                           {
+                                               @class = "form-control chosen-select jsCourseDDL",
+                                               required = "required",
+                                               @data_scope = "row1"
+                                           })
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-sm-9 jsDDLContainer">
+                                @Html.DropDownList("model[" + TopIndex + "].DependentSemester", new SelectList(ViewBag.Semesters, "Value", "Text", item.DependentSemester), new
+                           {
+                               @class = "form-control jsSemesterDDL",
+                               required = "required",
+                               @data_scope = "row1"
+                           })
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-sm-6 jsDDLContainer">
+                                @Html.DropDownList("model[" + TopIndex + "].DependentSubject_ID", new SelectList(ViewBag.CurrentSemSubject ?? new List<SelectListItem>(), "Value", "Text"),
+                        "--Select--", new
+                        {
+                            @class = "form-control chosen-select",
+                            @data_defaulttextvalue = "--Select--,"
+                        })
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label class="block">
+                                        <input type="checkbox" name="IsActive" class="ace input-lg" @(item.IsActive ? "Checked='checked'" : "") />
+                                        <span class="lbl bigger"></span>
+                                        @Html.Hidden("model[" + TopIndex + "].IsActive")
+                                    </label>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}*@

@@ -1,0 +1,58 @@
+﻿<div class="accordion" id="myAccordionRmenu">
+    <div class="panel">
+        <div class="panel-heading" data-toggle="collapse" data-target="#collapsible-1" data-parent="#myAccordionRmenu">
+            About CU Srinagar
+        </div>
+        <div id="collapsible-1" class="collapse">
+            <p style="padding:10px;">
+                The Cluster University of Srinagar (CUS) has been created by pooling the resources of five existing colleges of Amar Singh College,
+                Sri Pratap College, Govt. College for Women, M. A. Road, Govt. Degree College, Bemina and Govt. College of Education.
+                These five constituent colleges of the Cluster University have adequate academic, physical and technical infrastructural
+                facilities and
+                <a class="linkred" href='@Url.Action("AboutCUS","Home")'> more.. </a>
+            </p>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="panel-heading" data-toggle="collapse" data-target="#collapsible-2" data-parent="#myAccordionRmenu">The Concept</div>
+        <div id="collapsible-2" class="collapse">
+            <p style="padding:10px;">
+                The Cluster University concept, first of its kind in India introduced by the Jammu and Kashmir Government in the year 2016. It is expected to give an impetus to academics and research in the state.
+                <a class="linkblue" href='@Url.Action("TheConcept","Home")'>more</a>
+            </p>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="panel-heading" data-toggle="collapse" data-target="#collapsible-3" data-parent="#myAccordionRmenu">
+            Statutes and Act
+        </div>
+        <div id="collapsible-3" class="collapse">
+            <p style="padding:10px;">
+                <a class="linkblue" href=@Url.Content("~/FolderManager/TheAct/statutes.pdf") target="_blank">University Statutes and Act</a>
+            </p>
+        </div>
+    </div>
+
+    @*<dDigitiv class="panel">
+            <div class="panel-heading" data-toggle="collapse" data-target="#collapsible-4" data-parent="#myAccordionRmenu">
+                Activities Report
+            </div>
+            <div id="collapsible-4" class="collapse">
+                <p style="padding:0 0 5px 5px;">
+                    <a href=@Url.Content("~/FolderManager/ProgressReport/ProgressReport.pdf") target="_blank">University Activities Report - August,2017</a>
+                </p>
+            </div>
+        </div>*@
+
+</div>
+<style>
+    .panel-heading {
+        font-size: 14px;
+        color: #fff;
+        text-align: left;
+    }
+
+    #myAccordionRmenu .panel {
+        margin-bottom: 2px !important;
+    }
+</style>

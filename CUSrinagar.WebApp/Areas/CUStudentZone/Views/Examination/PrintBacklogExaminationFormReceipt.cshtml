@@ -1,0 +1,229 @@
+﻿@using CUSrinagar.Models
+@using CUSrinagar.Extensions
+
+@model List<CUSrinagar.Models.PaymentDetails>
+
+@{
+    ViewBag.Title = "Payment Response";
+    Layout = null;
+
+    string errorMessage = ViewBag.PaymentFailureMessage;
+    var _StudentExamFormDetail = (ARGStudentExamFormSubjects)ViewBag.StudentExamFormDetail;
+    var _StudentInfo = (ARGPersonalInformation)ViewBag.StudentInfo;
+
+    short _choosenSemester = 0;
+    try
+    {
+        _choosenSemester = (short)(ViewBag.SemesterChoosen ?? "0");
+    }
+    catch (Exception)
+    {
+        _choosenSemester = 0;
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Exam Form</title>
+    <link href="~/Content/ThemePublic/Libraries/plugins/news-ticker/assets/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/ThemePublic/Libraries/css/printer-frndly.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="A4 middle">
+    @if (Model != null)
+    {
+        <section class="sheet padding-5mm">
+            <div class="page-content ">
+                <div class="">
+                    @*<div class="col-sm-10 col-md-8 col-sm-offset-1">*@
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <div class="row panel panel-body well">
+                            <div class="">
+                                <div class="text-center">
+                                    <img src="@Url.Content("~/Content/ThemePublic/Libraries/images/cus-logo1.svg")" width="500" height="50" />
+                                    <h4 class="text-success">
+                                        <b>
+                                            @if (_StudentExamFormDetail.IsDivisionImprovement)
+                                            {
+                                                <text>Division Improvement </text>
+                                            }
+                                            else
+                                            {
+                                                <text>Backlog </text>
+                                            }
+                                            Exam Form (@_StudentInfo.CourseFullName Semester-@_StudentExamFormDetail.Semester)
+                                        </b>
+                                    </h4>
+                                    <b>Printed on @DateTime.Now.ToLongDateString()</b>
+                                </div>
+
+                                <div class="table-bordered" style="margin:20px">
+                                    <table class="table no-margin-bottom">
+                                        <tbody>
+                                            <tr>
+                                                <td class="col-md-9">Registration Number:<b> @_StudentInfo.CUSRegistrationNo </b></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="col-md-9">Name:<b> @_StudentInfo.FullName </b></td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="col-md-9">Parentage:<b> @_StudentInfo.FathersName </b></td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="col-md-9">
+                                                    Transaction Reference Number(s):<b>
+                                                        @string.Join(",", Model.Select(i => i.TxnReferenceNo))
+                                                    </b>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="col-md-9">Transaction Date(s):<b> @string.Join(",", Model.Select(i => i.TxnDate))</b></td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="col-md-9">Form Number :<b> @_StudentExamFormDetail.FormNumber</b></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Mobile No :<b> @string.Join(",", Model.Select(i => i.PhoneNumber).Distinct())</b></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Email: <b>@string.Join(",", Model.Select(i => i.Email).Distinct())</b></td>
+                                            </tr>
+                                            @if (_StudentExamFormDetail.IsDivisionImprovement)
+                                            {
+                                                <tr>
+                                                    <td>Division Improvement Form: <b>YES</b></td>
+                                                </tr>
+                                            }
+
+                                            @if (_StudentExamFormDetail != null && _StudentExamFormDetail.ReAppearSubjects != null)
+                                            {
+                                                var listOfAppliedSubjects = _StudentExamFormDetail.ReAppearSubjects.Where(x => x.IsApplied && x.FeeStatus == CUSrinagar.Enums.FormStatus.FeePaid || x.FeeStatus == CUSrinagar.Enums.FormStatus.UpdatedManually)?.ToList();
+                                                if (listOfAppliedSubjects != null && listOfAppliedSubjects.Count() > 0)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <span>
+                                                                Subjects in which to Re-appear
+                                                                @if (_StudentExamFormDetail.IsDivisionImprovement)
+                                                                {
+                                                                    <text> for division improvement</text>
+                                                                }
+                                                                :
+                                                            </span>
+                                                            <ol class="list-inline">
+                                                                @for (int i = 0; i < listOfAppliedSubjects.Count; i++)
+                                                                {
+                                                                    <li class=""><label class="">@(i + 1))</label><b> @listOfAppliedSubjects[i].SubjectFullName  (@listOfAppliedSubjects[i].SubjectType.GetEnumDescription())</b> <br /> </li>
+                                                                }
+                                                            </ol>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                            @if (_StudentExamFormDetail != null && _StudentExamFormDetail.AdditionalSubjects != null)
+                                            {
+                                                var listofAdditionalSubjects = _StudentExamFormDetail.AdditionalSubjects;
+                                                if (listofAdditionalSubjects != null)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <b> Additional subjects :</b>
+                                                            <ol class="list-inline">
+                                                                @for (int i = 0; i < listofAdditionalSubjects.Count; i++)
+                                                                {
+                                                                    <li class=""><label class="">@(i + 1).&nbsp;&nbsp; </label>@listofAdditionalSubjects[i].Subject.SubjectFullName <br /> </li>
+                                                                }
+                                                            </ol>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                            <tr>
+                                                <td class="text-right float-right right">
+
+                                                    Total Amount Paid : <strong>Rs.@Model.Sum(i => i.TxnAmount)</strong>
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="clearfix hidden-print"></div>
+                            <div>
+                                <b>Important : </b>
+                                <h5>
+                                    <strong>
+                                        Students who are submitting their exam forms are advised to keep the downloaded copy with them
+                                        and contact college for further formalities (if required).
+                                    </strong>
+                                </h5>
+                                <hr />
+                                @if (_StudentExamFormDetail.IsDivisionImprovement)
+                                {
+                                    <h5>Note :</h5>
+                                    <ol>
+                                        <li>
+                                            <i style="font-size:17px;text-align:justify">
+                                                Candidates applying for Division Improvement should submit original certificates
+                                                (Issued by Cluster University Of Srinagar) in the University
+                                                Examination Section in-case any certificate is issued to him / her, at the time of
+                                                Issuance of new updated Certificates.
+                                            </i>
+                                        </li>
+                                    </ol>
+                                }
+                                else
+                                {
+                                    <h5>WARNING!</h5>
+                                    <ol>
+                                        <li>
+                                            Those candidates who have not appeared in internal/continous assesment are not eligible to appear in exam and their
+                                            form will be cancelled. (Also the subject(s) in which internal/continous assesment is not
+                                            cleared will not appear on Admit Card).
+                                        </li>
+                                        <li><strong>In case of any discrepancy please visit / contact College.</strong></li>
+                                    </ol>
+                                }
+                                <hr />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="noneOnPrint print-download-strip">
+            <a style="color: #ffffff;background-color: #080808;border-color: #59f908;" href="@Url.Action("Examination", "Examination")" class="btn btn-default">Back</a>
+            <button style="color: #ffffff;background-color: #080808;border-color: #59f908;" href="#" class="btn btn-default" onclick="window.print();"><b>Download / Print Examination Form </b></button>
+        </div>
+    }
+    else
+    {
+        <section class="sheet padding-5mm">
+            <hr />
+            <hr />
+            <h1 class="center">No Form Found.</h1>
+            <hr />
+            <hr />
+        </section>
+    }
+    @if (ViewBag.RedirectFromPaymentGateWay == true)
+    {
+        <script src="@Url.Content("~/Content/ThemePublic/Libraries/disableBack.js")"></script>
+        <script>
+            $(document).ready(function () {
+                $("[id*=Section]").removeClass("active");
+                $("#ExaminationFormSection").addClass("active");
+            });
+        </script>
+    }
+</body>
+</html>
+

@@ -1,0 +1,38 @@
+﻿@model  List<CUSrinagar.Models.ResultAnomalies>
+@using CUSrinagar.Extensions
+
+@{
+    Layout = null;
+}
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th>Reason</th>
+            <th>Created On</th>
+            <th> Type</th>
+        </tr>
+    </thead>
+
+    <tbody style="background: azure;">
+        @if (Model != null)
+        {
+            foreach (var row in Model)
+            {
+        <tr>
+
+            <td>
+                @row.Reason
+            </td>
+            <td>
+                @row.CreatedOn
+            </td>
+            <td>
+                @row.AnomalyType
+            </td>
+        </tr>
+            }
+        }
+    </tbody>
+</table>
+

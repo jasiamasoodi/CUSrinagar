@@ -1,0 +1,76 @@
+﻿@model  CUSrinagar.Models.ADMSubjectMaster
+@{
+
+}
+<div class="panel-body">
+
+    <div class="col-sm-25 search-box">
+        <label class="col-sm-25">Select College</label>
+        @Html.DropDownListFor(model => model.College_ID, new SelectList(ViewBag.CollegeDDLList, "Value", "Text"),
+                                                             "--Select--", new { Class = "ddlStyle", id = "ddlCollege" })
+    </div>
+
+</div>
+<div class="page-wrapper pager-table-text">
+    <div class="page-wrapper pager-table-text">
+        <div class="page-content">
+            <div class="row page-row">
+                <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+                <div class="col-md-12 jsTableContent">
+                    <div class="panel panel-primary js-pager-table">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Subject
+                                <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                    <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                                </span>
+
+                            </h3>
+                        </div>
+                        @*<div class="panel-body">
+
+                            <div class="col-sm-12 search-box">
+                                <label class="col-sm-12">Advance Search</label>
+                                @Html.DropDownListFor(model => model.College_ID, new SelectList(ViewBag.CollegeDDLList, "Value", "Text"),
+                                                             "--Select--", new { Class = "ddlStyle", id = "ddlCollege" })
+                            </div>
+
+                        </div>*@
+                        <div class="js-table-content" data-url=@Url.Action("GetSkillSubjectsByCollegeID", "Syllabus", new { area = string.Empty }) data-DefaultOrderByColumn="SubjectFullName">
+                           
+                        </div>
+                        @{Html.RenderPartial("_JSPagerTableFooter");}
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section PageSpecificJS{
+    <script>
+        $(document).ready(function () {
+            $("#ddlCollege").on("change", function () {
+                $.ajax({
+                    url: '/Syllabus/GetSkillSubjectsByCollege?Id=' + $(this).find('option:selected').val(),
+                    type: 'GET',
+                    data: "",
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        //$("#partialDiv").html(data);
+                        $(".jsTableContent").html(data);
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+
+            });
+        });
+
+    </script>
+}

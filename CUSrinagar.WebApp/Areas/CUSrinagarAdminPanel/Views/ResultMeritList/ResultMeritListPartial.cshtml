@@ -1,0 +1,40 @@
+﻿@model IEnumerable<CUSrinagar.Models.ResultList>
+@using CUSrinagar.Enums
+<table class="table table-hover table-bordered ">
+    <thead>
+        <tr>
+            <th title="Serial Number">No</th>
+            <th title="Serial Number">Batch</th>
+            <th data-property="CourseFullName">Course</th>
+            <th data-property="FullName">Full Name</th>
+            <th data-property="CUSRegistrationNo">CUS Registration No.</th>
+            <th title="Examination Roll Number" data-property="ExamRollNumber">Exam Roll No</th>
+            <th title="Updated on" data-property="CGPA">CGPA</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+        <tr class="jsRowAction">
+            <td>
+                <span class="js-sno"></span>
+                <td>@item.Batch</td>
+            <td>@item.CourseFullName</td>
+            <td>@item.FullName</td>
+            <td>@item.CUSRegistrationNo</td>
+            <td>@item.ExamRollNumber</td>
+            <td>@item.CGPA</td>
+         
+         
+
+        </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+

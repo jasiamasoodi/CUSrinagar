@@ -1,0 +1,643 @@
+﻿@using CUSrinagar.Models
+@using CUSrinagar.BusinessManagers
+@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc;
+@using CUSrinagar.Extensions
+
+
+@model ARGPersonalInformation
+
+@{
+    // Integrated b.ed-M.ed and Engineering LE
+
+    //HttpContext.Current.Response.Redirect("/NEP/");
+
+    ViewBag.Title = $"Integrated / Honor's / Professional / Graduation Registration Form {DateTime.UtcNow.Year} - ";
+    string title = "e.g GENERAL, ARTS, MEDICAL"; string placeholder = "e.g ARTS";
+    title = ((bool)ViewBag.IsBEdMEdAdm) ? "e.g MSc,MA" : title;
+    placeholder = ((bool)ViewBag.IsBEdMEdAdm) ? "e.g MSc,MA" : placeholder;
+    string _IsBEdMEdAdm = ((bool)ViewBag.IsBEdMEdAdm) ? "True" : "False";
+    ARGFormNoMaster formNoMaster = ViewBag.FormNoMater;
+
+    if (formNoMaster.ShowLateralEntry)
+    {
+        ((List<SelectListItem>)ViewBag.Provisional).Remove(((List<SelectListItem>)ViewBag.Provisional).First(x => x.Value == "True"));
+    }
+
+    ARGCoursesApplied coursesAppliedGraduation = null;
+    string hideCourseSection = "";
+}
+<div id="Jspleasewait" style="display:none;position:fixed;background-color:rgba(0, 0, 0, 0.20);left:0;top:0;z-index:200;width:100%;height:100%">
+    <p style="font-size:30px;font-weight:bold;color:white;margin-top:20%;margin-left:41%">
+        Please wait...
+    </p>
+</div>
+<div class="page-wrapper pt-text-style">
+
+    <div id="response">
+        @if (TempData["response"] != null)
+        {
+            @Html.Raw(TempData["response"])
+        }
+    </div>
+    <div class="page-content">
+        @using (Html.BeginForm("IntegratedHonors", "Registration", FormMethod.Post, new { @enctype = "multipart/form-data", @id = "StdRegistration" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.Hidden("IsBEdMEdAdm", _IsBEdMEdAdm)
+
+            @Html.Hidden("BasicFee", formNoMaster.BasicFee)
+            @Html.Hidden("PerCourse", formNoMaster.PerCourse)
+            @Html.Hidden("AdditionalFeeForNonJK", formNoMaster.AdditionalFeeForNonJK)
+            @Html.Hidden("FeeForAlreadyInIH", formNoMaster.FeeForAlreadyInIH)
+            @*------------------------board reg &course Section-----------------------------------*@
+            <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                <div class="content-wrapper">
+                    <h4 style="margin-left:10px;">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                        @Html.LabelFor(model => model.BoardRegistrationNo, new { @class = "small-70" })
+                        <span style="margin-left:15%">
+
+                            @if (formNoMaster.AllowApplyForSelfFinancedSeat)
+                            {
+                                <strong style="color:red !important;">Self-Finance Form</strong>
+                            }
+                            else
+                            {
+                                <span>Fields marked with <strong style="color:red;">*</strong> are mandatory.</span>
+                            }
+                        </span>
+                        <a class="pull-right" href="@Url.Action("Instructions", "Registration", new { area = string.Empty })">Go Back to Instructions&nbsp;&nbsp;&nbsp;</a>
+                    </h4> <hr />
+                    <div class="col-lg-4"></div>
+                    <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                        Enter @Html.LabelFor(model => model.BoardRegistrationNo, new { @class = "small-70" })
+                        <span class="required">
+                            *
+                            @Html.ValidationMessageFor(model => model.BoardRegistrationNo)
+                        </span><br />
+                        @Html.Hidden("programme", (int)CUSrinagar.Enums.PrintProgramme.IH)
+                        @Html.Hidden(nameof(Model.TotalFee), "0")
+                        @Html.TextBoxFor(model => model.BoardRegistrationNo, new { @class = "form-control ", @maxlength = "150", @onkeypress = "return forAdmissionRollNo(event);" })
+                    </label>
+                </div>
+            </div>
+
+
+
+            @*------------------------------------ End board reg Section -----------------------------------*@
+
+            @*------------------------------------Personal Details Section-----------------------------------*@
+            <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                <div class="content-wrapper">
+                    <h4 style="margin-left:10px;">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                        <strong>Personal Information</strong>
+                    </h4> <hr />
+
+                    <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                        @Html.LabelFor(model => model.FullName, new { @class = "small-70" })
+                        <span class="required">
+                            *
+                            @Html.ValidationMessageFor(model => model.FullName)
+                        </span><br />
+                        @Html.TextBoxFor(model => model.FullName, new { @class = "form-control", @maxlength = "150", @onkeypress = "return forNameOnly(event);" })
+                    </label>
+
+                    <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                        @Html.LabelFor(model => model.FathersName, new { @class = "small-70" })
+                        <span class="required">
+                            *
+                            @Html.ValidationMessageFor(model => model.FathersName)
+                        </span><br />
+                        @Html.TextBoxFor(model => model.FathersName, new { @class = "form-control", @maxlength = "150", @onkeypress = "return forNameOnly(event);" })
+                    </label>
+
+                    <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                        @Html.LabelFor(model => model.MothersName, new { @class = "small-70" })
+                        <span class="required">
+                            *
+                            @Html.ValidationMessageFor(model => model.MothersName)
+                        </span><br />
+                        @Html.TextBoxFor(model => model.MothersName, new { @class = "form-control", @maxlength = "150", @onkeypress = "return forNameOnly(event);" })
+                    </label>
+
+
+                    <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                        @Html.LabelFor(model => model.Gender)
+                        <span class="required">
+                            *
+                            @Html.ValidationMessageFor(model => model.Gender)
+                        </span><br />
+                        @Html.DropDownListFor(model => model.Gender, (IEnumerable<SelectListItem>)ViewBag.GenderDDL, string.Empty, new { @class = "form-control" })
+                    </label>
+
+                    <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                        @Html.LabelFor(model => model.Religion)
+                        <span class="required">
+                            *
+                            @Html.ValidationMessageFor(model => model.Religion)
+                        </span><br />
+                        @Html.DropDownListFor(model => model.Religion, (IEnumerable<SelectListItem>)ViewBag.ReligionDDL, string.Empty, new { @class = "form-control" })
+                    </label>
+
+                    <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                        @Html.LabelFor(model => model.Category)
+                        <span class="required">
+                            *
+                            @Html.ValidationMessageFor(model => model.Category)
+                        </span><br />
+                        @Html.DropDownListFor(model => model.Category, (IEnumerable<SelectListItem>)ViewBag.CategoryDDL, string.Empty, new { @class = "form-control" })
+
+                    </label>
+
+                    <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                        @Html.LabelFor(model => model.EnteredDOB)
+                        <span class="required">
+                            *
+                            @Html.ValidationMessageFor(model => model.EnteredDOB)
+                        </span><br />
+                        @Html.TextBoxFor(model => model.EnteredDOB, new { @maxlength = "10", @class = "form-control dateDDMMYYY", @placeholder = "dd-mm-yyyy" })
+                    </label>
+
+                    @if (((bool)ViewBag.IsBEdMEdAdm))
+                    {
+                        <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                            @Html.LabelFor(model => model.PreviousUniversityRegnNo, new { @class = "small-70" })
+                            <span class="required">
+                                *
+                                @Html.ValidationMessageFor(model => model.PreviousUniversityRegnNo)
+                            </span><br />
+
+                            @Html.TextBoxFor(model => model.PreviousUniversityRegnNo, new { @class = "form-control ", @maxlength = "150", @onkeypress = "return forAdmissionRollNo(event);" })
+                        </label>
+                    }
+                    else
+                    {
+                        @Html.Hidden(nameof(Model.PreviousUniversityRegnNo), "null")
+                    }
+
+                </div>
+            </div>
+            @*------------------------------------End Personal Details Section-----------------------------------*@
+
+
+            @*------------------------------------Address Information Section-----------------------------------*@
+            <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                <div class="content-wrapper">
+                    <h4 style="margin-left:10px;"><i class="fa fa-map-marker" aria-hidden="true"></i> <strong>Address Information</strong> </h4><hr />
+
+                    <label class="col-sm-12 lbl bigger-120 no-padding-right">
+                        @Html.LabelFor(model => model.StudentAddress.PermanentAddress, new { @class = "small-70" })
+                        <span class="required">
+                            *
+                            @Html.ValidationMessageFor(model => model.StudentAddress.PermanentAddress)
+                        </span><br />
+                        @Html.TextBoxFor(model => model.StudentAddress.PermanentAddress, new { @class = "form-control", @maxlength = "400", @onkeypress = "return forAddressOnly(event);" })
+                    </label>
+
+                    <label class="col-sm-4 lbl bigger-120 no-padding-right">
+
+                        @Html.LabelFor(model => model.StudentAddress.PinCode, new { @class = "small-70" })
+                        <span class="required">
+                            *
+                            @Html.ValidationMessageFor(model => model.StudentAddress.PinCode)
+                        </span><br />
+                        @Html.TextBoxFor(model => model.StudentAddress.PinCode, new { @class = "form-control", @maxlength = "6", @onkeypress = "return numbersOnly(event);" })
+                    </label>
+
+                    <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                        @Html.LabelFor(model => model.StudentAddress.Mobile, new { @class = "small-70" })
+                        <span class="required">
+                            *
+                            @Html.ValidationMessageFor(model => model.StudentAddress.Mobile)
+                        </span><br />
+                        @Html.TextBoxFor(model => model.StudentAddress.Mobile, new { @class = "form-control", @maxlength = "10", @onkeypress = "return numbersOnly(event);", @title = "Provide a valid Mobile No. to enable University to send alerts, important communications etc" })
+                    </label>
+
+                    <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                        @Html.LabelFor(model => model.StudentAddress.Email, new { @class = "small-70" })
+                        <span class="required">
+                            *
+                            @Html.ValidationMessageFor(model => model.StudentAddress.Email)
+                        </span><br />
+                        @Html.TextBoxFor(model => model.StudentAddress.Email, new { @class = "form-control", @maxlength = "150", @title = "Provide a valid Email to enable University to send alerts, important communications etc" })
+                        @Html.Hidden("StudentAddress.PProgramme", (int)CUSrinagar.Enums.PrintProgramme.IH)
+                    </label>
+                    <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                        @Html.LabelFor(model => model.StudentAddress.Block, new { @class = "small-70" })
+                        <span class="required">
+                            *
+                            @Html.ValidationMessageFor(model => model.StudentAddress.Block)
+                        </span><br />
+
+                        @Html.TextBoxFor(model => model.StudentAddress.Block, new { @class = "form-control", @maxlength = "200", @onkeypress = "return forAddressOnly(event);" })
+                    </label>
+
+                    <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                        @Html.LabelFor(model => model.StudentAddress.Tehsil, new { @class = "small-70" })
+                        <span class="required">
+                            *
+                            @Html.ValidationMessageFor(model => model.StudentAddress.Tehsil)
+                        </span><br />
+
+                        @Html.TextBoxFor(model => model.StudentAddress.Tehsil, new { @class = "form-control", @maxlength = "200", @onkeypress = "return forAddressOnly(event);" })
+
+                    </label>
+
+                    <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                        @Html.LabelFor(model => model.StudentAddress.District, new { @class = "small-70" })
+                        <span class="required">
+                            *
+                            @Html.ValidationMessageFor(model => model.StudentAddress.District)
+                        </span><br />
+                        @Html.DropDownListFor(model => model.StudentAddress.District, (IEnumerable<SelectListItem>)ViewBag.DistrictDDL, string.Empty, new { @class = "form-control" })
+                    </label>
+
+                    <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                        @Html.LabelFor(model => model.StudentAddress.AssemblyConstituency, new { @class = "small-70" })
+                        <span class="required">
+                            *
+                            @Html.ValidationMessageFor(model => model.StudentAddress.AssemblyConstituency)
+                        </span><br />
+
+                        @Html.DropDownListFor(model => model.StudentAddress.AssemblyConstituency, (IEnumerable<SelectListItem>)ViewBag.AssemblyDDL, string.Empty, new { @class = "form-control" })
+                    </label>
+                </div>
+            </div>
+            @*------------------------------------End Address Information Section-----------------------------------*@
+
+
+            @*------------------------------------Academic Qulafications Section-----------------------------------*@
+            <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                <div class="content-wrapper">
+                    <h4 style="margin-left:10px;">
+                        <i class="fa fa-database" aria-hidden="true"></i>
+                        <strong>Academic Qualifications </strong>
+                    </h4>
+                    <hr />
+                    @if (((bool)ViewBag.IsBEdMEdAdm) || formNoMaster.ShowLateralEntry)
+                    {
+                        @Html.Hidden("IsProvisional", "False")
+                    }
+                    else
+                    {
+                        <strong>
+                            <label class="col-sm-3 no-padding-right" style="width:200px">
+                                <strong class="">@Model.AcademicDetails[0].ExamName Result</strong>
+                            </label>
+                        </strong>
+                        <strong>
+                            <label class="col-sm-3 lbl bigger-120 no-padding-right">
+                                @Html.DropDownListFor(model => model.IsProvisional, (IEnumerable<SelectListItem>)ViewBag.Provisional, string.Empty, new { @class = "form-control" })
+                            </label>
+                        </strong>
+                        <strong>
+                            <label class="col-sm-3 lbl bigger-120 no-padding-right">
+                                <span class="required">
+                                    *
+                                    @Html.ValidationMessageFor(model => model.IsProvisional)
+                                </span>
+                            </label>
+                        </strong>
+                        <br />
+                    }
+                    <table class=table-acedemic>
+                        <thead>
+                            <tr>
+                                <th class=table-acedemic-th>Exam Name<span class="required"> *</span></th>
+                                <th class=table-acedemic-th>Stream<span class="required"> *</span></th>
+                                @if (formNoMaster.ShowLateralEntry)
+                                {
+                                    <th class=table-acedemic-th>Subjects/Branch<span class="required"> *</span></th>
+                                }
+                                else
+                                {
+                                    <th class=table-acedemic-th>Subjects<span class="required"> *</span></th>
+                                }
+                                <th class=table-acedemic-th>Session<span class="required"> *</span></th>
+                                <th class=table-acedemic-th>Year<span class="required"> *</span></th>
+                                <th class=table-acedemic-th>Roll No<span class="required"> *</span></th>
+                                <th class=table-acedemic-th>Max Marks<span class="required"> *</span></th>
+                                <th class=table-acedemic-th>Marks Obt<span class="required"> *</span></th>
+                                <th class=table-acedemic-th>Board/University Name<span class="required"> *</span></th>
+                            </tr>
+                        </thead>
+                        <tbody class=table-acedemic-body>
+                            @{int index = 0;}
+                            @if (Model != null && Model.AcademicDetails != null)
+                            {
+                                for (index = 0; index < Model.AcademicDetails.Count; index++)
+                                {
+                                    <tr id="@Model.AcademicDetails[index].ExamName.Replace("/","").Replace(".","")">
+                                        <th style="padding-left:20px">
+                                            <span class="required">
+                                                @Html.ValidationMessageFor(model => model.AcademicDetails[index].ExamName)
+                                            </span>
+                                            @if (Model.AcademicDetails[index].ReadOnly)
+                                            {
+                                                @Html.DisplayFor(model => model.AcademicDetails[index].ExamName, new { @class = "form-control width100", @maxlength = "2", @onkeypress = "return forAddressOnly(event);", @title = "Exam Name", @readonly = "readonly", @style = "border:1;border-color: darkgray;" })
+                                                @Html.HiddenFor(model => model.AcademicDetails[index].ExamName)
+                                                @Html.HiddenFor(model => model.AcademicDetails[index].ReadOnly, new { value = "True" })
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(model => model.AcademicDetails[index].ExamName, new { @maxlength = "140", @onkeypress = "return forAddressOnly(event);", @title = "Exam Name", @style = "border:0", @class = "width100" })
+                                            }
+                                        </th>
+                                        <td>
+                                            <span class="required">
+                                                @Html.ValidationMessageFor(model => model.AcademicDetails[index].Stream)
+                                            </span>
+                                            @*@if (Model.AcademicDetails[index].ExamName.Trim() == "Post-Graduation" )
+                                                {*@
+                                            @Html.TextBoxFor(model => model.AcademicDetails[index].Stream, new { @class = "form-control width100" })
+                                            @*}
+                                                else
+                                                {
+                                                    @Html.DropDownListFor(model => model.AcademicDetails[index].Stream, (IEnumerable<SelectListItem>)ViewBag.I2thStreamDDL, string.Empty, new { @class = "form-control width100" })
+                                                }*@
+                                        </td>
+                                        <td>
+                                            <span class="required">
+                                                @Html.ValidationMessageFor(model => model.AcademicDetails[index].Subjects)
+                                            </span>
+                                            @Html.TextBoxFor(model => model.AcademicDetails[index].Subjects, new { @class = "form-control width100", @maxlength = "400", @onkeypress = "return forAddressOnly(event);", @title = "Subjects separated by comma", placeholder = "Separated by ," })
+                                        </td>
+                                        <td>
+                                            <span class="required">
+                                                @Html.ValidationMessageFor(model => model.AcademicDetails[index].Session)
+                                            </span>
+                                            @Html.DropDownListFor(model => model.AcademicDetails[index].Session, (IEnumerable<SelectListItem>)ViewBag.Session, string.Empty, new { @class = "form-control width100" })
+                                        </td>
+                                        <td>
+                                            <span class="required">
+                                                @Html.ValidationMessageFor(model => model.AcademicDetails[index].Year)
+                                            </span>
+                                            @Html.TextBoxFor(model => model.AcademicDetails[index].Year, new { @class = "form-control width100", @maxlength = "4", @onkeypress = "return numbersOnly(event);", @title = "Year Of Passing" })
+                                        </td>
+                                        <td>
+                                            <span class="required">
+                                                @Html.ValidationMessageFor(model => model.AcademicDetails[index].RollNo)
+                                            </span>
+                                            @Html.TextBoxFor(model => model.AcademicDetails[index].RollNo, new { @class = "form-control width100", @maxlength = "80", @onkeypress = "return forAdmissionRollNo(event);", @title = "RollNo" })
+                                        </td>
+                                        <td>
+                                            <span class="required">
+                                                @Html.ValidationMessageFor(model => model.AcademicDetails[index].MaxMarks)
+                                            </span>
+                                            @Html.TextBoxFor(model => model.AcademicDetails[index].MaxMarks, new { @class = "form-control width100 jsvalmm", @maxlength = "4", @onkeypress = "return numbersOnly(event);", @title = "Maximum Marks" })
+                                        </td>
+
+                                        <td>
+                                            <span class="required">
+                                                @Html.ValidationMessageFor(model => model.AcademicDetails[index].MarksObt)
+                                            </span>
+                                            @Html.TextBoxFor(model => model.AcademicDetails[index].MarksObt, new { @class = "form-control width100 jsvalminm", @maxlength = "7", @onkeypress = "return floatNumbersOnly(event);", @title = "Marks Obtained" })
+                                        </td>
+                                        <td>
+                                            <span class="required">
+                                                @Html.ValidationMessageFor(model => model.AcademicDetails[index].ExamBody)
+                                            </span>
+                                            @Html.DropDownListFor(model => model.AcademicDetails[index].ExamBody, (IEnumerable<SelectListItem>)ViewBag.Boards, string.Empty, new { @class = "form-control width100" })
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @*-----------------------------end Academic Qulafications section-----------------------------------*@
+            @*------------Add Graduation Course if any -------------------*@
+            {
+                coursesAppliedGraduation =
+                                Model.CoursesApplied.FirstOrDefault(x => x.Course_ID == Guid.Parse("A3EE7F98-7B82-4D95-A2C0-FABA7A18240E"));
+
+                int indexOfGraduation = Model.CoursesApplied.IndexOf(coursesAppliedGraduation ?? new ARGCoursesApplied());
+
+                if (coursesAppliedGraduation != null)
+                {
+                    hideCourseSection = "hidden";
+                    <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                        <div class="col-sm-12 quadraText" style="padding:20px;">
+                            <div class="col-sm-4" style="font-size:17px !important;padding:20px;">
+                                @Html.HiddenFor(model => model.CoursesApplied[indexOfGraduation].Course_ID)
+                                @Html.HiddenFor(model => model.CoursesApplied[indexOfGraduation].CourseName)
+                                @Html.CheckBoxFor(model => model.CoursesApplied[indexOfGraduation].IsClicked, new { @dataid = Model.CoursesApplied[indexOfGraduation].Course_ID, @class = "JSCourseClk ugonly" })
+                                Apply for @Model.CoursesApplied[indexOfGraduation].CourseName.Replace("Integrated", "").Replace("Honor's", "")
+                            </div>
+
+                            <div class="col-sm-5" style="font-size:17px !important;padding:20px;">
+                                @if (Model.CoursesApplied.Count(x => x.Course_ID != Guid.Parse("A3EE7F98-7B82-4D95-A2C0-FABA7A18240E")) > 0)
+                                {
+                                    <input type="checkbox" id="showorhideigsection" /> <text>Apply for Integrated / Honor's / Professional</text>
+                                }
+                            </div>
+                            <div class="col-sm-3" style="padding:20px;">
+                                <span style="float:right;margin-right:20px;color:black;font-weight:bold;" id="jsfeeug"></span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+
+            @*-----------------------------Courses section-----------------------------------*@
+            <div class="row page-row @hideCourseSection" style="background-color:white;padding-bottom: 10px" id="CourseSection">
+                <div class="content-wrapper">
+                    <h4 style="margin-left:10px;">
+                        <strong>
+                            <i class="fa fa-book" aria-hidden="true"></i> @Html.LabelFor(model => model.CoursesApplied, new { @class = "small-70" })
+                            <span class="required">
+                                *
+                            </span>
+                        </strong>
+                        <span style="float:right;margin-right:20px;color:black;font-weight:bold;" id="Jsfee"></span>
+                    </h4> <hr />
+                    <div class="col-sm-12">
+                        @{string lbl = string.Empty;}
+                        @for (int i = 0; i < Model.CoursesApplied.Count; i++)
+                        {
+                            if (Model.CoursesApplied[i].Course_ID == Guid.Parse("A3EE7F98-7B82-4D95-A2C0-FABA7A18240E"))
+                            {
+                                continue;
+                            }
+
+                            if (lbl != Model.CoursesApplied[i].Programme.ToString().ToLower() && lbl != string.Empty)
+                            {
+                                <div class="col-sm-12"><hr /></div>
+                            }
+                            if (lbl != Model.CoursesApplied[i].Programme.ToString().ToLower())
+                            {
+                                <h4 class="col-sm-12">
+                                    <span style="background-color:#0db12f;padding:3px 10px;width:100%;color:white;">
+                                        @if (Model.CoursesApplied[i].Programme == CUSrinagar.Enums.Programme.UG)
+                                        {
+                                            <text>3 Year Professional Courses</text>
+                                        }
+                                        else
+                                        {
+                                            if (formNoMaster.ShowLateralEntry)
+                                            {
+                                                @Html.Hidden("IsLateralEntry", "True")
+                                                <text>Engineering Lateral Entry Courses</text>
+                                            }
+                                            else
+                                            {
+                                                @Model.CoursesApplied[i].Programme.GetEnumDescription() <text>Courses</text>
+                                            }
+                                        }
+                                    </span>
+                                </h4>
+                            }
+                            <div class="col-sm-4 lbl bigger-120 no-padding-right" style="margin-bottom:10px;" id="@Model.CoursesApplied[i].Course_ID.ToString().ToLower()">
+                                <div class="col-sm-12">
+                                    @*7*@
+                                    @Html.HiddenFor(model => model.CoursesApplied[i].Course_ID)
+                                    @Html.HiddenFor(model => model.CoursesApplied[i].CourseName)
+                                    @Html.CheckBoxFor(model => model.CoursesApplied[i].IsClicked, new { @dataid = Model.CoursesApplied[i].Course_ID, @class = "JSCourseClk" })
+                                    @Model.CoursesApplied[i].CourseName.Replace("Integrated", "").Replace("Honor's", "").Replace("Bachelor of ", "")
+                                </div>
+                                @*------------------ Preference ------------------------------*@
+                                @if (((bool)ViewBag.IsBEdMEdAdm) == false)
+                                {
+                                    if (formNoMaster.ShowLateralEntry)// comment if allowed for all
+                                    {
+                                        <div class="col-sm-4">
+                                            @Html.DropDownListFor(model => model.CoursesApplied[i].Preference, (IEnumerable<SelectListItem>)ViewBag.EngPreferences, "--Select Preference--", new { @class = Model.CoursesApplied[i].Course_ID })
+                                        </div>
+                                    }
+                                }
+                                <div class="col-sm-1"></div>
+                            </div>
+                            {
+                                lbl = Model.CoursesApplied[i].Programme.ToString().ToLower();
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+
+            @*---------------------------- Upload MarksCard and Category Certificate ------------------------ *@
+
+            <div class="row page-row CertificateSection" style="background-color:white;padding-bottom: 10px">
+                <div class="content-wrapper">
+                    <div class="col-sm-12 lbl bigger-120 no-padding-right">
+                        <h4 style="margin-left:8px;">
+                            <i class="fa fa-camera" aria-hidden="true"></i>
+                            <strong>Upload your Certificates <span style="float:right;"> Only jpg, png, jpeg, bmp & 100-200KB image file is allowed.</span></strong>
+                        </h4><hr />
+
+                        <div class="col-sm-6 MCSection">
+                            <img id="img-previewMC" src="" style="width:130px;" />
+                            @Html.LabelFor(model => model.MarksCertificate, new { @class = "small-70" }) <strong>of @Model.AcademicDetails[0].ExamName</strong>
+                            <span class="required">
+                                @Html.ValidationMessageFor(model => model.MarksCertificate)
+                                *
+                                <span class="erMsgMC"></span>
+                            </span>
+                            @Html.TextBoxFor(model => model.MarksCertificate, new { @style = "padding:2px 0;", @type = "file", @onchange = "return valFileCertificates('#MarksCertificate',100,200,'KB','jpg,jpeg,bmp,png','.erMsgMC','#img-previewMC');", title = "Only jpg, png, jpeg, bmp & 100-200KB image file is allowed." })
+                        </div>
+
+                        <div class="col-sm-6 CCSection">
+                            <img id="img-previewCC" src="" style="width:130px;" />
+                            @Html.LabelFor(model => model.CategoryCertificate, new { @class = "small-70" })
+                            <span class="required">
+                                @Html.ValidationMessageFor(model => model.CategoryCertificate)
+                                *
+                                <span class="erMsgCC"></span>
+                            </span>
+                            @Html.TextBoxFor(model => model.CategoryCertificate, new { @style = "padding:2px 0;", @type = "file", @onchange = "return valFileCertificates('#CategoryCertificate',100,200,'KB','jpg,jpeg,bmp,png','.erMsgCC','#img-previewCC');", title = "Only jpg, png, jpeg, bmp & 100-200KB image file is allowed." })
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            @*----------------------------End Upload MarksCard and Category Certificate ------------------------ *@
+
+
+            @*---------------------------- select photo ------------------------ *@
+            <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                <div class="content-wrapper">
+                    <div class="col-sm-12 lbl bigger-120 no-padding-right">
+                        <h4 style="margin-left:8px;">
+                            <i class="fa fa-camera" aria-hidden="true"></i>
+                            <strong>Upload your recent Photograph <span style="float:right;"> Only jpg, png, jpeg, bmp & 20-70KB image file is allowed.</span></strong>
+                        </h4><hr />
+                        <div class="text-center">
+                            <img id="img-preview" src="" style="width:130px;align-content:center;" />
+                            <br />
+                            <span class="required">
+                                *
+                                @Html.ValidationMessageFor(model => model.PhotographPath)
+                                <span class="erMsg"></span>
+                            </span>
+                            @Html.LabelFor(model => model.PhotographPath, new { @class = "small-70" })
+                            @Html.TextBoxFor(model => model.PhotographPath, new { @style = "padding:2px 0;margin:0 auto;", @type = "file", @id = "theFile", @onchange = "return valFile('#theFile',20,70,'KB','jpg,jpeg,bmp,png','.erMsg');", title = "Only jpg, png, jpeg, bmp & 20-70KB image file is allowed." })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*----------------------------End photo Section------------------------ *@
+
+            @*---------------------------- Declaration Section  ------------------------ *@
+            <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                <div class="content-wrapper">
+                    <div class="col-sm-12 lbl bigger-120 no-padding-right">
+                        <h4 style="margin-left:10px;"><i class="fa fa-book" aria-hidden="true"></i> <strong>Declaration</strong></h4><hr />
+                        <ol class="justify">
+                            <li style="padding:0.3%">I hereby declare that all the statements made in this application are true, complete and correct to the best of my knowledge. In the event of any information being found false or incorrect or any ineligibility being detected my candidature is liable to be cancelled and legal action may be initiated against me.</li>
+                            <li style="padding:0.3%">I fulfil all conditions of eligibility educational qualification etc. prescribed for the admission.</li>
+                            <li style="padding:0.3%">I have gone through the conditions mentioned in the Cluster University Srinagar Advertisement notification and shall abide by them.</li>
+                            <li style="padding:0.3%">I have noted that if my application is found incomplete / defective, the same is liable to be rejected summarily and no correspondence will be entertained in this regard. </li>
+                            <li style="padding:0.3%">I have read and agree with the Cluster University Srinagar Advertisement notification including instructions, enclosures, check list and other relevant information.</li>
+                        </ol>
+                        <div class="clear bold text-center">
+                            @Html.Captcha("", "Enter Verification Code", 4, " Required", true)
+                            <br />
+                        </div>
+                    </div>
+                    <br />
+                    <p style="text-align:center;">
+                        <ifa class="fa fa-check-square-o"></ifa> @Html.Label("agree", "By clicking on Final Submit button you have read and accepted the terms & conditions.")
+                        <input type="hidden" id="prevf" value="" />
+                        <br />
+                        <strong class="red quadraText" style="font-size:20px">No change is allowed after form is successfully submitted</strong>
+                        <br /><br />
+                        <span id="hideButtons6">
+                            <input style="font-weight:bold;font-size:20px;" type="submit" id="jspreview" value="Preview Form" class="btn btn-success" />
+                        </span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span id="hideButtons6">
+                            <input style="font-weight:bold;font-size:20px;" type="submit" id="jsfinalSubmit" value="Final Submit" class="btn btn-theme" />
+                        </span>
+                    </p>
+
+                </div>
+            </div>
+            @*----------------------------End Declaration Section  ------------------------ *@
+        }
+
+    </div>
+</div>
+<style>
+    .width100 {
+        width: 100% !important;
+    }
+</style>
+@section PageSpecificJS{
+    @Scripts.Render("~/bundles/Libraries/jqueryval", "~/bundles/Libraries/jqueryregIH")
+
+    <script>
+        $(document).ready(function () {
+            var ss = "@formNoMaster.AllowApplyForSelfFinancedSeat";
+            $("body").on("keypress focusout", "#BoardRegistrationNo",function () {
+                if (ss=="True")
+                {
+                    var enteredbr = $("#BoardRegistrationNo").val().replace(/sf-/gi,"");
+                    $("#BoardRegistrationNo").val('SF-' + enteredbr);
+                 }
+            });
+        });
+    </script>
+}

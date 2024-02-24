@@ -1,0 +1,38 @@
+﻿@model  List<CUSrinagar.Models.ADMCollegeMaster>
+@using CUSrinagar.Extensions
+
+@{
+    Layout = null;   
+}
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th data-property="UserName">College Code</th>
+            <th data-property="FullName">College FullName</th>
+            <th data-property="FullName">Contact Number</th>
+            <th data-property="FullName">Website</th>
+            <th data-property="Email">Email</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var row in Model)
+            {
+                <tr>
+                    <td>@row.CollegeCode</td>
+                    <td>
+                        @*<a href='@Url.Action("Edit", "College", new { area = "CUSrinagarAdminPanel", @id = row.College_ID })'>*@
+                            @row.CollegeFullName
+                        @*</a>*@
+                    </td>
+                    <td>@row.ContactNo1</td>
+                    <td>@row.Website</td>
+                    <td>@row.Email</td>                    
+                </tr>
+            }
+        }
+    </tbody>
+</table>

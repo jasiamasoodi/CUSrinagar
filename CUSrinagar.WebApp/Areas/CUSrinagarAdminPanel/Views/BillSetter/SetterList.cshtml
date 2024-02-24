@@ -1,0 +1,227 @@
+﻿
+@model  List<CUSrinagar.Models.BIL_BillDetails>
+@using CUSrinagar.Models
+@using CUSrinagar.Enums
+@using CUSrinagar.Extensions
+
+@{
+    Layout = null;
+}
+<div id="ModalBillStatus" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter no-margin"><i class="fa fa-refresh"></i>&nbsp;Change Bill Status</h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="msg101"></div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form>
+                            <div class="form-group">
+                                <label class="control-label no-padding-right">
+                                    Bill Status <span class="red">*</span>
+                                </label>
+                                @Html.DropDownList("BillStatus", (IEnumerable<SelectListItem>)ViewBag.BillStatusPartial, new { @class = "form-control", required = "required" })
+                            </div>
+                            <div class="form-group text-center">
+                                <button class="btn btn-sm btn-success pull-center JSChangeBillStatus">
+                                    Update
+                                </button>
+                                <button class="btn btn-sm btn-danger" id="JSClose" data-dismiss="modal">
+                                    <i class="ace-icon fa fa-times"></i>
+                                    Close
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th data-property="BillNo">Bill No</th>
+            <th data-property="FullName">Setter Name</th>
+            <th data-property="Semester">Semester</th>
+            <th class="center"> @(Model?.First()?.BillType.GetEnumDescription()) Details</th>
+            <th>Net Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            int index = 0;
+            short sno = 1;
+            foreach (IEnumerable<BIL_BillDetails> row in Model.OrderByDescending(x => x.CreatedOn).ThenBy(x => x.BillNo).GroupBy(x => x.BillNo))
+            {
+                <tr class="no-padding no-margin">
+                    <td class="red" style="width:190px">
+                        @row.First().BillNo
+                        <br />
+                        <span class="label label-lg label-pink arrowed-right">@row.First().BillStatus.GetEnumDescription()</span>
+                        @if (row.First().BillStatus == BillStatus.Assigned)
+                        {
+                            <img src="/Content/ThemePublic/PrintImages/new.gif" />
+                        }
+                    </td>
+                    <td>
+                        @row.First().FullName ( @row.First().Institute)<br /><br />
+                        User : <a href="javascript:void(0)">@row.First().UserName</a>
+                    </td>
+                    <td style="font-size:16px;font-weight:bold;">@row.First().Semester</td>
+                    <td class="no-padding">
+                        <table class="table table-hover table-bordered no-padding no-margin">
+                            <tr class="purple">
+                                <th>Paper Title</th>
+                                <th>Completion Days</th>
+                                <th>No. of Sets</th>
+                                <th>Amount Per Set</th>
+                                <th>Gross Amount ₹</th>
+                                <th>Other Details</th>
+                                <th style="width:200px">Links</th>
+                            </tr>
+                            @foreach (BIL_BillDetails bill in row)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (row.First().BillStatus == BillStatus.Verified
+                                            || row.First().BillStatus == BillStatus.DispatchedToAccountsSection
+                                            || row.First().BillStatus == BillStatus.Paid)
+                                        {
+                                            <a href="@Url.Action("ViewBill", "BillAccount", new { area = "CUSrinagarAdminPanel", @r = row.First().BillNo.EncryptCookieAndURLSafe() })" target="_blank">
+                                                @bill.SubjectFullName
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a href='javascript:void(0);' onclick='alert("Bill Can be Viewed once Verified / Paid by University.")'>
+                                                @bill.SubjectFullName
+                                            </a>
+                                        }
+                                        <br />
+                                        <br />
+                                        Examination : @bill.Examination<br /><br />
+                                        Batch : @bill.Batch<br /><br />
+                                        Session : @bill.Session
+                                    </td>
+                                    <td>
+                                        <span>@bill.TotalAssignmentCompletionDays day(s) from @bill.CreatedOn.ToLongDateString()</span>
+                                    </td>
+                                    <td>@bill.NoOfSets</td>
+                                    <td>@bill.AmountPerSet</td>
+                                    <td>₹ @bill.TotalAmount</td>
+                                    <td>
+                                        <br />
+                                        <span>Bill Created on: @bill.CreatedOn.ToLongDateString() @bill.CreatedOn.ToString("hh:ss tt")</span>
+                                    </td>
+                                    <td>
+                                        Paper Pattern :<br />@Html.Raw(Html.Action("GetPaperSetting", "BillSetter", new { @d = bill.PaperPattern_ID }))<br /><br />
+                                        Sample Paper :<br />@Html.Raw(Html.Action("GetPaperSetting", "BillSetter", new { @d = bill.SamplePaper_ID }))<br /><br />
+
+                                        @if (!string.IsNullOrWhiteSpace(bill.SyllabusLink))
+                                        {
+                                            sno = 1;
+                                            <span>Syllabus:<br /></span>
+                                            foreach (string item in (bill.SyllabusLink + "").Split('|'))
+                                            {
+                                                <a href="@item" target="_blank">Syllabus Link-@sno</a><br />
+                                                sno++;
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                                <tr class="padding-0 margin-0">
+                                    <td colspan="10" class="padding-0 margin-0">
+                                        <div class="profile-user-info profile-user-info-striped" style="border: 1px dashed #336199">
+                                            <div class="profile-info-row">
+                                                <div class="profile-info-name align-left" style="font-size: 16px; text-align: center !important;">
+                                                    Once you set the Question Paper(s), you are requested to
+                                                    forward the same as an attachment in soft format (word format only) on:
+
+                                                    <span style="font-size:18px;">
+                                                        <strong>
+                                                            <a href="mailto:@(bill.PaperReceiverEmail)?subject=Paper: @bill.SubjectFullName.Replace("&","and") Examination:@bill.Examination.Replace("&","and") Batch:@bill.Batch.Replace("&","and") Session:@bill.Session.Replace("&","and")">
+                                                                <i class="ace-icon fa fa-envelope purple quadraText"></i>
+                                                                @bill.PaperReceiverEmail
+                                                            </a>
+                                                        </strong>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </td>
+                    <td style="text-align:center">
+                        <span>₹ @row.First().RevenueStampAmount (RevenueStamp Deducted)<br /><br /></span>
+                        <strong>₹ @(row.Sum(x=>x.TotalAmount)-row.First().RevenueStampAmount)</strong>
+                        <div class="col-sm-12 dropup" style="bottom: 0; top: 30px">
+                            @if (row.First().BillStatus == BillStatus.Assigned)
+                            {
+                                <a href="javascript:void(0);" id='@row.First().BillNo' class="JSChangeStatus btn btn-danger">Accept /  Reject</a>
+                            }
+                            else
+                            {
+                                <button data-toggle="dropdown" class="btn btn-purple dropdown-toggle">
+                                    options
+                                    <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-purple dropdown-menu-right">
+                                    @if (row.All(x => x.BillStatus != BillStatus.UnderVerification && x.BillStatus != BillStatus.Verified && x.BillStatus != BillStatus.DispatchedToAccountsSection && x.BillStatus != BillStatus.Paid && x.BillStatus != BillStatus.UnderVerification))
+                                    {
+                                        <li>
+                                            <a href="javascript:void(0);" id='@row.First().BillNo' class="JSChangeStatus">Change Bill Status</a>
+                                        </li>
+                                    }
+
+                                    @if (row.First().BillStatus == BillStatus.Verified
+                                        || row.First().BillStatus == BillStatus.DispatchedToAccountsSection
+                                        || row.First().BillStatus == BillStatus.Paid)
+                                    {
+
+                                        <li>
+                                            <a href='@Url.Action("ViewBill", "BillAccount", new { area = "CUSrinagarAdminPanel", @r = row.First().BillNo.EncryptCookieAndURLSafe() })'>View Bill</a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <a href='javascript:void(0);' onclick='alert("Bill Can be Viewed once Verified / Paid by University.")'>View Bill</a>
+                                        </li>
+                                    }
+
+                                    @if (row.All(x => x.BillStatus == BillStatus.Paid))
+                                    {
+                                        <li>
+                                            <a href='@Url.Action("Certificate", "BillSetter", new { area = "CUSrinagarAdminPanel", @r = row.First().BillNo.EncryptCookieAndURLSafe() })' target="_blank">Certificate</a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <a href="javascript:alert('Bill status is @row.First().BillStatus.GetEnumDescription()\nHowever Certificate can be printed once bill is Paid.')">Certificate</a>
+                                        </li>
+                                    }
+                                    <li>
+                                        <a href='@Url.Action("AppointmentLetter", "BillSetter", new { area = "CUSrinagarAdminPanel", @r = row.First().BillNo.EncryptCookieAndURLSafe() })' target="_blank">Appointment Letter</a>
+                                    </li>
+                                </ul>
+                            }
+                        </div>
+                    </td>
+                </tr>
+                index++;
+            }
+        }
+    </tbody>
+</table>
+
+

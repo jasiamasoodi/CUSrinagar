@@ -1,0 +1,327 @@
+﻿@model List<CUSrinagar.Models.Certificate>
+@using CUSrinagar.Enums
+@using CUSrinagar.Extensions
+@{
+    ViewBag.Title = "Certificate Upload";
+    CUSrinagar.Models.ARGPersonalInformation STD = ViewBag.ARGPersonalInformation;
+
+}
+
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="">Admission</a>
+        </li>
+        <li>
+            <a href="@Url.Action("UploadCertificateIH", new { R=CUSrinagar.Extensions.Helper.EncryptCookieAndURLSafe(((short)PrintProgramme.IH).ToString())})" class="active">Upload Certificates</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+
+<div class="row page-content">
+    <div class="col-sm-12 col-md-12">
+
+        @if (Model != null && STD != null && STD.CoursesApplied.IsNotNullOrEmpty())
+        {
+            CUSrinagar.Models.ARGCoursesApplied _CurrentSelectedCourse = STD.CoursesApplied.First();
+            StudentSelectionStatus studentSelectionStatus = StudentSelectionStatus.Provisional;
+            if (_CurrentSelectedCourse.StudentSelectionStatus == StudentSelectionStatus.Provisional)
+            {
+                studentSelectionStatus = StudentSelectionStatus.CertificatesUploaded;
+            }
+            else if (_CurrentSelectedCourse.StudentSelectionStatus == StudentSelectionStatus.Provisional_SF)
+            {
+                studentSelectionStatus = StudentSelectionStatus.CertificatesUploaded_SF;
+            }
+            else
+            {
+                studentSelectionStatus = _CurrentSelectedCourse.StudentSelectionStatus;
+            }
+
+            var showSave = false;
+            var joinedCourse = STD.CoursesApplied.Where(x => x.StudentSelectionStatus == StudentSelectionStatus.Joined || x.StudentSelectionStatus == StudentSelectionStatus.Joined_SF)?.ToList();
+            var makePaymentCourse = STD.CoursesApplied.Where(x => x.StudentSelectionStatus == StudentSelectionStatus.Verified_MakePayment || x.StudentSelectionStatus == StudentSelectionStatus.Verified_MakePayment_SF)?.ToList();
+            var certificateUploaded = STD.CoursesApplied.Where(x => x.StudentSelectionStatus == StudentSelectionStatus.CertificatesUploaded || x.StudentSelectionStatus == StudentSelectionStatus.CertificatesUploaded_SF)?.ToList();
+            <div class="">
+                @using (Html.BeginForm("UploadCertificateIH", "Admission", FormMethod.Post,
+                                    new
+                                    {
+                                        @class = "jsMainForm form-horizontal",
+                                        @enctype = "multipart/form-data",
+                                        @name = "UploadCertificateIH",
+                                        @id = "UploadCertificateIH"
+                                    }))
+                {
+
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" name="R" value="@ViewBag.R" />
+                    <input type="hidden" name="S" value="@(CUSrinagar.Extensions.Helper.EncryptCookieAndURLSafe(((short)studentSelectionStatus).ToString()))" />
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <div class="form-group">
+                                <label for="name" class="col-sm-4 control-label text-primary">Form Number :</label>
+                                <div class="col-sm-8">
+                                    <b><span class="small">@STD.StudentFormNo</span></b>
+                                </div>
+                            </div>
+                            <hr class="no-margin-top margin-bottom-5" />
+                            <div class="form-group">
+                                <label for="name" class="col-sm-4 control-label text-primary">Name :</label>
+                                <div class="col-sm-8">
+                                    <b><span class="small">@STD.FullName</span></b>
+                                </div>
+                            </div>
+                            <hr class="no-margin-top margin-bottom-5" />
+                            <div class="form-group">
+                                <label for="name" class="col-sm-4 control-label text-primary">Status :</label>
+                                <div class="col-sm-8">
+                                    <b>
+                                        @if (STD.CoursesApplied.Count > 1)
+                                        {
+                                            if (joinedCourse.IsNotNullOrEmpty())
+                                            {
+                                                _CurrentSelectedCourse = joinedCourse.First();
+                                                <span class="small">@(CUSrinagar.Extensions.Helper.GetEnumDescription(joinedCourse.First().StudentSelectionStatus))</span>
+                                            }
+                                            else if (makePaymentCourse.IsNotNullOrEmpty())
+                                            {
+                                                _CurrentSelectedCourse = makePaymentCourse.First();
+                                                <span class="small">@(CUSrinagar.Extensions.Helper.GetEnumDescription(makePaymentCourse.First().StudentSelectionStatus))</span>
+                                            }
+                                            else if (certificateUploaded.IsNotNullOrEmpty())
+                                            {
+                                                _CurrentSelectedCourse = certificateUploaded.First();
+                                                <span class="small">@(CUSrinagar.Extensions.Helper.GetEnumDescription(certificateUploaded.First().StudentSelectionStatus))</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="small">@(CUSrinagar.Extensions.Helper.GetEnumDescription(STD.CoursesApplied.First().StudentSelectionStatus))</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            _CurrentSelectedCourse = STD.CoursesApplied.First();
+                                            <span class="small">@(CUSrinagar.Extensions.Helper.GetEnumDescription(STD.CoursesApplied.First().StudentSelectionStatus))</span>
+                                        }
+                                    </b>
+                                </div>
+                            </div>
+                            <hr class="no-margin-top margin-bottom-5" />
+                            <div class="form-group">
+                                <label for="name" class="col-sm-4 control-label text-primary">Applying For Course :</label>
+                                <div class="col-sm-8">
+                                    @if (STD.CoursesApplied.Count > 1)
+                                    {
+                                        if (joinedCourse.IsNotNullOrEmpty())
+                                        {
+                                            <input type="hidden" name="Course_ID" value="@(joinedCourse.First().Course_ID)" />
+                                            <b><span class="text-success">@joinedCourse.First().CourseName)</span></b>
+                                        }
+                                        else if (makePaymentCourse.IsNotNullOrEmpty())
+                                        {
+                                            <input type="hidden" name="Course_ID" value="@(makePaymentCourse.First().Course_ID)" />
+                                            <b><span class="text-success">@makePaymentCourse.First().CourseName</span></b>
+                                        }
+                                        else
+                                        {
+                                            showSave = true;
+                                            @Html.Hidden("HasMultimpleCourses", true)
+                                            <select name="Course_ID" required class="form-control">
+                                                @foreach (var item in STD.CoursesApplied)
+                                                {
+                                                    <option value="@item.Course_ID" @(item.StudentSelectionStatus == StudentSelectionStatus.CertificatesUploaded || item.StudentSelectionStatus == StudentSelectionStatus.CertificatesUploaded_SF ? "selected='selected'" : "")>
+                                                        @item.CourseName
+                                                    </option>
+                                                }
+                                            </select>
+                                        }
+                                    }
+                                    else if (STD.CoursesApplied.Count == 1)
+                                    {
+                                        <input type="hidden" name="Course_ID" value="@(STD.CoursesApplied.First().Course_ID)" />
+                                        <b><span class="text-success">@(STD.CoursesApplied.First().CourseName)</span></b>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="name" class="col-sm-4 control-label text-primary">Entrance Roll No :</label>
+                                <div class="col-sm-8">
+                                    <b><span class="small">@STD.EntranceRollNo</span></b>
+                                </div>
+                            </div>
+                            <hr class="no-margin-top margin-bottom-5" />
+                            <div class="form-group">
+                                <label for="name" class="col-sm-4 control-label text-primary">Category :</label>
+                                <div class="col-sm-8">
+                                    <b><span class="small">@STD.Category</span></b>
+                                </div>
+                            </div>
+                            <hr class="no-margin-top margin-bottom-5" />
+                            <div class="form-group">
+                                <label for="name" class="col-sm-4 control-label text-primary">Email :</label>
+                                <div class="col-sm-8">
+                                    <b><span class="small">@STD.StudentAddress.Email</span></b>
+                                </div>
+                            </div>
+                            <hr class="no-margin-top margin-bottom-5" />
+                            <div class="form-group">
+                                <label for="name" class="col-sm-4 control-label text-primary">Mobile :</label>
+                                <div class="col-sm-8">
+                                    <b><span class="small">@STD.StudentAddress.Mobile</span></b>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <div class="hidden-xs hidden-sm">
+                                    <center>
+                                        <div class="thumbnail no-margin-bottom">
+                                            @if (STD.Photograph != null)
+                                            {
+                                                <img src="@Url.Content(STD.Photograph)" class="img-responsive max-height-200" />
+                                            }
+                                        </div>
+                                    </center>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="no-margin-top margin-bottom-5" />
+                    <hr class="no-margin-top margin-bottom-5" />
+                    <div class="form-group col-sm-12">
+                        <div class="col-sm-12 col-md-12">
+                            <h5><b>Procedure</b> </h5>
+                            <small>
+                                <b>
+                                    <ol>
+                                        <li>Upload required certficates.</li>
+                                        <li>For UG/IG/Honor's/Professional students upload 12<sup>th</sup> markscard & for Int B.Ed-M.ED upload PG markscard. </li>
+                                        <li>Wait for document verification.</li>
+                                        <li>Login again next day to check the status</li>
+                                        <li>After document verification, you will be asked to go for payment,(if no discrepany is found in certifcates ).</li>
+                                        <li>Make payment online to complete the admission procedure.</li>
+                                    </ol>
+                                </b>
+                            </small>
+                        </div>
+                        <label class="control-label text-primary ">
+                            <i class="fa fa-camera" aria-hidden="true"></i>
+                            <strong>Upload your certificates. <span> Only jpg, png, jpeg, bmp & 70-200KB image file is allowed.</span></strong>
+                        </label>
+                    </div>
+                    <hr class="no-margin-top margin-bottom-5" />
+
+                    for (int i = 0; i < Model.Count; i++)
+                    {
+                        CUSrinagar.Models.Certificate item = Model[i];
+                        <div class="col-sm-3">
+                            <div class="form-group jsFileContainer">
+                                <input type="hidden" name="model[@i].Certificate_ID" value="@item.Certificate_ID" />
+                                <input type="hidden" name="model[@i].CertificateType" value="@item.CertificateType" />
+                                <input type="hidden" name="model[@i].CertificateUrl" value="@item.CertificateUrl" />
+                                <input type="hidden" name="model[@i].Remark" value="@item.Remark" />
+                                <input type="hidden" name="model[@i].Student_ID" value="@item.Student_ID" />
+                                <input type="hidden" name="model[@i].UploadingDate" value="@item.UploadingDate" />
+                                <input type="hidden" name="model[@i].RecordState" value="@(item.Certificate_ID==Guid.Empty?RecordState.New:RecordState.Old)" />
+                                <input type="hidden" name="model[@i].VerificationDate" />
+                                <input type="hidden" name="model[@i].VerificationStatus" value="@VerificationStatus.Pending" />
+                                <input type="hidden" name="model[@i].VerifiedBy" />
+
+                                <label class="col-sm-12 text-primary">
+                                    @item.CertificateType.ToString() :
+                                </label>
+                                @if (item.VerificationStatus == VerificationStatus.Pending || item.VerificationStatus == VerificationStatus.Rejected)
+                                {
+                                    showSave = true;
+                                    if (item.VerificationStatus == VerificationStatus.Rejected && !string.IsNullOrEmpty(item.Remark))
+                                    {
+                                        <label class="col-sm-12 text-danger">@item.Remark</label><br />
+                                    }
+                                    <div class="col-sm-12">
+                                        <input type="file" name="model[@i].File" id="@item.CertificateType.ToString()" accept=".jpg,.jpeg,.bmp,.png" class="form-control"
+                                               onchange="return valFile('#@item.CertificateType.ToString()',70,200,'KB','jpg,jpeg,bmp,png','.erMsg');"
+                                               title="Only jpg, png, jpeg, bmp & 70-200KB image file is allowed."
+                                               @(string.IsNullOrEmpty(item.CertificateUrl) && (item.CertificateType == CertificateType.MarksCard || item.CertificateType == CertificateType.DOB || item.CertificateType == CertificateType.Category) ? "required" : "") />
+                                    </div>
+                                }
+                                <div class="col-sm-12">
+                                    <div class="@(string.IsNullOrEmpty(item.CertificateUrl)?"hidden":Url.Content(item.CertificateUrl)) jsPreviewSection">
+                                        <img id="@item.CertificateType.ToString()-img-preview" src="@(string.IsNullOrEmpty(item.CertificateUrl)?"":Url.Content(item.CertificateUrl))" class="no-margin-bottom thumbnail img-responsive max-height-200" />
+                                    </div>
+                                </div>
+                                <label title="verification status" class="col-sm-12 text-primary text-center">@item.VerificationStatus.ToString()</label>
+                                <div class="col-sm-12 hidden error text-danger" id="@item.CertificateType.ToString()-error">
+                                    Invalid file uploaded
+                                </div>
+                            </div>
+                            <hr class="no-margin-top margin-bottom-10" />
+                        </div>
+                    }
+
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4 control-label text-primary"></label>
+                        <div class="col-sm-12">
+                            <div class="pull-right">
+
+                                @if (Model.Any(x => x.Certificate_ID != Guid.Empty))
+                                {
+                                    <a href="@Url.Action("UploadSuccessReponseIH",new {R=ViewBag.R })" class="btn btn-default">View Application Form</a>
+                                }
+                                @if (_CurrentSelectedCourse.StudentSelectionStatus == StudentSelectionStatus.Verified_MakePayment || _CurrentSelectedCourse.StudentSelectionStatus == StudentSelectionStatus.Verified_MakePayment_SF)
+                                {
+                                    <a id="btn-make-payment" href="@Url.Action("CreateBillDeskRequestIH", new
+                                                              {
+                                                                  Student_ID = CUSrinagar.Extensions.Helper.EncryptCookieAndURLSafe(STD.Student_ID.ToString()),
+                                                                  Course_ID = CUSrinagar.Extensions.Helper.EncryptCookieAndURLSafe(_CurrentSelectedCourse.Course_ID.ToString()),
+                                                                  R = CUSrinagar.Extensions.Helper.EncryptCookieAndURLSafe("3")
+                                                              })" class="btn btn-success btn-lg">Make Payment</a>
+                                }
+                                
+                                @if (STD.CoursesApplied.Any(x => x.StudentSelectionStatus == StudentSelectionStatus.Joined || x.StudentSelectionStatus == StudentSelectionStatus.Joined_SF))
+                                {
+                                    <h3 class="text-danger">Already joined for course <b>@STD.CoursesApplied.First(x => x.StudentSelectionStatus == StudentSelectionStatus.Joined || x.StudentSelectionStatus == StudentSelectionStatus.Joined_SF).CourseName</b></h3>
+                                }
+                                else if (showSave && (_CurrentSelectedCourse.StudentSelectionStatus == StudentSelectionStatus.Provisional || _CurrentSelectedCourse.StudentSelectionStatus == StudentSelectionStatus.Provisional_SF
+                                    || _CurrentSelectedCourse.StudentSelectionStatus == StudentSelectionStatus.CertificatesUploaded || _CurrentSelectedCourse.StudentSelectionStatus == StudentSelectionStatus.CertificatesUploaded_SF))
+                                {
+
+                                    <button id="" type="submit" class="btn btn-success">
+                                        <i class="glyphicon glyphicon-ok"></i><b>&nbsp;Save</b>
+                                    </button>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <h3 class="text-danger">@ViewBag.ErrorMessage</h3>
+            <a href="@Url.Action("UploadSuccessReponseIH",new {R=ViewBag.R })"><i class="fa fa-print"></i> </a>
+        }
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-sm-12 col-md-12">
+        <p class="text-danger"> <b>Note : No admission shall be confirmed if payment is not made by of before last date.</b></p>
+        <p>
+            <b>
+                Important: In case of any query, please mail us on
+                <a href="mailto:admissions@cusrinagar.edu.in?Subject=IH_Admission"><i class="fa fa-envelope"></i>admissions@cusrinagar.edu.in</a>
+            </b>
+        </p>
+    </div>
+</div>
+
+@section PageSpecificJSFiles{
+    <script src="~/Scripts/Pages/std-upload-certificates-ih.js"></script>
+}
+
+
+
+

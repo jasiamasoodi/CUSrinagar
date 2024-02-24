@@ -1,0 +1,89 @@
+﻿@{
+    ViewBag.Title = "Delete Junk";
+}
+
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUCollegeAdminPanel"})">Home</a>
+            </li>
+            <li>Entrance Centers</li>
+            <li class="active">Delete Junk</li>
+        </ul>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Delete Junk
+                    <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                        <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                    </span>
+                </h3>
+            </div>
+            <div class="panel-body">
+                @if (TempData["response"] != null)
+                {
+                    @Html.Raw(TempData["response"])
+                }
+                <div class="search-box">
+                    @using (Html.BeginForm("DeleteJunk", "Entrance", FormMethod.Post, new { id = "frmDelJunk" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <label class="control-label no-padding-right">
+                                        Programme <span class="red">*</span>
+                                    </label>
+                                    <span class="red"> </span><br />
+                                    @Html.DropDownList("printProgramme", (IEnumerable<SelectListItem>)ViewBag.Programmes, string.Empty, new { @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <label class="control-label no-padding-right">
+                                        Is Certificate Course <span class="red"></span>
+                                    </label>
+                                    <span class="red"> </span><br />
+                                    @Html.CheckBox("IsCertificate", new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <label class="control-label no-padding-right">
+                                        only Lateral Entry <span class="red"></span>
+                                    </label>
+                                    <span class="red"> </span><br />
+                                    @Html.CheckBox("onlyLateralEntry", new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <label class="control-label no-padding-right">
+                                        Applied before <span class="red"></span>
+                                    </label>
+                                    <span class="red"> </span><br />
+                                    @Html.TextBox("appliedBefore", null, new { @type = "date", @class = "form-control" })
+                                </div>
+                            </div>
+                            <span class="errorMsg"></span>
+                            <div class="form-group ">
+                                <br />
+                                <button type="submit" onclick="return confirm('CAUTION : \nThese changes cannot be undo.\nAre you sure you want to proceed?')" class="btn btn-sm btn-danger JSSubmitBtn"><i class="fa fa-trash"></i>&nbsp;Delete Junk</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

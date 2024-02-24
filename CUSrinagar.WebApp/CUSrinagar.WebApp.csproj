@@ -1,0 +1,1902 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1BB89AD5-CAEE-4AC2-B4E2-BE98780E1D4F}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CUSrinagar.WebApp</RootNamespace>
+    <AssemblyName>CUSrinagar.WebApp</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+    <UseIISExpress>true</UseIISExpress>
+    <TypeScriptToolsVersion>2.3</TypeScriptToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="BitMiracle.LibTiff.NET, Version=2.4.649.0, Culture=neutral, PublicKeyToken=53879b3e20e7a7d6, processorArchitecture=MSIL">
+      <HintPath>..\packages\BitMiracle.LibTiff.NET.2.4.649\lib\net40\BitMiracle.LibTiff.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="CaptchaMvc, Version=2.5.0.0, Culture=neutral, PublicKeyToken=fe46ad421dd3b0e6, processorArchitecture=MSIL">
+      <HintPath>..\packages\CaptchaMvc.Mvc5.1.5.0\lib\net45-full\CaptchaMvc.dll</HintPath>
+    </Reference>
+    <Reference Include="IronSoftware.Drawing.Common, Version=2023.1.11379.0, Culture=neutral, PublicKeyToken=8d7e55c97b3e9835, processorArchitecture=MSIL">
+      <HintPath>..\packages\IronSoftware.System.Drawing.2023.1.11379\lib\netstandard2.0\IronSoftware.Drawing.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="IronXL, Version=2023.1.14.0, Culture=neutral, PublicKeyToken=0f5804b6690bad1e, processorArchitecture=MSIL">
+      <HintPath>..\packages\IronXL.Excel.2023.1.14\lib\netstandard2.0\IronXL.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.TelemetryCorrelation, Version=1.0.8.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.8\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\lib\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=7.0.0.1, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.7.0.1\lib\net462\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.2.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Nut, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nut.2.4.2\lib\Nut.dll</HintPath>
+    </Reference>
+    <Reference Include="Rotativa, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rotativa.1.7.3\lib\net461\Rotativa.dll</HintPath>
+    </Reference>
+    <Reference Include="SixLabors.Fonts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
+      <HintPath>..\packages\IronSoftware.System.Drawing.2023.1.11379\lib\netstandard2.0\SixLabors.Fonts.dll</HintPath>
+    </Reference>
+    <Reference Include="SixLabors.ImageSharp, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
+      <HintPath>..\packages\SixLabors.ImageSharp.2.1.3\lib\net472\SixLabors.ImageSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="SixLabors.ImageSharp.Drawing, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
+      <HintPath>..\packages\IronSoftware.System.Drawing.2023.1.11379\lib\netstandard2.0\SixLabors.ImageSharp.Drawing.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=7.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.7.0.2\lib\net462\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Text.Encoding.CodePages, Version=7.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encoding.CodePages.7.0.0\lib\net462\System.Text.Encoding.CodePages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.3.0\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.3.0\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\CUCollegeAdminPanel\Controllers\AdmissionController.cs" />
+    <Compile Include="Areas\CUCollegeAdminPanel\Controllers\AssignCombinationController.cs" />
+    <Compile Include="Areas\CUCollegeAdminPanel\Controllers\AssignSubjectController.cs" />
+    <Compile Include="Areas\CUCollegeAdminPanel\Controllers\AttendanceSheetController.cs" />
+    <Compile Include="Areas\CUCollegeAdminPanel\Controllers\AwardController.cs" />
+    <Compile Include="Areas\CUCollegeAdminPanel\Controllers\BOPEERegistrationController.cs" />
+    <Compile Include="Areas\CUCollegeAdminPanel\Controllers\CollegeAdminBaseController.cs" />
+    <Compile Include="Areas\CUCollegeAdminPanel\Controllers\CollegeClassController.cs" />
+    <Compile Include="Areas\CUCollegeAdminPanel\Controllers\CollegeRegistrationController.cs" />
+    <Compile Include="Areas\CUCollegeAdminPanel\Controllers\CombinationController.cs" />
+    <Compile Include="Areas\CUCollegeAdminPanel\Controllers\EGovCUETController.cs" />
+    <Compile Include="Areas\CUCollegeAdminPanel\Controllers\SemesterCentersController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\BillAccountController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\BillController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\AdmissionSettingsController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\AwardEditController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\AwardSettingController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\BillEvaluatorController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\BillSetterController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\CombinationController.cs" />
+    <Compile Include="Areas\CUCollegeAdminPanel\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\CUCollegeAdminPanel\Controllers\ExaminationController.cs" />
+    <Compile Include="Areas\CUCollegeAdminPanel\Controllers\GrievanceController.cs" />
+    <Compile Include="Areas\CUCollegeAdminPanel\Controllers\RRController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\AssignRollNumberController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\BillDeskController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\DegreeCertificateEngController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\EGovCUETController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\EnrollmentController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\FeedbackController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\MarksSheetController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\PendingListsController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\ReEvaluationSettingController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\CombinationSettingController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\CourseController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\InternalAdminController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\EmployeeController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\EntranceListsController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\EntranceNotificationController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\ExamFormSettingController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\ExaminationWhiteListController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\FeeStructureController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\FileTrackingController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\MessageController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\MigrationController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\ProfessorStatisticsController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\QuestionaireController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\AdmissionController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\ResultBacklogBatchesController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\ResultGazetteController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\ResultHistoryController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\ResultMeritListController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\RevaluationController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\RRController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\SubjectMarksStructureController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\DegreeCertificateController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\TranscriptController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\ResultNotificationController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\SalaryController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\SemesterCentersController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\SMSController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\StudentInfoController.cs" />
+    <Compile Include="Areas\CUStudentZone\Controllers\CombinationController.cs" />
+    <Compile Include="Areas\CUStudentZone\Controllers\DownloadController.cs" />
+    <Compile Include="Areas\CUStudentZone\Controllers\FeedbackController.cs" />
+    <Compile Include="Areas\CUStudentZone\Controllers\InternalStudentController.cs" />
+    <Compile Include="Areas\CUStudentZone\Controllers\MessageController.cs" />
+    <Compile Include="Areas\CUStudentZone\Controllers\QuestionaireController.cs" />
+    <Compile Include="Areas\CUStudentZone\Controllers\RegnCoursesController.cs" />
+    <Compile Include="Areas\CUStudentZone\Controllers\RegularExaminationsController.cs" />
+    <Compile Include="Areas\CUStudentZone\Controllers\ResultController.cs" />
+    <Compile Include="Areas\CUStudentZone\Controllers\AdmissionController.cs" />
+    <Compile Include="Areas\CUStudentZone\Controllers\StudentInfoController.cs" />
+    <Compile Include="Controllers\ApplicationFormsController.cs" />
+    <Compile Include="Controllers\AttemptCertificateController.cs" />
+    <Compile Include="Controllers\CertificateCoursesController.cs" />
+    <Compile Include="Controllers\EntranceController.cs" />
+    <Compile Include="Controllers\MarksCardController.cs" />
+    <Compile Include="Controllers\MigrationController.cs" />
+    <Compile Include="Areas\CUCollegeAdminPanel\Controllers\LibraryController.cs" />
+    <Compile Include="Areas\CUCollegeAdminPanel\Controllers\MigrationController.cs" />
+    <Compile Include="Areas\CUCollegeAdminPanel\Controllers\ResultController.cs" />
+    <Compile Include="Areas\CUCollegeAdminPanel\Controllers\StatisticsController.cs" />
+    <Compile Include="Areas\CUCollegeAdminPanel\Controllers\StudentController.cs" />
+    <Compile Include="Areas\CUCollegeAdminPanel\Controllers\UserProfileController.cs" />
+    <Compile Include="Areas\CUCollegeAdminPanel\CUCollegeAdminPanelAreaRegistration.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\AdminController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\AwardController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\CollegeController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\StatisticsController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\EntranceController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\GeneralController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\GrievanceController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\NotificationController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\RegistrationController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\DeanResultController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\ResultController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\SubjectController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\SyllabusController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\UniversityAdminBaseController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\UserProfileController.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\CUSrinagarAdminPanelAreaRegistration.cs" />
+    <Compile Include="Areas\CUStudentZone\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\CUStudentZone\Controllers\GrievanceController.cs" />
+    <Compile Include="Areas\CUStudentZone\Controllers\PaymentController.cs" />
+    <Compile Include="Areas\CUStudentZone\Controllers\ReEvaluationController.cs" />
+    <Compile Include="Areas\CUStudentZone\Controllers\StudentBaseController.cs" />
+    <Compile Include="Areas\CUStudentZone\Controllers\StudentController.cs" />
+    <Compile Include="Areas\CUStudentZone\CUStudentZoneAreaRegistration.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CourseController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Areas\CUStudentZone\Controllers\ExaminationController.cs" />
+    <Compile Include="Controllers\GrievanceController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\NEPPGController.cs" />
+    <Compile Include="Controllers\NEPIGController.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
+    <Compile Include="Controllers\PaymentController.cs" />
+    <Compile Include="Controllers\NEPController.cs" />
+    <Compile Include="Controllers\ResultController.cs" />
+    <Compile Include="Controllers\RegistrationController.cs" />
+    <Compile Include="Areas\CUStudentZone\Controllers\SelfFinancedController.cs" />
+    <Compile Include="Controllers\SubjectDetailsController.cs" />
+    <Compile Include="Controllers\SyllabusController.cs" />
+    <Compile Include="Controllers\WebAppBaseController.cs" />
+    <Compile Include="Controllers\WebController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Areas\CUSrinagarAdminPanel\Controllers\SeatAllocationController.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app_offlin.htm" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Examination\BulkExamFormSubjects.html" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\MarksSheet\Result.cshtml" />
+    <Content Include="BillDeskSMSOMRIntegratinCUET_Docs\CUETDocs\CUET API Helper.txt" />
+    <Content Include="BillDeskSMSOMRIntegratinCUET_Docs\CUETDocs\NONCUET IMPORT SQL.txt" />
+    <Content Include="BillDeskSMSOMRIntegratinCUET_Docs\Imp Queries.txt" />
+    <Content Include="BillDeskSMSOMRIntegratinCUET_Docs\degree certificate queries.txt" />
+    <Content Include="BillDeskSMSOMRIntegratinCUET_Docs\Index.html" />
+    <Content Include="BillDeskSMSOMRIntegratinCUET_Docs\BillSQL.txt" />
+    <Content Include="BillDeskSMSOMRIntegratinCUET_Docs\jobs.txt" />
+    <Content Include="BillDeskSMSOMRIntegratinCUET_Docs\nad queries.txt" />
+    <Content Include="Content\JSdisabled.html" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\ace-ie.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\ace-part2.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\ace-rtl.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\ace-skins.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\ace.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\bootstrap-colorpicker.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\bootstrap-datepicker3.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\bootstrap-datetimepicker.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\bootstrap-duallistbox.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\bootstrap-editable.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\bootstrap-multiselect.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\bootstrap-theme.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\bootstrap-theme.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\bootstrap-timepicker.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\bootstrap.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\chosen-sprite.png" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\chosen.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\colorbox.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\daterangepicker.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\dropzone.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\font-awesome.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\fonts.googleapis.com.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\fullcalendar.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\jquery-ui.custom.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\jquery-ui.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\jquery.gritter.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\prettify.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\select2.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\style.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\images\loading.gif" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\CustomScripts\admin-result.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\CustomScripts\admin-resultnotification.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSAdmission\AddMoreCourses.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSAdmission\AddMoreCoursesUG.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSAdmission\AddMoreCoursesPG.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSAdmission\AssignClassRollNo.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSAdmission\Combinations.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSAdmission\CombinationStatus.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSAdmission\SearchCombinations.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSAdmission\AddMoreCoursesNormal.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSAdmission\SemesterAdmission.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSAward\award.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSAward\AwardSetting.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSBillDesk\JSCUSPaymentStatus.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSEntranceCenters\JSAssignEntranceCentersBulk.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSEntranceCenters\JSVerifyRR.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSEntranceLists\JSEntranceLists.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSFileTracking\FileTracking.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSGeneral\CheckCheckBoxes.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSGeneral\GeneralJS.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSEntranceCenters\JSEntranceCenters.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSGeneral\preventDefaultJS.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSImport\Import.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSPayments\JSPaymentStatistics.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSRR\StdRegisterReportUniversity.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSRR\RRReportUniversity.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSSemesterCenters\SubjectEnrollments.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSSemesterCenters\BulkAdmitCardsAndAttsheets.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSLibrary\Students.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSMigration\JSMigration.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSRegistration\BOPEERegn.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSRegistration\CollegeEditStudent.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSRegistration\CollegeGraduation.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSRegistration\Graduation.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSRegistration\IntegratedHonors.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSRegistration\PostGraduation.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSRR\DownloadPhotos.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSSemesterCenters\JSAssignCentersBulk.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSUsers\CreateOREdit.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSUsers\StudentLogin.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSUsers\UserList.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSZIP\3-FileSaver.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSZIP\2-jszip-utils.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSZIP\1-jszip.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery-2.1.4.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.mask.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.validate.1.17.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Pages\admin-dashboard.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Pages\assign-combination.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Pages\admin-grievance.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Pages\clg-examination-form.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Pages\reports-result.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Pages\result-rapid-entry.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Pages\revaluation-result.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Pages\student-re-evaluation.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSRR\RRReport.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Pages\subject-combination-setting.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\SMS\JSSMS.js" />
+    <Content Include="Content\ThemePublic\ApplicationForms\IssuingOfDegreeCertificateForm.js" />
+    <Content Include="Content\ThemePublic\CloudPushNotification\JSPushNotification.js" />
+    <Content Include="Content\ThemePublic\Examination\SemExamAdmitCards.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSSemesterCenters\JSCenters.js" />
+    <Content Include="Content\ThemePublic\JSCertificateCourses\CertificateCourses.js" />
+    <Content Include="Content\ThemePublic\JSRegistration\NEP_PG.js" />
+    <Content Include="Content\ThemePublic\JSRegistration\NEP_IG.js" />
+    <Content Include="Content\ThemePublic\JSRegistration\NEP.js" />
+    <Content Include="Content\ThemePublic\JSRegistration\IntegratedHonoursPG.js" />
+    <Content Include="Content\ThemePublic\JSRegistration\IntegratedHonours.js" />
+    <Content Include="Content\ThemePublic\JSRegistration\JSPostGraduationBB.js" />
+    <Content Include="Content\ThemePublic\Libraries\css\Engstyle.css" />
+    <Content Include="Content\ThemePublic\Libraries\css\transcript.css" />
+    <Content Include="Content\ThemePublic\Libraries\images\cus-logo-green.png" />
+    <Content Include="Content\ThemePublic\Libraries\images\CUSrinagar-logo-green.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\ElectionComissionOfIndia\ECIFormPage1.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\ElectionComissionOfIndia\ECIFormPage2.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\PencakSilatChampionship24\1.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\ADMeetings\DSC_0447.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\ADMeetings\DSC_0462.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\ADMeetings\DSC_0504.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\ADMeetings\DSC_0509.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\ADMeetings\DSC_0510.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\ADMeetings\DSC_0526.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\ADMeetings\DSC_0535.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\administration\063.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\administration\DSC_0471.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\administration\DSC_0475.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\administration\facCus.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\administration\statutes.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\AnnualCollegeRoadRace2022\acf_1.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\AnnualCollegeRoadRace2022\acf_2.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\AnnualCollegeRoadRace2022\acf_3.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\AnnualCollegeRoadRace2022\acf_4.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\AnnualCollegeRoadRace2022\acf_5.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\AnnualCollegeRoadRace2022\acf_6.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\AnnualCollegeRoadRace2022\acf_7.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\constitutionday2021\DSC_0465.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\constitutionday2021\DSC_0469.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\constitutionday2021\DSC_0471.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\constitutionday2021\DSC_0473.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\constitutionday2021\DSC_0474.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\constitutionday2021\DSC_0475.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\constitutionday2021\DSC_0477.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\constitutionday2021\DSC_0478.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\constitutionday2021\DSC_0479.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\constitutionday2021\DSC_0480.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\PencakSilatChampionship24\Inter University Pencak Silat Championship 2023-24  %281%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\PencakSilatChampionship24\Inter University Pencak Silat Championship 2023-24  %2810%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\PencakSilatChampionship24\Inter University Pencak Silat Championship 2023-24  %2811%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\PencakSilatChampionship24\Inter University Pencak Silat Championship 2023-24  %2812%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\PencakSilatChampionship24\Inter University Pencak Silat Championship 2023-24  %2813%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\PencakSilatChampionship24\Inter University Pencak Silat Championship 2023-24  %2814%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\PencakSilatChampionship24\Inter University Pencak Silat Championship 2023-24  %2815%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\PencakSilatChampionship24\Inter University Pencak Silat Championship 2023-24  %2816%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\PencakSilatChampionship24\Inter University Pencak Silat Championship 2023-24  %2817%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\PencakSilatChampionship24\Inter University Pencak Silat Championship 2023-24  %2818%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\PencakSilatChampionship24\Inter University Pencak Silat Championship 2023-24  %2819%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\PencakSilatChampionship24\Inter University Pencak Silat Championship 2023-24  %282%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\PencakSilatChampionship24\Inter University Pencak Silat Championship 2023-24  %2820%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\PencakSilatChampionship24\Inter University Pencak Silat Championship 2023-24  %283%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\PencakSilatChampionship24\Inter University Pencak Silat Championship 2023-24  %284%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\PencakSilatChampionship24\Inter University Pencak Silat Championship 2023-24  %285%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\PencakSilatChampionship24\Inter University Pencak Silat Championship 2023-24  %286%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\PencakSilatChampionship24\Inter University Pencak Silat Championship 2023-24  %287%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\PencakSilatChampionship24\Inter University Pencak Silat Championship 2023-24  %288%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\PencakSilatChampionship24\Inter University Pencak Silat Championship 2023-24  %289%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\prize_distribution_fest\DSC_0164-min.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\prize_distribution_fest\DSC_0166-min.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\prize_distribution_fest\DSC_0168-min.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\prize_distribution_fest\DSC_0170-min.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\prize_distribution_fest\slide-3.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\sports_festival\DSC_0094-min.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\sports_festival\DSC_0095-min.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\sports_festival\DSC_0104-min.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\sports_festival\DSC_0108-min.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\sports_festival\DSC_0109-min.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\sports_festival\DSC_0133-min.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\sports_festival\DSC_0136-min.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\vcwelcome2021\front-pic.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\vcwelcome2021\vc-welcome04 %281%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\vcwelcome2021\vc-welcome04 %2810%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\vcwelcome2021\vc-welcome04 %2811%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\vcwelcome2021\vc-welcome04 %2812%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\vcwelcome2021\vc-welcome04 %2813%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\vcwelcome2021\vc-welcome04 %2814%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\vcwelcome2021\vc-welcome04 %2815%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\vcwelcome2021\vc-welcome04 %2816%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\vcwelcome2021\vc-welcome04 %2817%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\vcwelcome2021\vc-welcome04 %2818%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\vcwelcome2021\vc-welcome04 %2819%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\vcwelcome2021\vc-welcome04 %282%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\vcwelcome2021\vc-welcome04 %2820%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\vcwelcome2021\vc-welcome04 %2821%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\vcwelcome2021\vc-welcome04 %2822%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\vcwelcome2021\vc-welcome04 %283%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\vcwelcome2021\vc-welcome04 %284%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\vcwelcome2021\vc-welcome04 %285%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\vcwelcome2021\vc-welcome04 %286%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\vcwelcome2021\vc-welcome04 %287%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\vcwelcome2021\vc-welcome04 %288%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\vcwelcome2021\vc-welcome04 %289%29.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\workshop_quantum_mechnics\IMG_20170831_110815-min.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\workshop_quantum_mechnics\IMG_20170913_160205-min.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\gallery\workshop_quantum_mechnics\IMG_20170913_160219-min.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\logo-green-t3.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\logo-green-t3.png" />
+    <Content Include="Content\ThemePublic\Libraries\images\slides\Cricket_Team_cus2024-min.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\slides\cusnta_23.png" />
+    <Content Include="Content\ThemePublic\Libraries\images\slides\g20.png" />
+    <Content Include="Content\ThemePublic\Libraries\images\slides\iuniv-min.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\slides\slide-5.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\slides\slide0.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\slides\Slide6.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\slides\slide77.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\slides\slide_1.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\slides\ug2022NEP.png" />
+    <Content Include="Content\ThemePublic\Libraries\images\slides\VB2047.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\aa.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\AAAP.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\accountant.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\amarsingcollege.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\AR.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\controller.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\DAA.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\DeanCM.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\deaneng.JPG" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\dhla.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\dss.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\dsw.png" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\KAS.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\ManojSinha.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\no-image.png" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\NSSCOD.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\PAIC.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\PrincipalSP.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\Principal_iase.png" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\sa.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\sci.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\SeemaNaz1.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\te.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\VC2021.jpeg" />
+    <Content Include="Content\ThemePublic\Libraries\images\team\administration\small\vccus.jpg" />
+    <Content Include="Content\ThemePublic\Migration\JSMigration.js" />
+    <Content Include="Content\ThemePublic\JSRegistration\AdmitCards.js" />
+    <Content Include="Content\ThemePublic\JSRegistration\JSPostGraduation.js" />
+    <Content Include="Content\ThemePublic\JSRegistration\Graduation.js" />
+    <Content Include="Content\ThemePublic\JSRegistration\IntegratedHonoursNormalIHP.js" />
+    <Content Include="Content\ThemePublic\Libraries\css\printer-frndly.css" />
+    <Content Include="Content\ThemePublic\Libraries\css\style.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\ui.jqgrid.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\font-awesome\4.7.0\css\font-awesome.min.css" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\font-awesome\4.7.0\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\images\avatars\avatar.png" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\images\avatars\avatar1.png" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\images\avatars\avatar2.png" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\images\avatars\avatar3.png" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\images\avatars\avatar4.png" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\images\avatars\avatar5.png" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\images\avatars\profile-pic.jpg" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\images\avatars\user.jpg" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\images\bootstrap-colorpicker\alpha-horizontal.png" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\images\bootstrap-colorpicker\alpha.png" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\images\bootstrap-colorpicker\hue-horizontal.png" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\images\bootstrap-colorpicker\hue.png" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\images\bootstrap-colorpicker\saturation.png" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\images\placeholder\165x90.png" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\images\placeholder\255x150.png" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\images\placeholder\530x270.png" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\images\placeholder\550x280.png" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\swf\flashExport.swf" />
+    <Content Include="Content\ThemePublic\Libraries\css\main-site-styles.css" />
+    <Content Include="Content\ThemePublic\Libraries\css\tree-view-style-temp.css" />
+    <Content Include="Content\ThemePublic\Libraries\css\tree-view-style.css" />
+    <Content Include="Content\ThemePublic\Libraries\disableBack.js" />
+    <Content Include="Content\ThemePublic\Libraries\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\ThemePublic\Libraries\images\awards\award1.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\awards\award2.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\awards\award3.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\awards\award4.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\awards\award5.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\awards\award6.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\awards\award7.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\banners\AAA.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\banners\aaa-banner.png" />
+    <Content Include="Content\ThemePublic\Libraries\images\banners\aaa-banner2.png" />
+    <Content Include="Content\ThemePublic\Libraries\images\banners\asc-1.jfif" />
+    <Content Include="Content\ThemePublic\Libraries\images\banners\ASC.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\banners\asc-banner.png" />
+    <Content Include="Content\ThemePublic\Libraries\images\banners\asc-banner2.png" />
+    <Content Include="Content\ThemePublic\Libraries\images\banners\IASE.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\banners\gcw-banner.png" />
+    <Content Include="Content\ThemePublic\Libraries\images\banners\gcw-banner2.png" />
+    <Content Include="Content\ThemePublic\Libraries\images\banners\iase-banner.png" />
+    <Content Include="Content\ThemePublic\Libraries\images\banners\iase-banner2.png" />
+    <Content Include="Content\ThemePublic\Libraries\images\banners\SPC.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\banners\spc-banner.png" />
+    <Content Include="Content\ThemePublic\Libraries\images\banners\spc-banner2.png" />
+    <Content Include="Content\ThemePublic\Libraries\images\banners\GWC.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\cus-logo1.svg" />
+    <Content Include="Content\ThemePublic\Libraries\images\jkbank-logo.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\loading-icon-large.gif" />
+    <Content Include="Content\ThemePublic\Libraries\images\misc\bootstrap-glyphicons-screenshot.png" />
+    <Content Include="Content\ThemePublic\Libraries\images\misc\fontawsome-screenshot.png" />
+    <Content Include="Content\ThemePublic\Libraries\images\prof-dp-sm.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\images\student-dp-sm.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\back-to-top.js" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\bootstrap-hover-dropdown.min.js" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\bootstrap\fonts\glyphicons-halflings-regular-2.html" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\bootstrap\fonts\glyphicons-halflings-regular-3.html" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\bootstrap\fonts\glyphicons-halflings-regular.html" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\jq-accordion\css\style.css" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\jq-accordion\index.html" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\jq-accordion\js\index.js" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\flexslider\flexslider.css" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\flexslider\images\bg_direction_nav.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\flexslider\jquery.flexslider-min.js" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\font-awesome\4.7.0\css\font-awesome.min.css" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\font-awesome\4.7.0\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\grid.locale-en.js" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\jflickrfeed\jflickrfeed.min.js" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\jquery-1.12.3.min.js" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\jquery-3.2.1.min.js" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\jquery-placeholder\jquery.placeholder.js" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\jquery.3.3.1.min.js" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\jquery.jqGrid.min.js" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\main.js" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\css\bootstrap.css" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\css\font-awesome.min.css" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\css\jquery.mCustomScrollbar.css" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\css\main.css" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\css\prism.css" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\img\01.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\img\02.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\img\03.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\img\04.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\img\05.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\img\06.jpg" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\img\iphone.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\js\bootstrap.js" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\js\chart.js" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\js\jquery.mCustomScrollbar.min.js" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\js\jquery.mousewheel.min.js" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\js\jquery.newsTicker.js" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\js\prism.js" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\index.html" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\jquery.newsTicker.js" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\jquery.newsTicker.min.js" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\css\prettyPhoto.css" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\dark_rounded\btnNext.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\dark_rounded\btnPrevious.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\dark_rounded\contentPattern.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\dark_rounded\loader.gif" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\dark_rounded\sprite.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\dark_square\btnNext.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\dark_square\btnPrevious.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\dark_square\loader.gif" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\dark_square\sprite.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\default\default_thumb.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\default\loader.gif" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\default\sprite.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\default\sprite_next.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\default\sprite_prev.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\default\sprite_x.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\default\sprite_y.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\facebook\btnNext.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\facebook\btnPrevious.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\facebook\contentPatternBottom.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\facebook\contentPatternLeft.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\facebook\contentPatternRight.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\facebook\contentPatternTop.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\facebook\default_thumbnail.gif" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\facebook\loader.gif" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\facebook\sprite.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\light_rounded\btnNext.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\light_rounded\btnPrevious.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\light_rounded\loader.gif" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\light_rounded\sprite.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\light_square\btnNext.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\light_square\btnPrevious.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\images\prettyPhoto\light_square\sprite.png" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\pretty-photo\js\jquery.prettyPhoto.js" />
+    <Content Include="Content\ThemePublic\Libraries\css\ui.jqgrid.min.css" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\tabs\css\style-tabs.css" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\tabs\css\style.min.css" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\tabs\fonts\font-awesome\fontawesome-webfont.svg" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\tabs\js\src\tabs.js" />
+    <Content Include="Content\ThemePublic\Libraries\swf\flashExport.swf" />
+    <Content Include="Content\ThemePublic\Libraries\css\ui.jqgrid-custom.css" />
+    <Content Include="Content\ThemePublic\Payment\SelfFinanced.js" />
+    <Content Include="Content\ThemePublic\Payment\LaterPayment.js" />
+    <Content Include="Content\ThemePublic\PrintImages\DefaultStudentPic.jpeg" />
+    <Content Include="Content\ThemePublic\PrintImages\DefaultStudentPhoto.jpeg" />
+    <Content Include="Content\ThemePublic\PrintImages\CUSLogo.png" />
+    <Content Include="Content\ThemePublic\PrintImages\JKGovtLogo.png" />
+    <Content Include="Content\ThemePublic\PrintImages\cuslogoEmail.png" />
+    <Content Include="Content\ThemePublic\PrintImages\JKB.jpg" />
+    <Content Include="Content\ThemePublic\PrintImages\MarksSheetLogo.png" />
+    <Content Include="Content\ThemePublic\PrintImages\new.gif" />
+    <Content Include="firebase-messaging-sw.js" />
+    <Content Include="FolderManager\BoardOfStudies\BoS-Commerce.pdf" />
+    <Content Include="FolderManager\BoardOfStudies\BoS-ET.pdf" />
+    <Content Include="FolderManager\Downloads\Contractual-Lecturers-AdvNotification.pdf" />
+    <Content Include="FolderManager\Downloads\Contractual-lecturers-Short-Listing-Criteria.pdf" />
+    <Content Include="FolderManager\Downloads\form-contractual-lecturer.pdf" />
+    <Content Include="FolderManager\Downloads\GradeTableCUS.jpeg" />
+    <Content Include="FolderManager\Downloads\Prospectus2018.pdf" />
+    <Content Include="FolderManager\ModelPaper\AECCModelPaper.pdf" />
+    <Content Include="FolderManager\ModelPaper\BotanyModelPaper-1.pdf" />
+    <Content Include="FolderManager\ModelPaper\ChemistryModelPaper.pdf" />
+    <Content Include="FolderManager\ModelPaper\HistoryModelPaper-1.pdf" />
+    <Content Include="FolderManager\ModelPaper\MathematicsModelPaper.pdf" />
+    <Content Include="FolderManager\ModelPaper\PhysicsModelPaper.pdf" />
+    <Content Include="FolderManager\ModelPaper\ZoologyModelPaper.pdf" />
+    <Content Include="FolderManager\ProgressReport\ProgressReport.pdf" />
+    <Content Include="FolderManager\TheAct\CUS-TheAct.pdf" />
+    <Content Include="FolderManager\Transcript\AR.png" />
+    <Content Include="FolderManager\Transcript\Controller.png" />
+    <Content Include="FolderManager\Transcript\gulzar_ar.png" />
+    <Content Include="FolderManager\Transcript\Prog.png" />
+    <Content Include="Rotativa\help-wkhtmltoimage.txt" />
+    <Content Include="Rotativa\help-wkhtmltopdf.txt" />
+    <Content Include="Rotativa\wkhtmltoimage.exe" />
+    <Content Include="Rotativa\wkhtmltopdf.exe" />
+    <Content Include="Scripts\General\custom-select.js" />
+    <Content Include="Scripts\General\general-validation.js" />
+    <Content Include="Scripts\General\general.js" />
+    <Content Include="Scripts\General\pager-table.js" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ExaminationWhiteList\ApplicationsList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ExaminationWhiteList\Applications.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ExaminationWhiteList\Create.cshtml" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\JSAccount\SignIn.js" />
+    <Content Include="Scripts\JSBilling\BillBankAccount.js" />
+    <Content Include="Scripts\JSBilling\Billing.js" />
+    <Content Include="Scripts\JSBilling\BillSetter.js" />
+    <Content Include="Scripts\JSChosen.js" />
+    <Content Include="Scripts\JSCourse\Assigncombination.js" />
+    <Content Include="Scripts\JSCourse\GetCombinations.js" />
+    <Content Include="Scripts\JSNotification\NotificationCreateOrEdit.js" />
+    <Content Include="Scripts\JSNotification\NotificationIndex.js" />
+    <Content Include="Scripts\JSalary\Salary.js" />
+    <Content Include="Scripts\JSSubject\CalculateMarks.js" />
+    <Content Include="Scripts\JSSubject\Subject.js" />
+    <Content Include="Scripts\JSSubject\_CreateOrEdit.js" />
+    <Content Include="Scripts\Pages\admin-degree-certificate-Eng2017.js" />
+    <Content Include="Scripts\Pages\admin-degree-certificate.js" />
+    <Content Include="Scripts\Pages\admin-MarksSheet.js" />
+    <Content Include="Scripts\Pages\admin-selectionlist.js" />
+    <Content Include="Scripts\Pages\admin-transcript.js" />
+    <Content Include="Scripts\Pages\DivisionImprovementForm.js" />
+    <Content Include="Scripts\Pages\std-colg-prefs.js" />
+    <Content Include="Scripts\Pages\combinationsetting.js" />
+    <Content Include="Scripts\Pages\examination-setting.js" />
+    <Content Include="Scripts\Pages\grievance.js" />
+    <Content Include="Scripts\Pages\InternalExam.js" />
+    <Content Include="Scripts\Pages\result.js" />
+    <Content Include="Scripts\Pages\resultnotification.js" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\web.config" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\web.config" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\JSGeneral\JSWebAppMenuHandler.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\ace-editable.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\ace-elements.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\ace-extra.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\ace.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\autosize.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\bootbox.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\bootstrap-colorpicker.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\bootstrap-datepicker.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\bootstrap-datetimepicker.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\bootstrap-editable.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\bootstrap-markdown.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\bootstrap-multiselect.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\bootstrap-tag.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\bootstrap-timepicker.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\bootstrap-wysiwyg.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\bootstrap.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\buttons.colVis.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\buttons.flash.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\buttons.html5.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\buttons.print.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\chosen.jquery.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\dataTables.buttons.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\dataTables.select.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\daterangepicker.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\dropzone.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\excanvas.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\fullcalendar.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\grid.locale-en.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\holder.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\html5shiv.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery-1.11.3.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\bootstrap-theme.css.map" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\bootstrap-theme.min.css.map" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\bootstrap.css.map" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\css\bootstrap.min.css.map" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\font-awesome\4.7.0\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\font-awesome\4.7.0\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\font-awesome\4.7.0\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\font-awesome\4.7.0\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\font-awesome\4.7.0\fonts\FontAwesome.otf" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Dashboard\Index.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Shared\_CUAdminPanelUserAccountMenu.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Shared\_CUAdminPanelLayout.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Shared\_CUAdminPanelLeftMenu.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Shared\_CUAdminPanelSearch.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Shared\_CUAdminPanelShortCuts.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Shared\_CUAdminPanelSiteMap.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Shared\_CUCollegeAdminPanelUserAccountMenu.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Shared\_CUCollegeAdminPanelLayout.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Shared\_CUCollegeAdminPanelLeftMenu.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Shared\_CUCollegeAdminPanelSearch.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Shared\_CUCollegeAdminPanelShortCuts.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Shared\_CUCollegeAdminPanelSiteMap.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Syllabus\Index.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Syllabus\Create.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Syllabus\Edit.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Syllabus\_CreateOrEdit.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Syllabus\_GetChildDDL.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Notification\_DetailedNotification.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Notification\NotificationListPartial.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Notification\Index.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Syllabus\SyllabusListPartial.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Dashboard\Index.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignCombination\StudentDetail.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignCombination\_FormDetail.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignCombination\Forms.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignCombination\FormListPartial.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Shared\_JSPagerTableFooter.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignCombination\ViewFormDetail.cshtml" />
+    <Content Include="Scripts\Pages\clg-upload-certificates-ih.js" />
+    <Content Include="Scripts\Pages\student-examinationform.js" />
+    <Content Include="Scripts\Pages\subject-master.js" />
+    <Content Include="Scripts\Pages\std-upload-certificates-ih.js" />
+    <Content Include="Views\MarksCard\PrintDegreeCertificate.cshtml" />
+    <Content Include="Views\MarksCard\PrintMarksSheet.cshtml" />
+    <Content Include="Views\MarksCard\PrintTranscript.cshtml" />
+    <Content Include="Views\MarksCard\SemesterMarksCards.cshtml" />
+    <Content Include="Views\MarksCard\View.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Registration\StudentDetail.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Registration\PostGraduation.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Registration\Graduation.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Registration\IntegratedHonors.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignCombination\_CourseCombinationList.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignCombination\ViewFormDetailPartial.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignCombination\_GetSubjectCombinationDDL.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignCombination\_GetChildDDL.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\UserProfile\UserList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\UserProfile\UserListTable.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\UserProfile\Create.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\UserProfile\Edit.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\UserProfile\_CreateOrEdit.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\CollegeRegistration\Graduation.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Entrance\AdmitCardStatus.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Subject\SubjectList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Subject\Subjects.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\web.config" />
+    <Content Include="Areas\CUStudentZone\Views\Shared\_CUStudentZoneLayout.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Shared\_CUStudentZoneLeftMenu.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Shared\_CUStudentZoneSearch.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Shared\_CUStudentZoneShortCuts.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Shared\_CUStudentZoneSiteMap.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Shared\_CUStudentZoneAccountMenu.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Shared\_JSPagerTableFooter.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Dashboard\Index.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\EditResult.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\EditResultPartial.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Dashboard\_CUSCollegeInfoPartialView.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Library\Students.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Library\StudentList.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Library\_GetChildDDL.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Library\LibraryForm.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\UserProfile\UserList.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Shared\_CUWebAppFavicon.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Shared\_CUStudentPanelUserAccountMenu.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Shared\_CUWebAppFooter.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\UserProfile\UserListTable.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\UserProfile\Create.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\UserProfile\_CreateOrEdit.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Dashboard\Profile.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Student\ExaminationForm.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Student\StudentProfile.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\UserProfile\_GetChildDDL.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\UserProfile\SubjectSection.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\UserProfile\Edit.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\CollegeClass\Index.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Examination\ExaminationForm.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Examination\ExaminationFormListPartail.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Examination\AcceptExaminationForm.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Award\Award.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Award\AwardList_UG.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Award\_GetChildDDL.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Award\_AwardListSubPartial.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Award\SubmitAward.cshtml" />
+    <Content Include="BillDeskSMSOMRIntegratinCUET_Docs\BillDesk PG Interface Specs -  Cluster University Srinagar  v1.0.pdf" />
+    <Content Include="BillDeskSMSOMRIntegratinCUET_Docs\Parameter Specification_Cluster University Srinagar.xls" />
+    <Content Include="Areas\CUStudentZone\Views\ReEvaluation\ReEvaluation.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\ReEvaluation\PrintReEvaluationForm.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\College\CollegeList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\College\CollegeListTable.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\College\Create.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AttendanceSheet\ViewStudents.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AttendanceSheet\_GetChildDDL.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AttendanceSheet\DownloadSheets.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\DeanResult\ReEvaluationXerox.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\DeanResult\ReEvaluationXeroxListPartail.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Award\AwardList_IH.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Award\AwardList_PG.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Award\PrintAward.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Grievance\Detail.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Grievance\Grievance.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Grievance\GrievanceForm.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Grievance\GrievanceList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Award\AwardList_IH.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Award\AwardList_PG.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Award\AwardList_UG.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Award\AwardExt.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Award\_GetChildDDL.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Award\PrintAward.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\UserProfile\UserListEvalvator.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\UserProfile\CreateEvalvator.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\UserProfile\EditEvalvator.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\UserProfile\SubjectSectionEvalvator.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\UserProfile\_CreateOrEditEvalvator.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\UserProfile\_GetChildDDL.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\UserProfile\UserListTableEvalvator.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\UserProfile\_GetChildDDLEvalvator.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Dashboard\GrievanceWizardList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Dashboard\GrievanceWizardChart.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\Student.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\StudentListPartial.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Student\Index.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Student\Edit.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\CategoryWise.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\CategoryWiseListPartial.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Statistics\CourseCategoryWise.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Statistics\CourseWiseListPartial.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Statistics\Student.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Statistics\StudentListPartial.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Statistics\PrintCourseCategoryWise.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\PrintCourseWise.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Statistics\CourseDistrictCategoryListPartial.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Statistics\PrintCourseDistrictCategory.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Statistics\CourseDistrictCategoryWise.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Student\SemesterAdmForm.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Student\ApplySemesterAdm.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\DistrictWise.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\DistrictListPartial.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\PrintCourseDistrictCategory.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\PrintCourseCategoryWise.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Student\SemesterAdmFormOnlinePayment.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignCombination\CombinationDetail.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Grievance\Detail.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Grievance\Grievance.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Grievance\GrievanceForm.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Grievance\GrievanceList.cshtml" />
+    <Content Include="Views\Migration\Form.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Migration\Index.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Migration\FormList.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Migration\FormListTable.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Result\_ResultListPartial.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Result\_ResultListSubPartial.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Result\ResultList.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Result\ResultNotification.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Result\ResultNotificationList.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Grievance\EmailConfirmation.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Grievance\GrievanceConfirmation.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Grievance\GrievanceForm.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Grievance\OTPConfirmation.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Grievance\GrievanceList.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Grievance\Grievance.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Grievance\Detail.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Message\Add.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Message\Message.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Message\MessageList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Message\Create.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\UserProfile\Instructions.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\UserProfile\Instructions.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Message\Edit.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Message\Message.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Message\MessageList.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignCombination\CombinationRollNumber.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\RR\Report.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\RR\_GetRRDDL.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\RR\ViewReport.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Examination\Examination.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Examination\PrintExaminationForm.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Examination\ExaminationForm.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Examination\PaymentResponse.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Examination\PrintExaminationFormReceipt.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\AssignRollNumber\ExaminationForm.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\AssignRollNumber\ExaminationFormListPartail.cshtml" />
+    <Content Include="BillDeskSMSOMRIntegratinCUET_Docs\BillDeskS2S.pdf" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\BillDesk\SearchPayments.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Migration\FormListTable.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Migration\FormList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\CombinationSetting\CombinationSetting.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\CombinationSetting\CreateEdit.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\CombinationSetting\Edit.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\CombinationSetting\CombinationSettingList.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignCombination\CombinationSearchFilter.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignCombination\GetSubjectsCount.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignCombination\_SubjectCountList.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Examination\GetCombination.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ExamFormSetting\ExaminationSetting.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ExamFormSetting\ExaminationSettingList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ExamFormSetting\_CreateOrEdit.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ExamFormSetting\Create.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ExamFormSetting\Edit.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Course\_CreateOrEdit.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Course\Create.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Course\Edit.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Course\CourseList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Course\Courses.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Combination\GetCourseList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SemesterCenters\Centers.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SemesterCenters\_DisplayCenters.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Questionaire\Questionaire.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Questionaire\ExamForm.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\ExaminationFormWigets.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SemesterCenters\DownloadCenterNotices.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\SemesterCenters\Centers.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\SemesterCenters\_DisplayCenters.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\SemesterCenters\DownloadCenterNotices.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\AdmissionFormWigets.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\GetCourseWiseCountForProgramme.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\GetCourseWiseGenderCount.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Examination\BacklogForm.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Questionaire\QuestionaireList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Questionaire\QuestionaireListTable.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Questionaire\Create.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Questionaire\_CreateOrEdit.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Questionaire\_OptionsView.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Questionaire\Edit.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\GrievanceWidgets.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SemesterCenters\AssignCentersInBulk.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SemesterCenters\_GetCoursesDDL.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SemesterCenters\_DispalyAvaliableCenters.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\AwardStatistics.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\GetCoursesForCollege.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Subject\CreateEdit.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SemesterCenters\Individual.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Examination\HardCodeFeeResponse.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\GetSubjectsForCourse.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Entrance\EntranceCenters.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Entrance\_DisplayCenters.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\StudentInfo\SearchStudent.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\StudentInfo\GetInfo.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\StudentInfo\PersonalDetail.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\StudentInfo\ExaminationDetail.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\StudentInfo\AdmissionDetail.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\StudentInfo\AdmissionDetail.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\StudentInfo\ExaminationDetail.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\StudentInfo\GetInfo.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\StudentInfo\PersonalDetail.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\RegnCourses\AddIHPNormal.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Combination\Edit.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\RegnCourses\AddPG.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\SubjectWise.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\ResultListPartial.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\Result.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\SubjectWiseListPartial.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Entrance\AssignCentersInBulk.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Entrance\_GetCoursesDDL.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Examination\PrintBacklogExaminationFormReceipt.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Entrance\_DispalyAvaliableCenters.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SeatAllocation\OLDFetchList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SeatAllocation\GenerateList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Entrance\DownloadCenterNotices.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\NewAdmissionsStatisticsPartial.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\NewAdmissionStatistics.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Combination\_SearchCombinations.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Combination\_SubjectsHelper.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Combination\Combinations.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Combination\Edit.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Combination\GetCourseList.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Combination\Index.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\NewAdmissionStatisticsList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Entrance\_GetCoursesOMRDDL.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Questionaire\QuestionaireCountList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Questionaire\QuestionaireCountListTable.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Questionaire\_GetChildDDL.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SeatAllocation\_GetChildDDL.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Statistics\DownloadPhotographs.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\AwardSetting\AwardSettingList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\AwardSetting\Index.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\AwardSetting\_GetChildDDL.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Award\AwardListPartial.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Combination\BacklogForm.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Combination\ChooseSemester.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Combination\ExaminationForm.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Combination\GetCombination.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Combination\HardCodeFeeResponse.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Combination\PaymentResponse.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Combination\PrintAdmitCard.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Combination\PrintBacklogExaminationFormReceipt.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Combination\PrintExaminationForm.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Combination\PrintExaminationFormReceipt.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Combination\PrintPriview.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SMS\Send.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SMS\_GetCoursesSMSDDL.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SMS\_GetCollegeCenterSMSDDL.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Registration\AssignRegistrationNumbers.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Registration\GetCoursesForCollege.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ResultNotification\ResultNotification.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ResultNotification\ResultNotificationListPartial.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\EntranceNotification\Index.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SeatAllocation\UpdateStudentStatus.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SeatAllocation\_GetCoursesDDL.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SeatAllocation\UpdateSelectionList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\EntranceLists\Index.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\EntranceLists\AddEditList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\EntranceLists\GetCourseDDL.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\ReEvaluationStatistics.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\Edit.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\UserProfile\AssignProfessorCRClasses.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\PaymentStatistics.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\BOPEERegistration\AddStudentDetails.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Entrance\VerifyRR.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\CombinationSetting\CreateEditSubjectCombinationSetting.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\CombinationSetting\SubjectCombinationSetting.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\CombinationSetting\SubjectSettingRapidEntryList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\CombinationSetting\SubjectCombinationSettingList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Entrance\_GetListOfFirstSemesterRRPartial.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Employee\Create.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Employee\List.cshtml" />
+    <Content Include="BillDeskSMSOMRIntegratinCUET_Docs\SMS-IntegrationDocumentver1.4.pdf" />
+    <Content Include="BillDeskSMSOMRIntegratinCUET_Docs\OMR_50_100_SERIES_PROGS.zip" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignSubject\SubjectClassDetailList.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignSubject\ProfessorSubjectList.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignSubject\SubjectClassDetailTable.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignSubject\ProfessorSubjectListTable.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignSubject\CRSubjectList.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignSubject\CRSubjectListTable.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignSubject\ResponseProfessor.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignSubject\ResponseCR.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ProfessorStatistics\ProfessorListTable.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ProfessorStatistics\ProfessorList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ProfessorStatistics\SubjectClassDetailList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ProfessorStatistics\SubjectClassDetailTable.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Employee\EmployeeListPartial.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Entrance\DeleteJunk.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\FileTracking\AllFiles.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ExamFormSetting\ExaminationForms.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ExamFormSetting\ExaminationFormsList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\FileTracking\GetFiles.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Salary\EmployeeList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Salary\FetchEmployeeList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Salary\EditEmployeeSalary.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Salary\GenerateSalaryBill.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Salary\EditSalarySettings.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Salary\SalaryList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Salary\FetchSalaryList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Salary\CurrentSalaryList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\Enrollment.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\EnrollmentList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\FileTracking\TrackFileDetails.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\PrintProgrammeWise.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\CreateResult.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\CreateResultListPartial.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Salary\EmployeeHistory.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Salary\EmployeeHistoryList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Salary\PrintSalary.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\FileTracking\PrintHistory.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Dashboard\GetOpenExaminations.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Dashboard\GetProgrammeWiseCount.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Dashboard\GetPassingCourses.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Dashboard\GetFailingCourses.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\RegularExaminations\RegularExaminationForm.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\FeeStructure\FeeStructureList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\FeeStructure\FeeStructureListPartial.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Combination\_UserActivity.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Combination\_UserActivity.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SemesterCenters\BulkAdmitCards.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SemesterCenters\DownloadAdmitCardsPreview.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Entrance\_GetCoursesPDFDDL.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Entrance\DownloadPDFMeritList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SemesterCenters\DownloadAdmitCardAndAttendanceSheet.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\SubjectWiseStatistics.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\SubjectWiseStatisticsListPartial.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Result\Result.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Result\ResultListPartial.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Result\SubjectWise.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Result\SubjectWiseListPartial.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Result\SubjectWiseStatistics.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Result\SubjectWiseStatisticsListPartial.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Combination\Combination.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Combination\CombinationListPartial.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Combination\Combination.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Combination\CombinationListPartial.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Examination\BulkExamaminationForm.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Examination\SingleExamaminationForm.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignCombination\CombinationRollNumberOLD.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Examination\BulkExamaminationFormWithSubjects.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Examination\BulkExamaminationFormWithSubjectsUG5.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Examination\BulkExamaminationFormWithSubjectsIH5.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Examination\BulkExamaminationFormWithSubjectsUG2.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Examination\BulkExamaminationFormWithSubjectsIH2.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Examination\BulkExamaminationFormWithSubjectsUG2B.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Examination\BulkExamaminationFormWithSubjectsPG2.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Examination\BulkExamaminationFormWithSubjectsENG2.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Examination\BulkExamaminationFormWithSubjectsENG2B.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Examination\BulkExamaminationFormWithSubjectsPG2B.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Examination\BulkExamaminationFormWithSubjectsPGMED2B.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\RapidEntry.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\RapidEntryListPartial.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\RegnCourses\AddUG.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\AdmissionSettings\RegularAdmSettings.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\AdmissionSettings\EditRegularAdmSettings.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Examination\BulkExamaminationFormWithSubjectsPG3B.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Examination\BulkExamaminationFormWithSubjectsPG1B.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Examination\BackLogFormWithPayment.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Examination\RegularFormWithPaymentWithSubjects.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Examination\RegularFormWithPaymentWithOutSubjects.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\RegnCourses\AddEditQualificationDetails.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\ProgramGenderWise.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\ProgramGenderWiseListPartial.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\ProgramCategoryGenderWiseListPartial.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\ProgramCategoryGenderWise.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\GenderWise.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\GenderWiseListPartial.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\CategoryGenderWise.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Statistics\CategoryGenderWiseListPartial.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\InternalAdmin\InternalExam.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\InternalAdmin\InternalExamList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\InternalAdmin\Create.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\InternalAdmin\ViewQuestions.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\InternalAdmin\QuestionsList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\InternalAdmin\_CreateOrEdit.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\InternalAdmin\_CreateOrEditQuestion.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\InternalAdmin\AddQuestions.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\InternalAdmin\EditQuestion.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\InternalStudent\ViewExam.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\InternalStudent\ExamPaper.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\InternalAdmin\Edit.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\StudentInfo\PaymentDetail.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Student\SemesterAdmForm.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Entrance\_GetCoursesRCDDL.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Admission\CollegePreference.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Admission\PaymentResponse.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Admission\ProvAdmFormPrint.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Admission\NewAdmission.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Admission\NewAdmissionListPartial.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Admission\UploadCertificateIH.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Admission\UploadSuccessReponseIH.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Admission\UploadedCertificateIH.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Admission\UploadCertificateIHList.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Admission\UploadedCertificate.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Admission\PaymentResponseIH.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Admission\UploadedCertificateIH.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Admission\UploadCertificateIHList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Admission\UploadedCertificate.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Admission\UploadSuccessReponseUG.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Admission\PaymentResponseUG.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Admission\CollegePreference.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Admission\CollegePreferenceListPartial.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Admission\StudentCollegePreference.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Admission\ApplyForCounseling.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ResultNotification\CreateResultNotification.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SemesterCenters\_GetCoursesRCDDL.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ResultNotification\DeclareResult.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Result\ResultDiscrepancy.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\TranscriptsDel.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\TranscriptNotificationDel.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\TranscriptNotificationListPartialDel.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\Detail.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\RR\DownloadSemesterAdmissionDetails.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Admission\NewUGAdmissionForms.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\Transcript_BEDs.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Grievance\AddAlumni.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\ReEvaluation\ReEvaluationForm.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\ReEvaluation\Xerox.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\ReEvaluation\XeroxForm.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\ReEvaluation\PrintXeroxForm.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ReEvaluationSetting\ReEvaluationSetting.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ReEvaluationSetting\ReEvaluationSettingList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ReEvaluationSetting\CreateEdit.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\ReEvaluation\ReEvaluationPaymentResponse.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\ReEvaluation\XeroxPaymentResponse.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\OLDTranscript.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\OldPrintTranscript.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SubjectMarksStructure\SubjectMarksStructure.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SubjectMarksStructure\SubjectMarksStructureList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SubjectMarksStructure\CreateEdit.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\RegnCourses\AddEditQualificationDetailsPG.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\TranscriptsListTest.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\RR\_GetRRDDL.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\RR\Report.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\RR\ViewReport.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Result\PrintGazette.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\Transcript_MSChemistry.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\CourseWiseStatistics.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\CourseWiseStatisticsListPartial.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Result\CourseWiseStatistics.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Result\CourseWiseStatisticsListPartial.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\OLDGetStudentMarks.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\StudentMarks.cshtml" />
+    <Content Include="BillDeskSMSOMRIntegratinCUET_Docs\First 40 ResultSecionprogs.rar" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Notification\MarqueeText.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\DeanResult\FindSubjectClashforDateSheets.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignCombination\GetLateralEntry.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SemesterCenters\_GetCoursesACDDL.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ResultNotification\ValidateResult.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\RegnCourses\AddIHP.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\OldTranscriptList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\CombinationSetting\CombinationSettingStructure.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\CombinationSetting\CombinationSettingStructureList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\CombinationSetting\CombinationSettingStructureCreateEdit.cshtml" />
+    <Content Include="BillDeskSMSOMRIntegratinCUET_Docs\PROGRAMEntrance2021.rar" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\ProgramStructure.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\ProgramStructureList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\PrintTranscriptDel.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignCombination\ChangeCourse.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Combination\SetCombination.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Combination\GetSetCombination.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Combination\ReplaceSubject.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\DegreeCertificate\DegreeCertificate.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\DegreeCertificate\DegreeCertificateList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\DegreeCertificate\PrintDegreeCertificate.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\AwardSetting\AwardFilters.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\AwardSetting\AwardFiltersList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\AwardSetting\EditFilters.cshtml" />
+    <Content Include="Content\ThemeAdmin\Content\Libraries\fonts\Gandhara Suls Regular.ttf" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Admission\PGCertificateCheck.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Admission\StudentCertificates.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Admission\StudentsRegister.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Admission\StudentsRegisterPreview.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Admission\_GetRRDDL.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\RegnCourses\AddEditQualificationDetailsPGLE.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\RegnCourses\UpdateCertificates.cshtml" />
+    <Content Include="App_Browsers\qt.browser" />
+    <Content Include="Areas\CUStudentZone\Views\Download\Download.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Download\PrintMarksSheet.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Download\PrintDegreeCertificate.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Download\PrintTranscript.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Statistics\CategoryWise.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Statistics\CategoryWiseListPartial.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Statistics\DistrictListPartial.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Statistics\DistrictWise.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Statistics\Enrollment.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Statistics\EnrollmentList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\PrintGazette.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\PrintMarksSheet.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Combination\EditCombinationCode.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\Statistics.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\StatisticsListPartial.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\PrintStatistics.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Result\PrintMarksSheet.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\PrintGazetteSubjectWise.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Result\PrintGazetteSubjectWise.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\DegreeCertificate\PrintDegreeCertificate_PG.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Award\AwardList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ResultHistory\ResultHistory.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ResultHistory\ResultHistoryPartial.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Result\Statistics.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Result\StatisticsListPartial.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Course\CourseMapping.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SeatAllocation\FetchList.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Examination\DivisionImprovement.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ResultMeritList\ResultMeritList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ResultMeritList\ResultMeritListPartial.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Revaluation\UpdateRevaluationtResult.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Revaluation\CreateRevaluationtNotification.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Revaluation\UpdateRevaluationtResultPartial.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Feedback\Index.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Feedback\FeedbackList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Feedback\DailyLectureFeedBacks.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Feedback\DailyLectureFeedBacksList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\PendingLists\ResultPendingLists.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\ResultAnomaly.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\PendingLists\ResultPendingListPartial.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AttendanceSheet\_GetCenterList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SemesterCenters\AttendanceSheetsPreview.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SemesterCenters\_GetChildDDL.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SemesterCenters\_GetCenterList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\ResultAnomalyList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SemesterCenters\SubjectsEnrollment.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SemesterCenters\_SubjectCountList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SemesterCenters\_DDLCourse.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SemesterCenters\_DDLProgramme.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Dashboard\GetOpenAwardLinks.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ResultBacklogBatches\ResultBacklogBatches.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ResultBacklogBatches\ResultBacklogBatchesPartial.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Dashboard\CurrentRunningSemesters.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Result\PrintFullGazette.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignCombination\ViewFormDetailNEP.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\PrintEngMarksSheet.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\MarksSheet\MarksSheet.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\MarksSheet\List.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\Result\ResultData.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Enrollment\Index.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Enrollment\EnrollmentList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\SemesterCenters\_GetCoursesDDLForBulkAssign.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\MarksSheet\PrintMarksSheet.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\MarksSheet\MarksSheetStatus.cshtml" />
+    <Content Include="BillDeskSMSOMRIntegratinCUET_Docs\NTA 2023.al4" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\PrintAllMarksSheets.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\PrintTranscript_Eng.cshtml" />
+    <Content Include="BillDeskSMSOMRIntegratinCUET_Docs\CUETDocs\CUET UG 2023 Data Sharing APIs  Interface.pdf" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\EGovCUET\Search.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\EGovCUET\SearchList.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\EGovCUET\Search.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\EGovCUET\SearchList.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignCombination\ViewFormDetailNEPCUET.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Bill\SetterSearch.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Bill\SetterList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Bill\EditSetter.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Bill\CreateSetter.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Bill\PaperSetterList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Bill\AssignPaper.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Bill\EvaluatorSearch.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Bill\EvaluatorList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Bill\Bills.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Bill\BillList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\BillAccount\BillAccountDetails.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\BillAccount\PrintBills.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\BillSetter\Bills.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\BillSetter\SetterList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\BillEvaluator\Bills.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\BillEvaluator\EvaluatorList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\BillSetter\Certificate.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\BillSetter\AppointmentLetter.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignCombination\ViewFormDetailPG.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignCombination\PGSubjectsRegion.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\PrintTranscriptIG.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\DegreeCertificateEng\DegreeCertificateEng.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\DegreeCertificateEng\DegreeCertificateListEng.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\DegreeCertificateEng\PrintDegreeCertificateEng.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\TranscriptDegreeSetting.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\TranscriptDegreeSettingsSearch.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\TranscriptDegreeSettingsList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\GenerateTranscripts.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\SetTranscriptParameter.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\TranscriptSearch.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\TranscriptsList.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\PrintTranscripts.cshtml" />
+    <Content Include="BillDeskSMSOMRIntegratinCUET_Docs\ABCApi\ABC_ID_Create_and_Verify_AP.pdf" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ResultGazette\ResultGazette.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\ResultGazette\PrintGazette.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Transcript\Transcript.cshtml" />
+    <None Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery-3.2.1.intellisense.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery-3.2.1.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery-3.2.1.slim.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery-3.2.1.slim.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery-additional-methods.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery-typeahead.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery-ui.custom.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery-ui.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.bootstrap-duallistbox.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.colorbox.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.dataTables.bootstrap.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.dataTables.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.easypiechart.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.flot.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.flot.pie.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.flot.resize.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.gritter.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.hotkeys.index.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.inputlimiter.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.jqGrid.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.knob.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.maskedinput.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.mobile.custom.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.nestable.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.raty.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.sparkline.index.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.ui.touch-punch.min.js" />
+    <None Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.validate-vsdoc.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.validate.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.validate.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.validate.unobtrusive.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\markdown.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\moment.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\prettify.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\respond.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\respond.matchmedia.addListener.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\respond.matchmedia.addListener.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\respond.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\select2.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\spin.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\spinbox.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\tree.min.js" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\wizard.min.js" />
+    <Content Include="Scripts\JSSyllabus\SyllabusCreateOrEdit.js" />
+    <Content Include="Scripts\JSSyllabus\SyllabusIndex.js" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Shared\_CUWebAppGeneralCSS.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Shared\_CUWebAppGeneralJS.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Shared\_CUWebAppThemeSettings.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Shared\_CUWebAppFooter.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Shared\_CUWebAppFavicon.cshtml" />
+    <Content Include="Views\Result\ResultNotification.cshtml" />
+    <Content Include="Views\Result\ResultNotificationList.cshtml" />
+    <Content Include="Views\Result\Result.cshtml" />
+    <Content Include="Views\Shared\_CUWebAppFooter.cshtml" />
+    <Content Include="Views\Shared\_CUWebAppHeader.cshtml" />
+    <Content Include="Views\Shared\_CUWebAppLayout.cshtml" />
+    <Content Include="Views\Syllabus\Index.cshtml" />
+    <Content Include="Views\Syllabus\_GetChildDDL.cshtml" />
+    <Content Include="Views\Notification\Notification.cshtml" />
+    <Content Include="Views\Notification\NotificationListPartial.cshtml" />
+    <Content Include="Views\Notification\_DetailedNotification.cshtml" />
+    <Content Include="Views\Syllabus\SyllabusListPartial.cshtml" />
+    <Content Include="Views\Registration\IntegratedHonorsNormalIH.cshtml" />
+    <Content Include="Views\Account\SignIn.cshtml" />
+    <Content Include="Views\Account\Forbidden.cshtml" />
+    <Content Include="Views\Shared\_JSPagerTableFooter.cshtml" />
+    <Content Include="Views\Registration\Instructions.cshtml" />
+    <Content Include="Views\Registration\Detail.cshtml" />
+    <Content Include="Views\Home\VCDesk.cshtml" />
+    <Content Include="Views\Home\RegistrarDesk.cshtml" />
+    <Content Include="Views\Shared\_CUWebAppRightNavigation.cshtml" />
+    <Content Include="Views\Error\Error404.cshtml" />
+    <Content Include="Views\Error\ApplicationError.cshtml" />
+    <Content Include="Views\Home\AboutCUS.cshtml" />
+    <Content Include="Views\Home\TheConcept.cshtml" />
+    <Content Include="Views\Home\ExaminationSchedule.cshtml" />
+    <Content Include="Views\Home\ModelPapers.cshtml" />
+    <Content Include="Views\Home\FeeStructure.cshtml" />
+    <Content Include="Views\Home\Gallery.cshtml" />
+    <Content Include="Views\Home\_UGPaper.cshtml" />
+    <Content Include="Views\Home\_PGPaper.cshtml" />
+    <Content Include="Views\Home\ContactUs.cshtml" />
+    <Content Include="Views\Course\Index.cshtml" />
+    <Content Include="Views\Course\_CoursesListPartial.cshtml" />
+    <Content Include="Views\Course\GetCombinationsOLD.cshtml" />
+    <Content Include="Views\Course\_CombinationListOLD.cshtml" />
+    <Content Include="Views\Registration\_Proceed.cshtml" />
+    <Content Include="Views\Registration\Graduation.cshtml" />
+    <Content Include="Views\Registration\PostGraduationBB.cshtml" />
+    <Content Include="Views\Home\GalleryAlbum.cshtml" />
+    <Content Include="Views\Shared\_ComingSoon.cshtml" />
+    <Content Include="FolderManager\TheAct\statutes.pdf" />
+    <Content Include="FolderManager\Downloads\Instructions-IG-Honors-Students.pdf" />
+    <Content Include="FolderManager\Help\InstructionsCoordinators.pdf" />
+    <Content Include="FolderManager\Help\Instructions.pdf" />
+    <Content Include="FolderManager\Downloads\cvnew_jas_17_may18.pdf" />
+    <Content Include="FolderManager\Syllabus\Common\EnglishSem1.pdf" />
+    <Content Include="FolderManager\Syllabus\Common\EnglishSem2.pdf" />
+    <Content Include="FolderManager\Syllabus\Common\EVSsem1.pdf" />
+    <Content Include="FolderManager\Syllabus\Common\EVSsem2.pdf" />
+    <Content Include="FolderManager\Downloads\spokenarabic2.pdf" />
+    <Content Include="FolderManager\LecturesPresentations\Innovation_Higher_Education.pdf" />
+    <Content Include="FolderManager\Syllabus\Common\EnglishSem-1.pdf" />
+    <Content Include="FolderManager\Syllabus\Common\EnglishSem-2.pdf" />
+    <Content Include="FolderManager\Help\CourseCurricullum09oct2018.pdf" />
+    <Content Include="FolderManager\Help\Course Structure for B.A_B.Com.pdf" />
+    <Content Include="FolderManager\Help\Course Structure for B.Sc.pdf" />
+    <Content Include="FolderManager\Help\Course Structure for Integrated_Honors.pdf" />
+    <Content Include="FolderManager\Help\Course Structure for 5 Year Integrated and Honors Students.pdf" />
+    <Content Include="FolderManager\Help\Course Structure for B.A, B.Com General Degree.pdf" />
+    <Content Include="FolderManager\Downloads\Choice filling Form Generic and Open Elective Courses.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2018\BCA.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2018\Biochemistry.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2018\BOTANY.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2018\BusinessAdministration.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2018\Chemistry.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2018\COM-CU.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2018\Economics.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2018\English.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2018\EnvScience.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2018\GeneralApetitude.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2018\Geography.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2018\History.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2018\InformationTechnology.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2018\Journalism.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2018\Physics.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2018\Zoology.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\Syllabus\BioChemistry2019.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\Syllabus\Botany2019.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\Syllabus\Business-Adminstration-2019.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\Syllabus\Chemistry2019.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\Syllabus\Computer-Application2019.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\Syllabus\Economics2019.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\Syllabus\English2019.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\Syllabus\EnvironemtalScience2019.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\Syllabus\Geography2019.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\Syllabus\Journalism-Mass-Communicatio-2019.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\Syllabus\Physics2019.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\Syllabus\PoliticalScience2019.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\Syllabus\Zoology2019.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\Syllabus\Commerce-2019.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2018\PoliticalScience.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\Syllabus\Information-Technology-2019.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\Syllabus\History2019.pdf" />
+    <Content Include="FolderManager\Notification\CollegeSubjectCombinationList.pdf" />
+    <Content Include="FolderManager\Notification\feestructurecopy.pdf" />
+    <Content Include="FolderManager\Downloads\Prospectus.pdf" />
+    <Content Include="FolderManager\Syllabus\Common\English_2nd_sem_2017.pdf" />
+    <Content Include="FolderManager\Syllabus\Common\English_Ist_sem_2017.pdf" />
+    <Content Include="FolderManager\Downloads\AppForm-NonTeaching.pdf" />
+    <Content Include="FolderManager\Downloads\Newsletter.pdf" />
+    <Content Include="FolderManager\Downloads\CoE-Form.pdf" />
+    <Content Include="Views\Home\PhysicsWorkshop.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ReSetPassword.cshtml" />
+    <Content Include="Views\Course\_CombinationList.cshtml" />
+    <Content Include="Views\Course\GetCombinations.cshtml" />
+    <Content Include="Views\Course\_GetChildDDL.cshtml" />
+    <Content Include="Views\Home\ContractualLecturers.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignCombination\GetCombinationsCount.cshtml" />
+    <Content Include="Areas\CUCollegeAdminPanel\Views\AssignCombination\_CombinationCountList.cshtml" />
+    <Content Include="Views\Home\Downloads.cshtml" />
+    <Content Include="Views\Home\DownloadListPartial.cshtml" />
+    <Content Include="Views\Registration\AdmitCard.cshtml" />
+    <Content Include="Views\Registration\PrintAdmitCard.cshtml" />
+    <Content Include="Views\Notification\EntranceExamNotification.cshtml" />
+    <Content Include="Views\Account\StudentZone.cshtml" />
+    <Content Include="Views\Registration\IntegratedHonorsPreview.cshtml" />
+    <Content Include="Views\Payment\Index.cshtml" />
+    <Content Include="Views\Payment\S2S.cshtml" />
+    <Content Include="Views\Home\BoardOfStudies.cshtml" />
+    <Content Include="Views\Registration\Submitted.cshtml" />
+    <Content Include="Views\Notification\SelectionList.cshtml" />
+    <Content Include="Views\Registration\MakePayment.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Examination\PrintAdmitCard.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\Examination\PrintPriview.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\SelfFinanced\Apply.cshtml" />
+    <Content Include="Areas\CUStudentZone\Views\SelfFinanced\PrintReceipt.cshtml" />
+    <Content Include="Views\Grievance\Detail.cshtml" />
+    <Content Include="Views\Grievance\Grievance.cshtml" />
+    <Content Include="Views\Grievance\GrievanceForm.cshtml" />
+    <Content Include="Views\Grievance\GrievanceList.cshtml" />
+    <Content Include="Views\Grievance\GrievanceConfirmation.cshtml" />
+    <Content Include="Views\Grievance\EmailConfirmation.cshtml" />
+    <Content Include="Views\Grievance\OTPConfirmation.cshtml" />
+    <Content Include="Views\Course\CUSCourses.cshtml" />
+    <Content Include="Views\Syllabus\SkillCourses.cshtml" />
+    <Content Include="Views\Home\Contacts.cshtml" />
+    <Content Include="Views\SubjectDetails\SubjectInfo.cshtml" />
+    <Content Include="Views\SubjectDetails\_GetChildDDLL.cshtml" />
+    <Content Include="Views\SubjectDetails\SubjectDetails.cshtml" />
+    <Content Include="Views\Home\Lectures_presentations.cshtml" />
+    <Content Include="Views\Syllabus\ListOfSkillCourses.cshtml" />
+    <Content Include="Views\Syllabus\GetSkillSubjectsByCollege.cshtml" />
+    <Content Include="Views\Course\CourseStructure.cshtml" />
+    <Content Include="Views\Home\Enrollments.cshtml" />
+    <Content Include="Views\Home\_Enrollments.cshtml" />
+    <Content Include="Views\Home\_Engineering.cshtml" />
+    <Content Include="FolderManager\Notification\SelectionProdecure.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2019\biochem.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2019\Botany.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2019\BusinessAdministration.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2019\CAT.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2019\chemistry.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2019\commerce.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2019\economics.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2019\english.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2019\evs.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2019\history.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2019\IMCA.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2019\it.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2019\mascom.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2019\physics.pdf" />
+    <Content Include="FolderManager\IGPGEntranceSyllabus_Papers\PreviousPapers\2019\zoology.pdf" />
+    <Content Include="FolderManager\Downloads\Application-FormatVC.pdf" />
+    <Content Include="FolderManager\Downloads\Instructions_on_MOOCS.pdf" />
+    <Content Include="FolderManager\Downloads\UniversitySubjects.pdf" />
+    <Content Include="FolderManager\Downloads\del duplicate transcript.pdf" />
+    <Content Include="FolderManager\Downloads\Degree Certificate Form CUS.pdf" />
+    <Content Include="FolderManager\Downloads\ExitFormOfIntegrated.pdf" />
+    <Content Include="FolderManager\Downloads\CUSDivisionImprovement.pdf" />
+    <Content Include="FolderManager\Downloads\duplicate transcript.pdf" />
+    <Content Include="FolderManager\Downloads\StudentRefundForm.pdf" />
+    <Content Include="FolderManager\Downloads\ScehemeRegulationsofCUS2021NEP.pdf" />
+    <Content Include="FolderManager\Downloads\ComSenioritylistofAPsInConstituentColCUS.pdf" />
+    <Content Include="FolderManager\Downloads\AssociateProf_SenoritylistInConstituentColsCUS.pdf" />
+    <Content Include="FolderManager\Downloads\IGPGCoordinators.pdf" />
+    <Content Include="FolderManager\Notification\degreecertificateform.pdf" />
+    <Content Include="FolderManager\Downloads\nCUSSubjectStructureFormat.xlsx" />
+    <Content Include="BillDeskSMSOMRIntegratinCUET_Docs\AdmNotification.al4" />
+    <Content Include="FolderManager\Downloads\ACBGuidlines.pdf" />
+    <Content Include="FolderManager\Downloads\JobFeeRefundformcuSrinagar.pdf" />
+    <Content Include="FolderManager\Downloads\NEP-SubjectFormat.xlsx" />
+    <Content Include="FolderManager\Downloads\RTI.pdf" />
+    <Content Include="FolderManager\Downloads\Regulations Governing 4-yr UG NEP CUS.pdf" />
+    <None Include="Properties\PublishProfiles\cusrinagar.edu.in - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\CUSrinagar.pubxml" />
+    <None Include="Properties\PublishProfiles\CUSSalary.pubxml" />
+    <None Include="Properties\PublishProfiles\CUSSrinagar.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <Content Include="Views\Registration\_InstructionsPartial.cshtml" />
+    <Content Include="Views\Registration\_EntranceSyllabus.cshtml" />
+    <Content Include="Views\Registration\_IGEntrancePapers.cshtml" />
+    <Content Include="Views\Registration\_PGEntrancePapers.cshtml" />
+    <Content Include="Views\Home\QuickLinks.cshtml" />
+    <Content Include="Views\Registration\_CombinationsList.cshtml" />
+    <Content Include="Views\Course\FeeStructure.cshtml" />
+    <Content Include="Views\Result\ResultPartial.cshtml" />
+    <Content Include="Views\Home\QCAI.cshtml" />
+    <Content Include="Views\Entrance\ProvAdmForm.cshtml" />
+    <Content Include="Views\Entrance\ProvAdmFormPrint.cshtml" />
+    <Content Include="Views\CertificateCourses\Apply.cshtml" />
+    <Content Include="Views\CertificateCourses\PrintPreview.cshtml" />
+    <Content Include="Views\CertificateCourses\Instructions.cshtml" />
+    <Content Include="Views\Error\BrowserBlocked.cshtml" />
+    <Content Include="Views\Account\ResetUserPassword.cshtml" />
+    <Content Include="Views\Registration\_SelectionProdcedure.cshtml" />
+    <Content Include="Views\Course\UGCourses.cshtml" />
+    <Content Include="Views\Home\CUSApprovedBooksCourses.cshtml" />
+    <Content Include="Views\Course\UniversitySubjects.cshtml" />
+    <Content Include="Views\Error\CookieDisabled.cshtml" />
+    <Content Include="Views\Migration\_SubViewMigration.cshtml" />
+    <Content Include="Views\Migration\Migration.cshtml" />
+    <Content Include="Views\Migration\MigrationPrint.cshtml" />
+    <Content Include="Views\Registration\IntegratedHonors.cshtml" />
+    <Content Include="Views\Home\Administration.cshtml" />
+    <Content Include="Views\Registration\PostGraduation.cshtml" />
+    <Content Include="Views\Registration\IntegratedHonorsPPG.cshtml" />
+    <Content Include="Views\Home\DivisionImprovement.cshtml" />
+    <Content Include="Views\Result\ViewResult.cshtml" />
+    <Content Include="Views\AttemptCertificate\AttemptCertificate.cshtml" />
+    <Content Include="Views\AttemptCertificate\Index.cshtml" />
+    <Content Include="Views\AttemptCertificate\Print.cshtml" />
+    <Content Include="Views\ApplicationForms\Search.cshtml" />
+    <Content Include="Views\ApplicationForms\CertificateVerfication.cshtml" />
+    <Content Include="Views\ApplicationForms\Print.cshtml" />
+    <Content Include="Views\NEP\Index.cshtml" />
+    <Content Include="Views\NEP\PersonalInfo.cshtml" />
+    <Content Include="Views\NEP\PreviousQualification.cshtml" />
+    <Content Include="Views\NEP\SubjectPreference.cshtml" />
+    <Content Include="Views\NEP\CollegePreference.cshtml" />
+    <Content Include="Views\NEP\DocumentUpload.cshtml" />
+    <Content Include="Views\NEP\MakePayment.cshtml" />
+    <Content Include="Views\NEP\Print.cshtml" />
+    <Content Include="Views\NEPIG\DocumentUpload.cshtml" />
+    <Content Include="Views\NEPIG\MakePayment.cshtml" />
+    <Content Include="Views\NEPIG\PersonalInfo.cshtml" />
+    <Content Include="Views\NEPIG\PreviousQualification.cshtml" />
+    <Content Include="Views\NEPIG\Print.cshtml" />
+    <Content Include="Views\NEPIG\SubjectPreference.cshtml" />
+    <Content Include="Views\Home\SeniorityListAPS.cshtml" />
+    <Content Include="Views\Home\SeniorityListAssociateProfs.cshtml" />
+    <Content Include="Views\Home\CoordinatorDetails.cshtml" />
+    <Content Include="Views\Home\NEPRegulations.cshtml" />
+    <Content Include="Views\Home\RTI.cshtml" />
+    <Content Include="Views\ApplicationForms\SearchStudent.cshtml" />
+    <Content Include="Views\ApplicationForms\IssuanceOfDegreeCertificateForm.cshtml" />
+    <Content Include="Views\ApplicationForms\PrintIssuanceOfDCForm.cshtml" />
+    <Content Include="Views\MarksCard\PrintEngMarksSheet.cshtml" />
+    <Content Include="Views\Home\PaperPatternNEP.cshtml" />
+    <Content Include="Views\ApplicationForms\SearchForCorrection.cshtml" />
+    <Content Include="Views\ApplicationForms\CorrectionForm.cshtml" />
+    <Content Include="Views\ApplicationForms\PrintCorrectionForm.cshtml" />
+    <Content Include="Views\NEPPG\DocumentUpload.cshtml" />
+    <Content Include="Views\NEPPG\MakePayment.cshtml" />
+    <Content Include="Views\NEPPG\PersonalInfo.cshtml" />
+    <Content Include="Views\NEPPG\PreviousQualification.cshtml" />
+    <Content Include="Views\NEPPG\Print.cshtml" />
+    <Content Include="Views\NEPPG\SubjectPreference.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Areas\CUSrinagarAdminPanel\Views\Admin\" />
+    <Folder Include="Areas\CUSrinagarAdminPanel\Views\AwardEdit\" />
+    <Folder Include="Content\ThemePublic\Libraries\images\courses\" />
+    <Folder Include="Content\ThemePublic\Libraries\images\news\" />
+    <Folder Include="FolderManager\SelectionLists\" />
+    <Folder Include="FolderManager\StudentCertificates\IH\" />
+    <Folder Include="FolderManager\StudentCertificates\PG\" />
+    <Folder Include="FolderManager\StudentCertificates\UG\" />
+    <Folder Include="FolderManager\StudentPhotos\Arabic\" />
+    <Folder Include="FolderManager\StudentPhotos\IH\" />
+    <Folder Include="FolderManager\StudentPhotos\PG\" />
+    <Folder Include="FolderManager\StudentPhotos\UG\" />
+    <Folder Include="FolderManager\Syllabus\LearningTeachingObjectives\" />
+    <Folder Include="FolderManager\Xerox\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\ThemePublic\Libraries\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\ThemePublic\Libraries\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\ThemePublic\Libraries\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\ThemePublic\Libraries\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\bootstrap\fonts\glyphicons-halflings-regulard41d.eot" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\font-awesome\4.7.0\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\font-awesome\4.7.0\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\font-awesome\4.7.0\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\font-awesome\4.7.0\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\font-awesome\4.7.0\fonts\FontAwesome.otf" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\ResultNotification.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Result\ResultNotificationPartial.cshtml" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\fonts\FontAwesome.otf" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\news-ticker\assets\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Combination\Index.cshtml" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\tabs\fonts\font-awesome\fontawesome-webfont.eot" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\tabs\fonts\font-awesome\fontawesome-webfont.ttf" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\tabs\fonts\font-awesome\fontawesome-webfont.woff" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\tabs\fonts\font-awesome\fontawesome-webfont.woff2" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\tabs\fonts\font-awesome\FontAwesome.otf" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Combination\_SubjectsHelper.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Notification\Create.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Notification\Edit.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Notification\Delete.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Notification\_CreateOrEdit.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Combination\Combinations.cshtml" />
+    <Content Include="Areas\CUSrinagarAdminPanel\Views\Combination\_SearchCombinations.cshtml" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\jq-accordion\js\jquery-1.9.1.js" />
+    <Content Include="Content\ThemePublic\Libraries\plugins\jq-accordion\js\jquery-ui.js" />
+    <None Include="packages.config" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery-3.2.1.min.map" />
+    <Content Include="Content\ThemeAdmin\Content\Scripts\Libraries\jquery-3.2.1.slim.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CUSrinagar.BusinessManagers\CUSrinagar.BusinessManagers.csproj">
+      <Project>{0eb1321a-473e-4386-8c0a-cc1dc78e7381}</Project>
+      <Name>CUSrinagar.BusinessManagers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CUSrinagar.DataManagers\CUSrinagar.DataManagers.csproj">
+      <Project>{26266E98-C2AF-4AB1-9A02-AB326C7D4BA2}</Project>
+      <Name>CUSrinagar.DataManagers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CUSrinagar.Extensions\CUSrinagar.Extensions.csproj">
+      <Project>{18d2dd4d-22a2-4eee-a656-c4c49c73ef9c}</Project>
+      <Name>CUSrinagar.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CUSrinagar.Models\CUSrinagar.Models.csproj">
+      <Project>{9c770be0-1174-44e2-8c2e-d985d4f44b50}</Project>
+      <Name>CUSrinagar.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>51473</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:51473/</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost:51473/</IISAppRootUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

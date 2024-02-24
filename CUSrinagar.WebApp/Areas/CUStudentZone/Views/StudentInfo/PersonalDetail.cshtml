@@ -1,0 +1,376 @@
+﻿@model CUSrinagar.Models.ARGPersonalInformation
+@{
+    ViewBag.Title = "Student Info ";
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index", "Dashboard", new { area = "CUStudentZone" })">Home</a>
+        </li>
+        <li>
+            <a href="#" class="active">Student Profile</a>
+        </li>
+    </ul>
+}
+<div id="response">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+</div>
+<div class="page-content panTop">
+    <div class="row panel panel-success ">
+        <div class="page-header no-margin-bottom">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6">
+                    <h1>
+                        <i class="fa fa-users"></i> Student Profile
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 no-padding no-margin">
+            <div class="col-lg-10 col-md-10 no-padding no-margin">
+                <div id="accordion" class="accordion-style1 panel-group">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true">
+                                    <i class="bigger-110 ace-icon fa fa-angle-down" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                    &nbsp;University Info
+                                </a>
+                            </h4>
+                        </div>
+
+                        <div class="panel-collapse collapse in" id="collapseOne" aria-expanded="true" style="">
+                            <div class="panel-body no-padding no-margin">
+                                <div class="table-responsive panel">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-user"></i> Form No.</td>
+                                                <td>@Model.StudentFormNo</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-user"></i> CUS Registration No</td>
+                                                <td>@Model.CUSRegistrationNo</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-user"></i> Exam Roll No</td>
+                                                <td>@Model.ExamRollNo</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-book"></i> Course</td>
+                                                <td>@Model.CourseFullName</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-group"></i> Class &amp; Section</td>
+                                                <td>@Model.ClassRollNo</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-calendar"></i> DOB</td>
+                                                <td>@Model.DOB.ToString("dd-MMMM-yyyy")</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-calendar"></i> Board Registration No.</td>
+                                                <td>@Model.BoardRegistrationNo</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-calendar"></i> Batch</td>
+                                                <td>@Model.Batch</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-calendar"></i> Current Semester</td>
+                                                <td>@Model.CurrentSemesterOrYear</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-university"></i> College</td>
+                                                <td>
+                                                    @Model.AcceptCollegeID
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-university"></i> ABC ID</td>
+                                                <td>
+                                                    @(string.IsNullOrWhiteSpace(Model.ABCID)?
+                                                    Model.CurrentSemesterOrYear>0?
+                                                    Html.Raw("Not Available &nbsp;&nbsp;&nbsp;&nbsp;<a href=\"/CUStudentZone/Feedback/\" style=\"height:60px\"><i class=\"menu-icon fa fa-book\"></i> <span class=\"menu-text\">Add here</span></a>")
+                                                    :""
+                                                    : string.Join("-", Enumerable.Range(0, Model.ABCID.Length / 3).Select(i => Model.ABCID.Substring(i * 3, 3))))
+                                                </td>
+                                            </tr>
+                                            @if (Model.IsLateralEntry)
+                                            {
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-empire"></i> Lateral Entry</td>
+                                                    <td>
+                                                        Yes
+                                                    </td>
+                                                </tr>
+                                            }
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-thumbs-up"></i> Status</td>
+                                                @if (Model.FormStatus == CUSrinagar.Enums.FormStatus.FeePaid)
+                                                {
+                                                    <td>Entrance FeePaid</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>@Model.FormStatus</td>
+                                                }
+                                            </tr>
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false">
+                                    <i class="bigger-110 ace-icon fa fa-angle-right" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                    &nbsp;Personal Info
+                                </a>
+                            </h4>
+                        </div>
+
+                        <div class="panel-collapse collapse" id="collapseTwo" aria-expanded="false" style="height: 0px;">
+                            <div class="panel-body no-padding no-margin">
+                                <div class="table-responsive panel">
+                                    <table class="table">
+                                        <tbody>
+
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-user"></i> Full Name</td>
+                                                <td>@Model.FullName</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-user"></i> Father's Name</td>
+                                                <td>@Model.FathersName</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-user"></i> Mother's Name</td>
+                                                <td>@Model.MothersName</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-user"></i> Gender</td>
+                                                <td>@Model.Gender</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-user"></i> Religion</td>
+                                                <td>@Model.Religion</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-user"></i> Category</td>
+                                                <td>@(Model.Category==null?"":Model.Category)</td>
+                                            </tr>
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false">
+                                    <i class="bigger-110 ace-icon fa fa-angle-right" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                    &nbsp;Contact Detail
+                                </a>
+                            </h4>
+                        </div>
+
+                        <div class="panel-collapse collapse" id="collapseThree" aria-expanded="false" style="height: 0px;">
+                            <div class="panel-body no-padding no-margin">
+                                <div class="table-responsive panel">
+                                    @if (Model.StudentAddress != null)
+                                    {
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-envelope-o"></i> Email ID</td>
+                                                    <td><a href="mailto:@Model.StudentAddress.Email ?subject=Cluster University">@Model.StudentAddress.Email</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="glyphicon glyphicon-phone"></i> Mobile Number</td>
+                                                    <td><a class="phone" href="tel: @Model.StudentAddress.Mobile">@Model.StudentAddress.Mobile</a></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-home"></i> Address</td>
+                                                    <td colspan="4">@Model.StudentAddress.PermanentAddress</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa "></i>Pincode</td>
+                                                    <td colspan="2">@Model.StudentAddress.PinCode</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa "></i>Block</td>
+                                                    <td>@Model.StudentAddress.Block</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa "></i>Tehsil</td>
+                                                    <td colspan="2">@Model.StudentAddress.Tehsil</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa "></i>Assembly Constituency</td>
+                                                    <td colspan="2">@Model.StudentAddress.AssemblyConstituency</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa "></i>Parliamentary Constituency</td>
+                                                    <td>@Model.StudentAddress.ParliamentaryConstituency</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa "></i>District</td>
+                                                    <td>@Model.StudentAddress.District</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-flag"></i> State</td>
+                                                    <td colspan="2">@Model.StudentAddress.State</td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @if (Model.AcademicDetails != null)
+                    {
+
+                        <div class="panel panel-default">
+
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false">
+                                        <i class="bigger-110 ace-icon fa fa-angle-right" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                        &nbsp;Previous Academic Detail
+                                    </a>
+                                </h4>
+                            </div>
+
+                            <div class="panel-collapse collapse" id="collapseFour" aria-expanded="false" style="height: 0px;">
+                                <div class="panel-body no-padding no-margin">
+                                    <div class="table-responsive panel">
+                                        <table class="table">
+                                            <tbody>
+
+                                                @foreach (var item in Model.AcademicDetails)
+                                                {
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-university"></i> Last School</td>
+                                                        <td>@item.ExamBody</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-book"></i> Stream</td>
+                                                        <td>@item.Stream</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-list-ol"></i> Subjects</td>
+                                                        <td>@item.Subjects</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-calendar"></i> Roll Number</td>
+                                                        <td>@item.RollNo </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-calendar"></i> Session / Academic Year</td>
+                                                        <td>@item.Session /  @item.Year</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success">Marks </td>
+                                                        <td>@item.MarksObt.ToString()  /  @item.MaxMarks.ToString() =  @item.Percentage %</td>
+                                                    </tr>
+                                                }
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (Model.SelectedCombinations != null && Model.SelectedCombinations.Count > 0)
+                    {
+                        <div class="panel panel-default">
+
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false">
+                                        <i class="bigger-110 ace-icon fa fa-angle-right" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                        &nbsp;Subject Details
+                                    </a>
+                                </h4>
+                            </div>
+
+                            <div class="panel-collapse collapse" id="collapseFive" aria-expanded="false" style="height: 0px;">
+                                <div class="panel-body no-padding no-margin">
+                                    <div class="table-responsive panel">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Batch</th>
+                                                    <th>Sem</th>
+                                                    <th>Subject details</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.SelectedCombinations.OrderBy(x => x.Semester)?.ToList())
+                                                {
+                                                    if (item.Subjects != null && item.Subjects.Count > 0)
+                                                    {
+                                                        var semSub = item.Subjects.Select(x => new { x.SubjectFullName, x.SubjectType, x.DepartmentFullName }).OrderBy(x => x.SubjectFullName).OrderBy(x => x.SubjectType).ToList();
+                                                        <tr>
+                                                            <td>@item.SemesterBatch</td>
+                                                            <td>@item.Semester</td>
+                                                            <td>
+                                                                <ol>
+                                                                    @for (int i = 0; i < semSub.Count; i++)
+                                                                    {
+                                                                        var x = semSub[i];
+                                                                        <li>
+                                                                            <span title="Department/Subject">@(string.IsNullOrEmpty(x.DepartmentFullName) ? "Not Available" : x.DepartmentFullName)</span>:
+                                                                            <span title="Title">@x.SubjectFullName </span>
+                                                                            <span title="Type">@("(" + CUSrinagar.Extensions.Helper.GetEnumDescription<CUSrinagar.Enums.SubjectType>(x.SubjectType) + ")")</span>
+                                                                        </li>
+                                                                    }
+                                                                </ol>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2">
+                <div class="text-center">
+                    <img src="@( string.IsNullOrEmpty(Model.Photograph) ? "" : Url.Content(Model.Photograph))" class="img-responsive img-thumbnail" />
+                    <p style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-weight:600;text-align:justify;margin-top:15px">Students having any discrepancy in the details should visit the Admission Section of their respective colleges.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

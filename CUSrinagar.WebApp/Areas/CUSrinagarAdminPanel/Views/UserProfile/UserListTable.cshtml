@@ -1,0 +1,64 @@
+﻿@model  List<CUSrinagar.Models.AppUsers>
+@using CUSrinagar.Extensions
+
+@{
+    Layout = null;
+    var ISChecked = "";
+}
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th data-property="UserName">User Name</th>
+            <th data-property="FullName">Full Name</th>
+            <th data-property="Email">Email</th>
+            <th>Role</th>
+            <th data-property="Status">Is Active</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null)
+        {
+            int index = 0;
+            foreach (var row in Model)
+            {
+                {
+                    row.Password = row.Password.Decrypt();
+                }
+
+
+                <tr>
+                    <td>@row.UserName @Html.HiddenFor(i => i[index].Password) </td>
+                   
+                    <td>
+                        <a href='@Url.Action("Edit","UserProfile",new { area = "CUSrinagarAdminPanel", @id = row.User_ID })'>
+
+                            @row.FullName
+
+
+                        </a>
+
+                    </td>
+                    <td>@row.Email</td>
+                    <td>@string.Join(" , ", row.UserRoles.Select(x => x.RoleID.GetEnumDescription()))</td>
+                    <td>
+                        @if (row.Status)
+                        {
+                            ISChecked = "checked = 'checked'";
+                        }
+                        else
+                        { ISChecked = ""; }
+                        <label class='pull-center inline'>
+                            <input class='ace ace-switch ace-switch-5' id='@row.User_ID' type='checkbox' @ISChecked onclick='return IsActive(this)' />
+                            <span class='lbl middle'></span>
+                        </label>
+                    </td>
+                    <td><a href="javascript:void(0);" id='@row.User_ID' class="JSDelete ace-icon fa fa-trash-o red bigger-130" title="Delete this User"></a></td>
+                </tr>
+                index++;
+            }
+        }
+    </tbody>
+</table>

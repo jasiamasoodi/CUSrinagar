@@ -1,0 +1,130 @@
+﻿@{
+
+}
+
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUSrinagarAdminPanel"})">Home</a>
+            </li>
+            <li class="active">MarksCard</li>
+        </ul><!-- /.breadcrumb -->
+    </div>
+    <div class="col-md-7"></div>
+    <div class="col-md-4"></div>
+}
+<div class="row">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+    <div class="col-md-12 jsTableContent">
+        <div class="panel panel-primary js-pager-table">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Generate Transcript
+                    <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                        <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                    </span>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="search-box">
+                    <div class="form-inline">
+
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <span style="color:red">*</span><label>Batch</label><span id="BatchValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <br />
+                                <div class="jsDDLContainer">
+                                    @Html.TextBox("SemesterBatch", "2017", new { @class = "form-control jsfilterelement required ", @data_column = "SemesterBatch", @data_operator = "EqualTo", })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Semester From</label><br />
+                                <div class="jsDDLContainer">
+                                    @Html.DropDownList("SemesterFrom", new SelectList(ViewBag.SemestersFrom, "Value", "Text", 1), new { @class = "chosen-select required jsfilterelement form-control ", @data_column = "SemesterFrom", @data_operator = "EqualTo", @data_tablealias = "", @data_scope = "row1" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Semester To</label><br />
+                                <div class="jsDDLContainer">
+                                    @Html.DropDownList("SemesterTo", new SelectList(ViewBag.SemestersTo, "Value", "Text", 1), new { @class = "chosen-select required jsfilterelement form-control ", @data_column = "SemesterTo", @data_operator = "EqualTo", @data_tablealias = "", @data_scope = "row1" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Programme</label><br />
+                                <div class="jsDDLContainer">
+                                    @Html.DropDownList("PrintProgramme", new SelectList(ViewBag.PrintProgrammes, "Value", "Text", 1), new { @class = "chosen-select required jsfilterelement form-control jsPrintProgrammeDDL ", @data_column = "PrintProgramme", @data_operator = "EqualTo", @data_tablealias = "", @data_scope = "row1" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <span style="color:red">*</span> <label>Course</label><span id="CourseValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span><br />
+                                <div class="jsDDLContainer wd-230">
+                                    @Html.DropDownList("Course", new SelectList(ViewBag.Courses, "Value", "Text"), "--Select--", new
+                                    {
+                                        @class = "chosen-select form-control jsfilterelement jsCourseDDL required",
+                                        @data_column = "Course_ID",
+                                        @data_operator = "EqualTo",
+                                        @data_defaulttextvalue = "--Select--,",
+                                        @data_scope = "row1"
+                                     })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Filter</label><br />
+                                <div class="jsDDLContainer">
+                                    @Html.DropDownList("Filter", new SelectList(ViewBag.Filters, "Value", "Text", 0), new { @class = "chosen-select required jsfilterelement form-control ", @data_column = "Filter", @data_operator = "EqualTo", @data_tablealias = "", @data_scope = "row1" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label> Registartion No</label>
+                                <div class="jsDDLContainer">
+                                    @Html.TextBox("CUSRegistrationNo", "", new { @class = "form-control jsfilterelement ", @data_column = "CUSRegistrationNo", @data_operator = "EqualTo" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label> Set Passout</label>
+                                <div class="jsDDLContainer">
+                                    @Html.DropDownList("IsPassOut", new SelectList(new List<SelectListItem>() { new SelectListItem() { Text="Yes",Value=true.ToString()}, new SelectListItem() { Text = "No", Value = false.ToString() } }, "Value", "Text", true), new { @class = "chosen-select required jsfilterelement form-control ", @data_column = "IsPassOut", @data_operator = "EqualTo"})
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 center">
+                            <div class="form-group">
+                                <div style="padding-top:20px !important;">
+                                    <button type="button" class="btn btn-sm btn-primary fa-search-btn js-search"><i class="fa fa-search"></i>&nbsp;Search/Generate</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="js-table-content tbl" data-url="/CUSrinagarAdminPanel/Transcript/GenerateTranscripts " data-DefaultOrderByColumn="FULLNAME"></div>
+         </div>
+    </div>
+</div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

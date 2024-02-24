@@ -1,0 +1,182 @@
+﻿@{
+    ViewBag.Title = "Result";
+    var SemesterName = (ViewBag.semesterName).ToString().Replace("UG", "UG Semester ");
+    //Layout = "~/Areas/CUCollegeAdminPanel/Views/Shared/_CUCollegeAdminPanelLayout.cshtml";
+}
+
+<div class="page-wrapper pager-table-text">
+
+    <div class="page-header">
+        <div style="padding-bottom: 30px;">
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <h1 class="heading-title pull-left">
+                        Result
+                        <small>
+                            <i class="ace-icon fa fa-angle-double-right"></i>
+                            @SemesterName
+                        </small>
+                    </h1>
+
+                </div>
+
+                <div class="col-sm-6">
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-
+                 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Result
+                            <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                            </span>
+
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="col-sm-12 search-box">
+                            <label class="col-sm-12">Advance Search</label>
+                            <div class="col-sm-5 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span> Subject<span id="Subject_IDValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+
+                                <div>
+                                    @Html.DropDownList("Subject_ID", new SelectList(ViewBag.SubjectDDLList, "Value", "Text", ViewBag.DefaultSubjectId),
+                                      "--Select--", new { @class = "form-control jsfilterelement required chosen-select", @data_column = "Subject_ID", @data_operator = "EqualTo", @id = "Subject_ID" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 lbl bigger-120 no-padding-right">
+
+                                Registration No.
+                                <div>
+                                    @Html.TextBox("RegistrationNumber", "CUS-17-SPC-###", new {@onfocus="this.selectionStart=11;this.selectionEnd=25;", @autofocus="autofocus", @class = "jsSearchOnRegistrationNo form-control jsfilterelement", @data_column = "RegistrationNumber", @data_operator = "EqualTo" })
+                                </div>
+                            </div>
+                            <div class="col-sm-2 pull-right " style="padding-top: 17px;">
+                                <button type="button" class="btn btn-primary fa-search-btn"><i class="fa fa-search"></i>&nbsp;Search</button>
+                            </div>
+                        </div>
+
+                    </div>
+                    @using (Html.BeginForm("Edit", "Result", FormMethod.Post, new { enctype = "multipart/form-data", @name = "validation-form", @id = "result-form", @class = "form-horizontal", @role = "form" }))
+                    {
+                        <div class="js-table-content" data-url="/CUCollegeAdminPanel/Result/_ResultListPartial?semesterName=@ViewBag.semesterName&defaultSubjectId=@ViewBag.DefaultSubjectId" data-DefaultOrderByColumn="Name">
+
+                        </div>
+                    }
+                    @{Html.RenderPartial("_JSPagerTableFooter");}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+<script src="@Url.Content("~/Scripts/JSChosen.js")"></script>
+    <script>
+        function setFocus($pagertable) {
+            if ($pagertable.find('tr').length<=5){
+                $pagertable.find('tr:eq(1) input[id*=TheoryAttendance]').focus();
+            }
+            
+        }
+
+        $(document).ready(function () {
+            var $pagertable = $(".js-pager-table");
+            var subjectId = $("#Subject_ID option:selected").val();
+            if (subjectId)
+            { loadpagertable(); }
+
+
+            $(document).on('keydown', '.jsSearchOnRegistrationNo', function (event) {
+                if (event.which == 13) {
+                    $(".fa-search-btn").trigger('click');
+                }
+            });
+
+            $(document).on('click', '.jsDeleteSubject', function (event) {
+                var confirmation = confirm("Are you sure ,you want to delete syllabus.");
+                var tr = $(this).closest('tr');
+                var id = tr.find("input.js_ID").val();
+                if (confirmation) {                   
+                    var url = getBaseUrlCollege() + "Result/DeleteSubject";
+                    $.ajax({
+                        url: url + "?id=" + id,
+                        success: function (data) {
+                            if (data = "1") {
+                                tr.remove();
+                            }                            
+                        },
+                        error: function (xhr,error,msg) {
+                            console.log(msg);
+                        },
+                        beforeSend: function () { showLoader(); },
+                        complete: function () { hideLoader(); }
+                    });
+                } 
+            });
+
+
+
+        });
+
+        //$(document).on('change', '#Subject_ID', function (event) {
+        //    $(".fa-search-btn").trigger("click");
+        //});
+        function SetCheckBoxState(loop)
+        {
+           var setValue =($('#ÏsUpdated_' + loop+':checkbox:checked').length > 0)? '@CUSrinagar.Enums.RecordState.New' :'@CUSrinagar.Enums.RecordState.Old';
+         $('#semesterModelList_' + loop + '__RecordStatus').val(setValue);
+        }
+
+        $(document).on('change', '.ÏsUpdated', function (event) {
+        var loop = $(this).data("loop");
+        SetCheckBoxState(loop);
+    });
+    $(document).on('submit', '#result-form', function (event) {
+        var subjectId = $("#Subject_ID option:selected").val();
+        $("#defaultSubjectId").val(subjectId);
+        var UpdatedRecordCount = $('input.ÏsUpdated:checked').length;/* $('.ÏsUpdated :checked').length;*/
+        //if (confirm("Do you want to update " + UpdatedRecordCount+" records?"))
+        //    return;
+        //else
+        //    return false;
+    });
+    var lastValueInput = '';
+    $(document).on('keyup paste', '.textboxSub', function (event) {
+            var loop = $(this).data("loop");
+            $('#ÏsUpdated_' + loop).prop('checked', true);
+            SetCheckBoxState(loop);
+
+        });
+
+
+
+
+
+    </script>
+    <style>
+        .filter-btn a {
+            color: white !important
+        }
+    </style>
+}
+
+
+
+
+
+
+
+

@@ -1,0 +1,103 @@
+﻿@{
+
+}
+
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUSrinagarAdminPanel"})">Home</a>
+            </li>
+            <li class="active">MarksCard</li>
+        </ul><!-- /.breadcrumb -->
+    </div>
+    <div class="col-md-7"></div>
+    <div class="col-md-4"></div>
+}
+<div class="row">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    } <div class="form-group  col-sm-12 ">
+        <div style="padding-top:20px !important;">
+            <a href="@Url.Action("AddTranscriptDegreeSettings", "Transcript", new{area="CUSrinagarAdminPanel"})" target="_blank" class="btn btn-success btn-sm pull-right">Add Settings</a>
+        </div>
+    </div>
+    <div class="col-md-12 jsTableContent">
+        <div class="panel panel-primary js-pager-table" data-otherparam1="@CUSrinagar.Enums.PrintProgramme.UG">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                   Transcript Settings
+
+                    <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                        <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                    </span>
+                </h3>
+            </div>
+            <div class="panel-body">
+
+                <div class="search-box">
+                    <div class="form-inline">
+
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <span style="color:red">*</span>Batch From<span id="BatchValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <br />
+                                @Html.TextBox("BatchFrom", "2017", new { @class = "form-control jsfilterelement required ", @data_column = "BatchFrom", @data_operator = "GreaterThanEqualTo", })
+                            </div>
+                            <div class="form-group">
+                                <span style="color:red">*</span>Batch To<span id="BatchValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <br />
+                                @Html.TextBox("BatchTo", DateTime.Now.Year, new { @class = "form-control jsfilterelement required ", @data_column = "BatchTo", @data_operator = "LessThanEqualTo", })
+                            </div>
+                            <div class="form-group">
+                                <span style="color:red">*</span>Semester From<span id="BatchValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <br />
+                                @Html.TextBox("SemesterFrom", "1", new { @class = "form-control jsfilterelement required ", @data_column = "SemesterFrom", @data_operator = "EqualTo", })
+                            </div>
+                            <div class="form-group">
+                                <span style="color:red">*</span>Semester To<span id="BatchValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <br />
+                                @Html.TextBox("SemesterTo", "6", new { @class = "form-control jsfilterelement required ", @data_column = "SemesterTo", @data_operator = "EqualTo", })
+                            </div>
+
+                            <div class="form-group">
+                                <label>Programme</label><br />
+                                <div class="jsDDLContainer">
+                                    @Html.DropDownList("Programme", new SelectList(ViewBag.Programmes, "Value", "Text", 1), "None", new { @class = "chosen-select required jsfilterelement form-control jsProgrammeDDL", @data_column = "Programme", @data_operator = "EqualTo", @data_tablealias = "", @data_scope = "row1" })
+                                </div>
+                            </div>
+
+                            <div class="form-group  pull-right">
+                                <div style="padding-top:20px !important;">
+                                    <button type="button" class="btn btn-sm btn-primary fa-search-btn js-search"><i class="fa fa-search"></i>&nbsp;Search</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="js-table-content tbl" data-url="/CUSrinagarAdminPanel/Transcript/TranscriptDegreeSettingsList" data-DefaultOrderByColumn="Course_ID"></div>
+            @{Html.RenderPartial("_JSPagerTableFooter");}
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

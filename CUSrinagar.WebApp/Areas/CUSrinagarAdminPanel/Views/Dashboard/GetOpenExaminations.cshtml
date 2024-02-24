@@ -1,0 +1,60 @@
+﻿@model List<GeneralModels.ExaminationDashboard>
+@using CUSrinagar.Extensions
+@{
+    Layout = null;
+}
+
+@if (Model != null)
+{
+    <table class="table table-bordered table-striped">
+        <thead class="thin-border-bottom">
+            <tr>
+                <th>
+                    Course
+                </th>
+
+                <th>
+                    Semester
+                </th>
+
+                <th>
+                    Start Date
+                </th>
+                <th>
+                    End Date
+                </th>
+
+                <th>
+                    Status
+                </th>
+            </tr>
+        </thead>
+
+        @foreach (var item in Model)
+        {
+            <tbody>
+                <tr>
+                    <td>@item.Course</td>
+                    <td>@item.Semester</td>
+
+                    <td>
+                        <b class="green">@item.StartDate.ToString("dd-MMMM-yyyy hh:mm tt")</b>
+                    </td>
+                    <td>
+                        <b class="red">@item.EndDate.ToString("dd-MMMM-yyyy hh:mm tt")</b>
+                    </td>
+
+                    <td class="hidden-480">
+                        <span class="label label-success arrowed-in arrowed-in-right">Allowed</span>
+                    </td>
+                </tr>
+            </tbody>
+        }
+    </table>
+}
+else
+{
+    <h4>No Open Examinations Found</h4>
+}
+
+

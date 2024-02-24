@@ -1,0 +1,212 @@
+cuet.cusri  Cuet@20233
+https://adm23cuet.samarth.ac.in/231/index.php/site/login
+
+---------------------Data API : For Fetching Candidate Registration Data------------
+            Data Endpoint: https://apicuet.samarth.ac.in/index.php/v1/data-api
+
+d34Cx1zb33BudY2SrL5rzFiERjgawfuL ---VALID IP
+
+-- get local ip address
+https://www.showmyip.com/
+
+--error model
+{
+    "error": {
+        "code": 404,
+        "message": "fail",
+        "data": []
+    }
+}
+
+--request model for Reg data
+{
+    "application_no":"233511105885",
+    "day":"09",
+    "month":"09",
+    "year":"2004"
+}
+
+--response reg data
+
+{
+    "status": "success",
+    "message": "candidate information",
+    "data": {
+        "application_no": 233511105885,
+        "name": "FARHANA MAJEED",
+        "email": "Myzainshahid123@gmail.com",
+        "gender": "Female",
+        "nationality": "Indian",
+        "other_nationality": null,
+        "category": "General/Unreserved",
+        "pwd_applicable": "No",
+        "pwd_category": null,
+        "pwd_category_other": null,
+        "pwd_war": null,
+        "father_name": "ABDUL MAJEED SHEIKH",
+        "father_qualification": "Graduate",
+        "father_occupation": "Self Employment",
+        "mother_name": "SHAMEEMA BEGUM",
+        "mother_qualification": "Not Applicable",
+        "mother_occupation": "Others (Including House Wife)",
+        "guardian_name": "SHAHID MAJEED SHEIKH",
+        "family_income": "RS. 200001 - 300000",
+        "twin": "No",
+        "twin_name": null,
+        "domicile_state": "JAMMU AND KASHMIR",
+        "residence_place": "Rural",
+        "medium_schooling": "English",
+        "country": "India",
+        "add_state": "JAMMU AND KASHMIR",
+        "add_district": "BANDIPORA",
+        "country_pr": "India",
+        "add_state_pr": "JAMMU AND KASHMIR",
+        "add_district_pr": "BANDIPORA",
+        "bpl": "No",
+        "kashmiri_migrant": "No",
+        "cw_quota": "No",
+        "ncc_selection": "No",
+        "sports_selection": "No",
+        "sports_achievement": null,
+        "ward_quota": "No",
+        "ward_quota_relation_father": null,
+        "ward_university_father": null,
+        "ward_employee_id_father": null,
+        "ward_department_father": null,
+        "ward_employee_designation_father": null,
+        "ward_employment_status_father": null,
+        "ward_quota_relation_mother": null,
+        "ward_university_mother": null,
+        "ward_employee_id_mother": null,
+        "ward_department_mother": null,
+        "ward_employee_designation_mother": null,
+        "ward_employment_status_mother": null,
+        "x_result_status": "Passed",
+        "x_passing_year": 2019,
+        "x_course_name": "10th or Equivalent",
+        "x_schooling_place": "Urban",
+        "x_school_type": "Private Unaided",
+        "x_school_type_other": null,
+        "x_country": "India",
+        "x_state": "JAMMU AND KASHMIR",
+        "x_district": "BANDIPORA",
+        "x_board": "J & K STATE BOARD OF SCHOOL EDUCATION",
+        "x_board_other": null,
+        "x_result_type": "Percentage",
+        "x_grade_point": null,
+        "x_cgpa_obtained": null,
+        "x_cgpa": null,
+        "x_maximum_marks": "500.00",
+        "x_marks_obtained": "314.00",
+        "x_percentage": "62.80",
+        "xii_result_status": "Passed",
+        "xii_passing_year": 2021,
+        "xii_course_name": "12th or Equivalent",
+        "xii_schooling_place": "Urban",
+        "xii_school_type": "Private Unaided",
+        "xii_school_type_other": null,
+        "xii_country": "India",
+        "xii_state": "JAMMU AND KASHMIR",
+        "xii_district": "BANDIPORA",
+        "xii_board": "J & K STATE BOARD OF SCHOOL EDUCATION",
+        "xii_board_other": null,
+        "xii_result_type": "Percentage",
+        "xii_grade_point": null,
+        "xii_cgpa_obtained": null,
+        "xii_cgpa": null,
+        "xii_maximum_marks": "500.00",
+        "xii_marks_obtained": "409.00",
+        "xii_percentage": "81.80",
+        "university_programme_selection": {
+            "Cluster University of Srinagar": "Bachelor in Botany, Bachelor in Zoology"
+        },
+        "test_paper_1": "304 : Biology/Biological Studies/Biotecnology/Biochemistry",
+        "test_paper_medium_1": "English",
+        "test_paper_2": "Not Applicable",
+        "test_paper_medium_2": "",
+        "test_paper_3": "Not Applicable",
+        "test_paper_medium_3": "",
+        "test_paper_4": "Not Applicable",
+        "test_paper_medium_4": "",
+        "test_paper_5": "Not Applicable",
+        "test_paper_medium_5": "",
+        "test_paper_6": "Not Applicable",
+        "test_paper_medium_6": "",
+        "test_paper_7": "Not Applicable",
+        "test_paper_medium_7": "",
+        "test_paper_8": "Not Applicable",
+        "test_paper_medium_8": "",
+        "test_paper_9": "Not Applicable",
+        "test_paper_medium_9": "",
+        "test_paper_10": "Not Applicable",
+        "test_paper_medium_10": ""
+    }
+}
+
+--- Documents API : For Fetching Documents uploaded by Candidates
+  Data Endpoint: https://apicuet.samarth.ac.in/index.php/v1/photos-api
+  
+  -- resuest 
+  
+  {
+    "application_no":"233511105885",
+    "day":"09",
+    "month":"09",
+    "year":"2004"
+}
+  
+  
+ -------------- response
+ 
+ {
+    "status": "success",
+    "message": "candidate's photos",
+    "data": {
+        "application_no": 233511105885,
+        "name": "FARHANA MAJEED",
+        "email": "Myzainshahid123@gmail.com",
+        "gender": "Female",
+        "photo": "https://cuet-2023-public.s3.ap-south-1.amazonaws.com/cuet-2023/e36085b6aa54e94595eafe1e86ba37aada18df116ef3689094634c2843d1db63233511105885/233511105885_1678620816_photo.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIARVNI6D5MOXOKSZWP%2F20230719%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20230719T091115Z&X-Amz-SignedHeaders=host&X-Amz-Expires=1800&X-Amz-Signature=0c3cb624e3d5b35d369cd0ee4c968b13bd1fd8e9ad9f281416d3d11e033f0fd5",
+        "signature": "https://cuet-2023-public.s3.ap-south-1.amazonaws.com/cuet-2023/e36085b6aa54e94595eafe1e86ba37aada18df116ef3689094634c2843d1db63233511105885/233511105885_1678621023_signature.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIARVNI6D5MOXOKSZWP%2F20230719%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20230719T091115Z&X-Amz-SignedHeaders=host&X-Amz-Expires=1800&X-Amz-Signature=ce8d9c71bd83f263ae6a761d9b3b2c67a1d36b40db0b539f465d868928739ba2",
+        "category_certificate": null,
+        "km_certificate": null,
+        "bpl_certificate": null,
+        "cw_certificate": null,
+        "pwd_certificate": null
+    }
+}
+  
+
+
+  
+
+            #region Call CUET API
+            //var sssss = APIHelper.GetCandidatesRegistrationData(new CUSCUETAPIRequest
+            //{
+            //    ApplicationNo = "233511105885",
+            //    DOB = new DateTime(2004, 09, 09)
+
+            //});
+
+            //var sseeesss = APIHelper.GetCandidatesDocuments(new CUSCUETAPIRequest
+            //{
+            //    ApplicationNo = "233511105885",
+            //    DOB = new DateTime(2004, 09, 09)
+
+            //}); 
+            #endregion
+
+SELECT * FROM dbo.AdmissionSelectionCriteria 
+SELECT * FROM dbo.SeatCountAgainstCourse WHERE PrintProgramme=2 --auto generated by software 
+SELECT * FROM dbo.SeatAllocationMatrix_PG --clear  --auto generated by software
+
+SELECT * FROM dbo.ADMCourseMaster WHERE Programme=2 -- allownewslectionlist=1,currentselctionlistno=0 -- at the time of selection generation
+
+
+//var sssss = APIHelper.ImportCUETDetails(new CUSCUETAPIRequest
+            //{
+            //    ApplicationNo = "233511105885",
+            //    DOB = new DateTime(2004, 09, 09),
+            //    BoardRegistrationNo = "233511105885",
+            //    SelectedPorgramme = PrintProgramme.UG,
+            //});

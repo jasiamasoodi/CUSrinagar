@@ -1,0 +1,236 @@
+﻿@model  CUSrinagar.Models.ExaminationSetting
+@{
+    ViewBag.Title = "CUS :: Add ExaminationSetting";
+    string parsedDate = "";
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area= "CUSrinagarAdminPanel" })">Home</a>
+        </li>
+        <li>
+            <a href="@Url.Action("ExaminationSetting")" class="">Examination Setting List</a>
+        </li>
+    </ul>
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <h4 class="">Add Examination Setting</h4>
+        <hr class="no-margin-top" />
+        @using (Html.BeginForm("Create", "ExamFormSetting", FormMethod.Post, new { @class = "form-horizontal jsMainForm", @role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Course Category</label>
+                    <div class="col-sm-9">
+                        @Html.DropDownListFor(model => model.CourseCategory,
+                       new SelectList(ViewBag.CourseCategoryList, "Value", "Text",Model.CourseCategory), "--Select--",
+                       new { @class = "form-control chosen-select",@required = "required" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Print Programme</label>
+                    <div class="col-sm-9">
+                        @Html.DropDownListFor(model => model.PrintProgramme,
+                       new SelectList(ViewBag.PrintProgrammeList, "Value", "Text",Model.PrintProgramme),
+                       "--Select--", new { @class = "form-control chosen-select" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Semester</label>
+                    <div class="col-sm-9">
+                        @Html.DropDownListFor(model => model.Semester,
+                       new SelectList(ViewBag.Semesters, "Value", "Text",Model.Semester),
+                       "--Select--", new { @class = "form-control chosen-select" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Exam Year</label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(model => model.Year, new { @class = "form-control", @type = "number" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <span style="color:red !important;">@Html.ValidationMessageFor(model => model.RegularBatch)</span>
+                    <label for="name" class="col-sm-3 control-label">Regular Batch</label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(model => model.RegularBatch, new { @class = "form-control", @type = "number", @min = "2016", @max = "9999" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <div class="checkbox">
+                            <label class="block">
+                                <input name="IsBacklogSetting" value="@Model.IsBacklogSetting" id="IsBacklogSetting" type="checkbox"
+                                       class="ace input-lg" @(Model.IsBacklogSetting ? "Checked='checked'" : "") />
+                                <span class="lbl bigger"> Is Backlog Setting</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Form Number Count</label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(model => model.FormNumberCount, new { @class = "form-control", @type = "number" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">
+                        FeeStructure
+                        @Html.ValidationMessageFor(model => model.FeeStructure_ID)
+                    </label>
+                    <div class="col-sm-9">
+                        @Html.DropDownListFor(model => model.FeeStructure_ID,
+                            new SelectList(ViewBag.FeeStructure, "Value", "Text", Model.FeeStructure_ID),
+                            "--Select--", new { @class = "form-control chosen-select" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Start Date</label>
+                    <div class="col-sm-9">
+                        @{
+                            parsedDate = (Model.StartDate.Year + "-" + (Model.StartDate.Month.ToString().Length == 1 ? "0" + Model.StartDate.Month : Model.StartDate.Month.ToString()) + "-" + (Model.StartDate.Month.ToString().Length == 1 ? "0" + Model.StartDate.Month : Model.StartDate.Month.ToString()) + "T" + (Model.StartDate.Hour.ToString().Length == 1 ? "0" + Model.StartDate.Hour : Model.StartDate.Hour.ToString()) + ":" + (Model.StartDate.Minute.ToString().Length == 1 ? "0" + Model.StartDate.Minute : Model.StartDate.Minute.ToString())).Trim();
+                        }
+                        <input type="datetime-local" id="StartDate" name="StartDate" value="@parsedDate" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">End Date</label>
+                    <div class="col-sm-9">
+                        @{
+                            parsedDate = (Model.EndDate.Year + "-" + (Model.EndDate.Month.ToString().Length == 1 ? "0" + Model.EndDate.Month : Model.EndDate.Month.ToString()) + "-" + (Model.EndDate.Month.ToString().Length == 1 ? "0" + Model.EndDate.Month : Model.EndDate.Month.ToString()) + "T" + (Model.EndDate.Hour.ToString().Length == 1 ? "0" + Model.EndDate.Hour : Model.EndDate.Hour.ToString()) + ":" + (Model.EndDate.Minute.ToString().Length == 1 ? "0" + Model.EndDate.Minute : Model.EndDate.Minute.ToString())).Trim();
+                        }
+                        <input type="datetime-local" id="EndDate" name="EndDate" value="@parsedDate" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Hard Code Fee Amount</label>
+                    <div class="col-sm-3">
+                        @Html.EditorFor(model => model.HardCodeFeeAmount, new { @class = "form-control", @type = "number" })
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="checkbox">
+                            <label class="block">
+                                <input type="checkbox" class="ace input-lg" @(Model.IsHardCodeFeeSet ? "Checked='checked'" : "") />
+                                <span class="lbl bigger"> Hard Code Fee Set</span>
+                                @Html.HiddenFor(model => model.IsHardCodeFeeSet)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <div class="checkbox">
+                            <label class="block">
+                                <input type="checkbox" class="ace input-lg" @(Model.AllowDownloadAdmitCards ? "Checked='checked'" : "") />
+                                <span class="lbl bigger"> Allow Download Admit Card</span>
+                                @Html.HiddenFor(model => model.AllowDownloadAdmitCards)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <div class="checkbox">
+                            <label class="block">
+                                <input type="checkbox" class="ace input-lg" @(Model.AllowDownloadForm ? "Checked='checked'" : "") />
+                                <span class="lbl bigger"> Allow Download Form</span>
+                                @Html.HiddenFor(model => model.AllowDownloadForm)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Late Fee1</label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(model => model.LateFee1, new { @class = "form-control", @type = "number" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Late Fee2</label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(model => model.LateFee2, new { @class = "form-control", @type = "number" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Grace Period Days1</label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(model => model.GracePeriodDays1, new { @class = "form-control", @type = "number" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Grace Period Days2</label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(model => model.GracePeriodDays2, new { @class = "form-control", @type = "number" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <div class="checkbox">
+                            <label class="block">
+                                <input type="checkbox" class="ace input-lg" @(Model.ValidateByMinMaxFee ? "Checked='checked'" : "") />
+                                <span class="lbl bigger"> Validate By MinMax Fee</span>
+                                @Html.HiddenFor(model => model.ValidateByMinMaxFee)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Mininum Fee</label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(model => model.MinimumFee, new { @min = "0", @class = "form-control", @type = "number" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Maximun Fee</label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(model => model.MaximumFee, new { @min = "0", @class = "form-control", @type = "number" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Remark</label>
+                    <div class="col-sm-9">
+                        @Html.TextAreaFor(model => model.Remark, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">&nbsp;</label>
+                    <div class="col-sm-9">
+
+                    </div>
+                </div>
+                <div class="col-sm-11">
+                    <div class=" pull-text-right pull-right">
+                        <button type="submit" name="SaveAsNew" id="submitForm" class="btn btn-primary pull-right">Save</button>
+                    </div>
+                    <div class=" pull-text-right pull-right">
+                        <a href="@Url.Action("ExaminationSetting")" class="btn btn-danger ">Cancel</a>
+                        &nbsp; &nbsp;
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

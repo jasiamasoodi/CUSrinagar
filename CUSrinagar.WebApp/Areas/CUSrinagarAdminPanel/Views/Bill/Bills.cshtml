@@ -1,0 +1,200 @@
+﻿
+@{
+    ViewBag.Title = "Bills - Cluster University Sriangar";
+}
+
+<div class="page-wrapper pager-table-text">
+    <div class="page-content">
+        <div class="row page-row">
+            @if (TempData["Err"] != null)
+            {
+                @Html.Raw(TempData["Err"])
+            }
+            <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Evaluator &amp; Setter Bills
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-sm-12 search-box">
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                Bill Type
+                                <div>
+                                    @Html.DropDownList("BillType", (List<SelectListItem>)ViewBag.BillType, new { @class = " form-control jsfilterelement", @data_column = "BillType", @data_operator = "Equal" })
+                                </div>
+                            </div>
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                Bill No.
+                                <div id="Course">
+                                    @Html.TextBox("BillNO", "", new { @class = "form-control jsfilterelement", @data_column = "BillNo", @data_operator = "Contains" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                Setter/Evaluator Name
+                                <div id="Course">
+                                    @Html.TextBox("FullName", "", new { @class = "form-control jsfilterelement", @data_column = "FullName", data_tablealias = "au", @data_operator = "Contains" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                Bill Status
+                                <div>
+                                    @Html.DropDownList("BillStatus", (List<SelectListItem>)ViewBag.BillStatus, new { @class = " form-control jsfilterelement", @data_column = "BillStatus", @data_operator = "Equal" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2 " style="padding-top: 17px;">
+                                <button type="button" class="btn btn-primary fa-search-btn" data-dismiss="modal"><i class="fa fa-search"></i>&nbsp;Search</button>
+                            </div>
+
+                            <div class="col-sm-2" style="padding-top: 17px;">
+                                <button data-toggle="dropdown" class="btn btn-purple dropdown-toggle">
+                                    Action
+                                    <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-default dropdown-info">
+                                    <li>
+                                        <a href="#ModalPaidCSV" class="jsBillstatustoPaid" data-toggle="modal">
+                                            Bulk Update Bill Status to Paid &amp; Closed
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)" data-toggle="modal" title="Change Bill Status" id="" class="JSChangeStatus"> Bulk Update Bill Status</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)" class="js-exportToCSV" data-url="@Url.Action("BillsExcel","Bill",new { area="CUSrinagarAdminPanel"})">
+                                            Download Excel (CSV)
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)" class="js-exportToCSV" data-url="@Url.Action("PrintBills","BillAccount",new { area="CUSrinagarAdminPanel"})">
+                                            Print Bills
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="js-table-content" data-url="@Url.Action("BillList", "Bill", new { area = "CUSrinagarAdminPanel" })" data-DefaultOrderByColumn="CreatedOn">
+                    </div>
+                    @{Html.RenderPartial("_JSPagerTableFooter");}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="ModalPaidCSV" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter no-margin">
+                    <i class="fa fa-refresh"></i>
+                    &nbsp;Change Bill Status to Paid &amp; Closed
+                </h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="emsg2"></div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form id="frmFileCSV" method="post" action="@Url.Action("ChangeBillStatusPaidAndClosed","Bill",new {area="CUSrinagarAdminPanel"})" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label class="control-label no-padding-right">
+                                    Payment Date Time <span class="red">*</span>
+                                </label>
+                                @Html.TextBox("TransactionDate", "", new { @type = "datetime-local", @class = "width-100", @required = "required" })
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label no-padding-right">
+                                    CSV File with first column BillNo.s only <span class="red">*</span>
+                                </label>
+                                @Html.TextBox("CSVFile", "", new { @type = "file", @required = "required" })
+                            </div>
+                            <div class="form-group text-center">
+                                <button class="btn btn-sm btn-success pull-center JSPaidClosed">
+                                    Update
+                                </button>
+                                <button class="btn btn-sm btn-danger" id="JSClose" data-dismiss="modal">
+                                    <i class="ace-icon fa fa-times"></i>
+                                    Close
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJSFiles{
+    @Scripts.Render("~/bundles/Libraries/jqueryval")
+    <script src="@Url.Content("~/Scripts/JSBilling/Billing.js")"></script>
+    <script src="~/Content/ThemeAdmin/Content/Scripts/JSUsers/UserList.js"></script>
+}
+
+@section PageSpecificJS{
+    <script>
+        $(document).ready(function () {
+            var $pagertable = $(".js-pager-table");
+            fillPagerTableParams($pagertable);
+            loadpagertable();
+        });
+    </script>
+}
+
+@section PageSpecificStyle{
+    <style>
+        .filter-btn a {
+            color: white !important
+        }
+
+        @@media (min-width:320px) { /* smartphones, iPhone, portrait 480x320 phones */
+            .g4 {
+                width: 100% !important;
+            }
+        }
+
+        @@media (min-width:481px) { /* portrait e-readers (Nook/Kindle), smaller tablets  600 or  wide. */
+            .g4 {
+                width: 100% !important;
+            }
+        }
+
+        @@media (min-width:641px) { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+            .g4 {
+                width: 100% !important;
+            }
+        }
+
+        @@media (min-width:961px) { /* tablet, landscape iPad, lo-res laptops ands desktops */
+            .g4 {
+                width: 18% !important;
+            }
+        }
+
+        @@media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */
+            .g4 {
+                width: 18% !important;
+            }
+        }
+
+        @@media (min-width:1281px) { /* hi-res laptops and desktops */
+            .g4 {
+                width: 18% !important;
+            }
+        }
+    </style>
+}
+
+
+

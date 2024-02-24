@@ -1,0 +1,166 @@
+﻿@*******HEADER*******@
+<header class="header hidden-print">
+    <div class="top-bar" style="border-bottom:3px solid #545677;">
+    </div>
+    <div class="header-main container">
+        <h1 class="logo col-md-4 col-sm-4">
+            <a href="/">
+                <img id="logo" src='@Url.Content("~/Content/ThemePublic/Libraries/images/cus-logo-green.png")' alt="CUSrinagar" style="width:100%; height:100%;">
+            </a>
+        </h1>
+        <div class="info col-md-8 col-sm-8">
+            <ul class="menu-top navbar-right">
+                @{
+                    HttpCookie httpCookie = Request.Cookies[CUSrinagar.Models.AuthCookie.Name];
+                }
+                @if (httpCookie != null)
+                {
+                    <li class="divider"><a href="@Html.Action("GetControlPanelURL","Dashboard",new { area="CUSrinagarAdminPanel"})"><i class="fa fa-dashboard"></i> Back To Dashboard </a></li>
+                    <li class=""><a href="@Url.Action("SignOut", "Account", new { area = string.Empty })"><i class="fa fa-sign-out"></i> SignOut </a></li>
+                }
+                else
+                {
+                    <li class="divider"><a href="@Url.Action("StudentZone", "Account", new { area = string.Empty })"><i class="fa fa-graduation-cap"></i> <strong>Student SignIn</strong></a></li>
+                    <li class=""><a href="@Url.Action("SignIn", "Account", new { area = string.Empty })"><i class="fa fa-university"></i> <strong>University SignIn</strong></a></li>
+                }
+                @*<li class="divider"><a href='@Url.Action("ContactUs","Home",new { area = string.Empty})'>Contact</a></li>*@
+                <li class="divider">
+                    @*<li><a>FAQ</a></li>*@
+            </ul>
+            <br />
+            <div class="contact pull-right center">
+                <a href="https://www.facebook.com/cusgr" target="_blank"><i class="fa fa-facebook"></i></a>
+                <a href="https://twitter.com/cusgrofficial" target="_blank"><i class="fa fa-twitter"></i></a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<nav class="main-nav" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse" id="navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li id="HomeSection" class="active nav-item"><a href="@Url.Action("Index","Home")">Home</a></li>
+                <li id="UniversitySection" class="nav-item dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false">University <i class="fa fa-angle-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href='@Url.Action("Administration", "Home", new { area = string.Empty })'>Administration</a></li>
+                        <li><a href='@Url.Action("AboutCUS", "Home", new { area = string.Empty })'>About Us</a></li>
+                        <li><a href='@Url.Action("TheConcept", "Home", new { area = string.Empty })'> The Concept</a></li>
+
+                        <li><a href='@Url.Action("CoordinatorDetails", "Home", new { area = string.Empty })'>Programme Coordinators</a></li>
+                        <li><a href='@Url.Action("SeniorityListAPS", "Home", new { area = string.Empty })'>Common Seniority List of<br />Assistant Professors of Constituent Colleges</a></li>
+                        <li><a href='@Url.Action("SeniorityListAssociateProfs", "Home", new { area = string.Empty })'>Common Seniority list of<br />Associate Professors of Constituent Colleges </a></li>
+
+                        <li class="dropdown-submenu">
+                            <a class="trigger" tabindex="-1" href="#">Progress Report <i class="fa fa-angle-right"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a tabindex="-1" target="_blank" href='@Url.Content("~/FolderManager/ProgressReport/ProgressReport.pdf")'>Year -2017</a></li>
+                                <li class="dropdown-submenu">
+                                    <a class="trigger" href="#">Year-2018@*<i class="fa fa-angle-right"></i>*@</a>
+                                    @*<ul class="dropdown-menu">
+                                            <li><a href="#">Submenu Level 3</a></li>
+                                            <li><a href="#">Submenu Level 3</a></li>
+                                        </ul>*@
+                                </li>
+                                @*<li><a href="#">Submenu Level 2</a></li>
+                                    <li><a href="#">Submenu Level 2</a></li>*@
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li id="ResultSection" class="nav-item dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false">Results <i class="fa fa-angle-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="@Url.Action("ResultNotification","Result",new { @program=@CUSrinagar.Enums.PrintProgramme.UG})">NEP</a></li>
+                        <li><a href="@Url.Action("ResultNotification","Result",new { @program=@CUSrinagar.Enums.PrintProgramme.UG})">U.G</a></li>
+                        <li><a href="@Url.Action("ResultNotification","Result",new { @Program=@CUSrinagar.Enums.PrintProgramme.IH})">Integrated/Professional</a></li>
+                        <li><a href="@Url.Action("ResultNotification","Result",new { @program=@CUSrinagar.Enums.PrintProgramme.PG})">P.G.</a></li>
+                        <li><a href="@Url.Action("ResultNotification","Result",new { @program=@CUSrinagar.Enums.PrintProgramme.BED})">B.Ed.</a></li>
+
+                    </ul>
+                </li>
+                <li id="AcademicsSection" class="nav-item dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false">Academics <i class="fa fa-angle-down"></i></a>
+                    <ul class="dropdown-menu">
+                        @*<li><a href='@Url.Action("CUSCourses","Course",new { area = string.Empty})'>Courses</a></li>*@
+                        <li class="dropdown-submenu">
+                            <a class="trigger" tabindex="-1" href="#">Courses<i class="fa fa-angle-right"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href='@Url.Action("UniversitySubjects","Course",new { area = string.Empty})'>University Subjects</a></li>
+                                <li><a href='@Url.Action("CUSCourses","Course",new { area = string.Empty})'>Courses</a></li>
+                                <li><a href='@Url.Action("UGCourses","Course",new { area = string.Empty})'>UG Courses</a></li>
+                                <li><a href='@Url.Action("CourseStructure","Course",new { area = string.Empty})'>Course Structure</a></li>
+                                <li><a href='@Url.Action("CourseStructure","Course",new { area = string.Empty})'>Detailed Course Structure</a></li>
+                            </ul>
+                        </li>
+                        <li><a href='@Url.Action("FeeStructure","Course",new { area = string.Empty})'>Fee Structure</a></li>
+                        <li><a href='@Url.Action("GetCombinations","Course",new { area = string.Empty})'>Combinations</a></li>
+                        <li><a href="/Syllabus/Index/True?pp=UG">Syllabus</a></li>
+                        @*<li><a href='@Url.Action("SkillCourses","Syllabus",new { area = string.Empty})'>Syllabus For Skill Courses</a></li>*@
+                        <li><a href='@Url.Action("ListOfSkillCourses","Syllabus",new { area = string.Empty})'>List Of Skill Courses</a></li>
+                        <li><a href='@Url.Action("BoardOfStudies","Home",new { area = string.Empty})'>Board Of Studies</a></li>
+                    </ul>
+                </li>
+                <li id="GallerySection" class="active nav-item"><a href='@Url.Action("Gallery", "Home", new { area = string.Empty })'>Gallery</a></li>
+                @*<li id="CollegesSection" class="nav-item dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false" href="#">Colleges <i class="fa fa-angle-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href='@Url.Action("Index","Home",new { area = string.Empty})'><span class="fusion-megamenu-icon"><i class="fa glyphicon fa-university"></i></span>&nbsp;AAA College</a></li>
+                            <li><a href='@Url.Action("Index","Home",new { area = string.Empty})'><span class="fusion-megamenu-icon"><i class="fa glyphicon fa-university"></i></span>&nbsp;AS College</a></li>
+                            <li><a href='@Url.Action("Index","Home",new { area = string.Empty})'><span class="fusion-megamenu-icon"><i class="fa glyphicon fa-university"></i></span>&nbsp;GCW MA Road</a></li>
+                            <li><a href='@Url.Action("Index","Home",new { area = string.Empty})'><span class="fusion-megamenu-icon"><i class="fa glyphicon fa-university"></i></span>&nbsp;IAS College</a></li>
+                            <li><a href='@Url.Action("Index","Home",new { area = string.Empty})'><span class="fusion-megamenu-icon"><i class="fa glyphicon fa-university"></i></span>&nbsp;SP College</a></li>
+                        </ul>
+                    </li>*@
+                <li id="ExaminationSection" class="nav-item dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false">Examinations <i class="fa fa-angle-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href='@Url.Action("ExaminationSchedule","Home",new { area = string.Empty})'>Examination Schedule</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="trigger" tabindex="-1" href="#">Paper Pattern <i class="fa fa-angle-right"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href='@Url.Action("PaperPatternNEP","Home",new { area = string.Empty })'> NEP-2020</a></li>
+                                <li><a href='@Url.Action("PaperPattern","Home",new { area = string.Empty, @Program = CUSrinagar.Enums.Programme.UG })'> UG Paper</a></li>
+                                <li><a href='@Url.Action("PaperPattern","Home",new { area = string.Empty, @Program = CUSrinagar.Enums.Programme.PG})'> PG Paper</a></li>
+                                <li><a href='@Url.Action("PaperPattern","Home",new { area = string.Empty, @Program = CUSrinagar.Enums.Programme.Engineering})'>Engineering</a></li>
+                            </ul>
+                        </li>
+                        <li><a href='@Url.Action("DivisionImprovement", "Home", new { area = string.Empty })'>Division Improvement</a></li>
+                        <li><a href='@Url.Action("ModelPapers", "Home", new { area = string.Empty })'>Model Papers</a></li>
+                        <li><a href='@Url.Action("FeeStructure", "Home", new { area = string.Empty })'>Fee Structure</a></li>
+
+                    </ul>
+                </li>
+                <li id="ComponentsSection" class="nav-item dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false">Research <i class="fa fa-angle-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a>Initiatives</a></li>
+                        <li><a>Guidelines</a></li>
+                        <li><a>Programs offered</a></li>
+                    </ul>
+                </li>
+                @*<li id="ContactSection" class="nav-item"><a href='@Url.Action("GetCombinations", "Course", new { area = string.Empty })'>Combinations</a></li>*@
+                @*<li id="ContactSection" class="nav-item"><a href='@Url.Action("ContactUs", "Home", new { area = string.Empty })'>Contact</a></li>
+                    <li id="ContactSection" class="nav-item"><a href='@Url.Action("instructions", "registration", new { area = string.Empty })'>Admission 2018</a></li>*@
+                @*<li id="DownloadSection" class="nav-item dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false">Downloads<i class="fa fa-angle-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a tabindex="-1" target="_blank" href='@Url.Content("~/FolderManager/Downloads/Migration Certificate.pdf")'>Migration Certificate</a></li>
+                        </ul>
+                    </li>*@
+                <li id="DownloadSection" class="nav-item"><a href='@Url.Action("Downloads", "Home", new { area = string.Empty })'>Downloads</a></li>
+                <li id="GrievanceSection" class="nav-item"><a href='@Url.Action("Grievance", "Grievance", new { area = string.Empty })'>HelpDesk</a></li>
+                <li id="RTISection" class="nav-item"><a href='@Url.Action("RTI", "Home", new { area = string.Empty })'>RTI</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>

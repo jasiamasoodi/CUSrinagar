@@ -1,0 +1,78 @@
+﻿@model  List<CUSrinagar.Models.ARGEntranceCentersMaster>
+@using CUSrinagar.Extensions
+
+@{
+    Layout = null;
+    var ISChecked = "";
+    char hasStudentsAlloted = 'F';
+    bool IsAllowed = HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University.ToString());
+}
+
+<table class="table table-hover table-bordered">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th style="width:20%">Center Name &amp; Address</th>
+            <th>Center Code</th>
+            <th>Details</th>
+            <th>Is Active</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody style="background-color:#e5e5e5">
+        @if (Model != null)
+        {
+            foreach (var item in Model.OrderBy(x => x.CenterCode.SortAlphaNumeric()))
+            {
+                hasStudentsAlloted = 'F';
+                <tr>
+                    <td>@item.CenterName</td>
+                    <th class="text-center">@item.CenterCode</th>
+                    <td>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Course</th>
+                                <th>Total Students Alloted</th>
+                                <th>Entrance Date</th>
+                            </tr>
+                            @foreach (var centerDetail in item.DisplayEntranceCenterAllotmentDetail ?? new List<CUSrinagar.Models.DisplayEntranceCenterAllotmentDetail>())
+                            {
+                                hasStudentsAlloted = 'T';
+                                <tr>
+                                    <td>@centerDetail.CourseFullName</td>
+                                    <td style="text-align:center">@centerDetail.TotalStudentsAssigned</td>
+                                    <td style="text-align:center">@centerDetail.EntranceDate.ToLongDateString()</td>
+                                </tr>
+                            }
+                        </table>
+                        <input type="hidden" id="@item.Center_ID" value="@hasStudentsAlloted" />
+                    </td>
+                    <td>
+                        @if (IsAllowed)
+                        {
+                            if (item.Status)
+                            {
+                                ISChecked = "checked = checked";
+                            }
+                            else
+                            { ISChecked = ""; }
+                            <label class="pull-center inline text-center">
+                                <input class="JsStatus ace ace-switch ace-switch-5" id="@item.Center_ID" type="checkbox" @ISChecked />
+                                <span class="lbl middle"></span>
+                            </label>
+                        }
+                    </td>
+                    <td class="text-center">
+                        @if (IsAllowed)
+                        {
+                            <a href="javascript:void(0);" id='@item.Center_ID' class="JSDelete ace-icon fa fa-trash-o red bigger-130" title="Delete this Center"></a>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr><th colspan="5">No Entrance Centers found</th></tr>
+        }
+    </tbody>
+</table>

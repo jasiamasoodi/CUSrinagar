@@ -1,0 +1,2 @@
+﻿@model IEnumerable<SelectListItem>
+@Html.DropDownList("Programme", new SelectList(Model, "Value", "Text"), new { @class = "chosen-select required jsfilterelement form-control jsProgrammeDDL", @data_column = "Programme", @data_operator = "EqualTo", @data_scope = "row1", @required = "required" })

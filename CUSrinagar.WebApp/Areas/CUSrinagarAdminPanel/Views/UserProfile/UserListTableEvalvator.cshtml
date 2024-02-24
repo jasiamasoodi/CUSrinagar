@@ -1,0 +1,77 @@
+﻿@model  List<CUSrinagar.Models.AppUsers>
+@using CUSrinagar.Extensions
+@{
+    Layout = null;
+    var ISChecked = "";
+}
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th data-property="UserName">User Name</th>
+            <th data-property="FullName">Full Name</th>
+            <th data-property="Email">Email</th>
+            <th>Role</th>
+            <th data-property="Status">Is Active</th>
+            <th></th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var row in Model)
+            {
+                <tr>
+                    <td>@row.UserName @Html.Hidden("Password", row.Password.Decrypt().ToString())</td>
+                    <td>
+                        <a href='@Url.Action("EditEvalvator","UserProfile",new { area = "CUSrinagarAdminPanel", @id = row.User_ID })'>
+
+                            @row.FullName
+                        </a>
+
+                    </td>
+                    <td>@row.Email</td>
+                    <td>@string.Join(" , ", row.UserRoles.Select(x => ((CUSrinagar.Enums.AppRoles)Enum.Parse(typeof(CUSrinagar.Enums.AppRoles), x.RoleID.ToString())).GetEnumDescription()))</td>
+                    <td>
+                        @if (row.Status)
+                        {
+                            ISChecked = "checked = 'checked'";
+                        }
+                        else
+                        { ISChecked = ""; }
+                        <label class='pull-center inline'>
+                            <input class='ace ace-switch ace-switch-5' id='@row.User_ID' type='checkbox' @ISChecked onclick='return IsActive(this)' />
+                            <span class='lbl middle'></span>
+                        </label>
+                    </td>
+                    @*<td><a href="javascript:void(0);" id='@row.User_ID' class="JSDelete ace-icon fa fa-trash-o red bigger-130" title="Delete this User"></a></td>*@
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@section PageSpecificJS{
+    <script>
+    function IsActive(event) {
+        $.ajax({
+            url: '@Url.Action("ChangeStatus", "UserProfile", new { area = "CUSrinagarAdminPanel" })',
+            type: "GET",
+            data: { id: $(event).attr("id") },
+            cache: false,
+            async: true,
+            datatype: "html",
+            contentType: "application/html; charset=utf-8",
+            success: function (response) {
+                alert(response);
+
+            },
+            error: function (response) {
+            }
+        });
+        return true;
+    }
+    </script>
+}

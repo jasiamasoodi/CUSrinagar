@@ -1,0 +1,26 @@
+﻿
+@model  CUSrinagar.Models.ADMSubjectMaster
+@{
+    Layout = null;
+    var subject = ViewData["subject"];
+}
+
+<td style="display:none">
+    @Html.Hidden("semesterModelList[" + @loop + "]._ID", Model._ID, new { @class = "js_ID" })
+    @Html.Hidden("semesterModelList[" + @loop + "].Subject_ID", Model.Subject_ID)
+    @Html.Hidden("semesterModelList[" + @loop + "].RecordStatus", CUSrinagar.Enums.RecordState.Old)
+</td>
+<td>@Model.UpdatedByUserName</td>
+<td class="setwidth1">@Html.TextBox("semesterModelList[" + @loop + "].TheoryAttendance", Model.TheoryAttendance, new { @class = "setwidth textboxSub", @data_loop = @loop, @onfocus = "this.selectionStart=0;this.selectionEnd=10;" })</td>
+<td class="setwidth1">@Html.TextBox("semesterModelList[" + @loop + "].PracticalMarks", Model.PracticalMarks, new { @class = "setwidth textboxSub", @data_loop = @loop })</td>
+<td class="setwidth1">@Html.TextBox("semesterModelList[" + @loop + "].PracticalAttendance", Model.PracticalAttendance, new { @class = "setwidth textboxSub", @data_loop = @loop })</td>
+<td class="setwidth1">@Html.TextBox("semesterModelList[" + @loop + "].TheoryMarks", Model.TheoryMarks, new { @class = "setwidth textboxSub", @data_loop = @loop })</td>
+<td>
+    <button class="btn btn-white btn-warning btn-bold jsDeleteSubject" type="button">
+        <i class="ace-icon fa fa-trash-o bigger-120 orange"></i>
+        Delete
+    </button>
+</td>
+
+
+

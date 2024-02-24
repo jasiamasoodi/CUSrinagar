@@ -1,0 +1,125 @@
+﻿@model  List<CUSrinagar.Models.CourseCategoryWiseStatistics>
+@{
+    List<SelectListItem> Categories = ViewBag.Category;
+}
+<table class="text-center table table-bordered table-hover">
+    @if (Model != null)
+    {
+        var listOfCategories = Model.SelectMany(x => x.Categories.Where(z => z.Female + z.Male > 0).Select(y => y.CategoryName)).Distinct().OrderBy(x => x).ToList();
+        <thead style="">
+            <tr class="center">
+                <th rowspan="2" class="text-center">Course</th>
+                <th rowspan="2" class="text-center">M</th>
+                <th rowspan="2" class="text-center">F</th>
+                <th rowspan="2" class="text-center">Total</th>
+                @foreach (var cat in listOfCategories)
+                {
+                    string catValue = cat;
+                    <th class="text-center" colspan="2" title="@(Categories.FirstOrDefault(x=>x.Value.ToLower()==cat.ToLower())?.Text)">
+                        @catValue.Substring(0, catValue.Length < 4 ? catValue.Length : 4).ToUpper()
+                    </th>
+                }
+            </tr>
+            <tr>
+                @foreach (var cat in listOfCategories)
+                {
+                    <th class="text-center ">M</th>
+                    <th class="text-center ">F</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="">
+                    <td class="">@item.CourseFullName</td>
+                    <td>@item.Male</td>
+                    <td>@item.Female</td>
+                    <td>@item.Total</td>
+                    @foreach (var cat in listOfCategories)
+                    {
+                        var catCount = item.Categories.FirstOrDefault(i => i.CategoryName.ToLower() == cat.ToLower());
+                        <td>@(catCount == null ? 0 : catCount.Male)</td>
+                        <td>@(catCount == null ? 0 : catCount.Female)</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        <tr>
+            <td>
+                No Record Found
+            </td>
+        </tr>
+    }
+</table>
+
+
+@*<table class="table table-bordered js-table">
+        @if (Model != null)
+        {
+            <thead style="white-space: nowrap;">
+                <tr>
+                    <th class="wd-35">S.No</th>
+                    <th>Course</th>
+                    <th>Male</th>
+                    <th>Female</th>
+                    <th>Total</th>
+                    @foreach (var cat in Categories)
+                    {
+                        string catValue = cat.Value;
+                        <th title="@cat.Text">@catValue.Substring(0, catValue.Length < 4 ? catValue.Length : 4).ToUpper()</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="js-sno"></td>
+                            <td>@item.EntityID</td>
+                            <td>@item.Male</td>
+                            <td>@item.Female</td>
+                            <td>@item.Total</td>
+
+                            @foreach (var cat in Categories)
+                            {
+                                var catCount = item.Categories.FirstOrDefault(i => i.CategoryName.ToLower() == cat.Value.ToLower());
+                                <td>
+
+                                    <table class="table table-bordered" style=" border-collapse: collapse;border-style: hidden;width:100%">
+
+                                        <tbody>
+                                            <tr>
+                                                <td style="text-align:center">M</td>
+                                                <td style="text-align:center">F</td>
+                                            </tr>
+                                            <tr>
+
+                                                <td style="text-align:center">@(catCount == null ? 0 : catCount.Male)</td>
+                                                <td style="text-align:center">@(catCount == null ? 0 : catCount.Female)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        }
+        else
+        {
+            <tbody>
+                <tr>
+                    <td><h3>No record found</h3></td>
+                </tr>
+            </tbody>
+        }
+
+    </table>*@

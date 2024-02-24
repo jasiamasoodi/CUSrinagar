@@ -1,0 +1,227 @@
+﻿@model CUSrinagar.Models.ARGFormNoMasterSettings
+@using CUSrinagar.Extensions;
+
+@{
+    ViewBag.title = Model.PrintProgramme.GetEnumDescription() + " Settings";
+}
+
+
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area= "CUSrinagarAdminPanel" })">Home</a>
+        </li>
+        <li>
+            <a href="@Url.Action("RegularAdmSettings","AdmissionSettings",new { area= "CUSrinagarAdminPanel" })" class="">Admission Setting</a>
+        </li>
+    </ul>
+}
+
+<div class="row">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+
+    <div class="col-md-12">
+        @using (Html.BeginForm("EditRegularAdmSettings", "AdmissionSettings", FormMethod.Post, new { @class = "form-horizontal jsMainForm", @id = "AdmissionSettingsFrm", onsubmit = "return confirm('Are you sure, you want to update settings?');" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.PrintProgramme)
+
+            <div class="page-header">
+                <h1>
+                    @Model.PrintProgramme.GetEnumDescription() settings
+                </h1>
+            </div>
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Batch to set</label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(x => x.BatchToSet, new { @type = "number", @min = "2016", @max = "9999" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @{
+                        string parsedDates = "";
+                        if (Model.AllowFormsToBeEditFromDate != null)
+                        {
+                            parsedDates = (Model.AllowFormsToBeEditFromDate.Value.Year + "-" + (Model.AllowFormsToBeEditFromDate.Value.Month.ToString().Length == 1 ? "0" + Model.AllowFormsToBeEditFromDate.Value.Month : Model.AllowFormsToBeEditFromDate.Value.Month.ToString()) + "-" + (Model.AllowFormsToBeEditFromDate.Value.Day.ToString().Length == 1 ? "0" + Model.AllowFormsToBeEditFromDate.Value.Day : Model.AllowFormsToBeEditFromDate.Value.Day.ToString()));
+                        }
+                    }
+                    <label for="name" class="col-sm-6 control-label">Allow Forms Edit submitted from Date (> than)</label>
+                    <div class="col-sm-4">
+                        <input type="date" id="AllowFormsToBeEditFromDate" name="AllowFormsToBeEditFromDate" value="@parsedDates" class="form-control" />
+                    </div>
+                    <br />
+                    <br />
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <div class="checkbox">
+                            <label class="block">
+                                <input type="checkbox" class="ace input-lg" @(Model.AllowEditAfterPayment ? "Checked='checked'" : "") />
+                                <span class="lbl bigger"> <strong>Allow Edit after payment (NEP only)</strong></span>
+                                @Html.HiddenFor(model => model.AllowEditAfterPayment)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <div class="checkbox">
+                            <label class="block">
+                                <input type="checkbox" class="ace input-lg" @(Model.AllowNonCUET ? "Checked='checked'" : "") />
+                                <span class="lbl bigger"> <strong>Allow Non-CUET Forms</strong></span>
+                                @Html.HiddenFor(model => model.AllowNonCUET)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <div class="checkbox">
+                            <label class="block">
+                                <input type="checkbox" class="ace input-lg" @(Model.AllowOnlinePayment ? "Checked='checked'" : "") />
+                                <span class="lbl bigger"> Allow Online Payment</span>
+                                @Html.HiddenFor(model => model.AllowOnlinePayment)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <div class="checkbox">
+                            <label class="block">
+                                <input type="checkbox" class="ace input-lg" @(Model.ValidatePaymentByCourse ? "Checked='checked'" : "") />
+                                <span class="lbl bigger"> Validate Payment by Course</span>
+                                @Html.HiddenFor(model => model.ValidatePaymentByCourse)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <div class="checkbox">
+                            <label class="block">
+                                <input type="checkbox" class="ace input-lg" @(Model.ResetFormCount ? "Checked='checked'" : "") />
+                                <span class="lbl bigger"> Reset Form Count (Current Count @Model.FormNoCount)</span>
+                                @Html.HiddenFor(model => model.ResetFormCount)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <div class="checkbox">
+                            <label class="block">
+                                <input type="checkbox" class="ace input-lg" @(Model.ShowLateralEntry ? "Checked='checked'" : "") />
+                                <span class="lbl bigger"> Is Lateral Entry </span>
+                                @Html.HiddenFor(model => model.ShowLateralEntry)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Basic Fee</label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(x => x.BasicFee, new { @type = "number", @min = "0" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Per course fee</label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(x => x.PerCourse, new { @type = "number", @min = "0" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Additional Fee for  Non-JK</label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(x => x.AdditionalFeeForNonJK, new { @type = "number", @min = "0" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Fee for already In IH</label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(x => x.FeeForAlreadyInIH, new { @type = "number", @min = "0" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @{
+                        string parsedDate = (Model.ClosingDate.Year + "-" + (Model.ClosingDate.Month.ToString().Length == 1 ? "0" + Model.ClosingDate.Month : Model.ClosingDate.Month.ToString()) + "-" + (Model.ClosingDate.Day.ToString().Length == 1 ? "0" + Model.ClosingDate.Day : Model.ClosingDate.Day.ToString()) + "T" + (Model.ClosingDate.Hour.ToString().Length == 1 ? "0" + Model.ClosingDate.Hour : Model.ClosingDate.Hour.ToString()) + ":" + (Model.ClosingDate.Minute.ToString().Length == 1 ? "0" + Model.ClosingDate.Minute : Model.ClosingDate.Minute.ToString())).Trim();
+                    }
+                    <label for="name" class="col-sm-3 control-label">Closing Date</label>
+                    <div class="col-sm-6">
+                        <input type="datetime-local" id="ClosingDate" name="ClosingDate" value="@parsedDate" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Choose courses</label>
+                    <div class="col-sm-2">
+                        @Html.DropDownListFor(x => x.OpenRegistrationCourses, (IEnumerable<SelectListItem>)ViewBag.ADMCourses, "", new { @class = "form-control multiselect", @multiple = "", @style = "display: none;" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-7">
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <div class="checkbox">
+                            <label class="block">
+                                <input type="checkbox" class="ace input-lg" @(Model.AllowApplyForSelfFinancedSeat ? "Checked='checked'" : "") />
+                                <span class="lbl bigger"> Allow SelfFinanced Seat</span>
+                                @Html.HiddenFor(model => model.AllowApplyForSelfFinancedSeat)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">SelfFinanced Fee</label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(x => x.SelfFinancedApplicationFee, new { @type = "number", @min = "0" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">SelfFinanced Courses</label>
+                    <div class="col-sm-2">
+                        @Html.DropDownListFor(x => x.AllowProgrammesInSelfFinance, (IEnumerable<SelectListItem>)ViewBag.SFCourses, "ALL", new { @class = "form-control multiselect", @multiple = "", @style = "display: none;" })
+                    </div>
+                </div>
+
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.DownloadAdmitCards ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> Allow Entrance @Model.BatchToSet Admit Cards</span>
+                            @Html.HiddenFor(model => model.DownloadAdmitCards)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="center col-sm-12">
+                <button type="submit" value="True" name="SaveAsNew" id="submitForm" class="btn btn-primary">
+                    <i class="ace-icon fa fa-cogs"></i> Apply
+                </button>
+                <a href="/registration/instructions/" target="_blank" class="btn btn-success">
+                    <i class="ace-icon fa fa-file"></i> Goto Admission Form
+                </a>
+                <a href="/CUSrinagarAdminPanel/AdmissionSettings/RegularAdmSettings/" class="btn btn-danger">
+                    <i class="ace-icon fa fa-times"></i> Cancel
+                </a>
+            </div>
+        }
+    </div>
+    <div class="center col-sm-12">
+        <br /><br />
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script src="/Scripts/Pages/combinationsetting.js"></script>
+}
+
+
+

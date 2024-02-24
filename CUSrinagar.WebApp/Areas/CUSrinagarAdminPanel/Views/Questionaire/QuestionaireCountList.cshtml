@@ -1,0 +1,149 @@
+﻿
+@{
+    ViewBag.Title = "Questionaire";
+}
+
+<div class="page-wrapper pager-table-text">
+
+    <div class="page-header">
+        <div style="padding-bottom: 30px;">
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <h1 class="heading-title pull-left">
+                        Questionaire
+                        <small>
+                            <i class="ace-icon fa fa-angle-double-right"></i>
+                            List of questions
+                        </small>
+                    </h1>
+
+                </div>
+
+                <div class="col-sm-6">
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Questions
+                            <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                            </span>
+
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="col-sm-12 search-box">
+                            <label class="col-sm-12">Advance Search</label>
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span>College<span id="AcceptCollege_IDValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div>
+                                    @Html.DropDownList("AcceptCollege_ID", new SelectList(ViewBag.Colleges, "Value", "Text"),
+                                      "--Select--", new { @class = "required chosen-select tag-input-style SearchDDL form-control jsfilterelement", @data_column = "AcceptCollege_ID", @data_operator = "EqualTo", data_ddltype = "Course", @data_ddlchildtype = "", @data_ddlsubchildtype = "" })
+                                </div>
+                            </div>
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span>Programme<span id="ProgrammeIdValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div>
+                                    @Html.DropDownList("PrintProgramme", new SelectList(ViewBag.PrintProgramme, "Value", "Text"),
+                                      "--Select--", new { @class = "required chosen-select tag-input-style SearchDDL form-control jsfilterelement", @data_column = "PrintProgramme", @data_operator = "EqualTo", data_ddltype = "Course", @data_ddlchildtype = "", @data_ddlsubchildtype = "" })
+                                </div>
+                            </div>
+                            <div class="col-sm-1 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span>Batch<span id="BatchValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div>
+                                    @Html.TextBox("Batch", "", new { @class = "required form-control jsfilterelement", @data_column = "Batch", @data_operator = "EqualTo" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span>Course<span id="Course_IDValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div id="Course">
+                                    @Html.DropDownList("Course_ID", new SelectList(ViewBag.Courses, "Value", "Text"),
+                                           "--Select--", new { @class = "required chosen-select tag-input-style  form-control jsfilterelement", @data_column = "Course_ID", @data_operator = "EqualTo" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span>Semester<span id="SemesterValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div id="Semester">
+                                    @Html.DropDownList("Semester", new SelectList(ViewBag.Semesters, "Value", "Text"),
+                                            "--Select--", new { @class = "required chosen-select tag-input-style  form-control jsfilterelement", @data_column = "Semester", @data_operator = "EqualTo" })
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-1 " style="padding-top: 17px;">
+                                <button type="button" class="btn btn-primary fa-search-btn"><i class="fa fa-search"></i>&nbsp;Search</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="js-table-content" data-url="@Url.Action("QuestionaireCountListTable", "Questionaire", new { area = "CUSrinagarAdminPanel" })" data-DefaultOrderByColumn="Question">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script>
+
+        $(document).ready(function () {
+
+            var $pagertable = $(".js-pager-table");
+             var controllerName = "Questionaire";
+            var chilDDLPath = '@Url.Action("_GetChildDDL", "Questionaire", new { area = "CUSrinagarAdminPanel" })';
+            $(document).on('change', '.SearchDDL', function (e) {
+                var College_ID = $("#AcceptCollege_ID").val();
+                var PrintProgramme = $("#PrintProgramme").val();
+                var path = chilDDLPath;
+                if (PrintProgramme != "" && PrintProgramme != undefined && College_ID != "" && College_ID != undefined) {
+                    $.ajax({
+                        url: path,
+                        data: { College_ID: College_ID, PrintProgramme: PrintProgramme },
+                        datatype: "json",
+                        contentType: "application/json; charset=utf-8",
+                        encode: true,
+                        type: "Get",
+                        cache: false,
+                        async: false,
+                        success: function (response) {
+                            var PartialView = response;
+                            $('#Course').html(PartialView); // Modify me
+
+                            ChosenStyle();
+                        }
+                    });
+                }
+            });
+        });
+
+
+
+    </script>
+
+    <script src="@Url.Content("~/Scripts/JSChosen.js")"></script>
+}
+<style>
+    .filter-btn a {
+        color: white !important
+    }
+</style>
+
+

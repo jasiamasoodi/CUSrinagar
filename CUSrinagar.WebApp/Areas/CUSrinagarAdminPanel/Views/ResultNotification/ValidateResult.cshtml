@@ -1,0 +1,187 @@
+﻿@model  CUSrinagar.Models.ResultNotification
+@{
+    ViewBag.Title = "Validate Result";
+
+}
+
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header">
+                <h4 class="widget-title"><i class='menu-icon fa fa-pencil-square-o'></i>Check Awards</h4>
+
+
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    @using (@Html.BeginForm("ValidateResults", "ResultNotification", FormMethod.Post, new { @class = "jsMainForm form-horizontal", @id = "ResultNotification" }))
+                    {
+                        @Html.HiddenFor(model => model.ResultNotification_ID)
+
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">Batch</label>
+                            <div class="col-sm-8">
+                                <div class="jsDDLContainer wd-650">
+                                    @Html.DropDownListFor(model => model.Batch, new SelectList(ViewBag.Batchs, "Value", "Text"), new
+                                      {
+                                           @class = "form-control chosen-select  ",
+                                       })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">College</label>
+                            <div class="col-sm-8">
+                                <div class="jsDDLContainer wd-650">
+                                    @Html.DropDownListFor(model => model.College_ID, new SelectList(ViewBag.College, "Value", "Text"), "-- All Colleges --",
+                                                    new
+                                                    {
+                                                        @class = "form-control chosen-select jsCollegeDDL ",
+                                                        @data_column = "College_ID",
+                                                        @data_operator = "EqualTo",
+                                                         @data_scope = "row1"
+                                                    })
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">Print Programme</label>
+                            <div class="col-sm-8">
+                                <div class="jsDDLContainer wd-650">
+                                    @Html.DropDownListFor(model => model.Programme, new SelectList(ViewBag.Programmes, "Value", "Text"), new
+                                                  {
+                                                      @class = "form-control chosen-select jsProgrammeDDL ",
+                                                      @data_column = "Programme",
+                                                      @data_operator = "EqualTo",
+                                                       @data_scope = "row1"
+                                                  })
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">Course</label>
+                            <div class="col-sm-8">
+                                <div class="jsDDLContainer wd-650">
+                                    @Html.DropDownListFor(model => model.Course_ID, new SelectList(ViewBag.Courses, "Value", "Text", (short)CUSrinagar.Enums.Programme.UG), " -- All Courses --",
+                                                    new
+                                                    {
+                                                        @class = "form-control chosen-select jsCourseDDL ",
+                                                        @data_column = "Course_ID",
+                                                        @data_operator = "EqualTo",
+                                                        @data_defaulttextvalue = " -- All Courses --,",
+                                                        @data_scope = "row1"
+                                                    })
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">Semester</label>
+                            <div class="col-sm-8">
+                                <div class="jsDDLContainer wd-650">
+                                    @Html.DropDownListFor(model => model.Semester, new SelectList(ViewBag.Semesters, "Value", "Text"), null,
+                                                new
+                                                {
+                                                    @class = "form-control chosen-select jsSemesterDDL ",
+                                                    @data_column = "Semester",
+                                                    @data_operator = "EqualTo",
+                                                    @data_scope = "row1"
+                                                })
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">Subject</label>
+                            <div class="col-sm-8">
+                                <div class="jsDDLContainer wd-650">
+                                    <select required id="Subject_ID" name="Subject_ID" class=" chosen-select form-control jsVWSCSubjectDDL" data-column="Subject_ID" data-operator="EqualTo"
+                                            data-defaulttextvalue="All Subjects" data-scope="row1">
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <div class=" pull-text-right pull-right">
+                                    <button type="submit" class="btn btn-success ">Validate Result</button>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+
+                    }
+                </div>
+            </div>
+            <div>
+                @if (Model.AwardCounts != null)
+                {
+                    <script>
+
+                    </script>
+                    <br /><br />
+                    <table class="table table-hover table-bordered js-table">
+                        <thead>
+                            <tr>
+                                <th>Total Count</th>
+                                <th>Internal Count</th>
+                                <th>External Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var row in Model.AwardCounts)
+                            {
+                                <tr>
+                                    <td>@row.TotalCount</td>
+                                    <td>@row.InternalCount</td>
+                                    <td>@row.ExternalCount</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>}
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+            showLoader();
+        setTimeout(function () {
+
+            $(".jsSemesterDDL").trigger("change");
+
+        }, 50);
+        setTimeout(function () {
+             var val="@Model.Subject_ID";
+             $("#Subject_ID option[value='"+val+"']").prop("selected", true);
+             $("#Subject_ID").trigger("chosen:updated");
+             hideLoader();
+        }, 5000);
+    });
+    $('.date-picker').datepicker({
+        autoclose: true,
+        todayHighlight: true,
+        dateFormat: 'mm/dd/yy',
+        format: 'mm/dd/yy'
+    })
+
+</script>
+<style>
+    .child {
+        width: inherit;
+        height: 100%;
+    }
+</style>

@@ -1,0 +1,145 @@
+﻿@{
+    ViewBag.Title = "CUS :: Question List";
+
+}
+
+
+<div class="page-wrapper pager-table-text">
+
+    <div class="page-header">
+        <div style="padding-bottom: 30px;">
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <h1 class="heading-title pull-left">
+                        Questions
+                        <small>
+                            <i class="ace-icon fa fa-angle-double-right"></i>
+                            List of Questions
+                        </small>
+                    </h1>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Questions
+                            <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                            </span>
+
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-sm-12 search-box">
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    @{string Exam_Id = (ViewBag.Exam_Id) + "";}
+                                    @Html.Hidden("Exam_Id", Exam_Id,
+                                        new
+                                        {
+                                            @class = "jsfilterelement form-control required",
+                                            @data_column = "Exam_Id",
+                                            @data_tablealias = "InternalExam",
+                                        })
+
+                                    <label>Programme</label><br />
+                                    <div class="form-group">
+                                        @Html.DropDownList("ProgrammeDDL", new SelectList(ViewBag.Programmes, "Value", "Text", (short)CUSrinagar.Enums.Programme.UG), "-- All Programmes --",
+                                                   new
+                                                   {
+                                                       @class = "form-control chosen-select jsProgrammeDDL ",
+                                                       @data_column = "Programme",
+                                                       @data_operator = "EqualTo",
+                                                       @data_tablealias = "ADMSubjectMaster",
+                                                       @data_scope = "row1"
+                                                   })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Choose Course</label><br />
+                                    <div class="jsDDLContainer  wd-200">
+                                        @Html.DropDownList("Course", new SelectList(ViewBag.Courses, "Value", "Text", ViewBag.Course), " -- All Courses --",
+                                                   new
+                                                   {
+                                                       @class = "form-control chosen-select jsCourseDDL ",
+                                                       @data_column = "Course_ID",
+                                                       @data_operator = "EqualTo",
+                                                       @data_tablealias = "ADMCourseMaster",
+                                                       @data_defaulttextvalue = " -- All Courses --,",
+                                                       @data_scope="row1"
+                                                   })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Choose Semester</label><br />
+                                    <div class="jsDDLContainer">
+                                        @Html.DropDownList("SemesterDDL", new SelectList(ViewBag.Semesters, "Value", "Text", ViewBag.Semester), "-- All Semesters --",
+                                                  new
+                                                  {
+                                                      @class = "form-control chosen-select jsSemesterDDL ",
+                                                      @data_column = "Semester",
+                                                      @data_operator = "EqualTo",
+                                                      @data_tablealias = "ADMSubjectMaster",
+                                                      @data_scope = "row1"
+                                                  })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Choose Subject</label><br />
+                                    <div class="jsDDLContainer">
+                                        @Html.DropDownList("Subject", new SelectList(ViewBag.Subjects, "Value", "Text",ViewBag.Subject), "-- All Subject types --",
+                                                  new
+                                                  {
+                                                      @class = "form-control chosen-select jsSubjectDDL jsfilterelement",
+                                                      @data_column = "Subject_Id",
+                                                      @data_operator = "EqualTo",
+                                                      @data_tablealias = "InternalExam",
+                                                      @data_scope = "row1"
+                                                  })
+                                    </div>
+                                </div>
+                                <div class="form-group" style="padding-top: 17px;">
+                                    <button type="button" class="btn btn-primary fa-search-btn "><i class="fa fa-search"></i>&nbsp;View Questions</button>
+                                </div>
+                                <div class="form-group" style="padding-top: 17px;">
+
+
+                                    <a href="#123" class="btn btn-primary btn-primary  white" id="addQuestion" title="Add New">
+                                        <i class="ace-icon fa fa-plus  bigger-110"></i>
+                                        <span>&nbsp;Add Question</span>
+                                    </a>
+                                    <span class="red" id="Subjectlbl"></span>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                    <div class="js-table-content" data-url=@Url.Action("QuestionsList", "InternalAdmin", new { area = "CUSrinagarAdminPanel" }) data-DefaultOrderByColumn="Exam_ID">
+
+                    </div>
+                    @{Html.RenderPartial("_JSPagerTableFooter");}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var Exam_Id="@ViewBag.Exam_Id";
+</script>
+<script src="~/Scripts/Pages/InternalExam.js"></script>
+
+@section PageSpecificJS{
+    <script>
+        loadpagertableWithDefaultParams();
+    </script>
+
+
+}

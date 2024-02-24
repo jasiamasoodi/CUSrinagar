@@ -1,0 +1,133 @@
+﻿@model List<CUSrinagar.Models.Certificate>
+@using CUSrinagar.Enums
+@using CUSrinagar.Extensions
+@{
+    ViewBag.Title = "Upload Response";
+    Layout = "~/Areas/CUStudentZone/Views/Shared/_CUStudentZoneLayout.cshtml";
+    ViewBag.Title = "Upload Response";
+    string errorMessage = ViewBag.PaymentFailureMessage;
+    CUSrinagar.Models.ARGPersonalInformation STD = ViewBag.ARGPersonalInformation;
+}
+
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area="CUStudentZone"})">Home</a>
+        </li>
+        <li>
+            <a href="@Url.Action("UploadCertificateIH", new { R=CUSrinagar.Extensions.Helper.EncryptCookieAndURLSafe(((short)CUSrinagar.Enums.PrintProgramme.IH).ToString())})" class="active">Upload Certificates</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+
+<div class="page-content ">
+    <div class="row ">
+        <div class="col-xs-10 col-sm-10 col-md-6 col-xs-offset-1 col-sm-offset-1 col-md-offset-3">
+            <div class="row panel panel-body well">
+                @if (Model != null && STD != null && STD.CoursesApplied.IsNotNullOrEmpty())
+                {
+                    <div class="">
+                        <div class="text-center">
+                            <img src="@Url.Content("~/Content/ThemePublic/Libraries/images/cus-logo1.svg")" width="500" height="50" />
+                            <h4 class="text-success"><b>Upload Confirmation</b></h4>
+                            <h4 class="hidden-print"><b>Your request for admission has been submitted successfully</b></h4>
+                        </div>
+                        <div class="table-bordered" style="margin:20px">
+                            <table class="table">
+                                <tbody>
+                                    @if (STD.PaymentDetail != null && STD.PaymentDetail.Count > 0)
+                                    {
+                                        <tr>
+                                            <td>Transaction Reference:<b> @STD.PaymentDetail.First().TxnReferenceNo</b> </td>
+                                            <td>
+                                                Amount:<b> @STD.PaymentDetail.First().TxnAmount</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>For:<b> @STD.PaymentDetail.First().ModuleType.ToString() </b> </td>
+                                            <td>Date:<b> @STD.PaymentDetail.First().TxnDate.ToString("dd-MMMM-yyyy")</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Email:<b> @STD.PaymentDetail.First().Email</b></td>
+                                            <td>PhoneNumber:<b> @STD.PaymentDetail.First().PhoneNumber</b> </td>
+                                        </tr>
+                                    }
+                                    <tr>
+                                        <td>Form No:<b> @STD.StudentFormNo</b> </td>
+                                        <td>
+                                            Course:<b>
+                                                @if (STD.CoursesApplied.Count > 1)
+                                                {
+                                                    var joinedCourse = STD.CoursesApplied.Where(x => x.StudentSelectionStatus == StudentSelectionStatus.Joined || x.StudentSelectionStatus == StudentSelectionStatus.Joined_SF)?.ToList();
+                                                    var makePaymentCourse = STD.CoursesApplied.Where(x => x.StudentSelectionStatus == StudentSelectionStatus.Verified_MakePayment || x.StudentSelectionStatus == StudentSelectionStatus.Verified_MakePayment_SF)?.ToList();
+                                                    var certificateUploaded = STD.CoursesApplied.Where(x => x.StudentSelectionStatus == StudentSelectionStatus.CertificatesUploaded || x.StudentSelectionStatus == StudentSelectionStatus.CertificatesUploaded_SF)?.ToList();
+                                                    if (joinedCourse.IsNotNullOrEmpty())
+                                                    {
+                                                        <b> @(joinedCourse.First().CourseName)</b>
+                                                    }
+                                                    else if (makePaymentCourse.IsNotNullOrEmpty())
+                                                    {
+                                                        <b> @(makePaymentCourse.First().CourseName)</b>
+                                                    }
+                                                    else if (certificateUploaded.IsNotNullOrEmpty())
+                                                    {
+                                                        <b> @(certificateUploaded.First().CourseName)</b>
+                                                    }
+                                                    else
+                                                    {
+                                                        <b> @(STD.CoursesApplied.First().CourseName)</b>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <b>                                                        @(STD.CoursesApplied.First().CourseName)                                                </b>
+                                            }
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Name:<b> @STD.FullName</b> </td>
+                                        <td>Fathers:<b> @STD.FathersName</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            @foreach (var item in Model)
+                                            {
+                                                <div class="col-sm-2" style="display:inline-table">
+                                                    <center>
+                                                        <img src="@Url.Content(item.CertificateUrl)" class="no-margin-bottom thumbnail img-responsive" style="max-height:100px" />
+                                                        <span>@item.CertificateType.ToString()</span>
+                                                    </center>
+                                                </div>
+                                            }
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <h3 class="text-danger">@ViewBag.ErrorMessage</h3>
+                }
+                <div>
+                    <h3>Note !</h3>
+                    <ol>
+                        <li>In case of any discrepancy please mail at <a href="mailto:admissions@cusrinagar.edu.in?Subject=ClusterUniversity"><i class="fa fa-envelope"></i>admissions@cusrinagar.edu.in</a>.</li>
+                    </ol>
+                    <hr />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJSFiles{
+
+}
+
+
+
+

@@ -1,0 +1,158 @@
+﻿@using CUSrinagar.Models
+@using CUSrinagar.Extensions
+
+@{
+    ViewBag.Title = "Paper Evaluator Bills - Cluster University Sriangar";
+    List<BillStatistics> billStatistics = ViewBag.BillStatistics;
+}
+
+
+<div class="center">
+    <div class="clearfix">
+        <div class="grid4">
+            <span class="bigger-175 blue">
+                @(billStatistics.FirstOrDefault(x => x.BillStatus == CUSrinagar.Enums.BillStatus.ExternalAwardsUploaded)?.TotalBills ?? 0)
+            </span>
+            <br>
+            @if ((billStatistics.FirstOrDefault(x => x.BillStatus == CUSrinagar.Enums.BillStatus.ExternalAwardsUploaded)?.TotalBills ?? 0) > 0)
+            {
+                <img src="/Content/ThemePublic/PrintImages/new.gif">
+            }
+            Submitted to University
+        </div>
+
+        <div class="grid4">
+            <span class="bigger-175 blue">
+                @(billStatistics.FirstOrDefault(x => x.BillStatus == CUSrinagar.Enums.BillStatus.Verified)?.TotalBills ?? 0)
+            </span>
+            <br>
+            <i class="ace-icon glyphicon glyphicon-ok green bigger-140"></i> Verified at University
+        </div>
+        <div class="grid4" title="Bills with Status like : Under-Verification, Verified, Error in Bill etc">
+            @if ((billStatistics.FirstOrDefault(x => x.BillStatus == CUSrinagar.Enums.BillStatus.ErrorInBill)?.TotalBills ?? 0) > 0)
+            {
+                <span class="bigger-175 blue">
+                    @(billStatistics.FirstOrDefault(x => x.BillStatus == CUSrinagar.Enums.BillStatus.ErrorInBill)?.TotalBills ?? 0)
+                </span>
+                <br>
+                <i class="ace-icon fa fa-exclamation-circle red bigger-140"></i><span> Bills with Error</span>
+            }
+            else
+            {
+                <span class="bigger-175 blue">
+                    @(billStatistics.Where(x => x.BillStatus != CUSrinagar.Enums.BillStatus.DispatchedToAccountsSection
+                                                && x.BillStatus != CUSrinagar.Enums.BillStatus.ExternalAwardsUploaded
+                                                && x.BillStatus != CUSrinagar.Enums.BillStatus.Verified
+                                                && x.BillStatus != CUSrinagar.Enums.BillStatus.Paid)?.Sum(x => x.TotalBills) ?? 0)
+                </span>
+                <br>
+                <i class="ace-icon fa fa-exclamation-circle red bigger-140"></i><span> Bills Pending at Univeristy</span>
+            }
+        </div>
+
+        <div class="grid4">
+            <span class="bigger-175 blue">
+                @(billStatistics.FirstOrDefault(x => x.BillStatus == CUSrinagar.Enums.BillStatus.DispatchedToAccountsSection)?.TotalBills ?? 0)
+            </span>
+            <br>
+            <i class="ace-icon fa fa-folder-open purple bigger-140"></i> Dispatched to University Accounts Section
+        </div>
+    </div>
+</div>
+<div class="hr hr12 dotted" style="margin-bottom:0"></div>
+
+
+<div class="page-wrapper pager-table-text">
+    <div class="page-content">
+        <div class="row page-row">
+            @if (TempData["Err"] != null)
+            {
+                @Html.Raw(TempData["Err"])
+            }
+            <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Your Paper Evaluator Bills
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-sm-12 search-box">
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                Bill No.
+                                <div id="Course">
+                                    @Html.TextBox("BillNO", "", new { @class = "form-control jsfilterelement", @data_column = "BillNo", @data_operator = "Contains" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                Paper Title
+                                <div id="Course">
+                                    @Html.TextBox("SubjectFullName", "", new { @class = "form-control jsfilterelement", @data_column = "SubjectFullName", data_tablealias = "sm", @data_operator = "Contains" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                Bill Status
+                                <div>
+                                    @Html.DropDownList("BillStatus", (List<SelectListItem>)ViewBag.BillStatus, new { @class = " form-control jsfilterelement", @data_column = "BillStatus", @data_operator = "Equal" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2 " style="padding-top: 17px;">
+                                <button type="button" class="btn btn-primary fa-search-btn" data-dismiss="modal"><i class="fa fa-search"></i>&nbsp;Search</button>
+                            </div>
+
+                            <div class="col-sm-2" style="padding-top: 17px;">
+                                <button data-toggle="dropdown" class="btn btn-purple dropdown-toggle">
+                                    Action
+                                    <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-default dropdown-info">
+                                    <li>
+                                        <a href="javascript:void(0)" class="js-exportToCSV" data-url="@Url.Action("PrintBills","BillAccount",new { area="CUSrinagarAdminPanel"})">
+                                            Print Bills
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="js-table-content" data-url="@Url.Action("EvaluatorList", "BillEvaluator", new { area = "CUSrinagarAdminPanel" })" data-DefaultOrderByColumn="CreatedOn">
+                    </div>
+                    @{Html.RenderPartial("_JSPagerTableFooter");}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJSFiles{
+    @Scripts.Render("~/bundles/Libraries/jqueryval")
+    <script src="@Url.Content("~/Scripts/JSBilling/BillSetter.js")"></script>
+    <script src="~/Content/ThemeAdmin/Content/Scripts/JSUsers/UserList.js"></script>
+}
+
+@section PageSpecificJS{
+    <script>
+        $(document).ready(function () {
+            var $pagertable = $(".js-pager-table");
+            fillPagerTableParams($pagertable);
+            loadpagertable();
+        });
+    </script>
+}
+
+@section PageSpecificStyle{
+    <style>
+        .filter-btn a {
+            color: white !important
+        }
+    </style>
+}
+
+
+
+

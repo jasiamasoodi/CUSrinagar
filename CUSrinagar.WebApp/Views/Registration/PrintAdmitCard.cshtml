@@ -1,0 +1,249 @@
+﻿@using CUSrinagar.Models
+@using CUSrinagar.Extensions
+
+@model ARGPersonalInformation
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@Model.StudentFormNo Admit Card - CUSrinagar</title>
+    <style type="text/css">
+        .btn-theme {
+            background: #011c27;
+            border: 1px solid #84aac9;
+            color: #fff;
+        }
+
+            .btn-theme:hover {
+                background: #545677;
+                border: 1px solid #84aac9;
+                color: #fff;
+            }
+
+        .QRCode {
+            width: 95px;
+            position: absolute;
+            margin-top: -60px;
+            margin-left: 0
+        }
+
+        @@media print {
+            @@page {
+                size: portrait;
+            }
+
+            .QRCode {
+                width: 95px;
+                position: absolute;
+                margin-top: -60px;
+                margin-left: 0
+            }
+
+            .noneOnPrint {
+                display: none;
+            }
+
+            .dontbreakInside {
+                page-break-inside: avoid;
+            }
+
+            .breakpagehere {
+                page-break-after: always !important;
+            }
+
+            .blankspace {
+                height: 350px !important;
+            }
+        }
+
+        .breakpagehere {
+            height: 10px;
+            background-color: grey !important;
+        }
+
+        table tr td {
+            padding: 5px 10px;
+        }
+
+        table tr td, table tr th {
+            max-width: 150px;
+            word-wrap: hyphenate !important;
+        }
+
+        table, table tr, table tr td, table tr th {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        div {
+            background-color: #fff;
+        }
+
+        .center {
+            text-align: center !important;
+        }
+
+        .pull-right {
+            float: right !important;
+        }
+
+        .pull-left {
+            float: left !important;
+        }
+    </style>
+</head>
+<body style="background-color:grey">
+    @{
+        var base64 = Convert.ToBase64String(Model.QRCode);
+        var QRImgSrc = String.Format($"data:image/png" + ";base64,{0}", base64);
+    }
+    <div style="margin:0 auto;width:909px;padding:10px 10px">
+        <div class="center">
+            <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" style="width:90px;height:68px;" />
+            <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+            <br />
+            <strong style="font-size:20px;">
+                CUSAT - @Model.Batch
+                [ADMIT CARD]
+                <img src="@QRImgSrc" class="QRCode" style="margin-left:150px;" />
+            </strong>
+
+        </div>
+        <table>
+            <tr>
+                <td colspan="1">
+                    <strong style="float:left !important;">Form No. : @Model.StudentFormNo</strong>
+                </td>
+                <td colspan="3">
+                    <span style="float:left !important;">DOB (dd-mm-yyyy) : <strong>@Model.DOB.ToString("dd-MM-yyyy")</strong></span>
+                </td>
+                <td colspan="2">
+                    <strong style="float:right !important;font-size:17px;">Entrance Roll No. : @Model.EntranceRollNo</strong>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">Board Registration No.: @Model.BoardRegistrationNo</td>
+                <td rowspan="6" class="center">
+                    <img class="img-responsive" src="@Url.Content(Model.Photograph)" width="150" />
+                </td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td>@Model.FullName</td>
+                <td>Gender</td>
+                <td>@Model.Gender</td>
+            </tr>
+            <tr>
+                <td>Father's Name</td>
+                <td colspan="3">@Model.FathersName</td>
+
+            </tr>
+            <tr>
+                <td>Mother's Name</td>
+                <td>@Model.MothersName</td>
+                <td>Mobile</td>
+                <td>@Model.StudentAddress.Mobile</td>
+            </tr>
+        </table>
+
+        <div>
+            <h3>Examination Dates &amp; Centers</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:210px;">Course Name</th>
+                        @if ((Model.CoursesApplied?.Any(x => x.Preference != 0) ?? false))
+                        {
+                            <th style="width:100px;">Preference</th>
+                        }
+                        <th style="width:100px;">Date</th>
+                        <th style="width:90px;">Time</th>
+                        <th style="width:90px;">Center Code</th>
+                        <th style="width:200px;">Center Name &amp; Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        ARGEntranceCentersMaster CentersMaster = null; Guid course_ID = Guid.Empty;
+                        IEnumerable<ARGCoursesApplied> centersList = Model.CoursesApplied?.Where(c => c.EntranceCentersAllotment != null)?.OrderBy(x => x.EntranceCentersAllotment.EntranceDate).ToList() ?? new List<CUSrinagar.Models.ARGCoursesApplied>();
+                    }
+                    @foreach (var item in centersList)
+                    {
+                        CentersMaster = null;
+
+                        <tr class="dontbreakInside">
+                            <td>@item.CourseName</td>
+                            @if ((Model.CoursesApplied?.Any(x => x.Preference != 0) ?? false))
+                            {
+                                <td>@item.Preference</td>
+                            }
+
+                            <td>@item.EntranceCentersAllotment.EntranceDate.ToString("dd-MM-yyyy")</td>
+                            <td>@item.EntranceCentersAllotment.Time.ToUpper()</td>
+
+                            @{
+                                CentersMaster = Model.EntranceCenters.First(x => x.Center_ID == item.EntranceCentersAllotment.Center_ID);
+                            }
+                            <td style="text-align:center;"><strong>@CentersMaster.CenterCode</strong> </td>
+                            <td>
+                                @CentersMaster.CenterContactDetails.CollegeFullName
+
+                                @CentersMaster.CenterContactDetails.Address
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+        </div>
+        <div class="dontbreakInside" style="width:100% !important">
+            <p style="width:100%;text-align:justify">
+                <fieldset style="padding:0;">
+                    <legend style="font-weight:bold;font-size:16px;color:red;text-align:center"> Important </legend>
+                    <ol style="line-height:29px;font-weight:bold">
+                        <li>Candidates are directed to report at their allotted examination centres <strong>one hour</strong> before the commencement of Exam.</li>
+                        <li>Candidates should carry Admit Card and other valid Identity Proof along with them.</li>
+                        <li>Candidates are not allowed to carry any Electronic Gadget in the Examination Hall.</li>
+                        <li>
+                            Candidates are warned not to resort to any unfair / fraudulent means or act of impersonation during entrance test.
+                            In case a candidate is found taking recourse to such act, his/her candidature shall be cancelled.
+                        </li>
+                        <li><i>In case of any variation in particulars, the candidate shall contact the I.T Section.</i></li>
+                    </ol>
+                </fieldset>
+                <br /><br />
+                <span class="pull-left ">Printed on : @DateTime.UtcNow.ToLongDateString()</span>
+
+                <strong class="pull-right">
+                    Signature of the Applicant
+                </strong>
+            </p>
+        </div>
+        <br />
+        <br />
+    </div>
+    <br />
+
+    <div class="noneOnPrint" style="margin-left:-14px;height:40px;background-color:lightslategrey;width:100%;position:fixed;bottom:0;z-index:100;text-align:center;padding-top:10px">
+        @Html.ActionLink("Go Back", "AdmitCard", "Registration", null, new { style = "color:white;" })
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <button style="height: 32px;" href="#" class="btn btn-theme" onclick="window.print();"> <b> Download or Print Admit Card</b></button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a style="height: 32px;color:white" href="https://www.wikihow.com/Save-a-Web-Page-as-a-PDF-in-Google-Chrome" target="_blank"><b>See How to Save as PDF</b></a>
+    </div>
+
+    <script src="@Url.Content("~/Content/ThemePublic/Libraries/disableBack.js")"></script>
+    <script type="text/javascript">
+        window.oncontextmenu = function () { return false; }
+    </script>
+</body>
+</html>

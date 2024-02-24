@@ -1,0 +1,63 @@
+﻿
+
+@{
+    ViewBag.Title = "Board Of Studies";
+}
+
+<div class="page-wrapper pager-table-text">
+    <header class="page-heading clearfix" style="margin-bottom:2px;">
+        <h1 class="heading-title pull-left">
+           Board Of Studies
+        </h1>
+    </header>
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Board Of Studies
+                        </h3>
+                    </div>
+                    <table class="table table-hover table-bordered js-table">
+                        <thead style="white-space: nowrap;">
+                            <tr>
+                                <th>Subject</th>
+                                <th style="text-align:center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Engineering Technology</td>
+                                <td style="text-align:center"><a class="" href='@Url.Content("~/FolderManager/BoardOfStudies/BoS-ET.pdf")' target="_blank">View</a></td>
+                            </tr>   
+                            <tr>
+                                <td>Commerce</td>
+                                <td style="text-align:center"><a class="" href='@Url.Content("~/FolderManager/BoardOfStudies/BoS-Commerce.pdf")' target="_blank">View</a></td>
+                            </tr>                          
+                        </tbody>
+                    </table>
+
+                    </div>
+                    <div class="panel-footer js-pager-table-footer">
+                        <ul class="pager no-margin no-margin-top">
+                            <li class="">&nbsp; </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@section PageSpecificJS{
+    <script>
+        var _CurrentSection = "Academics";
+        $(document).ready(function () {
+            loadpagertable();
+        });
+    </script>
+}
+
+
+
+

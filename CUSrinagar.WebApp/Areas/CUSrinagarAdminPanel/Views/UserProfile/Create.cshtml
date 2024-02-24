@@ -1,0 +1,31 @@
+﻿@model  CUSrinagar.Models.AppUsers
+@{
+    ViewBag.Title = "CUS :: Add User";
+
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header">
+                <h4 class="widget-title"><i class='menu-icon fa fa-pencil-square-o'></i>Add User</h4>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+
+                    @using (Html.BeginForm("Create", "UserProfile", FormMethod.Post, new { enctype = "multipart/form-data", @name = "validation-form", @id = "validation-form", @class = "form-horizontal", @role = "form" }))
+                    {
+                        @Html.Partial("_CreateOrEdit", Model)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section PageSpecificJSFiles{
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSGeneral/GeneralJS.js")"></script>
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSUsers/CreateOREdit.js")"></script>
+}
+
+
+
+

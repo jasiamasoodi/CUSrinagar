@@ -1,0 +1,327 @@
+﻿@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@using CUSrinagar.Models
+@model List<ResultList>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Subject Statistics</title>
+    <style type="text/css">
+        @@media print {
+            .noneOnPrint {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body style="background: #e0e0e0;margin: auto;vertical-align: middle;display: table;">
+    @if (Model.IsNotNullOrEmpty())
+    {
+        var batches = Model.Select(x => x.SemesterBatch).Distinct().OrderBy(x => x).ToList();
+        var listOfCourses = Model.Select(x => new { x.Programme, x.CourseFullName }).OrderBy(x => x.CourseFullName).OrderBy(x => x.Programme).Select(x => x.CourseFullName).Distinct().ToList();
+        var listOfColleges = Model.Select(x => x.AcceptCollege_ID).Distinct();
+        var maxSemesters = Model.Max(x => x.Semester);
+        var count = 1;
+        foreach (string course in listOfCourses)
+        {
+            var _semesters = Model.Where(x => x.CourseFullName == course).Select(x => x.Semester).Distinct().OrderBy(x => x).ToList();
+            foreach (var item_semester in _semesters)
+            {
+                var _list = Model.Where(x => x.CourseFullName == course && x.Semester == item_semester).Select(x => new { x.SubjectType, x.SubjectFullName, x.Student_ID, x.Gender, x.OverallResultStatus, x.ResultNotification_ID, x.ExamForm_ID }).Distinct().ToList();
+                var _subjects = _list.Select(x => new { x.SubjectFullName, x.SubjectType }).Distinct().OrderBy(x => x.SubjectFullName).OrderBy(x => CUSrinagar.DataManagers.GeneralFunctions.GetSubjectTypeCode(x.SubjectType));
+                count = 1;
+                <section style="size:A4;background: white;padding:0;margin: 0;overflow: hidden;box-sizing: border-box;width: 210mm;position:relative;page-break-after: always;font-family: monospace;">
+
+                    <div style="margin:0mm;margin-right: 3.5mm;margin-left: 3.5mm;margin-top:2.5mm;float:right;">
+                        <table border="1" style="line-height:5mm;">
+                            <thead>
+                                <tr>
+                                    <th colspan="5">
+                                        <center>
+                                            <p style="margin:0mm;font-size:x-large;">@course Semester:@item_semester</p>
+                                        </center>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th style="text-align:center;">S.No</th>
+                                    <th style="width:125mm;">Paper titles</th>
+                                    <th title="Total" class="center text-center">Total</th>
+                                    <th title="Overall result status" class="center text-center">Passed</th>
+                                    <th title="Overall result status" class="center text-center">Failed</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var subject in _subjects)
+                                {
+                                    var _sublist = _list.Where(x => x.SubjectFullName == subject.SubjectFullName).ToList();
+                                    var _passedStudents = _sublist.Where(x => x.OverallResultStatus == ResultStatus.P && x.ResultNotification_ID.HasValue && x.ExamForm_ID.HasValue).Select(x => new { x.Student_ID, x.Gender }).Distinct().ToList();
+                                    var _failedStudents = _sublist.Where(x => x.OverallResultStatus != ResultStatus.P || !x.ResultNotification_ID.HasValue || !x.ExamForm_ID.HasValue).Select(x => new { x.Student_ID, x.Gender }).Distinct().ToList();
+
+                                    <tr>
+                                        <td><center>@(count++)</center></td>
+                                        <td>&nbsp;@(subject.SubjectFullName + " (" + CUSrinagar.DataManagers.GeneralFunctions.GetSubjectTypeCode(subject.SubjectType) + ")")</td>
+                                        <td>
+                                            <center>
+                                                <b><u>@_sublist.Distinct().Count()</u> </b>
+                                                <br />
+                                                [<span title="Male">@_sublist.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                |
+                                                <span title="Female">@_sublist.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                            </center>
+                                        </td>
+                                        <td>
+                                            <center>
+                                                <b><u>@_passedStudents.Count()</u></b>
+                                                <br />
+                                                [<span title="Male">@_passedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                |
+                                                <span title="Female">@_passedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                            </center>
+                                        </td>
+                                        <td>
+                                            <center>
+                                                <b><u>@_failedStudents.Count()</u></b>
+                                                <br />
+                                                [<span title="Male">@_failedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                                |
+                                                <span title="Female">@_failedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                            </center>
+                                        </td>
+                                    </tr>
+                                }
+                                @{
+                                    <tr>
+                                        <td><center>##</center></td>
+                                        <td colspan="4">
+                                            <center>
+                                                <h1>
+                                                    @course&nbsp;:&nbsp;
+                                                    @_list.Select(x => new { x.Student_ID, x.Gender }).Distinct().Count()
+                                                    [&nbsp;<span title="Male">@_list.Where(x => x.Gender.ToLower() == "male").Select(x => new { x.Student_ID, x.Gender }).Distinct().Count()</span><sup>M</sup>
+                                                    |
+                                                    <span title="Female">@_list.Where(x => x.Gender.ToLower() == "female").Select(x => new { x.Student_ID, x.Gender }).Distinct().Count()</span><sup>F</sup>&nbsp;]
+                                                </h1>
+                                            </center>
+                                        </td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td colspan="5">|</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </section>
+            }
+
+
+        }
+        if (ViewBag.printGazetteOnly)
+        {
+            count = 1;
+            foreach (string course in listOfCourses)
+            {
+                var _semesters = Model.Where(x => x.CourseFullName == course).Select(x => x.Semester).Distinct().OrderBy(x => x).ToList();
+                foreach (var item_semester in _semesters)
+                {
+                    var _list = Model.Where(x => x.CourseFullName == course && x.Semester == item_semester).OrderBy(x => x.SubjectFullName).OrderBy(x => CUSrinagar.DataManagers.GeneralFunctions.GetSubjectTypeCode(x.SubjectType));
+                    <section style="size:A4;background: white;padding:0;margin: 0;overflow: hidden;box-sizing: border-box;width: 210mm;position:relative;page-break-after: always;font-family: monospace;">
+                        <center>
+                            <div style="margin:0mm;margin-right: 3.5mm;margin-left: 3.5mm;margin-top:2.5mm;">
+                                <table class="" border="1">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="11">
+                                                <center>
+                                                    <p style="margin:0mm;font-size:x-large;">@course : Semester:@item_semester</p>
+                                                </center>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th>S.No</th>
+                                            @*<th data-property="CourseFullName">Course</th>*@
+                                            <th style="width:32mm;text-align:center;">Registration No</th>
+                                            <th style="width:16mm;text-align:center;">Roll No</th>
+                                            <th data-property="FullName">Full Name</th>
+                                            <th data-property="SubjectFullName">Paper titles</th>
+
+                                            @*<th title="Internal Marks" data-property="InternalMarks">Int</th>
+                                                <th title="Internal Attedance/Assessment Marks" data-property="InternalAttendance_AssessmentMarks">Int.A</th>
+                                                <th title="External Attendance/Assessment Marks" data-property="ExternalAttendance_AssessmentMarks">Ext.A</th>
+                                                <th title="External Marks" data-property="ExternalMarks">Ext</th>*@
+
+                                            <th title="Total Internal marks">T Int</th>
+                                            <th title="Total External marks">T Ext</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in _list)
+                                        {
+                                            <tr>
+                                                @*<td>@item.CourseFullName</td>*@
+                                                <td>
+                                                    <center>@(count++)</center>
+                                                </td>
+                                                <td style="text-align:center;">@item.CUSRegistrationNo</td>
+                                                <td style="text-align:center;">@item.ExamRollNumber</td>
+                                                <td>@item.FullName</td>
+                                                <td>@item.SubjectFullName</td>
+                                                @*<td>
+                                                        <center>
+                                                            @if (item.HasInternalComponent)
+                                                            {
+                                                                if (item.InternalMarks.HasValue)
+                                                                {
+                                                                    <span>@item.InternalMarks.Value.ToString("f0")</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>-</span>
+                                                                }
+
+                                                            }
+                                                        </center>
+                                                    </td>
+                                                    <td>
+                                                        <center>
+                                                            @if (item.IsInternalAttendance_AssessmentApplicable)
+                                                            {
+                                                                if (item.InternalAttendance_AssessmentMarks.HasValue)
+                                                                {
+                                                                    <span>@item.InternalAttendance_AssessmentMarks.Value.ToString("f0")</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>-</span>
+                                                                }
+                                                            }
+                                                        </center>
+                                                    </td>
+                                                    <td>
+                                                        <center>
+                                                            @if (item.IsExternalAttendance_AssessmentApplicable)
+                                                            {
+                                                                if (item.ExternalAttendance_AssessmentMarks.HasValue)
+                                                                {
+                                                                    <span>@item.ExternalAttendance_AssessmentMarks.Value.ToString("f0")</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>-</span>
+                                                                }
+                                                            }
+                                                        </center>
+                                                    </td>
+                                                    <td>
+                                                        <center>
+                                                            @if (item.IsExternalMarksApplicable)
+                                                            {
+                                                                if (item.ExternalMarks.HasValue)
+                                                                {
+                                                                    <span>@item.ExternalMarks.Value.ToString("f0")</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>-</span>
+                                                                }
+                                                            }
+                                                        </center>
+                                                    </td>*@
+                                                <td title="Total Internal marks">
+                                                    <center>
+                                                        @if (item.HasInternalComponent)
+                                                        {
+                                                            if ((item.InternalStatus == ResultStatus.P || item.InternalStatus == ResultStatus.F))
+                                                            {
+                                                                <span>@item.TotalInternalMarksObtained.Value.ToString("f0")</span>
+                                                                <sup>@item.InternalStatus.ToString()</sup>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span>@item.InternalStatus.ToString()</span>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>-</span>
+                                                        }
+                                                    </center>
+                                                </td>
+                                                <td title="">
+                                                    <center>
+                                                        @if (item.HasExternalComponent)
+                                                        {
+                                                            if (item.HasInternalComponent)
+                                                            {
+                                                                if (item.InternalStatus == ResultStatus.P)
+                                                                {
+                                                                    if (item.TotalExternalMarksObtained.HasValue && (item.ExternalStatus == ResultStatus.P || item.ExternalStatus == ResultStatus.F))
+                                                                    {
+                                                                        <span>@item.TotalExternalMarksObtained.Value.ToString("f0")</span>
+                                                                        <sup>@item.ExternalStatus.ToString()</sup>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span>@item.ExternalStatus.ToString()</span>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <sup>F</sup>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                if (item.TotalExternalMarksObtained.HasValue && (item.ExternalStatus == ResultStatus.P || item.ExternalStatus == ResultStatus.F))
+                                                                {
+                                                                    <span>@item.TotalExternalMarksObtained.Value.ToString("f0")</span>
+                                                                    <sup>@item.ExternalStatus.ToString()</sup>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>@item.ExternalStatus.ToString()</span>
+                                                                }
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>-</span>
+                                                        }
+                                                    </center>
+                                                </td>
+                                            </tr>
+                                        }
+                                        <tr>
+                                            <td colspan="11">
+                                                <center>
+                                                    <h1>
+                                                        @course : Total Students=@_list.Select(x => x.Student_ID).Distinct().Count()
+                                                    </h1>
+                                                </center>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </center>
+                    </section>
+                }
+
+
+            }
+        }
+    }
+    else
+    {
+        <section class="sheet padding-5mm">
+            <p>Result Not Found .... </p>
+        </section>
+    }
+</body>
+</html>

@@ -1,0 +1,81 @@
+﻿@model  List<CUSrinagar.Models.Notification>
+@{
+    Layout = null;
+    var ISChecked = "";
+}
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th data-property="NotificationType">Notification Type</th>
+            <th data-property="Description">Description</th>
+            <th data-property="StartDate">Start Date</th>
+            <th data-property="EndDate">End Date</th>
+            <th data-property="Status">Active</th>
+            <th data-property="Link">Attachment</th>
+            @*<th>Action</th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var row in Model)
+            {
+                <tr>
+                    <td>@row.NotificationType.ToString()</td>
+                    <td>
+                        <a href='@Url.Action("Edit","Notification",new { area = "CUSrinagarAdminPanel", @id = row.Notification_ID })'>
+                            @row.Description
+                        </a>
+                    </td>
+                    <td>@row.StartDate.ToString("dd-MMMM-yyyy")</td>
+                    <td>@row.EndDate.ToString("dd-MMMM-yyyy")</td>
+                    <td>
+                        @if (row.Status)
+                        {
+                            ISChecked = "checked = 'checked'";
+                        }
+                        else
+                        { ISChecked = ""; }
+                        <label class='pull-center inline'>
+                            <input class='ace ace-switch ace-switch-5' id='@row.Notification_ID' type='checkbox' @ISChecked onclick='return IsActive(this)' />
+                            <span class='lbl middle'></span>
+                        </label>
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(row.Link))
+                        {
+                            var href = ((row.IsLink) ? "http://" : "") + row.Link.ToLower().Replace("http://", "").Replace("https://", "");
+                            <a target="_blank" title='Download' href='@href'> View Detail </a>
+                        }
+
+                    </td>
+                    @*<td>
+                            <div class="hidden-sm hidden-xs btn-group">
+                                   @Html.ActionLink("View Detail", "_DetailedNotification", "Notification", new { area = "CUSrinagarAdminPanel", @class = "btn btn-sm btn-primary" })
+                            </div>
+                        </td>*@
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<script>
+    function IsActive(event) {
+        $.ajax({
+            url: '@Url.Action("ChangeStatus", "Notification", new { area = "CUSrinagarAdminPanel" })',
+            type: "GET",
+            data: { id: $(event).attr("id") },
+            cache: false,
+            async: true,
+            datatype: "html",
+            contentType: "application/html; charset=utf-8",
+            success: function (response) {
+                alert(response);
+
+            },
+            error: function (response) {
+            }
+        });
+        return true;
+    }
+</script>

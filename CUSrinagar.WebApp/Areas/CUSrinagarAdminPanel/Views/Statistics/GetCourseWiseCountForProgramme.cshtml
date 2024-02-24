@@ -1,0 +1,73 @@
+﻿
+@using CUSrinagar.Extensions;
+@{
+    Layout = null;
+}
+@model List<CUSrinagar.Models.AdmissionFormWidgetCourseWise>
+
+
+
+
+<div id="accordion" class="accordion-style1 panel-group">
+    @Html.Hidden("TotalStudent",(object)ViewBag.Totals)
+    @{
+        var programmes = Enum.GetValues(typeof(CUSrinagar.Enums.PrintProgramme)).Cast<CUSrinagar.Enums.PrintProgramme>();
+    }
+
+    @foreach (var programme in programmes)
+    {
+        if (Model != null)
+        {
+            if (Model.FirstOrDefault(i => i.PrintProgramme == programme) != null)
+            {
+                @Html.Hidden(programme.ToString() + "-ac", programme, new { @class = "jsCourseProgramme" })
+
+                <div class="panel panel-default">
+                    @Html.Hidden("TotalStudents", Model.Sum(i => i.NoOfStudents))
+                    <div class="panel-heading">
+                        <h2 class="panel-title">
+                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#@programme" aria-expanded="false">
+                                <i class="bigger-110 ace-icon fa fa-angle-right" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                <strong>@programme.GetEnumDescription() = @Model.Where(programe => programe.PrintProgramme == programme).Sum(i => i.NoOfStudents)</strong>
+
+                            </a>
+                        </h2>
+                    </div>
+                    <div class="panel-collapse collapse" id="@programme" aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body">
+                            <table class="table table-striped table-dark">
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        if (item.PrintProgramme == programme)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <strong>
+                                                        <a href="#">@item.CourseFullName </a>
+                                                        @Html.Hidden(item.CourseFullName, item.CourseFullName, new { @class = "jsCourseFullName" })
+                                                    </strong>
+                                                </td>
+                                                <td><strong>@item.NoOfStudents</strong></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <hr />
+            <h3 style="text-align:center"> <strong><i>No data found for the given filters. Please try again with different filter combinations.</i></strong></h3>
+            <hr />
+        }
+    }
+</div>
+
+
+
+

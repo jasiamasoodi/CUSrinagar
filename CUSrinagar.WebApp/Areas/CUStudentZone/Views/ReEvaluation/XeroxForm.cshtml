@@ -1,0 +1,297 @@
+﻿@model CUSrinagar.Models.ResultCompact
+@using CUSrinagar.Enums
+@using CUSrinagar.Models
+@using System.Linq;
+@{
+    ViewBag.Title = "Apply for Xerox - CUS";
+    List<CUSrinagar.Models.ReEvaluationStudentSubject> subjects = ViewBag.ReEvaluatedSubjects;
+    List<CUSrinagar.Models.ReEvaluationStudentSubject> xeroxSubjects = subjects == null ? null : subjects.Where(x => x.OptForXerox).ToList();
+}
+@section CUSSitemap{
+    <div class="breadcrumbs ace-save-state breadcrumbs-fixed hidden-print">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUStudentZone"})">Home</a>
+            </li>
+            <li>
+                <a href="@Url.Action("Xerox","ReEvaluation",new { area="CUStudentZone"})">Xerox</a>
+            </li>
+            <li>
+                <a href="#">Xerox Form</a>
+            </li>
+        </ul>
+    </div>
+}
+<div class=" page-content">
+    <h3 class="center">
+        <i class="fa fa-credit-card"></i> Apply For Xerox For Semester-@ViewBag.ApplyForSemester and Submitted Year-@ViewBag.SubmittedYear.
+    </h3>
+    <div class="col-sm-12">
+        @if (Model != null)
+        {
+            using (Html.BeginForm("XeroxForm", "ReEvaluation", FormMethod.Post, new { @class = "jsMainForm", @role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+
+                @Html.Hidden("_ID", Guid.Empty)
+                @Html.Hidden("Model.Student_ID", Model.Student_ID)
+                @Html.Hidden("Model.FullName", Model.FullName)
+                @Html.Hidden("FeeAmountXerox", "100")
+                @Html.Hidden("ModelFormStatus", CUSrinagar.Enums.FormStatus.InProcess)
+                @Html.Hidden("Model.FormNumber", "")
+                @Html.Hidden("Model.FormType", FormType.Xerox)
+
+                <input type="hidden" name="Model.Semester" value="@ViewBag.ApplyForSemester" />
+                <input type="hidden" name="ApplyForSemester" value="@ViewBag.ApplyForSemester" />
+                <input type="hidden" name="SubmittedYear" value="@ViewBag.SubmittedYear" />
+
+                <div class="table table-responsive">
+                    <table id="table" class="table table-bordered table-hover">
+                        <tbody>
+                            <tr>
+                                <th>Subject Title</th>
+                                <th>Theory</th>
+                                <th>Xerox Copy</th>
+                            </tr>
+
+                            @if (Model.SubjectResults != null)
+                            {
+                                var count = 0;
+                                Model.SubjectResults.OrderBy(i => i.IsInternalMarksApplicable).ThenBy(i => i.InternalAttendance_AssessmentMaxMarks);
+                                for (int index = 0; index < Model.SubjectResults.Count; index++)
+                                {
+                                    var subject = Model.SubjectResults[index];
+
+                                    if (subject.SubjectType == SubjectType.Lab
+                                        || subject.SubjectType == SubjectType.Practical || subject.SubjectType == SubjectType.Workshop)
+                                    {
+                                        continue;
+                                    }
+
+                                    if (subject.ResultNotification_ID.HasValue == false || subject.ResultNotification_ID.Value == Guid.Empty || subject.ExternalSubmitted == false || !subject.HasResult)
+                                    {
+                                        continue;
+                                    }
+
+                                    var hasExternal = false;
+                                    bool ExternalApplicable = false; decimal ExternalMaxMarks = 0; decimal ExternalMinPassMarks = 0; decimal? ExternalMarksObtained = null; var ExternalMarksTitle = "";
+                                    <tr>
+                                        <td>
+                                            @subject.SubjectFullName (@subject.SubjectType)
+
+                                            @Html.Hidden("Model.SubjectsForEvaluation[" + count + "].Student_ID", Model.Student_ID)
+                                            @Html.Hidden("Model.SubjectsForEvaluation[" + count + "].Subject_ID", subject.Subject_ID)
+                                            @Html.Hidden("Model.SubjectsForEvaluation[" + count + "].ResultNotification_ID", subject.ResultNotification_ID)
+                                            @Html.Hidden("Model.SubjectsForEvaluation[" + count + "].ExamForm_ID", subject.ExamForm_ID)
+                                            @Html.Hidden("Model.SubjectsForEvaluation[" + count + "].SubjectFullName", subject.SubjectFullName)
+                                        </td>
+                                        <td>
+                                            @if (subject.IsInternalMarksApplicable)
+                                            {
+                                                if (subject.InternalIsPartOf == MarksIsPartOf.External)
+                                                {
+                                                    ExternalApplicable = true; ExternalMinPassMarks += subject.InternalMinPassMarks; ExternalMaxMarks += subject.InternalMaxMarks;
+                                                    if (subject.ExternalSubmitted)
+                                                    {
+                                                        if (decimal.TryParse(subject.InternalMarks?.ToString() ?? "0", out decimal _Marks) && _Marks >= 0)
+                                                        {
+                                                            ExternalMarksObtained = ExternalMarksObtained.HasValue ? ExternalMarksObtained : 0;
+                                                            ExternalMarksObtained += _Marks;
+                                                        }
+                                                        else
+                                                        {
+                                                            ExternalMarksTitle += subject.InternalMarks + "#";
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            @if (subject.IsInternalAttendance_AssessmentMarksApplicable)
+                                            {
+                                                if (subject.InternalAttendance_AssessmentIsPartOf == MarksIsPartOf.External)
+                                                {
+                                                    ExternalApplicable = true; ExternalMinPassMarks += subject.InternalAttendance_AssessmentMinPassMarks; ExternalMaxMarks += subject.InternalAttendance_AssessmentMaxMarks;
+                                                    if (subject.ExternalSubmitted)
+                                                    {
+                                                        if (decimal.TryParse(subject.InternalAttendance_AssessmentMarks?.ToString() ?? "0", out decimal _Marks) && _Marks >= 0)
+                                                        {
+                                                            ExternalMarksObtained = ExternalMarksObtained.HasValue ? ExternalMarksObtained : 0;
+                                                            ExternalMarksObtained += _Marks;
+                                                        }
+                                                        else
+                                                        {
+                                                            ExternalMarksTitle += subject.InternalAttendance_AssessmentMarks + "#";
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                            @if (subject.IsExternalMarksApplicable)
+                                            {
+                                                if (subject.ExternalIsPartOf == MarksIsPartOf.External)
+                                                {
+                                                    ExternalApplicable = true; ExternalMinPassMarks += subject.ExternalMinPassMarks; ExternalMaxMarks += subject.ExternalMaxMarks;
+                                                    if (subject.ExternalSubmitted)
+                                                    {
+                                                        if (decimal.TryParse(subject.ExternalMarks?.ToString() ?? "0", out decimal _Marks) && _Marks >= 0)
+                                                        {
+                                                            ExternalMarksObtained = ExternalMarksObtained.HasValue ? ExternalMarksObtained : 0;
+                                                            ExternalMarksObtained += _Marks;
+                                                        }
+                                                        else
+                                                        {
+                                                            ExternalMarksTitle += subject.ExternalMarks + "#";
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                            @if (subject.IsExternalAttendance_AssessmentMarksApplicable)
+                                            {
+                                                if (subject.ExternalAttendance_AssessmentIsPartOf == MarksIsPartOf.External)
+                                                {
+                                                    ExternalApplicable = true; ExternalMinPassMarks += subject.ExternalAttendance_AssessmentMinPassMarks; ExternalMaxMarks += subject.ExternalAttendance_AssessmentMaxMarks;
+                                                    if (subject.ExternalSubmitted)
+                                                    {
+                                                        if (decimal.TryParse(subject.ExternalAttendance_AssessmentMarks?.ToString() ?? "0", out decimal _Marks) && _Marks >= 0)
+                                                        {
+                                                            ExternalMarksObtained = ExternalMarksObtained.HasValue ? ExternalMarksObtained : 0;
+                                                            ExternalMarksObtained += _Marks;
+                                                        }
+                                                        else
+                                                        {
+                                                            ExternalMarksTitle += subject.ExternalAttendance_AssessmentMarks + "#";
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            @if (ExternalApplicable)
+                                            {
+                                                if (ExternalMarksObtained.HasValue && subject.ResultNotification_ID.HasValue && subject.ResultNotification_ID.Value != Guid.Empty)
+                                                {
+                                                    hasExternal = true;
+                                                    <span title="@ExternalMarksObtained.Value.ToString("f0")/@ExternalMaxMarks">@ExternalMarksObtained.Value.ToString("f0")</span>
+                                                    if (ExternalMarksObtained < ExternalMinPassMarks)
+                                                    {
+                                                        <sup title="Fail">F</sup>
+                                                    }
+                                                    else
+                                                    {
+                                                        <sup title="Pass">P</sup>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <span title="@ExternalMarksTitle">Not Available</span>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <span>Not Applicable</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (hasExternal)
+                                            {
+                                                if (xeroxSubjects != null)
+                                                {
+                                                    var AppliedReEvalSubject = xeroxSubjects.FirstOrDefault(i => i.Subject_ID == subject.Subject_ID);
+                                                    if (AppliedReEvalSubject != null)
+                                                    {
+                                                        @Html.Hidden("Model.SubjectsForEvaluation[" + count + "].ReEvaluationSubject_ID", AppliedReEvalSubject.ReEvaluationSubject_ID)
+                                                        @Html.Hidden("Model.SubjectsForEvaluation[" + count + "].ReEvaluationSubject_ID", AppliedReEvalSubject.ReEvaluationSubject_ID)
+                                                        @Html.Hidden("Model.SubjectsForEvaluation[" + count + "].FormNumber", AppliedReEvalSubject.FormNumber)
+                                                        <a href="javascript:alert('Visit Cluster University Srinagar Result Section to get your Xerox copy of this subject');"><i class="menu-icon fa fa-check"></i> Applied</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.Hidden("Model.SubjectsForEvaluation[" + count + "].ReEvaluationSubject_ID", Guid.Empty)
+                                                        <label class="pos-rel">
+                                                            <input type="checkbox" id="@(subject.SubjectFullName + "Xerox")" class="ace js-chk-fee" name="subjectrow" value="Xerox" />
+                                                            <label class="lbl js-chk-fee" for="@(subject.SubjectFullName + "Xerox")"><strong> Apply</strong></label>
+                                                            <input type="hidden" name='@("Model.SubjectsForEvaluation[" + count + "].OptForXerox")' value="False" />
+                                                        </label>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <label class="pos-rel">
+                                                        <input type="checkbox" id="@(subject.SubjectFullName + "Xerox")" class="ace js-chk-fee" name="subjectrow" value="Xerox" />
+                                                        <label class="lbl js-chk-fee" for="@(subject.SubjectFullName + "Xerox")"><strong> Apply</strong></label>
+                                                        <input type="hidden" name='@("Model.SubjectsForEvaluation[" + count + "].OptForXerox")' value="False" />
+                                                    </label>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <span>Not Applicable</span>
+                                            }
+
+                                        </td>
+                                    </tr>
+                                    count++;
+                                }
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2">
+                                    <span class="pull-right">
+                                        <b><i>Total Fee </i></b>
+                                        <small>
+                                            <label for="subjectrow" class="error"></label>
+                                        </small>
+                                    </span>
+                                </td>
+                                <td>
+                                    <h4 class="no-margins jsTotalFee red"></h4>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <hr />
+                    <div class="form-group col-md-8">
+                        <label for="name" class="col-sm-3 control-label text-primary">Payment Information :</label>
+                        <div class="col-sm-4">
+                            <input type="email" value="@ViewBag.Email" autocomplete="off" id="Email" name="Email" placeholder="Email ID" class="form-control" required />
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" value="@ViewBag.Mobile" autocomplete="off" id="MobileNumber" name="MobileNumber" placeholder="Mobile Number" class="form-control phone" required minlength="10" maxlength="10" />
+                        </div>
+                    </div>
+                </div>
+
+                <a href="@Url.Action("PrintXeroxForm", "ReEvaluation", new { @area = "CUStudentZone", @ApplyForSemester = ViewBag.ApplyForSemester,@SubmittedYear=ViewBag.SubmittedYear })"
+                   class="margin-left-20 btn btn-success jsRePrint pull-right">Re-Print Form</a>
+
+                <button type="submit" style="z-index:99" class="btn btn-success jsSubmitReEvaluationForm pull-right"> PROCEED TO PAYMENT</button>
+
+            }
+        }
+        else
+        {
+            <div class="col-sm-12">
+                <p>
+                    <h5 class="text-danger">@ViewBag.ErrorMessage</h5>
+                </p>
+            </div>
+        }
+    </div>
+</div>
+<hr />
+<div class="col-sm-12">
+    <h5>
+        <i>
+            For suggestions / feedback or in case of an error / discrepancy in the results please mail us at
+            <a target="_blank" href="mailto:reevaluation@cusrinagar.edu.in">Re-Evaluation Support</a>
+        </i>
+    </h5>
+</div>
+
+
+@section PageSpecificJSFiles
+{
+    <script src="~/Content/ThemeAdmin/Content/Scripts/Pages/student-re-evaluation.js"></script>
+}
+

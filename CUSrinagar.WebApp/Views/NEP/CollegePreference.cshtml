@@ -1,0 +1,114 @@
+﻿@model List<CUSrinagar.Models.NEPCollegePreference>
+
+@using CUSrinagar.Models
+@using CUSrinagar.BusinessManagers
+@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc;
+@using CUSrinagar.Extensions
+
+@{
+    ViewBag.Title = $"Graduation Registration Form {DateTime.UtcNow.Year}- ";
+    ARGFormNoMaster formNoMaster = ViewBag.FormNoMater;
+
+}
+
+<div class="row">
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped" style="width: 16%">
+            <a href="#" style="color:white">Personal Info</a>
+        </div>
+        <div class="progress-bar progress-bar-striped" style="width: 16%">
+            <a href="#" style="color:white">Academic Qualification</a>
+        </div>
+        <div class="progress-bar progress-bar-striped" style="width: 16%">
+            <a href="#" style="color:white">Stream Preference</a>
+        </div>
+        <div class="progress-bar progress-bar-striped" style="width: 16%">
+            <a href="#" style="color:white">College Preference</a>
+        </div>
+        <div class="progress-bar" style="width: 16%;background-color:whitesmoke;">
+            <span class="text-primary">Documents</span>
+        </div>
+        <div class="progress-bar" style="width: 16%;background-color:whitesmoke;">
+            <span class="text-primary">Payment</span>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="col-sm-12">
+
+                @using (Html.BeginForm("CollegePreference", "NEP", FormMethod.Post, new { @class = "" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="programme" value="1" />
+
+                    if (Model != null)
+                    {
+                        List<SelectListItem> collegeList = (List<SelectListItem>)ViewBag.Colleges;
+
+                        <div class="row">
+                            <h3>College Preference Detail - Step 4 <strong style="float:right;color:purple;font-size:18px">@CUSrinagar.Enums.NEPProgrammesAdmTitle.Year_4_UG_Honors_Programmes.GetEnumDescription() Form</strong></h3>
+                            <div id="response">
+                                @if (ViewBag.ErrorMessage != null)
+                                {
+                                    @Html.Raw(ViewBag.ErrorMessage)
+                                }
+                                @if (ViewBag.SuccessMessage != null)
+                                {
+                                    <div class="alert alert-success alert-dismissible active" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <strong>Success!</strong> @ViewBag.SuccessMessage
+                                    </div>
+                                }
+                            </div>
+                            <hr class="no-margin-top" />
+                            @for (int index = 0; index < collegeList.Count; index++)
+                            {
+                                <div class="form-group col-sm-6">
+                                    @Html.HiddenFor(Model => Model[index].Student_ID)
+                                    @Html.HiddenFor(Model => Model[index].PreferenceNo)
+                                    <label for="ExamName">
+                                        College Preference  <span style="font-size:18px">@(index+1)</span>
+                                        <span class="required">*@Html.ValidationMessageFor(Model => Model[index].College_ID)</span>
+                                    </label>
+                                    @Html.DropDownList("[" + index + "].College_ID", new SelectList(ViewBag.Colleges, "Value", "Text", Model[index].College_ID), "select college", new { @class = "jscolpef form-control", @required = "required" })
+
+                                </div>
+                                <div class="clearfix"></div>
+                            }
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                @if (Model.IsNotNullOrEmpty() && Model.Any(x => x.Student_ID != Guid.Empty) && ViewBag.HasDBCollegePreference)
+                                {
+                                    <a href="@Url.Action("DocumentUpload", new {r = Model.First(x=>x.Student_ID!=Guid.Empty).Student_ID.ToString().EncryptCookieAndURLSafe() })" class="btn btn-lg btn-theme jsnextbt pull-right">Next</a>
+                                }
+                                <button type="submit" class="btn btn-lg btn-success pull-right" style="margin-right:10px;margin-left:10px;">Save & Next</button>
+
+                                <a href="@Url.Action("SubjectPreference", new {r = Model.First(x=>x.Student_ID!=Guid.Empty).Student_ID.ToString().EncryptCookieAndURLSafe()})" class="btn btn-lg btn-theme pull-right">Previous</a>
+
+                            </div>
+                        </div>
+                        <br />
+                    }
+                    else
+                    {
+                        string _student_id = ViewBag.Student_ID.ToString();
+                        <h3 class="text-danger">No Colleges found.<br />Please apply for  Stream wise Programme / Major Subjects Preferences first by clicking previous buttom below.</h3>
+                        <a href="@Url.Action("SubjectPreference", new {r = _student_id.EncryptCookieAndURLSafe()})" class="btn btn-lg btn-theme pull-right">Previous</a>
+                    }
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJS{
+    @Scripts.Render("~/bundles/Libraries/jqueryval", "~/bundles/Libraries/jqueryregNEP")
+}
+

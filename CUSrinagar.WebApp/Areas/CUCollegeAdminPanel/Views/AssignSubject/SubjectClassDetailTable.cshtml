@@ -1,0 +1,168 @@
+﻿@model  CUSrinagar.Models.ProfessorCRClasses
+@using CUSrinagar.Extensions
+@using CUSrinagar.Models
+@using CUSrinagar.Enums
+
+@{
+    /**/
+
+    Layout = null;
+}
+
+@using (Html.BeginForm("AddOrEdit", "AssignSubject", FormMethod.Post, new { enctype = "multipart/form-data", @name = "validation-form", @id = "class-form", @class = "form-horizontal", @role = "form" }))
+{
+    <div class="col-sm-12">
+        <div class="col-sm-12 align-right">
+            @if (AppUserHelper.AppUsercompact.UserRoles.Any(x => x == AppRoles.College_ClassRepresentative))
+            {
+                <a href='@Url.Action("CRSubjectList","AssignSubject",new { area = "CUCollegeAdminPanel"})'>
+                    Back
+                </a>
+            }
+            else
+            {
+                <a href='@Url.Action("ProfessorSubjectList","AssignSubject",new { area = "CUCollegeAdminPanel"})'>
+                    Back
+                </a>
+            }
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="form-group">
+                    <label for="name" class="col-sm-3"><b>Professor</b></label>
+                    @Html.HiddenFor(m => m.ProfessorCRClasses_ID)
+                    <div class="col-sm-8"> @Model.Professor</div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3"><b>Class Representative</b></label>
+                    <div class="col-sm-8"> @Model.CR</div>
+                </div>
+                <div class="form-group search-box">
+
+                    <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                        <label for="name">
+                            <b>
+                                Date From
+                            </b>
+                        </label>
+                        <div>
+                            @Html.TextBox("ProfessorResponseOn", "", new { @class = " form-control jsfilterelement date-picker", @data_column = "ProfessorResponseOn", @data_operator = "GreaterThanEqualTo" })
+                        </div>
+                    </div>
+                    <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                        <label for="name">
+                            <b>
+                                Date To
+                            </b>
+                        </label>
+                        <div>
+                            @Html.TextBox("ProfessorResponseOn", "", new { @class = " form-control jsfilterelement date-picker", @data_column = "ProfessorResponseOn", @data_operator = "LessThanEqualTo" })
+                        </div>
+                    </div>
+                    <div class="col-sm-1" style="padding-top:25px !important">
+                        <button type="button" class="btn btn-primary fa-search-btn"><i class="fa fa-search"></i>&nbsp;Search</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="name" class="col-sm-3"><b>Semester</b></label>
+                    <div class="col-sm-8"> @Model.Semester</div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3"><b>Batch</b></label>
+                    <div class="col-sm-8"> @Model.Batch</div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3"><b>Subject</b></label>
+                    <div class="col-sm-8"> @Model.SubjectFullName</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table table-hover table-bordered js-table">
+        <thead style="white-space: nowrap;">
+            <tr>
+                <th>S.No.</th>
+                <th>Response By</th>
+                <th>Class Date</th>
+                <th>Status</th>
+                <th style="width: 30px">Duration (min)</th>
+                <th>Remarks</th>
+                <th></th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+            @if (Model != null)
+            {
+                int serial = 1;
+                foreach (var row in Model.ProfessorCRClassDetails)
+                {
+
+                    if (AppUserHelper.AppUsercompact.UserRoles.Any(x => x == AppRoles.College_ClassRepresentative) && !row.CRResponseOn.HasValue)
+                    {
+                        @Html.Partial("ResponseCR", row, new ViewDataDictionary { { "serial", serial }, { "CRStatusList", ViewBag.CRStatusDDLList } })
+                    }
+                    else if (!row.ProfessorResponseOn.HasValue)
+                    {
+                        @Html.Partial("ResponseProfessor", row, new ViewDataDictionary { { "serial", serial }, { "ProfessorStatusList", ViewBag.CRStatusDDLList } })
+                    }
+
+
+                    else
+                    {
+                        <tr>
+                            <td>@serial</td>
+                            <td>
+                                <div class="col-sm-12 rowheight">Professor</div>
+                                <div class="col-sm-12 rowheight">CR</div>
+                            </td>
+                            <td class="paddingtop align-center ">
+                                @if (row.ProfessorResponseOn.HasValue)
+                                {<span>@row.ProfessorResponseOn.Value.ToShortDateString()</span>}
+                            </td>
+                            <td>
+                                <div class="col-sm-12 rowheight">@row.professorStatus</div>
+                                <div class="col-sm-12 rowheight">@row.crStatus</div>
+                            </td>
+                            <td style="width: 30px">
+                                <div class="col-sm-12 rowheight">@row.DurationByProfessor</div>
+                                <div class="col-sm-12 rowheight">@row.DurationByCR</div>
+                            </td>
+                            <td>
+                                <div class="col-sm-12 rowheight">@row.ProfessorRemarks</div>
+                                <div class="col-sm-12 rowheight">@row.CRRemarks</div>
+                            </td>
+                            <td></td>
+                        </tr>
+
+                    }
+                    serial++;
+
+                }
+            }
+        </tbody>
+    </table>
+}
+<style>
+    .rowheight {
+        min-height: 55px;
+        padding: 0px;
+    }
+
+    .paddingtop {
+        padding-top: 40px !important;
+    }
+</style>
+<script type="text/javascript">
+    $('.date-picker').datepicker({
+        autoclose: true,
+        todayHighlight: true,
+        dateFormat: 'dd/mm/yyyy',
+        format: 'dd/mm/yyyy'
+    })
+</script>

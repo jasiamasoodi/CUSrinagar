@@ -1,0 +1,187 @@
+﻿@model CUSrinagar.Models.ARGStudentPreviousQualifications
+
+@{
+    ViewBag.title = "Add or Edit Previous Academic details";
+}
+<div class="page-header">
+    <h1>
+        &nbsp;&nbsp;&nbsp;Add or Edit Previous Academic details
+    </h1>
+</div>
+<div id="response" style="width:85%;margin:0 auto">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+</div>
+@*@if (1 == 1 && Model?.ExamName.Trim() == "Diploma/B.Sc")*@
+@*@if (1 == 1 && Model?.ExamName.Trim() == "Post-Graduation")*@
+@*@if (1 == 1)*@
+@if (DateTime.Now.Date <= new DateTime(2022, 10, 14) && Model.CreatedOn > new DateTime(2022, 10, 06))
+{
+    <div class="row  col-sm-12" style="background-color:white;padding-bottom: 10px">
+        <div class="content-wrapper col-sm-12" style="overflow:auto">
+            @using (Html.BeginForm("AddEditQualificationDetails", "RegnCourses", FormMethod.Post, new { @class = "rnd5", @id = "frmq", area = "CUStudentZone" }))
+            {
+                @Html.AntiForgeryToken()
+                <table class="table table-bordered table-hover col-sm-12">
+                    <thead>
+                        <tr>
+                            <th class=table-acedemic-th>Exam Name<span class="required"> *</span></th>
+                            <th class=table-acedemic-th>Stream<span class="required"> *</span></th>
+                            @if (ViewBag.isLateralEntry && Model.ExamName.ToLower().Trim() == "diploma/b.sc")
+                            {
+                                <th class=table-acedemic-th>Subjects/Branch<span class="required"> *</span></th>
+                            }
+                            else
+                            {
+                                <th class=table-acedemic-th>Subjects<span class="required"> *</span></th>
+                            }
+                            <th class=table-acedemic-th>Session<span class="required"> *</span></th>
+                            <th class=table-acedemic-th>Year<span class="required"> *</span></th>
+                            <th class=table-acedemic-th>Roll No<span class="required"> *</span></th>
+                            <th class=table-acedemic-th>Max Marks<span class="required"> *</span></th>
+                            <th class=table-acedemic-th>Marks Obt<span class="required"> *</span></th>
+                            <th class=table-acedemic-th>Board/University Name<span class="required"> *</span></th>
+                        </tr>
+                    </thead>
+                    <tbody class=table-acedemic-body>
+                        <tr>
+                            <th style="padding-left:20px">
+                                <span class="required">
+                                    @Html.ValidationMessageFor(model => model.ExamName)
+                                </span>
+                                @Html.DisplayFor(model => model.ExamName, new { @class = "form-control width100", @onkeypress = "return forAddressOnly(event);", @title = "Exam Name", @readonly = "readonly", @style = "border:1;border-color: darkgray;" })
+                                @Html.HiddenFor(model => model.ExamName)
+                                @Html.HiddenFor(model => model.ReadOnly, new { value = "True" })
+                                @Html.HiddenFor(model => model.Student_ID)
+                                @Html.HiddenFor(model => model.Qualification_ID)
+                            </th>
+                            <td>
+                                <span class="required">
+                                    @Html.ValidationMessageFor(model => model.Stream)
+                                </span>
+                                @if (Model.ExamName.Trim() == "Post-Graduation")
+                                {
+                                    @Html.TextBoxFor(model => model.Stream, new { @class = "form-control width100" })
+                                }
+                                else
+                                {
+                                    @Html.TextBoxFor(model => model.Stream, new { @class = "form-control width100" })
+                                }
+
+                            </td>
+                            <td>
+                                <span class="required">
+                                    @Html.ValidationMessageFor(model => model.Subjects)
+                                </span>
+                                @Html.TextBoxFor(model => model.Subjects, new { @class = "form-control width100", @maxlength = "400", @onkeypress = "return forAddressOnly(event);", @title = "Subjects separated by comma" })
+                            </td>
+                            <td>
+                                <span class="required">
+                                    @Html.ValidationMessageFor(model => model.Session)
+                                </span>
+                                @Html.DropDownListFor(model => model.Session, new SelectList((IEnumerable<SelectListItem>)ViewBag.Session, "Value", "Text", Model.Session), string.Empty, new { @class = "form-control width100" })
+                            </td>
+                            <td>
+                                <span class="required">
+                                    @Html.ValidationMessageFor(model => model.Year)
+                                </span>
+                                @Html.TextBoxFor(model => model.Year, new { @class = "form-control width100", @maxlength = "4", @onkeypress = "return numbersOnly(event);", @title = "Year Of Passing" })
+                            </td>
+                            <td>
+                                <span class="required">
+                                    @Html.ValidationMessageFor(model => model.RollNo)
+                                </span>
+                                @Html.TextBoxFor(model => model.RollNo, new { @class = "form-control width100", @maxlength = "80", @onkeypress = "return forAdmissionRollNo(event);", @title = "RollNo" })
+                            </td>
+                            <td>
+                                <span class="required">
+                                    @Html.ValidationMessageFor(model => model.MaxMarks)
+                                </span>
+                                @Html.TextBoxFor(model => model.MaxMarks, new { @class = "form-control width100 jsvalmm", @maxlength = "4", @onkeypress = "return numbersOnly(event);", @title = "Maximum Marks" })
+                            </td>
+
+                            <td>
+                                <span class="required">
+                                    @Html.ValidationMessageFor(model => model.MarksObt)
+                                </span>
+                                @Html.TextBoxFor(model => model.MarksObt, new { @class = "form-control width100 jsvalminm", @maxlength = "7", @onkeypress = "return floatNumbersOnly(event);", @title = "Marks Obtained" })
+                            </td>
+                            <td>
+                                <span class="required">
+                                    @Html.ValidationMessageFor(model => model.ExamBody)
+                                </span>
+                                @Html.DropDownListFor(model => model.ExamBody, new SelectList((IEnumerable<SelectListItem>)ViewBag.UniversitiesDDL, "Value", "Text", Model.ExamBody), string.Empty, new { @class = "form-control width100" })
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="col-sm-12 center">
+                    <button type="submit" id="jsSave" class="btn btn-success"><i class="fa fa-save"></i> Save</button>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <h2 style="color:red;"> &nbsp; &nbsp; &nbsp; Process not allowed or has been closed </h2>
+    //<h2 style="color:red;">&nbsp;&nbsp;&nbsp;12th details received</h2>
+}
+
+@section PageSpecificJSFiles{
+    @Scripts.Render("~/bundles/Libraries/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function ($) {
+            $(".nav-list>li").removeClass("active");
+            $("#AddEditQualification").addClass("active");
+
+            $("#Session").val('@Model.Session');
+            $(".jsvalminm").change(function () {
+                var maxMarks = $(this).closest("tr").find(".jsvalmm").val();
+                var minMarks = $(this).val();
+                if (Number(maxMarks) < Number(minMarks)) {
+                    $(this).val('');
+                    alert("Min. Marks Obtained should be less or equal to Max. Marks");
+                }
+            });
+
+            $(".jsvalmm").change(function () {
+                var minMarks = $(this).closest("tr").find(".jsvalminm").val();
+                var maxMarks = $(this).val();
+                if (Number(maxMarks) < Number(minMarks)) {
+                    $(this).closest("tr").find(".jsvalminm").val('');
+                    alert("Max. Marks should be greater or equal to Min. Marks");
+                }
+            });
+        });
+
+        $(document).on('submit', '#frmq', function (e) {
+            if ($(this).valid()) {
+                //var OverAllCGPA = $("#OverAllCGPA").val();
+                //if ($.trim(OverAllCGPA) === '' || Number(OverAllCGPA) <= 0) {
+                //    alert("Please enter Over All CGPA Points of Graduation");
+                //    return false;
+                //}
+                if (confirm("Are you sure you want to save?")) {
+                    $("#jsSave").text("Saving....").prop("disabled", true);
+                    return true;
+                }
+                return false;
+            }
+        });
+    </script>
+}
+@section PageSpecificStyle{
+    <style>
+        .width100 {
+            width: 100% !important;
+        }
+
+        .field-validation-error, .required {
+            color: red;
+        }
+    </style>
+}
+

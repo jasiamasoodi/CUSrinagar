@@ -1,0 +1,66 @@
+﻿@using Nut
+@using CUSrinagar.Enums
+@using CUSrinagar.Models
+@model  List<CUSrinagar.Models.SalaryCalculationColumns>
+@using (Html.BeginForm("EditSalarySettings", "Salary", FormMethod.Post, new { enctype = "multipart/form-data", @name = "validation-form", @id = "result-form", @class = "form-horizontal jsMainForm", @role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <table class="table table-hover table-bordered js-table css-table" data-afterappendingrows="setFocus">
+        @if (Model != null)
+        {
+            <thead style="white-space: nowrap;">
+
+                <tr>
+                    <th>S.No.</th>
+                    <th>Column Name</th>
+                    <th>Column Type</th>
+                    <th>Column Value</th>
+                    <th>Is Percent</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @{int i = 0;int sno = 0;}
+                @foreach (var row in Model)
+                {
+                   sno = i + 1; 
+                    <tr>
+                        @Html.Hidden("salaryCalculationColumn[" + @i + "].SalaryCalculationColumn_ID", row.SalaryCalculationColumn_ID)
+                        <td class="js-sno">@sno</td>
+                        <td>
+                            @Html.TextBox("salaryCalculationColumn[" + @i + "].SalaryCalculationColumn", row.SalaryCalculationColumn)
+                        </td>
+                        <td>
+                            @Html.DropDownList("salaryCalculationColumn[" + @i + "].SalaryCalculationColumnType", new SelectList(ViewBag.SalaryColumnType, "Value", "Text",(int)row.SalaryCalculationColumnType),
+                                           "--Select--")
+
+                        </td>
+                        <td>
+                            @Html.TextBox("salaryCalculationColumn[" + @i + "].ColumnValue", (int)row.ColumnValue)
+                        </td>
+                        <td>
+                            @Html.CheckBox("salaryCalculationColumn[" + @i + "].IsPercent", row.IsPercent)
+                        </td>
+                    </tr>
+                    i++;
+                }
+
+
+            </tbody>
+
+
+        }
+        else
+        {
+            <tr><td colspan="10">No Record Found</td></tr>
+        }
+    </table>
+    if (Model != null && Model.Count > 0)
+    {
+        <div class="text-center col-sm-12">
+            <input id="Save" value="Save" type="submit" class="btn btn-primary" title="Save" />
+        </div>
+    }
+
+}

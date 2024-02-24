@@ -1,0 +1,46 @@
+﻿@model  List<CUSrinagar.Models.StatisticsProgramCategoryGenderWise>
+@{
+    Layout = null;
+}
+<table class="table table-bordered table-hover">
+    @if (Model != null)
+    {
+        <thead style="">
+            <tr class="center">
+                <th class="">S.No</th>
+                <th>Batch</th>
+                <th>Programme</th>
+                <th>Category Code</th>
+                <th>Category Name</th>
+                <th>Male</th>
+                <th>Female</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td><span class="js-sno"></span> </td>
+                <td>@item.Batch</td>
+                <td>
+                    @if (item.PrintProgramme == CUSrinagar.Enums.PrintProgramme.BED)
+                    {
+                        <span>@item.PrintProgramme</span>
+                    }
+                    else
+                    {
+                        <span>@item.Programme</span>
+                    }
+                </td>
+                <td>@item.CategoryCode</td>
+                <td>@item.CategoryName</td>
+                <td>@item.Male</td>
+                <td>@item.Female</td>
+                <td>@(item.Male + item.Female)</td>
+            </tr>
+            }
+
+        </tbody>
+    }
+</table>

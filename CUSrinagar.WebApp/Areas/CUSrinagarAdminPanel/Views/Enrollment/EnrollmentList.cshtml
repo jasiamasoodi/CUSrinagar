@@ -1,0 +1,36 @@
+﻿@using CUSrinagar.Models;
+@using CUSrinagar.Enums;
+@using CUSrinagar.Extensions
+@model IEnumerable<CUSrinagar.Models.Enrollments>
+
+<table class="table table-hover table-bordered ">
+    <thead>
+        <tr>
+            <th>S.No</th>
+            <th data-property="CollegeFullName">CollegeFullName</th>
+            <th data-property="Batch" title="Batch">Batch</th>
+            <th data-property="Enrollment" title="EEnrollment">Enrollment</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var itemSTD in Model)
+            {
+                <tr>
+                    <td class="js-sno"></td>
+                    <td>@itemSTD.CollegeFullName</td>
+                    <td>@itemSTD.Batch</td>
+                    <td>@itemSTD.Enrollment</td>
+
+                </tr>
+            }
+            <tr>
+                
+                <td colspan="2"><b>Total</b></td>
+                <td colspan="2"><b>@Model.Select(x => x.Enrollment).Sum()</b></td>
+            </tr>
+        }
+    </tbody>
+</table>

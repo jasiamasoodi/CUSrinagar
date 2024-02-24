@@ -1,0 +1,38 @@
+﻿
+
+@model  List<CUSrinagar.Models.Questionaire>
+@{
+    Layout = null;
+ 
+}
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th>S.No.</th>
+            <th data-property="Question">Question</th>
+            
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var row in Model)
+            {
+
+        <tr>
+            <td class="js-sno"></td>
+
+            <td>
+                <a href='@Url.Action("Edit","Questionaire",new { area = "CUSrinagarAdminPanel", @_ID = row.Question_Id })'>
+                    @row.Question
+                </a>
+            </td>
+
+        </tr>
+            }
+        }
+    </tbody>
+</table>
+

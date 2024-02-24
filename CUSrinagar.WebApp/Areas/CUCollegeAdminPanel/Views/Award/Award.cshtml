@@ -1,0 +1,178 @@
+﻿@{
+    ViewBag.Title = "Award";
+    CUSrinagar.Enums.Programme programmme = (CUSrinagar.Enums.Programme)ViewBag.Programme;
+
+    string semester = ViewBag.DefaultSemester;
+    string subject = ViewBag.DefaultSubject;
+    bool showBacklog = ViewBag.showBacklog ?? false;
+    int batch = DateTime.Now.Year;
+    int DefaultMarksForIs = (int)ViewBag.DefaultMarksFor;
+    var actionSuffix = new CUSrinagar.DataManagers.GeneralFunctions().GetProgrammePostFix(programmme);
+    List<SelectListItem> backloglist = new List<SelectListItem> {
+    new SelectListItem() {Text="Regular", Value="false"},
+    new SelectListItem() { Text="Backlog", Value="true"} };
+}
+
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUCollegeAdminPanel"})">Home</a>
+            </li>
+            <li class="active">Award</li>
+        </ul><!-- /.breadcrumb -->
+    </div>
+    <div class="col-md-7"></div>
+    <div class="col-md-4"></div>
+}
+<div class="row">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+    <div class="col-md-12 jsTableContent">
+        <div class="panel panel-primary js-pager-table" data-otherparam1="@CUSrinagar.Enums.PrintProgramme.UG">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Internal Award @CUSrinagar.Extensions.Helper.GetEnumDescription(programmme)
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        List of Student
+                    </small>
+                    <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                        <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                    </span>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="search-box">
+                    <div class="form-inline">
+                        @Html.Hidden("MarksFor", DefaultMarksForIs, new { @class = " required form-control ", @data_operator = "EqualTo" })
+                        @Html.Hidden("Year", batch, new { @class = " required form-control jsfilterelement", @data_column = "Batch", @data_operator = "EqualTo" })
+
+                        <div class="col-sm-12">
+                            <div class=" col-sm-3">
+                                <span style="color:red">*</span> Semester<span id="SemesterValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div class="jsDDLContainer">
+                                    @Html.DropDownList("Semester", new SelectList(ViewBag.SemesterList, "Value", "Text", subject),
+                                      "--Select--", new { @class = "form-control jsfilterelement required chosen-select ParentDDL", @data_column = "Semester", @data_operator = "EqualTo", })
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <span style="color:red">*</span> Subject<span id="CombinationSubjectsValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div class="">
+                                    <div class="jsDDLContainer" id="Subject">
+                                        @Html.DropDownList("CombinationSubjects", new SelectList(ViewBag.SubjectsList, "Value", "Text", subject),
+                                      "--Select--", new { @class = "form-control jsfilterelement required chosen-select", @data_column = "CombinationSubjects", @data_operator = "Like", })
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class=" col-sm-1">
+                                <div style="padding-top:20px !important;">
+                                    <button type="button" class="btn btn-sm btn-primary fa-search-btn js-search"><i class="fa fa-search"></i>&nbsp;Search</button>
+                                </div>
+                            </div>
+                            <div class=" col-sm-3" style="padding-top:20px !important;">
+                                @*<div class="btn-group" style="padding-top:18px !important;">
+                                    <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle">
+                                        Action
+                                        <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-default dropdown-info">
+                                        <li>*@
+                                <div class=" align-left col-sm-6">
+                                    <a href="button" class="btn btn-sm btn-primary JSDownloadAwardBtn ">Print Award</a>
+                                </div>
+                                @*</li>
+                                    <li class="hidden divider submitAwardBtn"></li>*@
+                                @*<div class="hidden submitAwardBtn align-right col-sm-6">
+                                        <a class="btn btn-sm btn-primary js-final-submit " href="javascript:void(0)" data-action="@Url.Action("SubmitAward", "Award", new { @area = "CUCollegeAdminPanel"})" title="Submit Award">
+                                            <span>&nbsp;Submit Award</span>
+                                        </a>
+                                    </div>*@
+                                <div class=" hidden submitAwardBtn align-right col-sm-6">
+                                    <a class="btn btn-sm btn-primary subbmit" title="Submit Award">
+                                        <i class="fa fa-save"></i><span>&nbsp;Submit Award</span>
+                                    </a>
+                                </div>
+
+                                @*</ul>*@
+                            </div>
+                        </div>
+                        <div class="col-sm-12 no-padding-right" style="padding-top:20px;font-weight:bolder">
+                            <div class="col-sm-2 red">-2 => Absent</div>
+                            <div class=" col-sm-4 min_marks">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @using (Html.BeginForm("Edit", "Award", FormMethod.Post, new { @name = "validation-form", @id = "result-form", @class = "form-horizontal jsMainForm", @role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("Programme", programmme)
+
+                <div class="js-table-content tbl" data-url="/CUCollegeAdminPanel/Award/AwardList@(actionSuffix)?Programme=@programmme" data-afterappendingrows="ShowORHideSubmit" data-DefaultOrderByColumn="FullName"></div>
+            }
+            @*   @{Html.RenderPartial("_JSPagerTableFooter");}*@
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@section PageSpecificJS{
+    <script>
+
+    var programmeIS = "@programmme";
+
+        $(document).ready(function () {
+             $(".ad").addClass("active open");
+             $("." + (programmeIS).toLowerCase()).addClass("active open");
+        });
+        if ("@semester" && "@subject")
+        {   var $pagertable = $(".js-pager-table");
+            filtergrid($pagertable) ;
+        }
+
+    </script>
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSGeneral/GeneralJS.js")"></script>
+    <script src="@Url.Content("~/Scripts/JSChosen.js")"></script>
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSAward/award.js")"></script>
+
+
+}
+
+
+<style>
+    .filter-btn a {
+        color: white !important
+    }
+
+    .tdd {
+        padding-top: 0px !important;
+    }
+</style>
+
+
+
+

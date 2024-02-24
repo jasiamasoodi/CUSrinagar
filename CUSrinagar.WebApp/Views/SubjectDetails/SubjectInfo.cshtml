@@ -1,0 +1,101 @@
+﻿@model  List<CUSrinagar.Models.SubjectDetails>
+@{
+    ViewBag.Title = "CUS :: Subject Info";
+    string currentYear = DateTime.Now.Year + "";
+
+}
+<style>
+    .required {
+        color: black;
+    }
+</style>
+
+
+<div class="page-wrapper pager-table-text" style="WIDTH: 121%;">
+    <header class="page-heading clearfix" style="margin-left: -126px;">
+        <h1 class="heading-title pull-left">
+            Subject
+            <small>
+                <i class="ace-icon fa fa-angle-double-right"></i>
+                Subject Information
+            </small>
+        </h1>
+    </header>
+
+    <div class="page-content" style="margin-left: -121px;margin-right: 45px;">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Subject-Details
+                            <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                            </span>
+
+                        </h3>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="col-sm-12 search-box">
+                            <label class="col-sm-12">Advance Search</label>
+
+                            <div class="col-sm-4 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span>College<span id="ProgrammeIdValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div>
+                                    @Html.DropDownList("College_ID", new SelectList(ViewBag.College, "Value", "Text"),
+                                      "--Select--", new { @class = "form-control SearchDDL jsfilterelement required", @data_column = "College_ID", @data_operator = "EqualTo", data_ddltype = "Course", @data_ddlchildtype = "Semester", @data_ddlsubchildtype = "" })
+                                </div>
+                            </div>
+                            <div class="col-sm-4 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span>Course<span id="Course_IDValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div id="Course">
+                                    @Html.DropDownList("Course_ID", new SelectList(ViewBag.CourseList, "Value", "Text"),
+                                           "--Select--", new { @class = "form-control  SearchDDL jsfilterelement required", @data_column = "Course_ID", @data_operator = "EqualTo", data_ddltype = "Semester", @data_ddlchildtype = "", @data_ddlsubchildtype = "" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span>Semester<span id="SemesterNameValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div id="Semester">
+                                    @Html.DropDownList("SemesterName", new SelectList(ViewBag.SemesterList, "Value", "Text"),
+                                            "--Select--", new { @class = "form-control SearchDDL jsfilterelement required", @data_column = "SemesterName", @data_operator = "EqualTo", @data_ddltype = "", @data_ddlchildtype = "", @data_ddlsubchildtype = "" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-1 " style="padding-top: 17px;">
+                                <button type="button" class="btn btn-theme fa-search-btn"><i class="fa fa-search"></i>&nbsp;Search</button>
+                                @*<button class="btn btn-info" type="button" id="addressSearch"
+                                    onclick="location.href='@Url.Action("SubjectDetails", "Course")'" )?College_ID= + ViewBag.College/></div>*@
+                            </div>
+
+                        </div>
+                        <div class="js-table-content" data-url='@Url.Action("SubjectDetails", "SubjectDetails", new { area = string.Empty })' data-DefaultOrderByColumn="CoursefullName,SemesterName">
+
+                        </div>
+
+                        @{Html.RenderPartial("_JSPagerTableFooter");}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section PageSpecificJS{
+    <script>
+        var chilDDLPath = '@Url.Action("_GetChildDDLL", "SubjectDetails", new {area = "" })';
+        var controllerName = "SubjectDetails";
+    </script>
+
+    @*<script src="@Url.Content("~/Scripts/JSChosen.js")"></script>
+        <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSLibrary/Students.js")"></script>*@
+    <script src="@Url.Content("~/Scripts/JSSyllabus/SyllabusIndex.js")"></script>
+    <script src="@Url.Content("~/Scripts/JSChosen.js")"></script>
+}
+

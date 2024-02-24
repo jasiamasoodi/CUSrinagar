@@ -1,0 +1,515 @@
+﻿@model List<CUSrinagar.Models.StudentsCourseWiseStatistics>
+@using CUSrinagar.Extensions
+@{
+    Layout = null;
+}
+@section PageSpecificStyle{
+    <style>
+        .th-category {
+            word-break: break-word;
+            width: 40px;
+        }
+
+        .accordion-style1 {
+            font-size: 8px;
+        }
+    </style>
+}
+
+
+@if (Model != null)
+{
+    var ListOfProgrammes = Model.Select(x => x.Programme).OrderBy(x => x).Distinct().ToList();
+    List<CUSrinagar.Models.StudentsCourseWiseStatistics> _list = null;
+    List<CUSrinagar.Models.StudentsCourseWiseStatistics> _sublist = null;
+    List<CUSrinagar.Models.StudentsCourseWiseStatistics> _subsublist = null;
+    var batches = Model.Select(x => x.SemesterBatch).Distinct().OrderBy(x => x).ToList();
+    var ListOfColleges = Model.Select(x => x.CollegeFullName).Distinct();
+    var listOfCategories = Model.Select(x => x.Category).Distinct().OrderBy(x => x).ToList();
+    var count = 1;
+
+    <div id="accordion" class="accordion-style1 panel-group" style="font-size:10px;">
+        <div class=" panel panel-default">
+            <div class="panel-heading hidden-print">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                        <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                        &nbsp;Student enrollment: Program wise
+                    </a>
+                </h4>
+            </div>
+
+            <div class="panel-collapse collapse" id="collapse1" style="page-break-after:always;">
+                <div class="panel-body">
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="@(6 + listOfCategories.Count * 2)">
+                                    <b>Student enrollment: Program wise</b>
+                                    <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th rowspan="2">Programme</th>
+                                <th rowspan="2">Sem</th>
+                                <th rowspan="2">Total</th>
+                                <th rowspan="2">Male</th>
+                                <th rowspan="2">Female</th>
+                                <th rowspan="2">Transgender</th>
+                                @foreach (var cat in listOfCategories)
+                                {
+                                    <th colspan="2" class="text-center th-category">
+                                        @(cat+"").ToUpper()
+                                    </th>
+                                }
+                            </tr>
+                            <tr>
+                                @foreach (var cat in listOfCategories)
+                                {
+                                    <th class="text-center ">M</th>
+                                    <th class="text-center ">F</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                count = 1;
+                                foreach (var item in ListOfProgrammes)
+                                {
+                                    if (item == CUSrinagar.Enums.Programme.UG)
+                                    {
+                                        _list = Model.Where(x => x.PrintProgramme == CUSrinagar.Enums.PrintProgramme.UG && x.Programme == CUSrinagar.Enums.Programme.UG)?.ToList();
+                                        if (_list.IsNotNullOrEmpty())
+                                        {
+                                            <tr>
+                                                <td>@(count++).&emsp;&emsp;Graduation</td>
+                                                <td>@_list.First().Semester</td>
+                                                <td>@(_list?.Sum(x => x.NoOfStudents))</td>
+                                                <td>@(_list?.Sum(x => x.Male))</td>
+                                                <td>@(_list?.Sum(x => x.Female))</td>
+                                                <td>@(_list?.Sum(x => x.Other))</td>
+                                                @foreach (var cat in listOfCategories)
+                                                {
+                                                    <th class="text-center">
+                                                        @(_list.Where(x => x.Category == cat).Sum(x => x.Male))
+                                                    </th>
+                                                    <th class="text-center">
+                                                        @(_list.Where(x => x.Category == cat).Sum(x => x.Female))
+                                                    </th>
+                                                }
+                                            </tr>
+                                        }
+                                        _list = Model.Where(x => x.PrintProgramme == CUSrinagar.Enums.PrintProgramme.BED && x.Programme == CUSrinagar.Enums.Programme.UG)?.ToList();
+                                        if (_list.IsNotNullOrEmpty())
+                                        {
+                                            <tr>
+                                                <td>@(count++).&emsp;&emsp;BED</td>
+                                                <td>@_list.First().Semester</td>
+                                                <td>@(_list?.Sum(x => x.NoOfStudents))</td>
+                                                <td>@(_list?.Sum(x => x.Male))</td>
+                                                <td>@(_list?.Sum(x => x.Female))</td>
+                                                <td>@(_list?.Sum(x => x.Other))</td>
+                                                @foreach (var cat in listOfCategories)
+                                                {
+                                                    <th class="text-center">
+                                                        @(_list.Where(x => x.Category == cat).Sum(x => x.Male))
+                                                    </th>
+                                                    <th class="text-center">
+                                                        @(_list.Where(x => x.Category == cat).Sum(x => x.Female))
+                                                    </th>
+                                                }
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        _list = Model.Where(x => x.Programme == item)?.ToList();
+                                        <tr>
+                                            <td>@(count++).&emsp;&emsp;@(CUSrinagar.Extensions.Helper.GetEnumDescription(item))</td>
+                                            <td>@Model.First().Semester</td>
+                                            <td>@(_list?.Sum(x => x.NoOfStudents))</td>
+                                            <td>@(_list?.Sum(x => x.Male))</td>
+                                            <td>@(_list?.Sum(x => x.Female))</td>
+                                            <td>@(_list?.Sum(x => x.Other))</td>
+                                            @foreach (var cat in listOfCategories)
+                                            {
+                                                <th class="text-center">
+                                                    @(_list.Where(x => x.Category == cat).Sum(x => x.Male))
+                                                </th>
+                                                <th class="text-center">
+                                                    @(_list.Where(x => x.Category == cat).Sum(x => x.Female))
+                                                </th>
+                                            }
+                                        </tr>
+                                    }
+                                }
+                            }
+                            <tr>
+                                <td colspan="2" class="text-center">
+                                    <strong>Total</strong>
+                                </td>
+                                <td>
+                                    <strong>@Model.Sum(i => i.NoOfStudents)</strong>
+                                </td>
+                                <td>
+                                    <strong>@(Model?.Sum(i => i.Male))</strong>
+                                </td>
+                                <td>
+                                    <strong>@(Model?.Sum(i => i.Female))</strong>
+                                </td>
+                                <td>
+                                    <strong>@(Model?.Sum(i => i.Other))</strong>
+                                </td>
+                                @foreach (var cat in listOfCategories)
+                                {
+                                    <th class="text-center">
+                                        @(Model.Where(x => x.Category == cat).Sum(x => x.Male))
+                                    </th>
+                                    <th class="text-center">
+                                        @(Model.Where(x => x.Category == cat).Sum(x => x.Female))
+                                    </th>
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading hidden-print">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+                        <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                        &nbsp;Student enrollment: batch wise
+                    </a>
+                </h4>
+            </div>
+
+            <div class="panel-collapse collapse" id="collapse3" style="page-break-after:always;">
+                <div class="panel-body">
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="@(6 + listOfCategories.Count * 2)">
+                                    <b>Student enrollment: batch wise</b>
+                                    <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th rowspan="2">batch</th>
+                                <th rowspan="2">Sem</th>
+                                <th rowspan="2">Total</th>
+                                <th rowspan="2">Male</th>
+                                <th rowspan="2">Female</th>
+                                <th rowspan="2">Transgender</th>
+                                @foreach (var cat in listOfCategories)
+                                {
+                                    <th colspan="2" class="text-center th-category">
+                                        @cat.ToUpper()
+                                    </th>
+                                }
+                            </tr>
+                            <tr>
+                                @foreach (var cat in listOfCategories)
+                                {
+                                    <th class="text-center ">M</th>
+                                    <th class="text-center ">F</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                count = 1;
+                                foreach (var batch in batches)
+                                {
+                                    _list = Model.Where(x => x.SemesterBatch == batch)?.ToList();
+                                    <tr>
+                                        <td>@(count++).&emsp;@batch</td>
+                                        <td>@Model.First().Semester</td>
+                                        <td>@(_list?.Sum(x => x.NoOfStudents))</td>
+                                        <td>@(_list?.Sum(x => x.Male))</td>
+                                        <td>@(_list?.Sum(x => x.Female))</td>
+                                        <td>@(_list?.Sum(x => x.Other))</td>
+                                        @foreach (var cat in listOfCategories)
+                                        {
+                                            <th class="text-center">
+                                                @(_list.Where(x => x.Category == cat).Sum(x => x.Male))
+                                            </th>
+                                            <th class="text-center">
+                                                @(_list.Where(x => x.Category == cat).Sum(x => x.Female))
+                                            </th>
+                                        }
+                                    </tr>
+                                }
+                            }
+                            <tr>
+                                <td colspan="2" class="text-center">
+                                    <strong>Total</strong>
+                                </td>
+                                <td>
+                                    <strong>@Model.Sum(i => i.NoOfStudents)</strong>
+                                </td>
+                                <td>
+                                    <strong>@(Model?.Sum(i => i.Male))</strong>
+                                </td>
+                                <td>
+                                    <strong>@(Model?.Sum(i => i.Female))</strong>
+                                </td>
+                                <td>
+                                    <strong>@(Model?.Sum(i => i.Other))</strong>
+                                </td>
+                                @foreach (var cat in listOfCategories)
+                                {
+                                    <th class="text-center">
+                                        @(Model.Where(x => x.Category == cat).Sum(x => x.Male))
+                                    </th>
+                                    <th class="text-center">
+                                        @(Model.Where(x => x.Category == cat).Sum(x => x.Female))
+                                    </th>
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading hidden-print">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse4">
+                        <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                        &nbsp;Student enrollment: College wise
+                    </a>
+                </h4>
+            </div>
+
+            <div class="panel-collapse collapse" id="collapse4" style="page-break-after:always;">
+                <div class="panel-body">
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="@(7 + listOfCategories.Count * 2)">
+                                    <b>Student enrollment: College wise</b>
+                                    <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th rowspan="2">College</th>
+                                <th rowspan="2">Sem</th>
+                                <th rowspan="2">Total</th>
+                                <th rowspan="2">Male</th>
+                                <th rowspan="2">Female</th>
+                                <th rowspan="2">Transgender</th>
+                                @foreach (var cat in listOfCategories)
+                                {
+                                    <th colspan="2" class="text-center th-category">
+                                        @cat.ToUpper()
+                                    </th>
+                                }
+                            </tr>
+                            <tr>
+                                @foreach (var cat in listOfCategories)
+                                {
+                                    <th class="text-center ">M</th>
+                                    <th class="text-center ">F</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                count = 1;
+                                foreach (var college in ListOfColleges)
+                                {
+                                    _list = Model.Where(x => x.CollegeFullName == college)?.ToList();
+                                    if (_list.IsNotNullOrEmpty())
+                                    {
+                                        <tr>
+                                            <td>@(count++).&emsp;@college</td>
+                                            <td>@Model.First().Semester</td>
+                                            <td>@(_list?.Sum(x => x.NoOfStudents))</td>
+                                            <td>@(_list?.Sum(x => x.Male))</td>
+                                            <td>@(_list?.Sum(x => x.Female))</td>
+                                            <td>@(_list?.Sum(x => x.Other))</td>
+                                            @foreach (var cat in listOfCategories)
+                                            {
+                                                <th class="text-center">
+                                                    @(_list.Where(x => x.Category == cat).Sum(x => x.Male))
+                                                </th>
+                                                <th class="text-center">
+                                                    @(_list.Where(x => x.Category == cat).Sum(x => x.Female))
+                                                </th>
+                                            }
+                                        </tr>
+                                    }
+                                }
+                            }
+                            <tr>
+                                <td colspan="2" class="text-center">
+                                    <strong>Total</strong>
+                                </td>
+                                <td>
+                                    <strong>@Model.Sum(i => i.NoOfStudents)</strong>
+                                </td>
+                                <td>
+                                    <strong>@(Model?.Sum(i => i.Male))</strong>
+                                </td>
+                                <td>
+                                    <strong>@(Model?.Sum(i => i.Female))</strong>
+                                </td>
+                                <td>
+                                    <strong>@(Model?.Sum(i => i.Other))</strong>
+                                </td>
+                                @foreach (var cat in listOfCategories)
+                                {
+                                    <th class="text-center">
+                                        @(Model.Where(x => x.Category == cat).Sum(x => x.Male))
+                                    </th>
+                                    <th class="text-center">
+                                        @(Model.Where(x => x.Category == cat).Sum(x => x.Female))
+                                    </th>
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading hidden-print">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse5">
+                        <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                        &nbsp;Student enrollment: College Course Category wise
+                    </a>
+                </h4>
+            </div>
+
+            <div class="panel-collapse collapse" id="collapse5" style="page-break-after:always;">
+                <div class="panel-body">
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="@(7 + listOfCategories.Count * 2)">
+                                    <b>Student enrollment:College Course Category wise</b>
+                                    <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th rowspan="2">College</th>
+                                <th rowspan="2">Course</th>
+                                <th rowspan="2">Sem</th>
+                                <th rowspan="2">Total</th>
+                                <th rowspan="2">Male</th>
+                                <th rowspan="2">Female</th>
+                                <th rowspan="2">Transgender</th>
+                                @foreach (var cat in listOfCategories)
+                                {
+                                    <th colspan="2" class="text-center th-category">
+                                        @cat.ToUpper()
+                                    </th>
+                                }
+                            </tr>
+                            <tr>
+                                @foreach (var cat in listOfCategories)
+                                {
+                                    <th class="text-center ">M</th>
+                                    <th class="text-center ">F</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                count = 1;
+                                foreach (var college in ListOfColleges)
+                                {
+                                    _list = Model.Where(x => x.CollegeFullName == college)?.ToList();
+                                    if (_list.IsNotNullOrEmpty())
+                                    {
+                                        var ListOfCourses = _list.Select(x => new { x.Programme, x.CourseFullName }).OrderBy(x => x.CourseFullName).OrderBy(x => x.Programme).Select(x => x.CourseFullName).Distinct().ToList();
+                                        if (ListOfCourses.IsNotNullOrEmpty())
+                                        {
+                                            foreach (var course in ListOfCourses)
+                                            {
+                                                _subsublist = _list.Where(x => x.CourseFullName == course)?.ToList();
+                                                if (_subsublist.IsNotNullOrEmpty())
+                                                {
+                                                    <tr>
+                                                        <td>@(count++).&emsp;@college</td>
+                                                        <td>
+                                                            @course
+                                                        </td>
+                                                        <td>@Model.First().Semester</td>
+                                                        <td>@(_subsublist?.Sum(x => x.NoOfStudents))</td>
+                                                        <td>@(_subsublist?.Sum(x => x.Male))</td>
+                                                        <td>@(_subsublist?.Sum(x => x.Female))</td>
+                                                        <td>@(_subsublist?.Sum(x => x.Other))</td>
+                                                        @foreach (var cat in listOfCategories)
+                                                        {
+                                                            <th class="text-center">
+                                                                @(_subsublist.Where(x => x.Category == cat).Sum(x => x.Male))
+                                                            </th>
+                                                            <th class="text-center">
+                                                                @(_subsublist.Where(x => x.Category == cat).Sum(x => x.Female))
+                                                            </th>
+                                                        }
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            <tr>
+                                <td colspan="3" class="text-center">
+                                    <strong>Total</strong>
+                                </td>
+                                <td>
+                                    <strong>@Model.Sum(i => i.NoOfStudents)</strong>
+                                </td>
+                                <td>
+                                    <strong>@(Model?.Sum(i => i.Male))</strong>
+                                </td>
+                                <td>
+                                    <strong>@(Model?.Sum(i => i.Female))</strong>
+                                </td>
+                                <td>
+                                    <strong>@(Model?.Sum(i => i.Other))</strong>
+                                </td>
+                                @foreach (var cat in listOfCategories)
+                                {
+                                    <th class="text-center">
+                                        @(Model.Where(x => x.Category == cat).Sum(x => x.Male))
+                                    </th>
+                                    <th class="text-center">
+                                        @(Model.Where(x => x.Category == cat).Sum(x => x.Female))
+                                    </th>
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="col-md-12">
+        <div id="blocks-container">
+            <hr />
+            <h2 class="center" style="font-style:italic">No data available for the selected filters.Please try again with different combination of filters.</h2>
+            <hr />
+        </div>
+    </div>
+}
+
+

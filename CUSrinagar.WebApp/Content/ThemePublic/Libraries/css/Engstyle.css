@@ -1,0 +1,407 @@
+﻿@page {
+    margin: 0;
+}
+
+@page {
+    size: A4;
+}
+
+/** Fix for Chrome issue #273306 **/
+@media print {
+    /*body.A4, body.A5.landscape {
+        width: 210mm;
+    }*/
+
+    #printPageButton {
+        display: none;
+    }
+
+    .noneOnPrint {
+        display: none;
+    }
+
+    table {
+        page-break-inside: auto !important;
+    }
+
+    tr {
+        page-break-inside: avoid !important;
+        page-break-after: auto !important;
+    }
+}
+
+/** For screen preview **/
+@media screen {
+    body {
+        background: #e0e0e0;
+    }
+
+    .sheet {
+        background: white;
+        box-shadow: 0 .5mm 2mm rgba(0,0,0,.3);
+        margin: 5mm;
+    }
+
+    .sheet-list {
+        background: white;
+        box-shadow: 0 .5mm 2mm rgba(0,0,0,.3);
+        margin: 5mm;
+    }
+}
+
+body {
+    margin: 0;
+}
+
+    body.middle {
+        margin: auto;
+        vertical-align: middle;
+        display: table;
+    }
+
+p {
+    text-align: justify;
+}
+
+.bottom-strip-ack {
+    position: absolute;
+    bottom: 9mm;
+}
+
+.center {
+    text-align: center;
+}
+
+table.center-text td, table.center-text th {
+    text-align: center;
+}
+
+.cut-line {
+    border-bottom: 1px dashed;
+    text-align: center;
+}
+
+    .cut-line span {
+        top: 8px;
+        position: relative;
+        background-color: white;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+.sheet {
+    margin: 0;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+    page-break-after: always;
+}
+
+.page-break-after-auto {
+    page-break-after: auto;
+}
+
+.sheet h3 {
+    margin: 5px;
+}
+
+.sheet table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.sheet-list table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.sheet table th {
+    border: 1px solid black;
+    padding: 8px;
+}
+
+.sheet-list table th {
+    border: 1px solid black;
+    padding: 8px;
+}
+
+.sheet-list table thead {
+    border: 1px solid black;
+    padding: 8px;
+}
+
+.sheet table.bordered td {
+    border: 1px solid black;
+    padding: 8px;
+}
+
+.sheet-list table.bordered td {
+    border: 1px solid black;
+    padding: 8px;
+}
+
+.portrait .allmarkscard12 td, .portrait .allmarkscard12 th {
+    padding: 1mm !important;
+}
+
+.portrait .allmarkscard09 td, .portrait .allmarkscard09 th {
+    padding: 0.9mm !important;
+}
+
+.compact td, .compactth {
+    padding: 6px !important;
+}
+
+.line-height-50 {
+    line-height: 50px;
+}
+
+.ul-pills {
+    list-style: none;
+    margin: 5px;
+    padding: 0px;
+    padding-bottom: 0mm;
+    padding-top: 0mm;
+    padding-right: 0mm;
+    padding-left: 3mm;
+}
+
+    .ul-pills li {
+        display: inline-flex;
+        margin: 5px;
+    }
+
+        .ul-pills li span {
+            width: 92mm;
+        }
+
+.no-border td, .no-border th {
+    border: 0px !important;
+}
+
+.list-item {
+    margin-top: 2mm;
+    margin-left: -2mm;
+}
+
+    .list-item li {
+        padding-left: 2mm;
+        text-align: justify;
+    }
+
+.no-margin-bottom {
+    margin-bottom: 0mm;
+}
+
+.margin-bottom-5 {
+    margin-bottom: 5px;
+}
+
+.margin-top-2 {
+    margin-top: 2mm;
+}
+
+.margin-top-0 {
+    margin-top: 0mm;
+}
+
+.margin-bottom-2 {
+    margin-bottom: 2mm;
+}
+
+.margin-bottom-1 {
+    margin-bottom: 1mm;
+}
+
+.margin-bottom-0 {
+    margin-bottom: 0mm;
+}
+
+.no-padding {
+    padding: 5px;
+}
+
+.pull-left {
+    float: left;
+    padding-left: 30px;
+}
+
+.pull-right {
+    float: right;
+    padding-right: 30px;
+}
+
+.pull-text-right {
+    text-align: right;
+    /*padding-right: 60px !important;*/
+}
+
+.line-above {
+    text-decoration-line: overline;
+}
+
+/** Paper sizes **/
+body.A4 .sheet {
+    width: 210mm;
+    height: 296mm;
+}
+
+body.A4 .sheet-list {
+    width: 210mm;
+}
+
+body.A4.landscape .sheet {
+    width: 297mm;
+    height: 209mm;
+    font-size: 14px !important;
+}
+
+body.A4.portrait .sheet {
+    width: 210mm;
+    height: 497mm;
+    font-size: 12px !important;
+}
+
+body.A4.landscape .sheet-list {
+    width: 297mm;
+    font-size: 10px !important;
+}
+
+/** Padding area **/
+.sheet.padding-5mm, .sheet-list.padding-5mm {
+    padding: 5mm;
+}
+
+.padding-1mm {
+    padding: 2mm;
+}
+
+.margin-top-2mm {
+    margin-top: 2mm;
+}
+
+.sheet.padding-10mm, .sheet-list.padding-10mm {
+    padding: 10mm;
+}
+
+.sheet.padding-15mm, .sheet-list.padding-15mm {
+    padding: 15mm;
+}
+
+.sheet.padding-20mm, .sheet-list.padding-20mm {
+    padding: 20mm;
+}
+
+.sheet.padding-25mm, .sheet-list.padding-25mm {
+    padding: 25mm;
+}
+
+.print-download-strip {
+    /*margin-left: -14px;*/
+    height: 50px;
+    background-color: lightslategrey;
+    width: 100%;
+    position: fixed;
+    bottom: 0mm;
+    left: 0mm;
+    z-index: 1;
+    text-align: center;
+    padding-top: 5px;
+    opacity: 0.4;
+}
+
+    .print-download-strip .btn {
+        height: 35px;
+        font-weight: bold;
+    }
+
+
+.text-size-3 {
+    font-size: 3mm;
+}
+
+.width-100 {
+    width: 100px;
+}
+
+.no-margins {
+    margin: 0px;
+}
+
+.portrait td, .portrait td {
+    padding: 0px;
+    vertical-align: middle;
+    line-height: 1em !important;
+}
+
+.portrait .wordart {
+    font-family: Arial, sans-serif;
+    font-size: 2em;
+    font-weight: bold;
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.wordart {
+    font-family: Arial, sans-serif;
+    font-size: 2.5em;
+    font-weight: bold;
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+
+    .wordart.slate {
+        transform: scale(1, 1.5);
+        -webkit-transform: scale(1, 1.5);
+        -moz-transform: scale(1, 1.5);
+        -o-transform: scale(1, 1.5);
+        -ms-transform: scale(1, 1.5);
+    }
+
+        .wordart.slate .text {
+            font-family: Algerian,Times, 'Times New Roman', serif;
+            font-weight: normal;
+            color: #2F5485;
+            text-shadow: 0.03em 0.03em 0px #B3B3B3;
+        }
+
+#background {
+    position: absolute;
+    top: 25%;
+    left: 33%;
+    z-index: 0;
+    background: white;
+    display: block;
+    opacity: 0.2;
+}
+
+#content {
+    position: absolute;
+    z-index: 1;
+}
+
+#bg-text {
+    color: lightgrey;
+    font-size: 55px;
+    transform: rotate(300deg);
+    -webkit-transform: rotate(300deg);
+}
+
+.text-align-left {
+    text-align: left;
+}
+
+.padding-left-10 {
+    padding-left: 10px;
+}
+
+.bold {
+    font-weight: bold;
+}

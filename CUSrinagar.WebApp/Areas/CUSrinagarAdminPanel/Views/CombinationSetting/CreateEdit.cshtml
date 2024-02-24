@@ -1,0 +1,299 @@
+﻿@model CUSrinagar.Models.CombinationSetting
+
+@{
+    /**/
+
+    var subjectlist = (List<SelectListItem>)ViewBag.SubjetList ?? new List<SelectListItem>();
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area= "CUSrinagarAdminPanel" })">Home</a>
+        </li>
+        <li>
+            <a href="@Url.Action("CombinationSetting","CombinationSetting",new { area= "CUSrinagarAdminPanel" })" class="">Combination Setting</a>
+        </li>
+        <li>
+            <a href="@Url.Action("CombinationSetting","CombinationSetting",new { area= "CUSrinagarAdminPanel",@id="" })" class="active">Create/Edit</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+
+@using (Html.BeginForm("CreateEdit", "CombinationSetting", FormMethod.Post, new { @class = "jsMainForm form-horizontal", @id = "CombinationSettingForm" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.CombinationSetting_ID)
+
+    <div class="row">
+        <div class="col-sm-12">
+            <h5>General</h5>
+            <hr class="no-margin-top" />
+        </div>
+        <div class="col-sm-6">
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Batch</label>
+                <div class="col-sm-9">
+                    @Html.DropDownList("Batch", new SelectList(ViewBag.Batches, "Value", "Text", Model.Batch),
+                               new
+                               {
+                                   @class = "form-control chosen-select",
+                                   required = "required"
+                               })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Courses</label>
+                <div class="col-sm-9">
+                    @Html.DropDownList("Course_ID", new SelectList(ViewBag.Courses, "Value", "Text", Model.Course_ID),
+                               "Select course", new
+                               {
+                                   @class = "form-control chosen-select",
+                                   required = "required"
+                               })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Semester</label>
+                <div class="col-sm-9">
+                    @Html.DropDownList("Semester", new SelectList(ViewBag.Semesters, "Value", "Text", Model.Semester), new
+               {
+                   @class = "form-control",
+                   required = "required"
+               })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Remark</label>
+                <div class="col-sm-9">
+                    @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Compulsary Subjects</label>
+                <div class="col-sm-9 jsDDLContainer">
+                    <select id='SubjectDDL' name='Subject' class="form-control multiselect" multiple="">
+                        @if (subjectlist != null)
+                        {
+                            foreach (var item in subjectlist)
+                            {
+                                <option value="@item.Value" @(Model.CompulsarySubjects != null && Model.CompulsarySubjects.Contains(item.Value) ? "selected" : "")>@item.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="clearfix"></div>
+                <label for="" class="col-sm-3 control-label invisible">style purpose</label>
+                <div class="col-sm-9">
+                    @Html.HiddenFor(model => model.CompulsarySubjects)
+                    <p id="jsSubjectList" class="text-success small">
+                        @((Model.CompulsarySubject == null) ? "" : String.Join(", ", Model.CompulsarySubject.Select(x => x.SubjectFullName)?.ToList()))
+                    </p>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.AllowCollegeChangeCombination ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> Allow College Change Combination</span>
+                            @Html.HiddenFor(model => model.AllowCollegeChangeCombination)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.AllowStudentChangeCombination ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> Allow Student Change Combination</span>
+                            @Html.HiddenFor(model => model.AllowStudentChangeCombination)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.AllowDeleteCombination ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> Allow Delete Combination</span>
+                            @Html.HiddenFor(model => model.AllowDeleteCombination)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.CheckAdmissionForm ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> Check Admission Form</span>
+                            @Html.HiddenFor(model => model.CheckAdmissionForm)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.CheckExaminationForm ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> Check Examination Form</span>
+                            @Html.HiddenFor(model => model.CheckExaminationForm)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.CheckResult ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> Check Result</span>
+                            @Html.HiddenFor(model => model.CheckResult)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.CheckCourseApplied ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> Check Course Applied</span>
+                            @Html.HiddenFor(model => model.CheckCourseApplied)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByIntakeCapacity ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> Validate By Intake Capacity</span>
+                            @Html.HiddenFor(model => model.ValidateByIntakeCapacity)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.Semester <= 1)
+            {
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <div class="checkbox">
+                            <label class="block">
+                                <input type="checkbox" class="ace input-lg" @(Model.CheckInSelectionList ? "Checked='checked'" : "") />
+                                <span class="lbl bigger"> Check in Selection List</span>
+                                @Html.HiddenFor(model => model.CheckInSelectionList)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <div class="checkbox">
+                            <label class="block">
+                                <input type="checkbox" class="ace input-lg" @(Model.CheckSelectionListCollege ? "Checked='checked'" : "") />
+                                <span class="lbl bigger"> Check Selection List College</span>
+                                @Html.HiddenFor(model => model.CheckSelectionListCollege)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">DefaultPaymentDate</label>
+                <div class="col-sm-9">
+                    <input type="date" name="DefaultPaymentDate" id="DefaultPaymentDate" value="@Model.GetDefaultPaymentDate" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">DefaultPaymentAmount</label>
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(model => model.DefaultPaymentAmount, new { @class = "form-control" })
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <h5>Course Structure</h5>
+            <hr class="no-margin-top" />
+            <div class="form-group">
+                <label for="name" class="col-sm-2 control-label">Setting Structure</label>
+                <div class="col-sm-10">
+                    @Html.DropDownList("CombinationSettingStructure_ID",
+                   new SelectList(ViewBag.CombinationSettingStructure, "Value", "Text", Model.CombinationSettingStructure_ID), "  -- All -- ",
+                    new
+                    {
+                        @class = "form-control chosen-select",
+                    })
+                    <a href="@Url.Action("CombinationSettingStructureCreateEdit",new { @id=Model.CombinationSettingStructure_ID})" target="_blank"><i class="fa fa-edit"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class=" pull-text-right pull-right">
+                <button type="submit" value="False" name="CreateNew" id="submitForm" class="btn btn-primary pull-right">@(Model.CombinationSetting_ID == Guid.Empty ? "Save" : "Update")</button>
+                &nbsp; &nbsp;
+            </div>
+            <div class=" pull-text-right pull-right">
+                <button type="submit" value="True" name="CreateNew" id="submitForm" class="btn btn-primary pull-right">@(Model.CombinationSetting_ID == Guid.Empty ? "Save" : "Update")/Create New</button>
+                &nbsp; &nbsp;
+            </div>
+            @if (Model.CombinationSetting_ID != Guid.Empty)
+            {
+                <div class=" pull-text-right pull-right">
+                    <button type="submit" value="True" name="SaveAsNew" id="submitForm" class="btn btn-primary pull-right">Save As New</button>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+
+@section PageSpecificJS{
+    <script src="~/Scripts/Pages/combinationsetting.js"></script>
+}
+
+
+

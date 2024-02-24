@@ -1,0 +1,135 @@
+﻿--------------------------------- non-Teaching Count---------------------------------------
+SELECT
+       PostName,
+       FormNo,
+       FullName,
+       FathersName,
+       DOB,
+       DomicileOfUTJK,
+       Category,
+       PermanentAddress,
+       CorrespondenceAddress,
+       ContactNo,
+       Email,
+       NTAcademicQualification.ExamName,
+       NTAcademicQualification.SubjectsOffered,
+       NTAcademicQualification.Percentage,
+       NTAcademicQualification.UniversityBoard,
+       NTAcademicQualification.YearOfPassing,
+       NTAcademicQualification.MaxMarks,
+       NTAcademicQualification.MarksObt,
+       TypingSpeed,
+       Shorthand,
+       PreviousProfessionalExperience,
+       PreviousAdministrativeExperience,
+       KnowingComputers,
+       ServedInGovtCompanyAutonomousOrg,
+       TotalServiceRendered,
+       PostHeld,
+       DateOfDischarge,
+       ReasonOfTermination,
+       ServedUTDeptName,
+       ServedUTPostHeld,
+       ServedUTCadre,
+       ServedUTNameAndRelationship,
+       RelationEmployedInUniversity,
+       Imprisoned,
+       NTDesirableQualification.CreatedOn,
+       ServedUTScaleOfPostHeld,
+       NTProfessionalTechnicalQualification.ExamName,
+       NTProfessionalTechnicalQualification.SubjectsOffered,
+       NTProfessionalTechnicalQualification.Percentage,
+       NTProfessionalTechnicalQualification.UniversityBoard,
+       NTProfessionalTechnicalQualification.YearOfPassing,
+       NTProfessionalTechnicalQualification.MaxMarks,
+       NTProfessionalTechnicalQualification.MarksObt,
+       NTProfessionalTechnicalQualification.CreatedOn FROM dbo.NTPersonalInfo
+LEFT JOIN dbo.NTAcademicQualification ON NTAcademicQualification.Form_ID = NTPersonalInfo.Form_ID
+LEFT JOIN dbo.NTDesirableQualification ON NTDesirableQualification.Form_ID = NTPersonalInfo.Form_ID
+LEFT JOIN dbo.NTProfessionalTechnicalQualification ON NTProfessionalTechnicalQualification.Form_ID = NTPersonalInfo.Form_ID
+LEFT JOIN dbo.RSPosts ON RSPosts.Post_ID = NTPersonalInfo.Post_ID
+WHERE FormStatus IN (9,2) ORDER BY  NTPersonalInfo.Post_ID,FormNo
+------------------------ count nt -------------------
+SELECT COUNT(PostName),PostName FROM dbo.NTPersonalInfo
+JOIN dbo.RSPosts ON RSPosts.Post_ID = NTPersonalInfo.Post_ID
+WHERE Year=2022 AND FormStatus<>1
+GROUP BY dbo.RSPosts.PostName
+
+---------------- Registrar data ---------------------------
+SELECT 
+       FormNo,
+       FullName,
+       FathersFullName,
+       CAST(DOB AS DATE) DOB,	   
+	   (SELECT COUNT(*) FROM dbo.PublishedWork WHERE Form_ID=RSFormPersonalDetails.Form_ID) AS NoOfPublications,
+       NoOfBooksNationalPublications,
+       NoOfBooksInternationalPublications,
+       NoOfPatents,
+       PostDoctoralFellowShip,
+       UGPGTeachingExperience [UGPGTeachingExperience in Months],
+       UGPGResearchExperience [UGPGResearchExperience in Months],
+       ContacNo1,
+       InternationalNationalLevelWards,
+       StateLevelWards,
+       ExamName,
+       Stream,
+       YearOfPassing,
+       Percentage,
+       BoardUniversity,
+       Designation,
+       NameAddressOfEmployer,
+       ServiceNature,
+       DateFrom,
+       DateTo,
+       ServiceResponsibility
+FROM dbo.RSFormPersonalDetails
+    JOIN dbo.RSAcademicDetails
+        ON RSAcademicDetails.Form_ID = RSFormPersonalDetails.Form_ID
+    JOIN dbo.RSPosts
+        ON RSPosts.Post_ID = RSFormPersonalDetails.Post_ID
+    LEFT JOIN dbo.RSPreviousServiceRecord
+        ON RSPreviousServiceRecord.Form_ID = RSFormPersonalDetails.Form_ID
+WHERE RSFormPersonalDetails.Post_ID = '57B8DD5C-9E4E-41D5-A6A8-414069CF2F6F'
+AND Status<>1 
+ORDER BY FormNo,RSAcademicDetails.YearOfPassing asc,ExamName,DateFrom asc,Designation
+
+------------------------ publication count ----------------------------
+
+SELECT COUNT(FormNo) TotalPublications,FormNo FROM dbo.RSFormPersonalDetails
+LEFT JOIN dbo.PublishedWork ON PublishedWork.Form_ID = RSFormPersonalDetails.Form_ID
+WHERE RSFormPersonalDetails.Post_ID = '57B8DD5C-9E4E-41D5-A6A8-414069CF2F6F'
+AND Status<>1
+GROUP BY FormNo
+
+
+----------------------- job details --------------
+SELECT 
+       FormNo,
+	   PostName,
+	   NotificationNo,
+	   NotificationDated,
+       FullName,
+       FathersFullName,
+       CAST(DOB AS DATE) DOB,	   
+       ContacNo1,
+	   TxnReferenceNo,
+	   TxnAmount,
+	   TxnDate
+FROM dbo.RSFormPersonalDetails    
+		JOIN dbo.PaymentDetails ON Entity_ID=RSFormPersonalDetails.Form_ID
+		JOIN dbo.RSPosts ON RSPosts.Post_ID = RSFormPersonalDetails.Post_ID
+WHERE RSFormPersonalDetails.Post_ID <> '57B8DD5C-9E4E-41D5-A6A8-414069CF2F6F'
+AND Status<>1  AND PostNature=2
+ORDER BY RSFormPersonalDetails.Post_ID,FullName,NotificationDated
+
+
+
+
+
+
+
+
+
+
+
+

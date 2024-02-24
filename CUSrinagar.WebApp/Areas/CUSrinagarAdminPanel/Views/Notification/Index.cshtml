@@ -1,0 +1,126 @@
+﻿
+@{
+    ViewBag.Title = "Notification";
+}
+
+<div class="page-wrapper pager-table-text">
+
+    <div class="page-header">
+        <div style="padding-bottom: 30px;">
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <h1 class="heading-title pull-left">
+                        Notification
+                        <small>
+                            <i class="ace-icon fa fa-angle-double-right"></i>
+                            List of notifications
+                        </small>
+                    </h1>
+
+                </div>
+
+                <div class="col-sm-6">
+
+                </div>
+
+
+                <div class="col-sm-6 align-right">
+
+                    @Html.ActionLink("Add New", "Create", "Notification", new { area = "CUSrinagarAdminPanel", @class = "btn btn-sm btn-primary white" })
+
+
+                    @*<button class="btn btn-sm btn-primary  white" type="button" onclick="window.location.href='@Url.Content("/CUSrinagarAdminPanel/Notification/Create")'" title="Add New Notification">
+                            <i class="ace-icon fa fa-plus  bigger-110"></i>
+                            <span>&nbsp;Add New</span>
+                        </button>*@
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Notifications
+                            <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                            </span>
+
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        @*<div class="col-sm-12" style="padding-bottom:10px">
+                            <label class="col-sm-12">Quick Search</label>
+                            <div class="col-sm-12 lbl bigger-120 no-padding-right">
+                                @Html.TextBox("Quicksearch", "", new { @class = "form-control", @data_action = "table-filter", @data_filters = ".js-table-content", placeholder = "Filter Developers" })
+                            </div>
+                        </div>
+                        <br />*@
+                        <div class="col-sm-12 search-box">
+                            <label class="col-sm-12">Advance Search</label>
+
+                            <div class="col-sm-5 lbl bigger-120 no-padding-right">
+                                Description
+                                <div id="Course">
+                                    @Html.TextBox("Description", "", new { @class = "form-control jsfilterelement", @data_column = "Description", @data_operator = "Contains" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                From
+                                <div>
+                                    @Html.TextBox("StartDate", "", "{0:mm/dd/yyyy}", new { @class = "date-picker form-control jsfilterelement", @data_column = "StartDate", @data_operator = "GreaterThanEqualTo" })
+                                </div>
+                            </div>
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                 To
+                                <div>
+                                    @Html.TextBox("StartDateTo", "", "{0:mm/dd/yyyy}", new { @class = "date-picker form-control jsfilterelement", @data_column = "StartDateTo", @data_operator = "LessThanEqualTo" })
+                                </div>
+                            </div>
+                            <div class="col-sm-1 " style="padding-top: 17px;">
+                                <button type="button" class="btn btn-primary fa-search-btn"><i class="fa fa-search"></i>&nbsp;Search</button>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <div class="js-table-content" data-url="@Url.Action("NotificationListPartial", "Notification", new { area = "CUSrinagarAdminPanel" })" data-DefaultOrderByColumn="CreatedOn">
+
+                    </div>
+                    @{Html.RenderPartial("_JSPagerTableFooter");}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script>
+        $(document).ready(function () {
+
+            var $pagertable = $(".js-pager-table");
+
+            loadpagertable();
+        });
+        $('.date-picker').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            dateFormat: 'mm/dd/yyyy',
+            format: 'mm/dd/yyyy'
+        });
+    </script>
+    <style>
+        .filter-btn a {
+            color: white !important
+        }
+    </style>
+}
+
+
+
+

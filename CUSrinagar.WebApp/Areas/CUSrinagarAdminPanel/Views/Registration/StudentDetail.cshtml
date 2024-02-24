@@ -1,0 +1,91 @@
+﻿@using CUSrinagar.Models
+
+@model ARGReprint
+@{
+    ViewBag.Title = "Search";
+}
+@if (TempData["response"] != null)
+{
+    @Html.Raw(TempData["response"])
+}
+<div class="widget-box">
+    <div class="widget-header">
+        <h4 class="widget-title"><i class='menu-icon fa fa-pencil-square-o'></i>Edit Student</h4>
+    </div>
+    @*<div class="widget-body">
+        <div class="widget-main">*@
+
+    @using (Html.BeginForm("EditStudent", "Registration", FormMethod.Post, new { @enctype = "multipart/form-data", @class = "rnd5" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="col-sm-12">
+            <div class="col-lg-4">    </div>
+            <div class="" style="background-color:white;padding-bottom: 10px">
+                <div class="content-wrapper">
+                    @Html.Hidden(nameof(Model.EnteredDOB), "01-01-2000")
+                    <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                        @Html.LabelFor(model => Model.FormNo, new { @class = "small-70" })
+                        <span class="required">
+                            *
+                            @Html.ValidationMessageFor(model => model.FormNo)
+                        </span><br />
+                        @Html.TextBoxFor(model => model.FormNo, new { @class = "form-control jsfilterelement", @maxlength = "150", @autocomplete = "off", @onkeypress = "return forAdmissionRollNo(event);" })
+                    </label>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="col-sm-12">
+            <div class="col-lg-4">    </div>
+            <div class="" style="background-color:white;padding-bottom: 10px">
+                <div class="content-wrapper">
+                    <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                        @Html.LabelFor(model => Model.Batch, new { @class = "small-70" })
+                        <span class="required">
+                            *
+                            @Html.ValidationMessageFor(model => model.Batch)
+                        </span><br />
+                        @Html.TextBoxFor(model => model.Batch, new { @class = "form-control", @Value = DateTime.UtcNow.Year.ToString(), @maxlength = "4", @autocomplete = "off", @onkeypress = "return numbersOnly(event);" })
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="col-lg-4">    </div>
+            <div class="" style="background-color:white;padding-bottom: 10px">
+                <div class="content-wrapper">
+                    <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                        @Html.LabelFor(model => Model.PrintProgrammeOption, new { @class = "small-70" })
+                        <span class="required">
+                            *
+                            @Html.ValidationMessageFor(model => model.PrintProgrammeOption)
+                        </span><br />
+                        @Html.DropDownListFor(model => model.PrintProgrammeOption, (IEnumerable<SelectListItem>)ViewBag.PrintProgrammeOption, string.Empty, new { @class = "form-control" })
+                    </label>
+                </div>
+            </div>
+        </div>
+        <br />
+        <p style="text-align:center;">
+            <span id="hideButtons6">
+                <input type="submit" id="jsFetchDetail" value="Fetch Detail" class="btn btn-theme" />
+            </span>
+        </p>
+
+
+    }
+    @*</div>
+        </div>*@
+</div>
+
+
+<style>
+    .required {
+        color: red;
+    }
+</style>
+@section PageSpecificJS{
+    @Scripts.Render("~/bundles/Libraries/jqueryval")
+}

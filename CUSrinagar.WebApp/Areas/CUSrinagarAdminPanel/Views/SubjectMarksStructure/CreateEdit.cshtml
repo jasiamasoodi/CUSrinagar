@@ -1,0 +1,371 @@
+﻿@model CUSrinagar.Models.MSSubjectMarksStructure
+
+@{
+    ViewBag.Title = "Marks Structure";
+}
+
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action(" Index","Dashboard",new { area="CUSrinagarAdminPanel" })">Home</a>
+        </li>
+        <li>
+            <a href="@Url.Action("SubjectMarksStructure","SubjectMarksStructure",new { area="CUSrinagarAdminPanel"})" class="">Subject List</a>
+        </li>
+        <li>
+            <a href="#" class="active">Edit</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+
+@section PageSpecificStyle{
+
+}
+<div class="row">
+    <div class="col-md-12">
+        <h3>
+            @if (Model.SubjectMarksStructure_ID != Guid.Empty)
+            {
+                <span>Edit Marks Structure</span>
+                <span class="pull-right">
+                    <a href="@Url.Action("Delete",new {@id=Model.SubjectMarksStructure_ID })" class="text-danger"><i class="ace-icon fa fa-trash-o"></i></a>
+                </span>
+                <span class="pull-right hidden">
+                    <a href="#" class="btn btn-primary">Assign Subject</a>
+                </span>
+            }
+            else
+            {
+                <span>Create Marks Structure</span>
+            }
+
+        </h3>
+        <hr class="no-margin-top" />
+        @using (Html.BeginForm("CreateEdit", "SubjectMarksStructure", FormMethod.Post, new { @class = "jsMainForm form-horizontal", @id = "SubjectMarksStructureForm" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.SubjectMarksStructure_ID)
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3">Remarks</label>
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control", @placeholder = "Enter some remarks to remember structure" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3">SGPAType</label>
+                        <div class="col-sm-8">
+                            @Html.DropDownList("SGPAType", new SelectList(ViewBag.SGPATypes, "Value", "Text", (short)Model.SGPAType),
+                        "Choose SGPA Type", new
+                        {
+                            @class = "form-control chosen-select",
+                            @required = "required"
+                        })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3">TotalCredit</label>
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.TotalCredit, new { @class = "form-control", @required = "required", @placeholder = "Enter total credit" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3">CreditWeightage</label>
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.CreditWeightage, new { @class = "form-control", @required = "required", @placeholder = "Enter credit weightage" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3"></label>
+                        <div class="col-sm-8">
+                            <div class="checkbox">
+                                <label class="block">
+                                    <input type="checkbox" class="ace input-lg " @(Model.IsLocked ? "Checked=checked" : "" ) />
+                                    <span class="lbl bigger-12000"> Is Locked</span>
+                                    @Html.HiddenFor(model => model.IsLocked)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <!--External section-->
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3>External Marks</h3>
+                    <hr class="no-margin-top" />
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4">External/theory max marks</label>
+                        <div class="col-sm-8">
+                            <div class="col-sm-2 no-padding-right">
+                                @Html.TextBoxFor(model => model.ExternalMaxMarks, new { @class = "form-control" })
+                            </div>
+                            <div class="col-sm-8 checkbox no-padding-left">
+                                <label class="block">
+                                    <input type="checkbox" class="ace jsIsApplicable" @(Model.IsExternalMarksApplicable == true ? "checked=checked" : "" ) />
+                                    <span class="lbl bigger-12000"> Is applicable</span>
+                                    @Html.HiddenFor(model => model.IsExternalMarksApplicable)
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4">External min pass marks</label>
+                        <div class="col-sm-8">
+                            <div class="col-sm-2 no-padding-right">
+                                @Html.TextBoxFor(model => model.ExternalMinPassMarks, new { @class = "form-control" })
+                            </div>
+                            <div class="col-sm-8 checkbox no-padding-left">
+                                <label class="block">
+                                    <input type="checkbox" class="ace  jsIsPassComponent" @(Model.IsExternalPassComponent == true ? "Checked=checked" : "" ) />
+                                    <span class="lbl bigger-12000"> Is Pass Component</span>
+                                    @Html.HiddenFor(model => model.IsExternalPassComponent)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4">External marks Label</label>
+                        <div class="col-sm-8">
+                            <div class="col-sm-6 no-padding-right">
+                                @Html.TextBoxFor(model => model.ExternalMarksLabel, new { @class = "form-control", @placeholder = "Label" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4">Marks Component of</label>
+                        <div class="col-sm-8">
+                            <div class="col-sm-6 no-padding-right">
+                                @Html.DropDownListFor(model => model.ExternalIsPartOf, new SelectList(ViewBag.MarksIsPartOfs, "Value", "Text", Model.ExternalIsPartOf)
+                               ,"chooose type", new { @class = "form-control", @placeholder = "Label" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4">Show in Award Module</label>
+                        <div class="col-sm-8">
+                            <div class="col-sm-6 no-padding-right">
+                                @Html.DropDownListFor(model => model.ExternalVisibleTo, new SelectList(ViewBag.AwardModuleTypes, "Value", "Text", Model.ExternalVisibleTo)
+                               , "chooose type", new { @class = "form-control", @placeholder = "Label" })
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4">External attendance/ assessment max marks</label>
+                        <div class="col-sm-8">
+                            <div class="col-sm-2 no-padding-right">
+                                @Html.TextBoxFor(model => model.ExternalAttendance_AssessmentMaxMarks, new { @class = "form-control" })
+                            </div>
+                            <div class="col-sm-8 checkbox no-padding-left">
+                                <label class="block">
+                                    <input type="checkbox" class="ace jsIsApplicable" @(Model.IsExternalAttendance_AssessmentMarksApplicable == true ? "Checked=checked" : "" ) />
+                                    <span class="lbl bigger-12000"> Is applicable</span>
+                                    @Html.HiddenFor(model => model.IsExternalAttendance_AssessmentMarksApplicable)
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4">External attendance/ assessment min pass marks</label>
+                        <div class="col-sm-8">
+                            <div class="col-sm-2 no-padding-right">
+                                @Html.TextBoxFor(model => model.ExternalAttendance_AssessmentMinPassMarks, new { @class = "form-control" })
+                            </div>
+                            <div class="col-sm-8 checkbox no-padding-left">
+                                <label class="block">
+                                    <input type="checkbox" class="ace  jsIsPassComponent" @(Model.IsExternalAttendance_AssessmentPassComponent == true ? "Checked=checked" : "" ) />
+                                    <span class="lbl bigger-12000"> Is Pass Component</span>
+                                    @Html.HiddenFor(model => model.IsExternalAttendance_AssessmentPassComponent)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4">External attendance/ assessment Label</label>
+                        <div class="col-sm-8">
+                            <div class="col-sm-6 no-padding-right">
+                                @Html.TextBoxFor(model => model.ExternalAttendance_AssessmentMarksLabel, new { @class = "form-control", @placeholder = "Label" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4">Marks Component of</label>
+                        <div class="col-sm-8">
+                            <div class="col-sm-6 no-padding-right">
+                                @Html.DropDownListFor(model => model.ExternalAttendance_AssessmentIsPartOf
+                           , new SelectList(ViewBag.MarksIsPartOfs, "Value", "Text", Model.ExternalIsPartOf), "chooose type", new { @class = "form-control", @placeholder = "Label" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4">Show in Award Module</label>
+                        <div class="col-sm-8">
+                            <div class="col-sm-6 no-padding-right">
+                                @Html.DropDownListFor(model => model.ExternalAttendance_AssessmentVisibleTo
+                           , new SelectList(ViewBag.AwardModuleTypes, "Value", "Text", Model.ExternalAttendance_AssessmentVisibleTo), "chooose type", new { @class = "form-control", @placeholder = "Label" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Internal section-->
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3>Internal Marks</h3>
+                    <hr class="no-margin-top" />
+                </div>
+                <div class="col-sm-5  jsGroupSection">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4">Internal/practical max marks</label>
+                        <div class="col-sm-8">
+                            <div class="col-sm-2 no-padding-right">
+                                @Html.TextBoxFor(model => model.InternalMaxMarks, new { @class = "form-control" })
+                            </div>
+                            <div class="col-sm-8 checkbox no-padding-left">
+                                <label class="block">
+                                    <input type="checkbox" class="ace jsIsApplicable" @(Model.IsInternalMarksApplicable == true ? "checked=checked" : "" ) />
+                                    <span class="lbl bigger-12000"> Is applicable</span>
+                                    @Html.HiddenFor(model => model.IsInternalMarksApplicable)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4">Internal min pass marks</label>
+                        <div class="col-sm-8">
+                            <div class="col-sm-2 no-padding-right">
+                                @Html.TextBoxFor(model => model.InternalMinPassMarks, new { @class = "form-control" })
+                            </div>
+                            <div class="col-sm-8 checkbox no-padding-left">
+                                <label class="block">
+                                    <input type="checkbox" class="ace jsIsPassComponent" @(Model.IsInternalPassComponent == true ? "Checked=checked" : "" ) />
+                                    <span class="lbl bigger-12000"> Is Pass Component</span>
+                                    @Html.HiddenFor(model => model.IsInternalPassComponent)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4">Internal marks Label</label>
+                        <div class="col-sm-8">
+                            <div class="col-sm-6 no-padding-right">
+                                @Html.TextBoxFor(model => model.InternalMarksLabel, new { @class = "form-control", @placeholder = "Label" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4">Marks Component of</label>
+                        <div class="col-sm-8">
+                            <div class="col-sm-6 no-padding-right">
+                                @Html.DropDownListFor(model => model.InternalIsPartOf
+                           , new SelectList(ViewBag.MarksIsPartOfs, "Value", "Text", Model.ExternalIsPartOf), "chooose type", new { @class = "form-control", @placeholder = "Label" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4">Show in Award Module</label>
+                        <div class="col-sm-8">
+                            <div class="col-sm-6 no-padding-right">
+                                @Html.DropDownListFor(model => model.InternalVisibleTo
+                           , new SelectList(ViewBag.AwardModuleTypes, "Value", "Text", Model.InternalVisibleTo), "chooose type", new { @class = "form-control", @placeholder = "Label" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-5  jsGroupSection">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4">Internal attendance/ assessment max marks</label>
+                        <div class="col-sm-8">
+                            <div class="col-sm-2 no-padding-right">
+                                @Html.TextBoxFor(model => model.InternalAttendance_AssessmentMaxMarks, new { @class = "form-control" })
+                            </div>
+                            <div class="col-sm-8 checkbox no-padding-left">
+                                <label class="block">
+                                    <input type="checkbox" class="ace  jsIsApplicable" @(Model.IsInternalAttendance_AssessmentMarksApplicable == true ? "Checked=checked" : "" ) />
+                                    <span class="lbl bigger-12000"> Is applicable</span>
+                                    @Html.HiddenFor(model => model.IsInternalAttendance_AssessmentMarksApplicable)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4">Internal attendance/ assessment min pass marks</label>
+                        <div class="col-sm-8">
+                            <div class="col-sm-2 no-padding-right">
+                                @Html.TextBoxFor(model => model.InternalAttendance_AssessmentMinPassMarks, new { @class = "form-control" })
+                            </div>
+                            <div class="col-sm-8 checkbox no-padding-left">
+                                <label class="block">
+                                    <input type="checkbox" class="ace  jsIsPassComponent" @(Model.IsInternalAttendance_AssessmentPassComponent == true ? "Checked=checked" : "" ) />
+                                    <span class="lbl bigger-12000"> Is Pass Component</span>
+                                    @Html.HiddenFor(model => model.IsInternalAttendance_AssessmentPassComponent)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4">External attendance/ assessment Label</label>
+                        <div class="col-sm-8">
+                            <div class="col-sm-6 no-padding-right">
+                                @Html.TextBoxFor(model => model.InternalAttendance_AssessmentMarksLabel, new { @class = "form-control", @placeholder = "Label" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4">Marks Component of</label>
+                        <div class="col-sm-8">
+                            <div class="col-sm-6 no-padding-right">
+                                @Html.DropDownListFor(model => model.InternalAttendance_AssessmentIsPartOf
+                           , new SelectList(ViewBag.MarksIsPartOfs, "Value", "Text", Model.ExternalIsPartOf), "chooose type", new { @class = "form-control", @placeholder = "Label" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4">Show in Award Module</label>
+                        <div class="col-sm-8">
+                            <div class="col-sm-6 no-padding-right">
+                                @Html.DropDownListFor(model => model.InternalAttendance_AssessmentVisibleTo
+                           , new SelectList(ViewBag.AwardModuleTypes, "Value", "Text", Model.InternalAttendance_AssessmentVisibleTo), "chooose type", new { @class = "form-control", @placeholder = "Label" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-11">
+                <div class=" pull-text-right pull-right">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+
+
+        }
+    </div>
+</div>
+
+
+@section PageSpecificJS{
+
+}
+
+
+

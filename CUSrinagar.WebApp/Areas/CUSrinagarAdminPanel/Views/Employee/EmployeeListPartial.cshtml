@@ -1,0 +1,78 @@
+﻿@model IEnumerable<CUSrinagar.Models.Employee>
+
+@{
+    ViewBag.Title = "List";
+    Layout = null;
+}
+
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <hr />
+    <div class="content">
+        @if (Model != null)
+        {
+            <table class="table table-hover table-bordered js-table">
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Phone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DOB)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Status)
+                    </th>
+                    <th>
+                        Father's Name
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PresentAddress)
+                    </th>
+                    <th></th>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EmployeeFullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Phone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @item.DOB.ToShortDateString()
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DepartmentName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FathersName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PresentAddress)
+                        </td>                       
+                    </tr>
+                }
+
+                </table>
+            }
+            else
+            {
+                <br />
+                <br />
+                <br />
+                <hr />
+                <h2 class="center">No Records Found</h2>
+                <hr />
+            }
+    </div>
+</div>
+
+

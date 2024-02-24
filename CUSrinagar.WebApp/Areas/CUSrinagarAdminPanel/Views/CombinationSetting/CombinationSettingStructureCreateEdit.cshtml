@@ -1,0 +1,926 @@
+﻿@model CUSrinagar.Models.CombinationSettingStructure
+@{
+
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area= "CUSrinagarAdminPanel" })">Home</a>
+        </li>
+        <li>
+            <a href="@Url.Action("CombinationSettingStructure","CombinationSetting",new { area= "CUSrinagarAdminPanel" })" class="">Structure List</a>
+        </li>
+        <li>
+            <a href="@Url.Action("CombinationSettingStructure","CombinationSetting",new { area= "CUSrinagarAdminPanel",@id="" })" class="active">Create/Edit</a>
+        </li>
+    </ul><!-- /breadcrumb -->
+}
+
+@using (Html.BeginForm("CombinationSettingStructureCreateEdit", "CombinationSetting", FormMethod.Post, new { @class = "jsMainForm form-horizontal", @id = "CombinationSettingForm" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.CombinationSettingStructure_ID)
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <h5>General</h5>
+            <hr class="no-margin-top" />
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Total Subjects</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.TotalNumberOfSubjects, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByTotalNumberOfSubjects ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateByTotalNumberOfSubjects</span>
+                            @Html.HiddenFor(model => model.ValidateByTotalNumberOfSubjects)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Total Result Subjects</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.TotalResultNumberOfSubjects, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByTotalResultNumberOfSubjects ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateByTotalResultNumberOfSubjects</span>
+                            @Html.HiddenFor(model => model.ValidateByTotalResultNumberOfSubjects)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">TotalSubjectCredits</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.TotalSubjectCredits, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByTotalSubjectCredits ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateByTotalSubjectCredits</span>
+                            @Html.HiddenFor(model => model.ValidateByTotalSubjectCredits)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">TotalResultCredits</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.TotalResultCredits, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByTotalResultCredits ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateByTotalResultCredits</span>
+                            @Html.HiddenFor(model => model.ValidateByTotalResultCredits)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Remark</label>
+                <div class="col-sm-7">
+                    @Html.EditorFor(model => model.Remark, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <h5>Core Section</h5>
+            <hr class="no-margin-top" />
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Core_Count</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.Core_Count, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByCore_Count ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateByCore_Count</span>
+                            @Html.HiddenFor(model => model.ValidateByCore_Count)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Core_Credit</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.Core_Credit, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByCore_Credit ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateByCore_Credit</span>
+                            @Html.HiddenFor(model => model.ValidateByCore_Credit)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.CoreDependOnPrevSem ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> CoreDependOnPrevSem</span>
+                            @Html.HiddenFor(model => model.CoreDependOnPrevSem)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.Show_Core ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ShowCore</span>
+                            @Html.HiddenFor(model => model.Show_Core)
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <h5>DCE/DSE Section</h5>
+            <hr class="no-margin-top" />
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">DCE_DSE_Count</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.DCE_DSE_Count, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByDCE_DSE_Count ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateByDCE_DSE_Count</span>
+                            @Html.HiddenFor(model => model.ValidateByDCE_DSE_Count)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">DCE_DSE_Credit</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.DCE_DSE_Credit, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByDCE_DSE_Credit ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateByDCE_DSE_Credit</span>
+                            @Html.HiddenFor(model => model.ValidateByDCE_DSE_Credit)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">BaseSemester</label>
+                <div class="col-sm-5">
+                    @Html.EditorFor(model => model.BaseSemester, new { htmlAttributes = new { @class = "form-control", @title = "Base subject semester", @type = "number" } })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.DCEBySubject ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> DCEBySubject </span>
+                            @Html.HiddenFor(model => model.DCEBySubject)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.DCEByCourse ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> DCEByCourse </span>
+                            @Html.HiddenFor(model => model.DCEByCourse)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.Show_DCE_DSE ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> Show_DCE_DSE </span>
+                            @Html.HiddenFor(model => model.Show_DCE_DSE)
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <h5>GE/OE Section</h5>
+            <hr class="no-margin-top" />
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">GE_OE_Count</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.GE_OE_Count, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByGE_OE_Count ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateByGE_OE_Count</span>
+                            @Html.HiddenFor(model => model.ValidateByGE_OE_Count)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">GE_OE_Credit</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.GE_OE_Credit, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByGE_OE_Credit ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateByGE_OE_Credit</span>
+                            @Html.HiddenFor(model => model.ValidateByGE_OE_Credit)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.AllowInterCollegeElective ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> AllowInterCollegeElective </span>
+                            @Html.HiddenFor(model => model.AllowInterCollegeElective)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ShowGE_OE ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ShowGE_OE </span>
+                            @Html.HiddenFor(model => model.ShowGE_OE)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <h5>Skill Section</h5>
+            <hr />
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">SEC_Count</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.SEC_Count, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateBySEC_Count ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateBySEC_Count</span>
+                            @Html.HiddenFor(model => model.ValidateBySEC_Count)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">SEC_Credit</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.SEC_Credit, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateBySEC_Credit ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateBySEC_Credit</span>
+                            @Html.HiddenFor(model => model.ValidateBySEC_Credit)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.Show_SEC ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> Show_SEC </span>
+                            @Html.HiddenFor(model => model.Show_SEC)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.AllowInterProgrammeSkill ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> AllowInterProgrammeSkill </span>
+                            @Html.HiddenFor(model => model.AllowInterProgrammeSkill)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-sm-4">
+            <h5>MIL Section</h5>
+            <hr />
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">MIL_Count</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.MIL_Count, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByMIL_Count ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateByMIL_Count</span>
+                            @Html.HiddenFor(model => model.ValidateByMIL_Count)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">MIL_Credit</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.MIL_Credit, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByMIL_Credit ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateByMIL_Credit</span>
+                            @Html.HiddenFor(model => model.ValidateByMIL_Credit)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.MILDependOnPrevSem ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> MILDependOnPrevSem </span>
+                            @Html.HiddenFor(model => model.MILDependOnPrevSem)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.Show_MIL ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> Show_MIL </span>
+                            @Html.HiddenFor(model => model.Show_MIL)
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <h5>Ability Enhancement Section</h5>
+            <hr />
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">AE_Count</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.AE_Count, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByAE_Count ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateByAE_Count</span>
+                            @Html.HiddenFor(model => model.ValidateByAE_Count)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">AE_Credit</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.AE_Credit, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByAE_Credit ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateByAE_Credit</span>
+                            @Html.HiddenFor(model => model.ValidateByAE_Credit)
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <h5>Major Section</h5>
+            <hr />
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Major_Count</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.Major_Count, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByMajor_Count ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateByMajor_Count</span>
+                            @Html.HiddenFor(model => model.ValidateByMajor_Count)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Major_Credit</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.Major_Credit, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByMajor_Credit ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateByMajor_Credit</span>
+                            @Html.HiddenFor(model => model.ValidateByMajor_Credit)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.MajorDependOnPrevSem ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> MajorDependOnPrevSem</span>
+                            @Html.HiddenFor(model => model.MajorDependOnPrevSem)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.Show_Major ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> Show_Major </span>
+                            @Html.HiddenFor(model => model.Show_Major)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-sm-4">
+            <h5>Minor Inter Disciplinary Section</h5>
+            <hr />
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">MID_Count</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.MinorInterDisciplinary_Count, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByMinorInterDisciplinary_Count ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateBy MID_Count</span>
+                            @Html.HiddenFor(model => model.ValidateByMinorInterDisciplinary_Count)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">MID_Credit</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.MinorInterDisciplinary_Credit, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByMinorInterDisciplinary_Credit ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateBy MID_Credit</span>
+                            @Html.HiddenFor(model => model.ValidateByMinorInterDisciplinary_Credit)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.MIDDependOnPrevSem ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> MIDDependOnPrevSem</span>
+                            @Html.HiddenFor(model => model.MIDDependOnPrevSem)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.Show_MinorInterDisciplinary ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> Show_MID </span>
+                            @Html.HiddenFor(model => model.Show_MinorInterDisciplinary)
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <h5>Minor Vocational Section</h5>
+            <hr />
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">MVoc_Count</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.MinorVocational_Count, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByMinorVocational_Count ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateBy MVoc_Count</span>
+                            @Html.HiddenFor(model => model.ValidateByMinorVocational_Count)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">MVoc_Credit</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.MinorVocational_Credit, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByMinorVocational_Credit ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateBy MVoc_Credit</span>
+                            @Html.HiddenFor(model => model.ValidateByMinorVocational_Credit)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.Show_MinorVocational ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> Show_MVoc </span>
+                            @Html.HiddenFor(model => model.Show_MinorVocational)
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-sm-4">
+            <h5>Multi Disciplinary Section</h5>
+            <hr />
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">MDisc_Count</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.MultiDisciplinary_Count, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByMultiDisciplinary_Count ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateBy MDisc_Count</span>
+                            @Html.HiddenFor(model => model.ValidateByMultiDisciplinary_Count)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">MDis_Credit</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.MultiDisciplinary_Credit, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByMultiDisciplinary_Credit ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateBy MDisc_Credit</span>
+                            @Html.HiddenFor(model => model.ValidateByMultiDisciplinary_Credit)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.MDiscDependOnPrevSem ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> MDiscDependOnPrevSem</span>
+                            @Html.HiddenFor(model => model.MDiscDependOnPrevSem)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.Show_MultiDisciplinary ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> Show_MDisc </span>
+                            @Html.HiddenFor(model => model.Show_MultiDisciplinary)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-sm-4">
+            <h5>Internship Section</h5>
+            <hr />
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Internship_Count</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.Internship_Count, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByInternship_Count ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateByInternship_Count</span>
+                            @Html.HiddenFor(model => model.ValidateByInternship_Count)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Internship_Credit</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.Internship_Credit, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByInternship_Credit ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateByInternship_Credit</span>
+                            @Html.HiddenFor(model => model.ValidateByInternship_Credit)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.Show_Internship ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> Show_Internship </span>
+                            @Html.HiddenFor(model => model.Show_Internship)
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <h5>Seminar Section</h5>
+            <hr />
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Seminar_Count</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.Seminar_Count, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateBySeminar_Count ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateBySeminar_Count</span>
+                            @Html.HiddenFor(model => model.ValidateBySeminar_Count)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Seminar_Credit</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.Seminar_Credit, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateBySeminar_Credit ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateBySeminar_Credit</span>
+                            @Html.HiddenFor(model => model.ValidateBySeminar_Credit)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.Show_Seminar ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> Show_Seminar </span>
+                            @Html.HiddenFor(model => model.Show_Seminar)
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-sm-4">
+            <h5>Research Section</h5>
+            <hr />
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Research_Count</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.Research_Count, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByResearch_Count ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateByResearch_Count</span>
+                            @Html.HiddenFor(model => model.ValidateByResearch_Count)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Research_Credit</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.Research_Credit, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByResearch_Credit ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateByResearch_Credit</span>
+                            @Html.HiddenFor(model => model.ValidateByResearch_Credit)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.Show_Research ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> Show_Research </span>
+                            @Html.HiddenFor(model => model.Show_Research)
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <h5>VAC Section</h5>
+            <hr />
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">VAC_Count</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.VAC_Count, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByVAC_Count ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateByVAC_Count</span>
+                            @Html.HiddenFor(model => model.ValidateByVAC_Count)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">VAC_Credit</label>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.VAC_Credit, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.ValidateByVAC_Credit ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> ValidateByVAC_Credit</span>
+                            @Html.HiddenFor(model => model.ValidateByVAC_Credit)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        <label class="block">
+                            <input type="checkbox" class="ace input-lg" @(Model.Show_VAC ? "Checked='checked'" : "") />
+                            <span class="lbl bigger"> Show_VAC </span>
+                            @Html.HiddenFor(model => model.Show_VAC)
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <h5>Other Section</h5>
+            <hr />
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label" title="Option core">Other Credits</label>
+                <div class="col-sm-5">
+                    @Html.EditorFor(model => model.Other_Credit, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label" title="Option core">OC Subjects</label>
+                <div class="col-sm-5">
+                    @Html.EditorFor(model => model.OC_Count, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label" title="Option core">Additional Subjects</label>
+                <div class="col-sm-5">
+                    @Html.EditorFor(model => model.AdditionalCourseCount, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-11">
+            <div class=" pull-text-right pull-right">
+                <button type="submit" name="CreateNew" id="submitForm" class="btn btn-primary pull-right">@(Model.CombinationSettingStructure_ID == Guid.Empty ? "Save" : "Update")</button>
+                &nbsp; &nbsp;
+            </div>
+        </div>
+    </div>
+}
+
+
+@section PageSpecificJS{
+
+}
+
+
+

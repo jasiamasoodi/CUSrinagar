@@ -1,0 +1,39 @@
+﻿<div class="">
+    <h1>UG Admission</h1>
+</div>
+<hr class="no-margin-bottom" />
+<hr class="margin-top-2" />
+<div class="page-wrapper ">
+    <div class="page-content">
+        <div class="row">
+            <div class="col-sm-8">
+                @*<a class=" btn btn-primary btn-block btn-link-breaked" target="_blank" href="http://www.cusrinagar.edu.in/foldermanager/notification/mednonmedlist.pdf">Medical/Non-Medical/Arts Selection/Waiting List</a>
+
+        <hr />*@
+                <a class="btn btn-primary btn-block btn-block btn-link-breaked" target="_blank" href="@Url.Action("UGCourses","Course")">College Intake Capacity</a>
+
+                <hr />
+                <a class="btn btn-primary btn-block btn-block btn-link-breaked" target="_blank" href="@Url.Action("GetCombinations","Course")">Subject Combinations Available in Colleges</a>
+                <p>Aspirants are advised to check combinations available in the desired colleges before selecting the college preference.</p>
+                <hr />
+                @*<a class="btn btn-primary btn-block btn-block btn-link-breaked" target="_blank" href="http://www.cusrinagar.edu.in/foldermanager/notification/coordinatorshelpline.pdf">College Coordinators Helpline</a>
+        <p>Aspirants are advised to check combinations available in the desired colleges before selecting the college preference.</p>
+        <hr />*@
+                <a class="btn btn-success btn-block btn-block btn-link-breaked btn-lg"
+           href="@Url.Action("StudentZone","Account",new { R=$"/CUStudentZone/Admission/CollegePreference?R={CUSrinagar.Extensions.Helper.EncryptCookieAndURLSafe("1")}"})">
+            Apply for UG Admission(Provisional): Medical/Non-Medical/Arts/Home Science
+        </a>
+                @*<a class="btn btn-block btn-block btn-link-breaked btn-lg quadraText"
+                   href="">
+                    UG Admission Process Has Been Closed
+                </a>*@
+                <p class="quadraText text-center">No vacancy available in Amar Singh College</p>
+                <hr />
+
+            </div>
+            <div class="col-sm-4">
+                @{ Html.RenderPartial("~/Views/Shared/_CUWebAppRightNavigation.cshtml");}
+            </div>
+        </div>
+    </div>
+</div>

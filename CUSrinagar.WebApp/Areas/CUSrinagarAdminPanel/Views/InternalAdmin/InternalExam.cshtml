@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "CUS :: Exam List";
+}
+
+
+<div class="page-wrapper pager-table-text">
+
+    <div class="page-header">
+        <div style="padding-bottom: 30px;">
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <h1 class="heading-title pull-left">
+                        Internal Exam
+                        <small>
+                            <i class="ace-icon fa fa-angle-double-right"></i>
+                            List of Internal Exam
+                        </small>
+                    </h1>
+
+                </div>
+
+                <div class="col-sm-6">
+
+                </div>
+
+
+                <div class="col-sm-6 align-right">
+
+
+                    <button class="btn btn-sm btn-primary  white" type="button" onclick="window.location.href='@Url.Action("Create", "InternalAdmin", new{area="CUSrinagarAdminPanel"})'" title="Add New">
+                        <i class="ace-icon fa fa-plus  bigger-110"></i>
+                        <span>&nbsp;Add New</span>
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Internal Exam
+                            <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                            </span>
+
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+    
+                    </div>
+                    <div class="js-table-content" data-url=@Url.Action("InternalExamList", "InternalAdmin", new { area = "CUSrinagarAdminPanel" }) data-DefaultOrderByColumn="Exam_ID">
+
+                    </div>
+                    @{Html.RenderPartial("_JSPagerTableFooter");}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script>
+        loadpagertableWithDefaultParams();
+    </script>
+
+
+}
+

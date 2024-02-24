@@ -1,0 +1,80 @@
+﻿@model List<CUSrinagar.Models.StudentCollegePreferenceList>
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th><input class="ace checkbox checkbox-inline jsSelectAllChk" type="checkbox"><span class="lbl padding-right-10"></span>SNo</th>
+            <th data-property="CourseFullName">Course</th>
+            <th data-property="Category">Category</th>
+            <th data-property="StudentFormNo">StudentFormNo</th>
+            <th data-property="FullName">FullName</th>
+            <th data-property="Gender">Gender</th>
+            <th data-property="PreferenceOrder" title="Preference Order">Pref</th>
+            <th data-property="EntranceRollNo" title="Entrance Roll No">RollNo</th>
+            <th data-property="CATEntrancePoints" title="CAT Entrance Points">Points</th>
+            <th></th>
+            @*<th data-property="IsActive">IsActive</th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input class="ace checkbox checkbox-inline jsSelectChk" type="checkbox"><span class="lbl padding-right-10"></span><span class="js-sno"></span>
+                        @Html.HiddenFor(model => item.Student_ID, new { @class = "jsEntity_ID" })
+                        @Html.HiddenFor(model => item.StudentFormNo, new { @class = "Form_RegistrationNumber" })
+                    </td>
+                    <td>@item.CourseFullName</td>
+                    <td>@item.Category</td>
+                    <td>@item.StudentFormNo</td>
+                    <td>@item.FullName</td>
+                    <td>@item.Gender</td>
+                    <td title="Preference Order">@item.PreferenceOrder</td>
+                    <td title="Entrance Roll No">@item.EntranceRollNo</td>
+                    <td title="CAT Entrance Points">@item.CATEntrancePoints</td>
+                    <td>
+                        @if (item.FormStatus == CUSrinagar.Enums.FormStatus.Selected)
+                        {
+                            <a target="_blank"k title="already selected" href="@Url.Action("ViewFormDetail","AssignCombination",new {@area="CUCollegeAdminPanel",@Form_RegistrationNumber=item.StudentFormNo,@sem=1,@printProg=1 })">
+                                <i class="fa fa-edit" title="Assign Combination"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="#">
+                                <i class="fa fa-map-marker jsimport" title="Assign Combination"></i>
+                            </a>
+                        }
+                    </td>
+                    @*<td>
+                            @if (item.IsActive)
+                            {
+                                <div class="checkbox">
+                                    <label class="block">
+                                        <input type="checkbox" class="ace input-lg" checked />
+                                        <span class="lbl bigger"></span>
+                                    </label>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="checkbox">
+                                    <label class="block">
+                                        <input type="checkbox" class="ace input-lg" />
+                                        <span class="lbl bigger"></span>
+                                    </label>
+                                </div>
+                            }
+                        </td>*@
+                </tr>
+            }
+        }
+        else
+        {
+            <tr><td colspan="10">No Record Found</td></tr>
+        }
+    </tbody>
+</table>

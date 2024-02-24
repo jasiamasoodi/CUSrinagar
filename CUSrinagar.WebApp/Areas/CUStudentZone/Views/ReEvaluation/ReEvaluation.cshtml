@@ -1,0 +1,123 @@
+﻿@using CUSrinagar.Extensions;
+@{
+    ViewBag.Title = "Re-evaluation - CUS";
+    List<CUSrinagar.Models.ReEvaluationSetting> reEvaluationSettings = ViewBag.ReEvaluationSettings;
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area= "CUStudentZone" })">Home</a>
+        </li>
+        <li>
+            <a href="#" class="active">Re-evaluation</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+<div class="page-content">
+    <h3 class="center">
+        <i class="fa fa-credit-card"></i> Apply For Re-Evaluation.
+    </h3>
+    <hr />
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="well well-sm">
+                <div class="row">
+                    <div class="col-sm-12">
+                        @if (reEvaluationSettings.IsNotNullOrEmpty())
+                        {
+                            using (Html.BeginForm("ReEvaluationForm", "ReEvaluation", FormMethod.Get, new { @class = "jsMainForm", @area = "CUStudentZone" }))
+                            {
+                                <div class="form-group">
+                                    <label>Choose Re-Evaluation Submit Year</label><br />
+                                    <select name="SubmittedYear" required class="form-control">
+                                        <option value=""></option>
+                                        @foreach (var item in reEvaluationSettings.Select(x => x.SubmittedYear).Distinct().ToList())
+                                        {
+                                            <option value="@item">@item</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Apply For Semester</label><br />
+                                    <select name="ApplyForSemester" required class="form-control">
+                                        <option value=""></option>
+                                        @foreach (var item in reEvaluationSettings.Select(x => x.Semester).Distinct().ToList())
+                                        {
+                                            <option value="@item">Semester - @item</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group col-sm-12">
+                                    <button type="submit" id="submitForm" class="btn btn-primary pull-right">
+                                        Proceed
+                                    </button>
+                                </div>
+
+                            }
+                        }
+                        else
+                        {
+                            <p>
+                                <h4 class="text-danger">
+                                    Re-Evaluation process hasn't started yet or the date for Application has ended.
+                                </h4>
+                            </p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="well well-sm">
+                <div class="row">
+                    @using (Html.BeginForm("PrintReEvaluationForm", "ReEvaluation", FormMethod.Get, new { @class = "jsMainForm", @area = "CUStudentZone" }))
+                    {
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Submitted Year</label><br />
+                                <select class="form-control" name="SubmittedYear" required>
+                                    <option value=""></option>
+                                    @for (int i = DateTime.Now.Year; i >= 2017; i--)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Print Of Semester</label><br />
+                                <select class="form-control" name="ApplyForSemester" required>
+                                    <option value=""></option>
+                                    @for (int i = 1; i <= ViewBag.CurrentSemester; i++)
+                                    {
+                                        <option value="@i">Semester-@i</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <button type="submit" id="submitForm" class="btn btn-primary pull-right">
+                                    Print
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+<div class="col-sm-12">
+    <h3>
+        <i>
+            After amount is deducted from your account, it is mandatory/Important to take printout of the Re-Evaluation form
+        </i>
+    </h3>
+    <h5>
+        <i>
+            For suggestions / feedback or in case of an error / discrepancy in the results please mail us at
+            <a target="_blank" href="mailto:reevaluation@cusrinagar.edu.in">Re-Evaluation Support</a>
+        </i>
+    </h5>
+</div>
+

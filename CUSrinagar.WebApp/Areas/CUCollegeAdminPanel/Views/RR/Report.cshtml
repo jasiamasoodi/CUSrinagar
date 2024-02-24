@@ -1,0 +1,111 @@
+﻿@using CUSrinagar.Models;
+@{
+    ViewBag.Title = "RR Preview - CUSrinagar";
+    string currentYear = DateTime.Now.Year + "";
+}
+@section PageSpecificStyle{
+    <style type="text/css">
+        .required {
+            color: black;
+        }
+
+        .filter-btn a {
+            color: white !important
+        }
+    </style>
+}
+<div class="page-wrapper pager-table-text">
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Registration Report (RR)
+                            <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                            </span>
+
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <h3 class="center" style="color:red">
+                            Important! Only those Students whose Combination for selected semester are verified, will be considered in RR
+                            <a href="/CUCollegeAdminPanel/AssignCombination/ViewFormDetail" target="_blank">Verify here</a>
+                        </h3>
+                        <hr />
+                        <div class="col-sm-12 search-box">
+                            <div class="col-sm-1 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span>Batch<span id="YearValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+
+                                <div>
+                                    @Html.TextBox("Year", DateTime.Now.Year, new { @class = " required form-control jsfilterelement", @data_column = "Year", @data_operator = "EqualTo" })
+                                </div>
+                            </div>
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span>Programme<span id="ProgrammeIdValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div>
+                                    @Html.DropDownList("ProgrammeId", new SelectList(ViewBag.ProgrammeList, "Value", "Text"),
+                                      "--Select--", new { @class = "form-control SearchDDL  required", @data_column = "ProgrammeId", @data_operator = "EqualTo", data_ddltype = "Course", @data_ddlchildtype = "Semester" })
+                                </div>
+                            </div>
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span>Course<span id="CourseIDValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div id="Course">
+                                    @Html.DropDownList("CourseID", new SelectList(ViewBag.CourseList, "Value", "Text"),
+                                           "--Select--", new { @class = "form-control  SearchDDL jsfilterelement required ", @data_column = "CourseID", @data_operator = "EqualTo", @data_ddltype = "Semester" })
+                                </div>
+                            </div>
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span>Semester<span id="SemesterValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div id="Semester">
+                                    @Html.DropDownList("Semester", new SelectList(ViewBag.SemesterList, "Value", "Text"),
+                                            "--Select--", new { @class = "required jsfilterelement chosen-select tag-input-style "})
+                                </div>
+                            </div>
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                Lateral Entry<span class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div id="Semester">
+                                    <select id="IsLateralEntry" class="form-control">
+                                        <option value="False">All</option>
+                                        <option value="True">Lateral Entry Only</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                Form No. Or Regn.No.
+                                <div id="Semester">
+                                    @Html.TextBox("cno", null, new { @class = "form-control jsfilterelement", @data_column = "cno", @data_operator = "EqualTo" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 center" style="padding-top: 17px;">
+                            <a href="button" class="btn btn-primary JSDownloadBtn"><i class="fa fa-eye"></i>&nbsp;View Registration Report (RR)</a>
+                            <a href="button" class="btn btn-success JSDownloadInExcel">Download Excel</a>
+                        </div>
+                    </div>
+                    <div class="js-table-content" data-url=@Url.Action("StudentList", "Library", new {area ="CUCollegeAdminPanel"}) data-DefaultOrderByColumn="FullName">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script type="text/javascript">
+        var chilDDLPath = '@Url.Action("_GetRRDDL", "RR", new {area = "CUCollegeAdminPanel" })';
+         var gridPathWithParam= '@Url.Action("ViewReport", "RR", new {area = "CUCollegeAdminPanel" })';
+        var controllerName = "RR";
+    </script>
+
+    <script src="@Url.Content("~/Scripts/JSChosen.js")"></script>
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSRR/RRReport.js")"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".RR").addClass("active");
+        });</script>
+}
+
+
+

@@ -1,0 +1,153 @@
+﻿@{ var routeValues = HttpContext.Current.Request.RequestContext.RouteData.Values;
+    string controllerName = "";
+    if (routeValues != null)
+    {
+        if (routeValues.ContainsKey("controller"))
+        {
+            controllerName = routeValues["controller"].ToString();
+        }
+    }
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8" />
+    <title>@(ViewBag.Title == null ? "CUSrinagar Student Portal" : ViewBag.Title)</title>
+
+    <meta name="description" content="CUSrinagar" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <noscript><meta http-equiv="REFRESH" content="0; url=@Url.Content("~/Content/JSdisabled.html")" /></noscript>
+    @{Html.RenderPartial("~/Areas/CUStudentZone/Views/Shared/_CUWebAppFavicon.cshtml");}
+
+    @Styles.Render("~/Content/ThemeAdmin/Content/Libraries/css/ace-master")
+    <link rel="stylesheet" href="@Url.Content("~/Content/ThemeAdmin/Content/Libraries/font-awesome/4.7.0/css/font-awesome.min.css")" />
+
+    @*basic scripts*@
+    @Scripts.Render("~/Content/ThemeAdmin/Content/Scripts/Libraries/js-ace-master")
+
+    @*inline styles related to this page*@
+    @RenderSection("PageSpecificStyle", required: false)
+</head>
+
+<body class="no-skin">
+    @Html.Hidden("studentbaseurl", Url.Action("action", "controller", new { area = "CUStudentZone" }))
+    @Html.Hidden("ErrorMessage", (string)ViewBag.ErrorMessage)
+    @Html.Hidden("SuccessMessage", (string)ViewBag.SuccessMessage)
+    <div id="navbar" class="navbar navbar-default ace-save-state navbar-fixed-top hidden-print">
+        <div class="navbar-container ace-save-state" id="navbar-container">
+            <button type="button" class="navbar-toggle menu-toggler pull-left blink_me" id="menu-toggler" data-target="#sidebar">
+                <span class="sr-only">Toggle sidebar</span>
+
+                <span class="icon-bar"></span>
+
+                <span class="icon-bar"></span>
+
+                <span class="icon-bar"></span>
+            </button>
+            <div class="navbar-header pull-left">
+                <a href="/" class="navbar-brand">
+                    <small>
+                        Cluster University Srinagar
+                    </small>
+                </a>
+            </div>
+            <div class="navbar-buttons navbar-header pull-right" role="navigation">
+                @{Html.RenderPartial("_CUStudentPanelUserAccountMenu");}
+            </div>
+        </div> @*navbar-container*@
+    </div>
+    <div class="main-container ace-save-state" id="main-container">
+        <script type="text/javascript">
+            try { ace.settings.loadState('main-container') } catch (e) { }
+        </script>
+
+        <div id="sidebar" class="hidden-print sidebar responsive hidden-print ace-save-state sidebar-fixed sidebar-scroll" data-sidebar="true" data-sidebar-scroll="true" data-sidebar-hover="true">
+            <script type="text/javascript">
+                try { ace.settings.loadState('sidebar') } catch (e) { }
+            </script>
+            @* Shortcuts *@
+            @{ Html.RenderPartial("_CUStudentZoneShortCuts");}
+
+            @*nav-list*@
+            @{Html.RenderPartial("_CUStudentZoneLeftMenu");}
+
+            <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+                @*<i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>*@
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="breadcrumbs ace-save-state breadcrumbs-fixed hidden-print" id="breadcrumbs">
+                    @*Site map*@
+                    @RenderSection("CUSSitemap", required: false)
+                    @*nav-search*@
+                    @{Html.RenderPartial("_CUStudentZoneSearch");}
+                </div>
+
+                <p style="margin-top:50px;"></p>
+                @*MESSAGE SECTION ENDS*@
+
+                @*PAGE CONTENT BEGINS*@
+                @RenderBody()
+                @*PAGE CONTENT ENDS*@
+                @*</div> @*page-content*@
+            </div>
+        </div> @*main-content*@
+
+
+        @{Html.RenderPartial("~/Areas/CUStudentZone/Views/Shared/_CUWebAppFooter.cshtml");}
+
+
+        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+            <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+        </a>
+    </div> @*main-container*@
+
+    <div class="loader" style="display:none;"></div>
+
+    @*basic scripts*@
+    @Scripts.Render("~/Content/ThemeAdmin/Content/Scripts/Libraries/js-general")
+    @Scripts.Render("~/Scripts/General/js-custom")
+    @Scripts.Render("~/bundles/Libraries/jqueryvalidation")
+    @Scripts.Render("~/Content/ThemeAdmin/Content/Scripts/JSGeneral/preventDefault")
+
+    <script type="text/javascript">
+        ///Set Active Tab
+        var Controller = '@controllerName';
+        function SetActiveSection(Section)
+        {
+            $(".nav-list>li").removeClass("active");
+            $("#" + Section +"Section").addClass("active");
+        }
+        SetActiveSection(Controller);
+        getMessages();
+        function getMessages() {
+            $.ajax({
+                url: getBaseUrlStudentZone() + "Message/GetLatestMessages",
+                dataType: "json",
+                success: function (data) {
+                    $("#jsMessageCount").html(data.length + " Messages");
+                    $("#MessageCountLabel").html(data.length);
+                    if (data == null || data.length == 0) {
+                        $("#MessageCountLabel").hide();
+                    }
+
+                    $("#jsMessageItem").siblings().remove();
+                    if (data != null) {
+                        $(data).each(function (index, message) {
+                            var $messageItem = $("#jsMessageItem").clone(true);
+                            $messageItem.removeClass('hidden').removeAttr('id');
+                            $messageItem.find('.msg-title').html(message.MessageTitle);
+                            $messageItem.find('.msg-time span').html(message.Date);
+                            $("#jsMessageItem").after($messageItem);
+                        });
+                    }
+                }
+            });
+        }
+    </script>
+    @RenderSection("PageSpecificJSFiles", required: false)
+</body>
+</html>
+

@@ -1,0 +1,153 @@
+﻿@using CUSrinagar.Extensions;
+@using CUSrinagar.Enums
+@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc;
+
+@model CUSrinagar.Models.CorrectionForm
+
+@{
+    ViewBag.Title = "Correction Form - ";
+}
+<div id="Jspleasewait" style="display:none;position:fixed;background-color:rgba(0, 0, 0, 0.20);left:0;top:0;z-index:200;width:100%;height:100%">
+    <p style="font-size:30px;font-weight:bold;color:white;margin-top:20%;margin-left:41%">
+        Please wait...
+    </p>
+</div>
+<div id="response">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+</div>
+
+@*--------------------- forms goes below --------------*@
+@if (DateTime.Now.Date > new DateTime(9999, 01, 01))
+{
+    <div class="table-responsive panel" style="border: 2px dashed #a9bda5">
+        <h4 class="text-center" style="color:orangered">Process closed or will be allowed soon</h4>
+    </div>
+}
+else
+{
+    using (Html.BeginForm("CorrectionForm", "ApplicationForms", FormMethod.Post, new { @class = "frmidc" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="table-responsive panel" style="border: 2px dashed #a9bda5">
+            <h3 class="text-center"> Application Form for Correction in Name/Parentage/Sub-Caste/DOB</h3>
+            <hr />
+            <div class="text-center">
+                <img src="https://www.cusrinagar.edu.in/@Model.Photograph" width="120" />
+            </div>
+            @Html.HiddenFor(model => model.Student_ID)
+            @Html.HiddenFor(model => model.PrintProgramme)
+            <table class="table">
+                <tbody class="">
+                    <tr>
+                        <td colspan="2" class="text-center" style="background-color:#e5e5e5">
+                            <strong>Name/Parentage/Sub-Caste/DOB recorded in the University records</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-success" style="width:300px"> 1. Name of the Applicant:</td>
+                        <th>
+                            @Html.DisplayFor(model => model.PresentFullName)
+                        </th>
+                    </tr>
+                    <tr>
+                        <td class="text-success"> 2. Father's Name</td>
+                        <td>@Html.DisplayFor(model => model.PresentFathersName)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success"> 3. Date of Birth</td>
+                        <td>@Model.PresentDOB.ToLongDateString()</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success"> 4. Registration Number</td>
+                        <td>@Html.DisplayFor(model => model.CUSRegistrationNo)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success"> 5. Transcript Printed</td>
+                        <td>@(Model.HasTranscriptPrinted?"YES":"NO")</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success"> 6. Degree Certificate Printed</td>
+                        <td>@(Model.HasDegreeCertificatePrinted?"YES":"NO")</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success"> 7. Registration Number</td>
+                        <td>@Html.DisplayFor(model => model.CUSRegistrationNo)</td>
+                    </tr>
+
+
+                    <tr>
+                        <td colspan="2" class="text-center" style="background-color:#e5e5e5">
+                            <strong style="font-size:17px;">
+                                Change in Name/parentage/Sub-Caste/DOB to be
+                                made by the applicant<br />(as per matriculation
+                                certificate issued by the concerned authority)
+                            </strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-success" style="width:300px"> 1. Name (Full):</td>
+                        <th>
+                            @Html.TextBoxFor(model => model.NewFullName, new { @style = "width:80%", })
+                            @Html.ValidationMessageFor(model => model.NewFullName, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+                        </th>
+                    </tr>
+                    <tr>
+                        <td class="text-success"> 2. Father's Name (Full)</td>
+                        <td>
+                            @Html.TextBoxFor(model => model.NewFathersName, new { @style = "width:80%", })
+                            @Html.ValidationMessageFor(model => model.NewFathersName, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-success"> 3. Date of Birth</td>
+                        <td>
+                            @Html.TextBoxFor(model => model.NewDOB, new { @type = "date", @Value = Model.NewDOB == DateTime.MinValue ? "" : Model.NewDOB.ToString("yyyy-MM-dd") })
+                            @Html.ValidationMessageFor(model => model.NewDOB, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td class="text-success"> @Html.LabelFor(model => model.ReasonAndDocumentaryProof)</td>
+                        <td>
+                            @Html.TextAreaFor(model => model.ReasonAndDocumentaryProof, new { @style = "width:80%", @rows = "3" })
+                            @Html.ValidationMessageFor(model => model.ReasonAndDocumentaryProof, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2" class="text-center" style="font-size:16px">
+                            Amount Rs @ViewBag.AmountPayable is Non-refundable (
+                            <a href="https://www.cusrinagar.edu.in/foldermanager/notification/transcriptofdegreenotificaitonon05.04.2023.pdf" target="_blank">
+                                View Fee Notification
+                            </a>)
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="form-group col-sm-12">
+                <div class="clear bold text-center">
+                    @Html.Captcha("", "Enter Verification Code", 4, " Required", true)
+                </div>
+                <br />
+                <div class="text-center danger col-sm-12" style="font-size:18px;color:black;background-color:#d9d3ad;padding:10px">It is recommended to check the details carefully before making payment, after payment no changes are allowed.</div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <p style="text-align:center;">
+                <span id="btn">
+                    <input type="submit" value="Apply & Make Payment" id="jsSave" class="btn btn-success" style="color:white !important" />
+                </span>
+            </p>
+        </div>
+    }
+}
+
+@section PageSpecificJS{
+    @Scripts.Render("~/bundles/Libraries/jqueryval")
+    <script src=@Url.Content("~/Content/ThemePublic/Libraries/disableBack.js")></script>
+}

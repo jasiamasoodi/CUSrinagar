@@ -1,0 +1,49 @@
+﻿
+@model List<GeneralModels.ProgammeDashboard>
+@using CUSrinagar.Extensions
+@{
+    Layout = null;
+}
+
+@if (Model != null)
+{
+    <table class="table table-bordered table-striped">
+        <thead class="thin-border-bottom">
+            <tr>
+                <th>
+                    Batch
+                </th>
+
+                <th>
+                    Programme
+                </th>
+
+                <th>
+                    No Of Students
+                </th>
+            </tr>
+        </thead>
+
+        @foreach (var item in Model)
+        {
+            <tbody>
+                <tr>
+                    <td>@item.Batch</td>
+
+                    <td>
+                        <b class="green">@item.Programme</b>
+                    </td>
+                    <td>
+                        <b>@item.NoOfStudents</b>
+                    </td>
+                </tr>
+            </tbody>
+        }
+    </table>
+}
+else
+{
+    <h4>No Records Found</h4>
+}
+
+

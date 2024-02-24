@@ -1,0 +1,39 @@
+﻿@model List<CUSrinagar.Models.CombinationsCount>
+@{
+
+    Layout = null;
+    int totalcount = Model.Count() > 0 ? Model[0].TotalRow_Count : 0;
+}
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th>S.No.</th>
+            <th data-property="CombinationCode">Code</th>
+            <th data-property="AssignedStudentCount">Count</th>
+            <th>Subjects<span class="pull-right"><b>Total Count: @totalcount</b></span></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var combination in Model)
+            {
+                <tr>
+                    <td class="js-sno"></td>
+                    <th title="Subject Combination Code">@combination.CombinationCode</th>
+                    <th title="Subject Combination Code">@combination.AssignedStudentCount</th>
+                    <td>
+                        @(combination.SubjectsDetails != null ? string.Join(" | ", combination.SubjectsDetails.OrderBy(x => x.SubjectFullName).Select(x => x.SubjectFullName)) : "")
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <th colspan="4" class="center">No Combinations found</th>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,89 @@
+﻿@using CUSrinagar.Models
+
+@model PrintExamAdmitCards
+
+@{
+    ViewBag.Title = $"Semester Exam Admit Cards-{DateTime.UtcNow.Year}";
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area="CUStudentZone"})">Home</a>
+        </li>
+        <li>
+            <a href="#" class="active">Sem Exam AdmitCard</a>
+        </li>
+    </ul>
+}
+<div class="page-header">
+    <h1>
+        &nbsp;&nbsp;
+        <i class="fa fa-credit-card"></i> Semester Exam Admit Cards-@DateTime.UtcNow.Year
+    </h1>
+</div>
+@if (ViewBag.PrintProgrammeOption != null)
+{
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-7" style="border:2px solid #cacaca;border-radius:6px;">
+            <br />
+            <div id="response" style="width:80%;margin:0 auto">
+                @if (TempData["response"] != null)
+                {
+                    @Html.Raw(TempData["response"])
+                }
+            </div>
+            @*<h3 class="red text-center">Admit cards for Integrated /Honor's / Professional courses shall be issued later.</h3>*@
+            @using (Html.BeginForm("PrintAdmitCard", "Examination", FormMethod.Post, new { area = "CUStudentZone", @class = "rnd5", @id = "frmSemAdmitCard" }))
+            {
+                @Html.AntiForgeryToken()
+
+                @*------------------------------------Print Section-----------------------------------*@
+                <div class="col-lg-2">    </div>
+                <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                    <div class="content-wrapper">
+                        <label class="col-sm-7 lbl bigger-120 no-padding-right">
+                            @Html.LabelFor(model => Model.Semester, new { @class = "small-70" })
+                            <span class="required">
+                                *
+                                @Html.ValidationMessageFor(model => model.Semester)
+                            </span><br />
+                            @Html.DropDownListFor(model => model.Semester, (IEnumerable<SelectListItem>)ViewBag.Semester, string.Empty, new { @class = "form-control" })
+                        </label>
+                    </div>
+                </div>
+                <br />
+                <p class="text-center">
+                    <span id="hideButtons6">
+                        <button type="submit" id="jsSemAdmitCard" class="btn btn-success"><i class="fa fa-download"></i> Download Admit Card</button>
+                    </span>
+                </p>
+
+                @*------------------------------------End Print Section-----------------------------------*@
+
+            }
+        </div>
+        <div class="col-md-3"></div>
+
+        <div class="col-lg-12"><br /><br /><br /><br /></div>
+    </div>
+}
+else
+{
+    <h1 class="quadraText">
+        The process of downloading Admit Cards is either closed or will be allowed soon.
+    </h1>
+}
+@section PageSpecificJSFiles
+{
+    @Scripts.Render("~/bundles/Libraries/jqueryval", "~/bundles/Libraries/jquerySemAdmitCard")
+}
+
+@section PageSpecificStyle{
+    <style>
+        .field-validation-error {
+            color: red !important;
+        }
+    </style>
+}

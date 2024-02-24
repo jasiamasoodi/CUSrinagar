@@ -1,0 +1,15 @@
+﻿
+@{
+    string Type = ViewBag.Type;
+    int track = ViewBag.Track;
+    string typeName = Type == "Semester" ? (Type) : (Type + "_ID");
+    string child = ((Type == "Semester") ? "Subject" : (Type == "Course" ? "Semester" : ""));
+    string subchild = Type == "Semester" ? "" : (Type == "Course" ? "Subject" : "");
+    string ClassName = Type == "Semester" ? ("ParentDDL") : ("");
+    string key = (Type == "Semester") ? "Value" : "Key";
+    var ValuesDDL = ViewBag.ChildValues != null ? ViewBag.ChildValues : new List<SelectListItem>();
+}
+
+  @Html.DropDownList("EvalvatorSubjects[" + track + "]." + typeName, new SelectList(ValuesDDL, "Value", "Text"),
+                                    "--Select--", new { @class = "chosen-select tag-input-style SearchDDL  form-control jsfilterelement " + ClassName, @id = "EvalvatorSubjects_" + track + "__" + typeName, @data_column = @typeName, @data_id = track, @data_operator = "EqualTo", data_ddltype = @child, @data_track = track, @data_ddlchildtype = @child, @data_ddlsubchildtype = subchild, @data_typeis = "Evalvator" })
+                                  

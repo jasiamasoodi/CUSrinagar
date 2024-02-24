@@ -1,0 +1,7 @@
+﻿
+@{
+
+    var ValuesDDL = ViewBag.ChildValues != null ? ViewBag.ChildValues : new List<SelectListItem>();
+}
+@Html.DropDownList("Course_ID", new SelectList(ValuesDDL, "Value", "Text"),
+                                        "--Select--", new { @class = "chosen-select tag-input-style  form-control jsfilterelement", @data_column = "Course_ID", @data_operator = "EqualTo", data_ddltype = "", @data_ddlchildtype = "", @data_ddlsubchildtype = "" })

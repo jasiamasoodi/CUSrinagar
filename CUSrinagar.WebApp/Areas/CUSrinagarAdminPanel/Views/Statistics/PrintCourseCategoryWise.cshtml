@@ -1,0 +1,89 @@
+﻿@model List<CUSrinagar.Models.CollegeCourseCategoryStatistics>
+@{
+    Layout = null;
+    List<SelectListItem> Categories = ViewBag.Category;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Course Statistics : CUS</title>
+    <link href="~/Content/ThemePublic/Libraries/css/printer-frndly.css" rel="stylesheet" type="text/css" />
+    <style type="text/css" media="print">
+        @@page {
+            size: landscape;
+        }
+    </style>
+</head>
+<body class="A4 middle landscape">
+    @if (Model != null)
+    {
+        foreach (var college in Model)
+        {
+            if (college.CourseCategory != null)
+            {
+                var listOfCategories = college.CourseCategory.SelectMany(x => x.Categories.Where(z => z.Female + z.Male > 0).Select(y => y.CategoryName)).Distinct().OrderBy(x => x).ToList();
+                <section class="sheet padding-5mm compact">
+                    <div class="center">
+                        <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                        <h3><u> @college.CollegeFullName</u></h3>
+                        <h4><u> Category Wise Data of @ViewBag.Programme  Semester-@ViewBag.Semester Batch-@ViewBag.Batch </u></h4>
+                    </div>
+                    <table border="1" class="center" style="font-size:14px;">
+                        <thead style="">
+                            <tr>
+                                <th rowspan="2">Course</th>
+                                <th rowspan="2">M</th>
+                                <th rowspan="2">F</th>
+                                <th rowspan="2">T</th>
+                                @foreach (var cat in listOfCategories)
+                                {
+                                    <th colspan="2" title="@(Categories.FirstOrDefault(x=>x.Value.ToLower()==cat.ToLower())?.Text)">
+                                        @cat.Substring(0, cat.Length < 4 ? cat.Length : 4).ToUpper()
+                                    </th>
+                                }
+                            </tr>
+                            <tr>
+                                @foreach (var cat in listOfCategories)
+                                {
+                                    <th>M</th>
+                                    <th>F</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in college.CourseCategory)
+                            {
+                                <tr class="">
+                                    <td>@item.CourseFullName</td>
+                                    <td>@item.Male</td>
+                                    <td>@item.Female</td>
+                                    <td>@item.Total</td>
+                                    @foreach (var cat in listOfCategories)
+                                    {
+                                        var catCount = item.Categories.FirstOrDefault(i => i.CategoryName.ToLower() == cat.ToLower());
+                                        <td>@(catCount == null ? 0 : catCount.Male)</td>
+                                        <td>@(catCount == null ? 0 : catCount.Female)</td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </section>
+            }
+
+        }
+
+        <div class="noneOnPrint print-download-strip">
+            <button href="#" class="btn btn-default" onclick="window.print();"><b>Download / Print Statistics</b></button>
+        </div>
+    }
+    else
+    {
+        <section class="sheet padding-5mm">
+            <p>Record Not Found .... </p>
+        </section>
+    }
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+﻿@model IEnumerable<CUSrinagar.Models.AwardModel>
+
+
+@Html.Hidden("RapidEntryResponse", Newtonsoft.Json.JsonConvert.SerializeObject((GeneralModels.ResponseData)ViewBag.RapidEntryResponse))
+
+<form class="js-rapid-entry jsMainForm">
+    @{Html.RenderAction("AlmirahRapidEnty", new { @Library_ID = Model.Library_ID });}
+</form>
+
+
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>S.No.</th>
+            <th>AlmirahNumber</th>
+            <th>AlmirahLocation</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr id="jsNewRow">
+            <td>
+                0
+                @Html.Hidden("Library_ID", (object)ViewBag.Library_ID)
+            </td>
+            <td>
+                <input type="text" class="form-control" id="AlmirahNumber" name="AlmirahNumber" required />
+            </td>
+            <td>
+                <input type="text" class="form-control" id="AlmirahLocation" name="AlmirahLocation" required />
+
+            </td>
+            <td>
+                <button type="button" class="btn btn-success btn-sm js-save-row"> Save </button>
+                <button type="button" class="btn btn-warning btn-sm hidden">Cancel</button>
+            </td>
+        </tr>
+        @if (Model != null)
+        {
+            for (var i = 0; i < Model.Count(); i++)
+            {
+                <tr>
+                    <td>
+                        @(i + 1)
+                        @Html.HiddenFor(itm => Model[i].Almirah_ID, new { @class = "jsRow_ID" })
+                        @Html.HiddenFor(itm => Model[i].Library_ID)
+                    </td>
+                    <td>@Html.TextBoxFor(itm => Model[i].AlmirahNumber, new { @class = "form-control" }) </td>
+                    <td>@Html.TextBoxFor(itm => Model[i].AlmirahLocation, new { @class = "form-control" }) </td>
+                    <td>
+                        <button type="button" class="btn btn-success btn-sm js-save-row">Update</button>
+                        <button type="button" class="btn btn-warning  btn-sm jsDeleteRow">Delete</button>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

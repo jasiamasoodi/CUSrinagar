@@ -1,0 +1,214 @@
+﻿
+@using CUSrinagar.Extensions
+@using CUSrinagar.Models
+@using CUSrinagar.Enums
+@model IEnumerable<FTFileTracking>
+
+@if (Model.IsNullOrEmpty())
+{
+    <div id="JSActiveFiles" class="tab-pane fade in active">
+        <b>No files found here</b>
+    </div>
+
+    <div id="JSFilesForwardedToYou" class="tab-pane fade">
+        <b>No files found here</b>
+    </div>
+
+    <div id="JSFileClosedByYou" class="tab-pane fade">
+        <b>No files found here</b>
+    </div>
+}
+else
+{
+    <div id="JSActiveFiles" class="tab-pane fade in active" style="overflow:auto !important;">
+        <table class="table-bordered table">
+            <thead>
+                <tr>
+                    <th style="min-width:18%">FileNo</th>
+                    <th>Created in Section</th>
+                    <th>Subject</th>
+                    <th>File Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ IEnumerable<FTFileTracking> _FTFileTracking = Model.Where(x => (x.CurrentFileStatus != FTFileStatus.Closed && x.CurrentlyWithUser_ID == AppUserHelper.User_ID));}
+                @if (_FTFileTracking.IsNotNullOrEmpty())
+                {
+                    foreach (var item in _FTFileTracking)
+                    {
+                        <tr class="AF">
+                            <td>
+                                <b>@item.FileNo</b>
+                            </td>
+                            <td>@item.Section</td>
+                            <td>
+                                <span class="purple">CreatedOn : @item.CreatedOn.ToString("dd MMMM, yyyy hh:mm tt")</span>
+                                <br />
+                                <b>@item.Subject</b>
+                                <br />
+                                @item.Description
+                            </td>
+                            <td>
+                                <span class="label label-success margin-bottom-10" style="font-size:14px;">@item.CurrentFileStatus.ToString()</span>
+                                <button type="button" href="#ModalDisplayTrackingDetail" data-toggle="modal" class="btn btn-sm btn-purple padding-0 JSActionTrackDetails" data-file-id="@item.File_ID"> Track Details </button>
+                            </td>
+                            <td>
+                                @if (item.CurrentFileStatus != FTFileStatus.Forwarded)
+                                {
+                                    <button type="button" href="#ModalCloseFile" data-toggle="modal" data-file-id="@item.File_ID" class="btn btn-sm btn-success margin-bottom-10 JSActionClose"> Close</button>
+                                }
+                                @if (item.CurrentFileStatus == FTFileStatus.Forwarded)
+                                {
+                                    <button type="button" href="#ModalRevertFile" data-toggle="modal" data-file-id="@item.File_ID" class="btn btn-sm btn-primary margin-bottom-10 JSActionRevert"> Revert </button>
+                                }
+                                else
+                                {
+                                    <button type="button" href="#ModalForwardFile" data-toggle="modal" data-file-id="@item.File_ID" class="btn btn-sm btn-primary margin-bottom-10 JSActionForward"> Forward </button>
+                                }
+                                @if (item.CurrentFileStatus == FTFileStatus.Created)
+                                {
+                                    <button type="button" data-file-id="@item.File_ID" class="btn btn-sm btn-danger margin-bottom-10 JSActionDelete"> Delete </button>
+                                }
+
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <th colspan="5">No Files Found here</th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div id="JSFilesForwardedToYou" class="tab-pane fade" style="overflow:auto !important;">
+        <table class="table-bordered table">
+            <thead>
+                <tr>
+                    <th style="min-width:18%">FileNo</th>
+                    <th>Forwarding Section</th>
+                    <th>Subject</th>
+                    @*<th>Forwarded By</th>*@
+                    <th>File Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ _FTFileTracking = Model.Where(x => (x.CurrentFileStatus == FTFileStatus.Forwarded && x.CurrentlyWithUser_ID != AppUserHelper.User_ID));}
+                @if (_FTFileTracking.IsNotNullOrEmpty())
+                {
+                    foreach (var item in _FTFileTracking)
+                    {
+                        <tr class="FF">
+                            <td><b>@item.FileNo</b></td>
+                            <td>@item.Section</td>
+                            <td>
+                                <span class="purple">Forwarded On : @item.CreatedOn.ToString("dd MMMM, yyyy hh:mm tt")</span>
+                                <br /><b>@item.Subject</b> <br /> @item.Description
+                            </td>
+                            @*<td><b>@item.UserID.Substring(item.UserID.LastIndexOf("(")).Replace("(", "").Replace(")", "")</b></td>*@
+                            <td>
+                                <span class="label label-warning margin-bottom-10" style="font-size:14px;">@item.CurrentFileStatus.ToString()</span>
+                                <button type="button" href="#ModalDisplayTrackingDetail" data-toggle="modal" class="btn btn-sm btn-purple padding-0 JSActionTrackDetails" data-file-id="@item.File_ID"> Track Details </button>
+                            </td>
+                            <td>
+                                <button type="button" href="#ModalAcceptFile" data-toggle="modal" data-file-id="@item.File_ID" class="btn btn-sm btn-success margin-bottom-10 JSActionAccept"> Accept</button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <th colspan="5">No Files Found here</th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div id="JSFileClosedByYou" class="tab-pane fade" style="overflow:auto !important;">
+        <table class="table-bordered table">
+            <thead>
+                <tr>
+                    <th style="min-width:18%">FileNo</th>
+                    <th>Created in Section</th>
+                    <th>Subject</th>
+                    <th>File Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ _FTFileTracking = Model.Where(x => (x.CurrentFileStatus == FTFileStatus.Closed));}
+                @if (_FTFileTracking.IsNotNullOrEmpty())
+                {
+                    foreach (var item in _FTFileTracking)
+                    {
+                        <tr class="CF">
+                            <td><b>@item.FileNo</b></td>
+                            <td>@item.Section</td>
+                            <td>
+                                <span class="purple">CreatedOn : @item.CreatedOn.ToString("dd MMMM, yyyy hh:mm tt")</span>
+                                <br /><b>@item.Subject</b> <br /> @item.Description
+                            </td>
+                            <td>
+                                <span class="label label-danger margin-bottom-10" style="font-size:14px;">@item.CurrentFileStatus.ToString()</span>
+                                <button type="button" href="#ModalDisplayTrackingDetail" data-toggle="modal" class="btn btn-sm btn-purple padding-0 JSActionTrackDetails" data-file-id="@item.File_ID"> Track Details </button>
+                            </td>
+                            <td>
+                                <button type="button" href="#ModalReOpenFile" data-toggle="modal" class="btn btn-sm btn-primary margin-bottom-10 JSActionReOpen" data-file-id="@item.File_ID"> Re-Open</button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <th colspan="6">No Files Found here</th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div id="JSTrackAllYourFiles" class="tab-pane fade" style="overflow:auto !important;">
+        <table class="table-bordered table">
+            <thead>
+                <tr>
+                    <th style="min-width:18% !important">FileNo</th>
+                    <th>Created in Section</th>
+                    <th>Subject</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ _FTFileTracking = Model.Where(x => (x.CurrentFileStatus == FTFileStatus.TrackAllYourFiles));}
+                @if (_FTFileTracking.IsNotNullOrEmpty())
+                {
+                    foreach (var item in _FTFileTracking)
+                    {
+                        <tr class="TF">
+                            <td><b>@item.FileNo</b></td>
+                            <td>@item.Section</td>
+                            <td><b>@item.Subject</b> <br /> @item.Description
+                            </td>
+                            <td>
+                                <button type="button" href="#ModalDisplayTrackingDetail" data-toggle="modal" class="btn btn-sm btn-purple padding-0 JSActionTrackDetails" data-file-id="@item.File_ID"> Track Details </button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <th colspan="5">No Files Found here</th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

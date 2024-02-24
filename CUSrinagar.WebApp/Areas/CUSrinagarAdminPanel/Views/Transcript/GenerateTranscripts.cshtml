@@ -1,0 +1,54 @@
+﻿@model List<CUSrinagar.Models.Transcript>
+@{
+    Layout = null;
+}
+<table class="table table-hover table-bordered js-table">
+
+
+    <tbody>
+
+        @{String msg = ViewBag.MessageIs;
+        }
+        <tr>
+            <td colspan="10" align="center">
+                <b>
+                    @msg
+                </b>
+        </tr>
+
+        @if (Model.Count > 0)
+        {
+            foreach (var student in Model)
+            {
+    <tr>
+        <td>
+            @student.CUSRegistrationNo
+        </td>
+        <td>
+            @student.CourseFullName
+        </td>
+        <td>
+            <a title="Transcript" target="_blank" href="@Url.Action("PrintTranscript", "Transcript"
+, new
+{
+    Batch = student.Batch
+,
+    SemesterTo = student.SemesterTo
+,
+    PrintProgramme = student.printProgramme
+,
+    Course_ID = student.Course_ID
+,
+    AcceptCollege_ID = student.AcceptCollege_ID
+,
+    CUSRegistrationNo = student.CUSRegistrationNo
+})">
+                <i class="fa fa-print fa-2x"></i>
+            </a>
+        </td>
+    </tr>
+            }
+        }
+
+    </tbody>
+</table>

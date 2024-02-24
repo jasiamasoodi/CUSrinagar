@@ -1,0 +1,26 @@
+﻿@model  CUSrinagar.Models.Syllabus
+@{
+    ViewBag.Title = "CUS :: Edit Syllabus";
+
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header">
+                <h4 class="widget-title"><i class='menu-icon fa fa-pencil-square-o'></i>Edit Syllabus</h4>
+
+
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+
+                    @using (Html.BeginForm("Edit", "Syllabus", FormMethod.Post, new { enctype = "multipart/form-data", @name = "validation-form", @id = "validation-form", @class = "form-horizontal", @role = "form" }))
+                    {
+                        @Html.HiddenFor(model => model.Syllabus_ID);
+                        @Html.Partial("_CreateOrEdit", Model)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

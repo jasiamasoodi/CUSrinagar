@@ -1,0 +1,114 @@
+﻿
+@{
+    ViewBag.Title = "Awards-" + ViewBag.Batch +"_"+ ((string)ViewBag.CourseFullName).Replace("/", "").Replace("'", "") + "_Semester-" + ViewBag.Semester;
+}
+
+@model List<CUSrinagar.Models.AwardForSubjects>
+
+@if (Model == null)
+{
+    <hr />
+    <h1 style="text-align:center"> <strong><i>No data found for the given filters. Please try again with different filter combinations.</i></strong></h1>
+    <hr />
+}
+else
+{
+    <div class="row ">
+        <center>
+            <h4> @ViewBag.CollegeFullName for batch : @ViewBag.Batch || Programme : @ViewBag.PrintProgramme Course : @ViewBag.CourseFullName (Semester : @ViewBag.Semester)</h4>
+            @*<button id="PrintPracticals" class="btn btn-info hidden-print">Print Pending Practicals</button>
+        <button id="PrintTheory" class="btn btn-info  hidden-print">Print Pending Theory</button>*@
+            <button id="PrintScreen" class="btn btn-info hidden-print">Print</button>
+         </center>
+        
+    </div>
+    <div class="box-border bordered">
+        <table class="responsive table table-striped table-dark">
+            <thead>
+                <tr>
+                    <td><strong>S No.</strong></td>
+                    <td><strong>Subject</strong></td>
+                    <td><strong>Total</strong></td>
+                    <td><strong>Theory Submitted</strong></td>
+                    <td><strong>Practical Submitted</strong></td>
+                    <td><strong>Theory Received</strong></td>
+                    <td><strong>Practical Received</strong></td>
+                    <td>@*<strong>Status</strong>*@</td>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = 1;
+                    foreach (var subject in Model)
+                    {
+                                <tr>
+                                    <td>@index</td>
+                                    <td>@subject.SubjectFullName</td>
+                                    <td>@subject.TotalNumberOfStudents</td>
+                                    <td>@subject.ExternalSubmitted</td>
+                                    <td>@subject.InternalSubmitted</td>
+                                    @*<td>
+            @if (subject.InternalNotSubmitted < 1)
+            {
+                <button class="btn btn-white btn-info btn-bold" style="width:250px!important; "><strong>ALL PRACTICAL AWARDS RECEIVED</strong></button>
+            }
+            else
+            {
+                <button class="btn btn-white btn-warning btn-bold" style="width:250px!important; "><strong>@subject.InternalNotSubmitted PRACTICAL AWARDS PENDING.</strong></button>
+            }
+
+            @if (subject.ExternalNotSubmitted < 1)
+            {
+                <button class="btn btn-white btn-info btn-bold" style="width:250px!important; "><strong>ALL THEORY AWARDS RECEIVED</strong></button>
+            }
+            else
+            {
+                <button class="btn btn-white btn-warning btn-bold" style="width:250px!important; "><strong>@subject.ExternalNotSubmitted THEORY AWARDS PENDING.</strong></button>
+
+            }
+        </td>*@
+                                    <td>@subject.ExternalRecieved</td>
+                                    <td>@subject.InternalRecieved</td>
+                                </tr>
+                        index++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+
+@section PageSpecificJS{
+    <script>
+        $(document).ready(function () {
+            $("tbody tr").removeClass('hidden');
+             $("#PrintScreen").click(function () {
+                $("tbody tr").removeClass('hidden');
+              
+                window.print();
+            });
+            $("#PrintPracticals").click(function () {
+                $("tbody tr").removeClass('hidden');
+                $($("tbody tr")).each(function (index, tr) {
+                    if (parseInt($(tr).find("td:eq(4)").html()) > 0) {
+                        $(tr).addClass('hidden');
+                    }
+                });
+                window.print();
+            });
+
+            $("#PrintTheory").click(function () {
+                $("tbody tr").removeClass('hidden');
+                $($("tbody tr")).each(function (index, tr) {
+                    if (parseInt($(tr).find("td:eq(3)").html()) > 0) {
+                        $(tr).addClass('hidden');
+                    }
+                });
+                window.print();
+            });
+        });
+    </script>
+    
+}
+

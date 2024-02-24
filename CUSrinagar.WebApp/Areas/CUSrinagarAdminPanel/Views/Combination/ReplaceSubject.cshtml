@@ -1,0 +1,157 @@
+﻿@model  CUSrinagar.Models.ReplaceSubject
+<div class="row">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+
+    <div class="col-md-12">
+        <hr class="no-margin-top" />
+        @using (Html.BeginForm("ReplaceSubject", "Combination", FormMethod.Post, new { @class = "jsMainForm form-horizontal", @id = "ReplaceSubject" }))
+        {
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3">Batches</label>
+                        <div class="col-sm-8">
+                            @Html.DropDownList("Batch", new SelectList(ViewBag.Batches, "Value", "Text", Model.Batch),
+      "Choose Batch", new
+      {
+          @class = "form-control chosen-select multiselect",
+          @multiple = "",
+          @required = "required",
+          @id = "BatchDDL",
+          @data_scope = "row1"
+      })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3">Program</label>
+                        <div class="col-sm-8">
+                            @Html.DropDownList("programme", new SelectList(ViewBag.Programmes, "Value", "Text",Model.Programme),
+                  "Choose Program", new
+                  {
+                      @class = "form-control chosen-select jsProgrammeDDL multiselect",
+                      @data_operator = "EqualTo",
+                      @multiple = "",
+                      @required = "required",
+                      @id = "ProgrammeDDL",
+                      @data_column = "Programme",
+                      @data_tablealias = "ADMCourseMaster",
+                      @data_scope = "row1"
+                  })
+                        </div>
+                    </div>
+
+                    @*<div class="form-group" id="jsCourseField">
+                        <label for="name" class="col-sm-3">Courses</label>
+                        <div class="col-sm-8 jsDDLContainer">
+                            @Html.DropDownList("Course_ID", new SelectList(ViewBag.Courses, "Value", "Text"),
+                     "choose course", new
+                     {
+                         @class = "form-control chosen-select jsCourseDDL ",
+                         @data_defaulttextvalue = "choose course,",
+                         @data_operator = "EqualTo",
+                         @id = "CourseDDL",
+                         @data_column = "Course_ID",
+                         @data_tablealias = "ADMCourseMaster",
+                         @data_scope = "row1"
+                     })
+                        </div>
+                    </div>*@
+
+
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3">Semester</label>
+                        <div class="col-sm-8">
+                            @Html.DropDownListFor(model => model.Semester, new SelectList(ViewBag.Semesters, "Value", "Text"),
+      "choose semester", new
+      {
+          @class = "form-control chosen-select jsSemesterDDL ",
+          @required = "required",
+          @data_defaulttextvalue = "choose semester,",
+          @data_operator = "EqualTo",
+          @data_column = "Semester",
+          @data_scope = "row1"
+      })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3">Find Subject title (Subject_ID)</label>
+                        <div class="col-sm-8">
+                            <div class="jsDDLContainer">
+                                @Html.TextBoxFor(model => model.FindSubject_ID, new {@class="form-control",@required="required" })
+                                @*<select required name="FindSubject_ID" class="chosen-select form-control jsVWSCSubjectDDL" data-defaulttextvalue="Choose title," data-scope="row1" data-operator="EqualTo">
+                                    <option value="" selected>Enter title (please check title if exists)</option>
+                                </select>*@
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3">Replace Subject title (Subject_ID)</label>
+                        <div class="col-sm-8">
+                            <div class="jsDDLContainer">
+                                @Html.TextBoxFor(model => model.ReplaceWithSubject_ID, new { @class = "form-control", @required = "required" })
+                                @*<select required name="ReplaceWithSubject_ID" class="chosen-select form-control jsVWSCSubjectDDL" data-column="" data-defaulttextvalue="Choose title (please check title if exists)," data-scope="row1" data-operator="EqualTo">
+            <option value="" selected>Enter title (please check title if exists),</option>
+        </select>*@
+                            </div>
+                        </div>
+                    </div>
+
+                    @*
+                        <div class="form-group"jsVWSCSubjectDDL>
+                            <label for="name" class="col-sm-3">Find Subject title</label>
+                            <div class="col-sm-8">
+                                <input autocomplete="off" list="SubjectFullNameDataList" name="SubjectFullName" id="FindSubject_ID" value="" class="form-control" required placeholder="Enter title (please check title if exists)">
+                                <datalist id="SubjectFullNameDataList">
+                                    @if (ViewBag.Subjects != null)
+                                    {
+                                        foreach (var item in (List<SelectListItem>)ViewBag.Subjects)
+                                        {
+                                            <option value="@item.Text"></option>
+                                        }
+                                    }
+                                </datalist>
+                            </div>
+                        </div>
+
+                                   *<div class="form-group">
+                                        <label for="name" class="col-sm-3">Replace Subject title</label>
+                                        <div class="col-sm-8">
+                                            <input autocomplete="off" list="SubjectFullNameDataList" name="SubjectFullName" id="ReplaceWithSubject_ID" value="" class="form-control" required placeholder="Enter title (please check title if exists)">
+                                            <datalist id="SubjectFullNameDataList">
+                                                @if (ViewBag.Subjects != null)
+                                                {
+                                                    foreach (var item in (List<SelectListItem>)ViewBag.Subjects)
+                                                    {
+                                                        <option value="@item.Text"></option>
+                                                    }
+                                                }
+                                            </datalist>
+                                        </div>
+                                    </div>
+                    *@
+
+
+
+
+
+
+
+
+                    <div class="col-sm-11">
+                        <div class=" pull-text-right pull-right">
+                            <button type="submit" class="btn btn-success ">Replace Subject</button>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+
+        }

@@ -1,0 +1,97 @@
+﻿@model IEnumerable<CUSrinagar.Models.CourseWiseList>
+@{
+    Layout = null;
+}
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th><input class="ace checkbox checkbox-inline jsSelectAllChk" type="checkbox"><span class="lbl padding-right-10"></span>SNo</th>
+            <th data-property="CourseFullName">Course</th>
+            <th data-property="ClassRollNo" title="Class roll number">ClassRollNo</th>
+            <th data-property="CUSRegistrationNo">Registration No</th>
+            <th data-property="FullName">Name</th>
+            <th data-property="Mobile">Phone No</th>
+            <th data-property="Email">Email</th>
+            <th data-property="ExamRollNo" title="Exam roll number">ExamRollNo</th>
+            <th data-property="StudentFormNo">Form No</th>
+            <th data-property="Semester" title="Semester">Sem</th>
+            @*<th data-property="BoardRegistrationNo">Board Registration No</th>*@
+            <th data-property="FathersName">Fathers Name</th>
+            <th data-property="Gender">Gender</th>
+            <th data-property="Religion">Religion</th>
+            @*<th title="Accademic percentage">%age</th>*@
+            @*<th data-property="Category">Category</th>*@
+            <th data-property="CombinationCode" title="Combination code">Comb</th>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            if (Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+        <tr title='@(item.IsVerified?"verified":"not verified")'>
+            <td>
+                <input class="ace checkbox checkbox-inline jsSelectChk" type="checkbox"><span class="lbl padding-right-10"></span><span class="js-sno"></span>
+                @Html.HiddenFor(model => item.Student_ID, new { @class = "jsEntity_ID" })
+            </td>
+            <td>@item.CourseFullName</td>
+            <td>@item.ClassRollNo</td>
+            <td>@item.CUSRegistrationNo</td>
+            <td>@item.FullName</td>
+            <td>@item.Mobile</td>
+            <td>@item.Email</td>
+            <td>@item.ExamRollNo</td>
+            <td>@item.StudentFormNo</td>
+            <td>@item.Semester</td>
+            @*<td>@item.BoardRegistrationNo</td>*@
+            <td>@item.FathersName</td>
+            <td>@item.Gender</td>
+            <td>@item.Religion</td>
+            @*<td>@(item.Percentage.HasValue ? Math.Round(item.Percentage.Value, 1).ToString() : "")</td>*@
+            @*<td>@item.Category</td>*@
+            <td>
+                @if (item.IsVerified)
+                {
+                    <small><b class="text-primary">@item.CombinationCode</b></small>
+
+                }
+                else
+                {
+                    <span>@item.CombinationCode</span>
+                }
+
+            </td>
+
+            <td>
+                @{
+                    if (item.Semester == 1)
+                    {
+                        <a target="_blank" href="@Url.Action("AssignCombination","AssignCombination",new { @Form_RegistrationNumber=item.StudentFormNo, @printProg=ViewBag.PrintProgramme, sem=item.Semester})">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                    }
+                    else if (item.Semester > 1)
+                    {
+                        <a target="_blank" href="@Url.Action("AssignCombination","AssignCombination",new {@Form_RegistrationNumber=item.StudentFormNo, @printProg=ViewBag.PrintProgramme, @sem=item.Semester})">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                    }
+                }
+            </td>
+
+        </tr>
+                }
+            }
+            else
+            {
+                <tr><td colspan="10">No Record Found</td></tr> }
+        }
+        else
+        {
+            <tr><td colspan="10">No Record Found</td></tr>
+        }
+    </tbody>
+</table>

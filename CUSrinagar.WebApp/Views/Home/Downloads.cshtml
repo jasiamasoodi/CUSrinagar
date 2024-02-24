@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewBag.Title = "Downloads";
+}
+
+<div class="page-wrapper pager-table-text">
+    <header class="page-heading clearfix">
+        <h1 class="heading-title pull-left">
+            Downloads
+            <small>
+                <i class="ace-icon fa fa-angle-double-right"></i>
+                List of Downloads
+            </small>
+        </h1>
+    </header>
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Downloads
+                        </h3>
+                    </div>
+                    <div class="js-table-content" data-url='@Url.Action("DownloadListPartial","Home",new { area = string.Empty})' data-DefaultOrderByColumn="">
+                    </div>
+                    @{Html.RenderPartial("_JSPagerTableFooter");}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            loadpagertable();
+        });
+        var _CurrentSection = "Download";
+    </script>
+}
+
+
+
+

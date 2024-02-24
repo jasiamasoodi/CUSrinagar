@@ -1,0 +1,84 @@
+﻿@model IEnumerable<CUSrinagar.Models.MSSubjectMarksStructure>
+@{
+    Layout = null;
+}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>S.No.</th>
+            <th data-property="Remarks">Remarks</th>
+            <th data-property="TotalCredit">Credit</th>
+            <th data-property="CreditWeightage">Weightage</th>
+            <th>Total (External+Internal)</th>
+            <th>Ext Pass</th>
+            <th>Int Pass</th>
+            <th data-property="ExternalMaxMarks">Ext</th>
+            <th data-property="ExternalAttendance_AssesmentMaxMarks">Ext A</th>
+            <th data-property="InternalMaxMarks">Int</th>
+            <th data-property="InternalAttendance_AssesmentMaxMarks">Int A</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td class="js-sno"></td>
+                    <td>
+                        @item.Remarks
+                        @Html.HiddenFor(modelItem => item.SubjectMarksStructure_ID, new { @class = "jsEntity_ID" })
+                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.TotalCredit)</td>
+                    <td>@item.CreditWeightage</td>
+                    <td>
+                        @if (item.TotalMaxMarks.HasValue)
+                        {
+                            <span>@item.TotalMaxMarks</span>
+                            <span>(</span>
+                            if (item.HasExternalComponent)
+                            {
+                                <span title="max external marks">Ext=@item.TotalExternalMaxMarks</span>
+                            }
+                            if (item.HasExternalComponent && item.HasInternalComponent)
+                            {
+                                <span>+</span>
+                            }
+                            if (item.HasInternalComponent)
+                            {
+
+                                <span title="max internal marks">Int=@item.TotalInternalMaxMarks</span>
+                            }
+                            <span>)</span>
+                        }
+                        else
+                        {
+                            <span class="text-danger">Error</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.HasExternalComponent)
+                        {
+                            <span title="min pass marks">@item.TotalExternalMinPassMarks</span><small> out of </small><span title="max external marks">@item.TotalExternalMaxMarks</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.HasInternalComponent)
+                        {
+                            <span title="min pass marks">@item.TotalInternalMinPassMarks</span><small> out of </small><span title="max internal marks">@item.TotalInternalMaxMarks</span>
+                        }
+                    </td>
+                    <td title="ExternalMaxMarks">@item.ExternalMaxMarks</td>
+                    <td title="ExternalAttendance_AssesmentMaxMarks">@item.ExternalAttendance_AssessmentMaxMarks</td>
+                    <td title="InternalMaxMarks">@item.InternalMaxMarks</td>
+                    <td title="InternalAttendance_AssesmentMaxMarks">@item.InternalAttendance_AssessmentMaxMarks</td>
+                    <td>
+                        <a href="#"><i class="copy-to-clipboard fa fa-circle-o"></i></a>
+                        <a href="@Url.Action("CreateEdit",new { @id=item.SubjectMarksStructure_ID})" target="_blank"><i class="fa fa-edit"></i></a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

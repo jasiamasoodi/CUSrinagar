@@ -1,0 +1,37 @@
+﻿@model  List<CUSrinagar.Models.StudentExamFormList>
+@{
+    Layout = null;
+}
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th>S.No</th>
+            <th data-property="CourseFullName">Course</th>
+            <th data-property="FullName">FullName</th>
+            <th data-property="CUSRegistrationNo">Registration No.</th>
+            <th data-property="FormNumber">Form No</th>
+            <th data-property="IsRegular">Regular</th>
+            <th data-property="Status">Status</th>
+            <th data-property="IsVerified">Form Verified</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+        <tr>
+            <td class="js-sno"></td>
+            <td>@item.CourseFullName</td>
+            <td>@item.FullName</td>
+            <td>@item.CUSRegistrationNo</td>
+            <td>@item.FormNumber</td>
+            <td>@(item.IsRegular == true ? " Regular " : "Backlog")</td>
+            <td>@(item.Status == CUSrinagar.Enums.FormStatus.Accepted ? " Applied " : "Not Applied")</td>
+            <td>@(item.IsVerified == true ? " Verified " : " Not Verified ")</td>
+        </tr>
+            }
+        }
+    </tbody>
+</table>

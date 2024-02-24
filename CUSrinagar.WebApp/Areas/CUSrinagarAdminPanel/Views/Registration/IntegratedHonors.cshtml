@@ -1,0 +1,180 @@
+﻿@using CUSrinagar.Models
+@using CUSrinagar.Extensions
+
+@model ARGPersonalInformation
+
+@{
+    ViewBag.Title = $"Integrated / Honor's / Professional Registration Form {DateTime.UtcNow.Year} - ";
+    ARGFormNoMaster formNoMaster = ViewBag.FormNoMaster;
+}
+<div id="Jspleasewait" style="display:none;position:fixed;background-color:rgba(0, 0, 0, 0.20);left:0;top:0;z-index:200;width:100%;height:100%">
+    <p style="font-size:30px;font-weight:bold;color:white;margin-top:20%;margin-left:41%">
+        Please wait...
+    </p>
+</div>
+<div class="page-wrapper pt-text-style">
+
+    <div id="response">
+        @if (TempData["response"] != null)
+        {
+            @Html.Raw(TempData["response"])
+        }
+    </div>
+    <div class="page-content">
+        @using (Html.BeginForm("IntegratedHonors", "Registration", FormMethod.Post, new { @enctype = "multipart/form-data", @id = "StdRegistration" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(x => x.TotalFee)
+            @Html.HiddenFor(x => x.Student_ID)
+            @Html.HiddenFor(x => x.FormStatus)
+
+            @Html.Hidden("BasicFee", formNoMaster.BasicFee)
+            @Html.Hidden("PerCourse", formNoMaster.PerCourse)
+            @Html.Hidden("AdditionalFeeForNonJK", formNoMaster.AdditionalFeeForNonJK)
+            @Html.Hidden("FeeForAlreadyInIH", formNoMaster.FeeForAlreadyInIH)
+            @Html.Hidden("Distt", Model.StudentAddress.District.ToLower().Trim())
+            <div class="page-header">
+                <h3>
+                    <b> Student Name : </b>
+                    @Model.FullName &nbsp; &nbsp; &nbsp;
+                    <b>Form No. : </b>
+                    @Model.StudentFormNo
+                </h3>
+
+            </div>
+            @*---------------------------- select photo ------------------------ *@
+
+
+            <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                <div class="content-wrapper">
+                    <div class="col-sm-12 lbl bigger-120 no-padding-right">
+                        <div class="col-sm-4"></div>
+                        @Html.HiddenFor(m => m.Batch, new { value = Model.Batch })
+                        @Html.HiddenFor(m => m.Photograph, new { value = Model.Photograph })
+
+                        <img class="center img-responsive" src="@Url.Content(Model.Photograph)" width="150" />
+                        <h4 style="margin-left:8px;">
+                            <i class="fa fa-camera" aria-hidden="true"></i>
+                            <strong>Upload your recent Photograph <span style="float:right;"> Only jpg, png, jpeg, bmp & 20-70KB image file is allowed.</span></strong>
+                        </h4><hr />
+                        <div class="text-center">
+                            <div class="col-sm-12">
+                                <div class="col-sm-3">
+                                    <span class="required">
+                                        *
+                                        @Html.ValidationMessageFor(model => model.PhotographPath)
+                                        <span class="erMsg"></span>
+                                    </span>
+                                    @Html.LabelFor(model => model.PhotographPath, new { @class = "small-70" })
+                                </div>
+                                <div class="col-sm-6">
+                                    @Html.TextBoxFor(model => model.PhotographPath, new { @style = "padding:2px 0;margin:0 auto;", @type = "file", @id = "theFile", @onchange = "return valFile('#theFile',20,70,'KB','jpg,jpeg,bmp,png','.erMsg');", title = "Only jpg, png, jpeg, bmp & 20-70KB image file is allowed." })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+
+            @*----------------------------End photo Section------------------------ *@
+            @*-----------------------------Courses section-----------------------------------*@
+            <div class="row page-row" style="background-color:white;padding-bottom: 10px" id="CourseSection">
+                <div class="content-wrapper">
+                    <h4 style="margin-left:10px;">
+                        <strong>
+                            <i class="fa fa-book" aria-hidden="true"></i> @Html.LabelFor(model => model.CoursesApplied, new { @class = "small-70" })
+                            <span class="required">
+                                *
+                            </span>
+                        </strong>
+                        <span style="float:right;margin-right:20px;color:black;font-weight:bold;" id="Jsfee"></span>
+                    </h4> <hr />
+                    <div class="col-sm-12">
+                        @{string lbl = string.Empty;}
+                        @for (int i = 0; i < Model.CoursesApplied.Count; i++)
+                        {
+                            if (lbl != Model.CoursesApplied[i].Programme.ToString().ToLower() && lbl != string.Empty)
+                            {
+                                <div class="col-sm-12"><hr /></div>
+                            }
+                            if (lbl != Model.CoursesApplied[i].Programme.ToString().ToLower())
+                            {
+                                <h4 class="col-sm-12">
+                                    <span style="background-color:#0db12f;padding:3px 10px;width:100%;color:white;">
+                                        @if (Model.CoursesApplied[i].Programme == CUSrinagar.Enums.Programme.UG)
+                                        {
+                                            <text>3 Year Professional Courses</text>
+                                        }
+                                        else
+                                        {
+                                            @Model.CoursesApplied[i].Programme.GetEnumDescription() <text>Courses</text>
+                                        }
+                                    </span>
+                                </h4>
+                            }
+                            <div class="col-sm-4 lbl bigger-120 no-padding-right" style="margin-bottom:10px;" id="@Model.CoursesApplied[i].Course_ID.ToString().ToLower()">
+                                <div class="col-sm-12">
+                                    @Html.HiddenFor(model => model.CoursesApplied[i].Course_ID)
+                                    @Html.HiddenFor(model => model.CoursesApplied[i].CourseName)
+                                    @Html.CheckBoxFor(model => model.CoursesApplied[i].IsClicked, new { @dataid = Model.CoursesApplied[i].Course_ID, @class = "JSCourseClk" })
+                                    @Model.CoursesApplied[i].CourseName.Replace("Integrated", "").Replace("Honor's", "")
+                                </div>
+                                @if (Model.IsLateralEntry)
+                                {
+                                    @Html.Hidden("IsLateralEntry", "True")
+                                    <div class="col-sm-4">
+                                        @Html.DropDownListFor(model => model.CoursesApplied[i].Preference, new SelectList(((IEnumerable<SelectListItem>)ViewBag.PreferenceCount), "Value", "Text", Model.CoursesApplied[i].Preference.ToString()), "--Select Preference--", new { @class = Model.CoursesApplied[i].Course_ID })
+                                    </div>
+                                }
+                                <div class="col-sm-1"></div>
+                            </div>
+                            {
+                                lbl = Model.CoursesApplied[i].Programme.ToString().ToLower();
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            @*---------------------------- Declaration Section  ------------------------ *@
+            <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                <div class="content-wrapper">
+
+                    <br />
+                    <p style="text-align:center;">
+
+                        <span id="hideButtons6">
+                            <input style="font-weight:bold;font-size:20px;" type="submit" id="jsfinalSubmit" value="Save" class="btn btn-success" />
+                        </span>
+                        &nbsp;&nbsp;&nbsp;
+                        <span>
+                            @* <a href="@Url.Action("StudentDetail","Registration",new { area="CUSrinagarAdminPanel"})" style="font-weight:bold;font-size:20px;" type="submit" id="" value="Cancel" class="btn btn-danger">Cancel</a>*@
+                            <input action="action" onclick="window.history.go(-1); return false;" type="button" value="Cancel" class="btn btn-danger" style="font-weight:bold;font-size:20px;" />
+
+                        </span>
+                    </p>
+
+                </div>
+            </div>
+            @*----------------------------End Declaration Section  ------------------------ *@
+        }
+    </div>
+</div>
+@section PageSpecificJS{
+    <script>
+        var basicFee = "@Model.TotalFee";
+    </script>
+    <script src=@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSRegistration/IntegratedHonors.js")></script>
+}
+@section PageSpecificStyle{
+    <style>
+        .required {
+            color: red;
+        }
+
+        .width100 {
+            width: 100% !important;
+        }
+    </style>
+}
+

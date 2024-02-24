@@ -1,0 +1,354 @@
+﻿
+@model  List<CUSrinagar.Models.BIL_BillDetails>
+@using CUSrinagar.Models;
+@using CUSrinagar.Extensions
+
+@{
+    Layout = null;
+    List<BillStatistics> billStatistics = ViewBag.BillStatistics;
+}
+
+
+<div class="hr hr12 dotted"></div>
+<div class="center">
+    <div class="clearfix">
+        @if (ViewBag.BillsTypeSelected == "1") //Evaluator Bills
+        {
+            <div class="grid4">
+                <span class="bigger-175 blue">
+                    @(billStatistics.FirstOrDefault(x => x.BillStatus == CUSrinagar.Enums.BillStatus.ExternalAwardsUploaded)?.TotalBills ?? 0)
+                </span>
+                <br>
+                @if ((billStatistics.FirstOrDefault(x => x.BillStatus == CUSrinagar.Enums.BillStatus.ExternalAwardsUploaded)?.TotalBills ?? 0) > 0)
+                {
+                    <img src="/Content/ThemePublic/PrintImages/new.gif">
+                }
+                Evaluator Bills
+            </div>
+
+            <div class="grid4">
+                <span class="bigger-175 blue">
+                    @(billStatistics.FirstOrDefault(x => x.BillStatus == CUSrinagar.Enums.BillStatus.Verified)?.TotalBills ?? 0)
+                </span>
+                <br>
+                Verified
+            </div>
+
+            <div class="grid4" title="Bills with Status like : Under-Verification, Verified, Error in Bill etc">
+                <span class="bigger-175 blue">
+                    @(billStatistics.Where(x => x.BillStatus != CUSrinagar.Enums.BillStatus.DispatchedToAccountsSection
+                             && x.BillStatus != CUSrinagar.Enums.BillStatus.ExternalAwardsUploaded
+                             && x.BillStatus != CUSrinagar.Enums.BillStatus.Verified
+                             && x.BillStatus != CUSrinagar.Enums.BillStatus.Paid)?.Sum(x => x.TotalBills) ?? 0)
+                </span>
+                <br>
+                Pending
+            </div>
+
+            <div class="grid4">
+                <span class="bigger-175 blue">
+                    @(billStatistics.FirstOrDefault(x => x.BillStatus == CUSrinagar.Enums.BillStatus.DispatchedToAccountsSection)?.TotalBills ?? 0)
+                </span>
+                <br>
+                Dispatched to Accounts Section
+            </div>
+        }
+        else
+        {
+            <div class="grid4 g4">
+                <span class="bigger-175 blue">
+                    @(billStatistics.FirstOrDefault(x => x.BillStatus == CUSrinagar.Enums.BillStatus.Assigned)?.TotalBills ?? 0)
+                </span>
+                <br>
+                Assigned to Setter
+            </div>
+
+            <div class="grid4 g4">
+                <span class="bigger-175 blue">
+                    @(billStatistics.FirstOrDefault(x => x.BillStatus == CUSrinagar.Enums.BillStatus.Accepted)?.TotalBills ?? 0)
+                </span>
+                <br>
+                @if ((billStatistics.FirstOrDefault(x => x.BillStatus == CUSrinagar.Enums.BillStatus.Accepted)?.TotalBills ?? 0) > 0)
+                {
+                    <img src="/Content/ThemePublic/PrintImages/new.gif">
+                }
+                Accepted
+            </div>
+
+            <div class="grid4 g4">
+                <span class="bigger-175 red">
+                    @(billStatistics.FirstOrDefault(x => x.BillStatus == CUSrinagar.Enums.BillStatus.Rejected)?.TotalBills ?? 0)
+                </span>
+                <br>
+                Rejected
+            </div>
+
+            <div class="grid4 g4" title="Bills with Status like : Under-Verification, Verified, Error in Bill etc">
+                <span class="bigger-175 blue">
+                    @(billStatistics.Where(x => x.BillStatus != CUSrinagar.Enums.BillStatus.DispatchedToAccountsSection
+                        && x.BillStatus != CUSrinagar.Enums.BillStatus.Accepted
+                        && x.BillStatus != CUSrinagar.Enums.BillStatus.Rejected
+                        && x.BillStatus != CUSrinagar.Enums.BillStatus.Paid
+                        && x.BillStatus != CUSrinagar.Enums.BillStatus.InProcess
+                        && x.BillStatus != CUSrinagar.Enums.BillStatus.Assigned)?.Sum(x => x.TotalBills) ?? 0)
+                </span>
+                <br>
+                Pending
+            </div>
+
+            <div class="grid4 g4">
+                <span class="bigger-175 blue">
+                    @(billStatistics.FirstOrDefault(x => x.BillStatus == CUSrinagar.Enums.BillStatus.DispatchedToAccountsSection)?.TotalBills ?? 0)
+                </span>
+                <br>
+                Dispatched to Accounts Section
+            </div>
+        }
+    </div>
+</div>
+<div class="hr hr12 dotted"></div>
+
+
+<div id="ModalBillStatus" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter no-margin"><i class="fa fa-refresh"></i>&nbsp;Change Bill Status</h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="msg101"></div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form>
+                            <div class="form-group">
+                                <label class="control-label no-padding-right">
+                                    Bill Status <span class="red">*</span>
+                                </label>
+                                @Html.DropDownList("BillStatus", (IEnumerable<SelectListItem>)ViewBag.BillStatus, new { @class = "form-control", required = "required" })
+                            </div>
+                            <div class="form-group text-center">
+                                <button class="btn btn-sm btn-success pull-center JSChangeBillStatus">
+                                    Update
+                                </button>
+                                <button class="btn btn-sm btn-danger" id="JSClose" data-dismiss="modal">
+                                    <i class="ace-icon fa fa-times"></i>
+                                    Close
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ModalStamp" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter no-margin">
+                    <i class="fa fa-refresh"></i>
+                    &nbsp;Change Bill Revenue Stamp Status
+                </h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="msg101"></div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form>
+                            <div class="form-group">
+                                <label class="control-label no-padding-right">
+                                    New Revenue Stamp Charges <span class="red">*</span>
+                                </label>
+                                <span class="red">@Html.ValidationMessageFor(b => b.First().RevenueStampAmount)</span>
+                                @Html.TextBox("NewAmount", "", new { @type = "number", @class = "width-100", @required = "required" })
+                            </div>
+                            <div class="form-group text-center">
+                                <button class="btn btn-sm btn-success pull-center JSChnageRevenueStampCharges">
+                                    Update
+                                </button>
+                                <button class="btn btn-sm btn-danger" id="JSClose" data-dismiss="modal">
+                                    <i class="ace-icon fa fa-times"></i>
+                                    Close
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th data-property="BillNo">Bill No</th>
+            <th data-property="FullName">@(Model?.FirstOrDefault()?.BillType==CUSrinagar.Enums.BillType.PaperSetterBill?"Setter":"Evaluator") Name</th>
+            <th data-property="Semester">Semester</th>
+            <th class="center"> @(Model?.First()?.BillType.GetEnumDescription()) Details</th>
+            <th>Net Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            int index = 0;
+            short sno = 1;
+            foreach (IEnumerable<BIL_BillDetails> row in Model.OrderByDescending(x => x.CreatedOn).ThenBy(x => x.BillNo).GroupBy(x => x.BillNo))
+            {
+                <tr class="no-padding no-margin">
+                    <td class="red" style="width:190px">
+                        @row.First().BillNo
+                        <br />
+                        <span class="label label-lg label-pink arrowed-right">@row.First().BillStatus.GetEnumDescription()</span>
+                    </td>
+                    <td>
+                        @row.First().FullName ( @row.First().Institute)<br /><br />
+                        User : <a href="/CUSrinagarAdminPanel/Bill/EditSetter/@row.First().User_ID" target="_blank">@row.First().UserName</a>
+
+                        @if (row.First().PaymentAccount == null)
+                        {
+                            <hr />
+                            <strong><i>Bank Details not Provided</i></strong>
+                        }
+                    </td>
+                    <td style="font-size:16px;font-weight:bold;">@row.First().Semester</td>
+                    <td class="no-padding">
+                        <table class="table table-hover table-bordered no-padding no-margin">
+                            <tr class="purple">
+                                <th style="max-width:350px;">@(row.First().BillType == CUSrinagar.Enums.BillType.EvaluatorBill ? "Paper Evaluated" : "Paper Title")</th>
+                                <th>@(row.First().BillType == CUSrinagar.Enums.BillType.EvaluatorBill ? "Conveyance Charges ₹" : "Completion Days")</th>
+                                <th>No. of @(row.First().BillType == CUSrinagar.Enums.BillType.EvaluatorBill ? "Papers":"Sets")</th>
+                                <th>Amount Per @(row.First().BillType == CUSrinagar.Enums.BillType.EvaluatorBill ? "Paper":"Set")</th>
+                                <th>Gross Amount ₹</th>
+                                <th>Other Details</th>
+                                @if (row.First().BillType == CUSrinagar.Enums.BillType.PaperSetterBill)
+                                {
+                                    <th style="width:200px;">Links</th>
+                                }
+                                @if (row.Count() > 1 && row.First().BillStatus != CUSrinagar.Enums.BillStatus.Paid)
+                                {
+                                    <th></th>
+                                }
+                            </tr>
+                            @foreach (BIL_BillDetails bill in row)
+                            {
+                                <tr>
+                                    <td>
+                                        <a href='@Url.Action("EditBill","Bill",new { area = "CUSrinagarAdminPanel", @id = bill.Bill_ID })'>
+                                            @bill.SubjectFullName
+                                        </a>
+                                        <br />
+                                        <br />
+                                        Examination : @bill.Examination<br /><br />
+                                        Batch : @bill.Batch<br /><br />
+                                        Session : @bill.Session
+                                    </td>
+                                    <td>
+                                        @if (row.First().BillType == CUSrinagar.Enums.BillType.EvaluatorBill)
+                                        {
+                                            @(bill.ConveyanceCharges??0)
+                                        }
+                                        else
+                                        {
+                                            <span>@bill.TotalAssignmentCompletionDays day(s) from @bill.CreatedOn.ToLongDateString()</span>
+                                        }
+                                    </td>
+                                    <td>@bill.NoOfSets</td>
+                                    <td>@bill.AmountPerSet</td>
+                                    <td>₹ @bill.TotalAmount</td>
+                                    <td>
+                                        <span>Bill Created on: @bill.CreatedOn.ToLongDateString() @bill.CreatedOn.ToString("hh:ss tt")</span><br />
+                                    </td>
+
+                                    @if (bill.BillType == CUSrinagar.Enums.BillType.PaperSetterBill)
+                                    {
+                                        <td>
+                                            Paper Pattern :<br />@Html.Raw(Html.Action("GetPaperSetting", "Bill", new { @d = bill.PaperPattern_ID }))<br /><br />
+                                            Sample Paper :<br />@Html.Raw(Html.Action("GetPaperSetting", "Bill", new { @d = bill.SamplePaper_ID }))<br /><br />
+
+                                            @if (!string.IsNullOrWhiteSpace(bill.SyllabusLink))
+                                            {
+                                                sno = 1;
+                                                <span>Syllabus:<br /></span>
+                                                foreach (string item in (bill.SyllabusLink + "").Split('|'))
+                                                {
+                                                    <a href="@item" target="_blank">Syllabus Link-@sno</a><br />
+                                                    sno++;
+                                                }
+                                            }
+                                        </td>
+                                    }
+
+                                    @if (row.Count() > 1 && bill.BillStatus != CUSrinagar.Enums.BillStatus.Paid)
+                                    {
+                                        <td>
+                                            <a href="javascript:void(0);" id='@bill.Bill_ID' class="JSRemoveBill ace-icon fa fa-trash-o red bigger-130" title="Remove Paper"></a>
+                                        </td>
+                                    }
+                                </tr>
+                                if (row.First().BillType == CUSrinagar.Enums.BillType.PaperSetterBill)
+                                {
+                                    <tr class="padding-0 margin-0">
+                                        <td colspan="10" class="padding-0 margin-0">
+                                            <div class="profile-user-info profile-user-info-striped" style="border: 1px dashed #336199">
+                                                <div class="profile-info-row">
+                                                    <div class="profile-info-name align-left" style="font-size:16px;text-align:center !important;">
+                                                        Email on which papers will be received as an attachment in soft format (word format only) on:
+                                                        <span style="font-size:18px;">
+                                                            <strong>
+                                                                <a href="mailto:@(bill.PaperReceiverEmail)?subject=Paper: @bill.SubjectFullName.Replace("&","and") Examination:@bill.Examination.Replace("&","and") Batch:@bill.Batch.Replace("&","and") Session:@bill.Session.Replace("&","and")">
+                                                                    <i class="ace-icon fa fa-envelope purple quadraText"></i>
+                                                                    @bill.PaperReceiverEmail
+                                                                </a>
+                                                            </strong>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </table>
+                    </td>
+                    <td style="text-align:center">
+                        <span>₹ @row.First().RevenueStampAmount (RevenueStamp Deducted)<br /><br /></span>
+                        <strong>₹ @(row.Sum(x=>x.TotalAmount)-row.First().RevenueStampAmount)</strong>
+                        <div class="col-sm-12 dropup" style="bottom: 0; top: 30px">
+                            <button data-toggle="dropdown" class="btn btn-purple dropdown-toggle">
+                                options
+                                <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-purple dropdown-menu-right">
+                                <li>
+                                    <a href='@Url.Action("ViewBill", "BillAccount", new { area = "CUSrinagarAdminPanel", @r = row.First().BillNo.EncryptCookieAndURLSafe() })'>View Bill</a>
+                                </li>
+                                @if (row.First().BillStatus != CUSrinagar.Enums.BillStatus.Paid)
+                                {
+                                    <li>
+                                        <a href="javascript:void(0);" id='@row.First().BillNo' class="JSDeleteBill " title="Delete Bill">Delete</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0);" title="Change Bill Status" id='@row.First().BillNo' class="JSChangeStatus">Change Status</a>
+                                    </li>
+                                    <li>
+                                        <a href="#ModalStamp" data-billno='@row.First().BillNo' data-toggle="modal">Change Revenue Stamp Charges</a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                index++;
+            }
+        }
+    </tbody>
+</table>
+

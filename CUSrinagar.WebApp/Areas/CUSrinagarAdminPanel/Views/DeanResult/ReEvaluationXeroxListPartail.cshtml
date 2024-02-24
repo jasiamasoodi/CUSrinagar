@@ -1,0 +1,73 @@
+﻿@model  List<CUSrinagar.Models.ReEvaluation>
+@using CUSrinagar.Models
+@using CUSrinagar.Extensions
+
+@{
+    Layout = null;
+}
+<table class="table table-hover table-bordered js-table" id="tbltocopy">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th>S.No</th>
+            <th data-property="SemesterBatch">Batch</th>
+            <th data-property="CreatedOn">Date Applied</th>
+
+            <th data-property="ExamRollNumber">Exam Roll No.</th>
+            <th data-property="CollegeFullName">College</th>
+            <th data-property="FormNumber">Form Number</th>
+            <th data-property="StudentName">FullName</th>
+            <th data-property="MobileNo">MobileNo</th>
+            <th data-property="">CourseFullName</th>
+            <th data-property="">Subject</th>
+            <th data-property="">External MarksObt</th>
+            <th data-property="">Center Detail</th>
+            <th data-property="FeeAmount">Fee</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td class="center js-sno"></td>
+                    <td>@item.SemesterBatch</td>
+                    <td>@item.DateFrom.ToString("dd-MMM-yy")</td>
+                    <td>@item.ExamRollNumber</td>
+                    <td>@item.CollegeFullName</td>
+                    <td>@item.FormNumber</td>
+                    <td>@item.FullName</td>
+                    <td>@item.MobileNo</td>
+                    <td>@item.CourseFullName</td>
+                    <td style="width:800px !important">
+
+                        @{string[] subjExtobt = { };}
+                        <table style="border:1px solid grey;border-collapse:collapse;">
+                            @foreach (ReEvaluationStudentSubject reEvaluationStudentSubject in item.SubjectsForEvaluation ?? new List<ReEvaluationStudentSubject>())
+                            {
+                                subjExtobt = reEvaluationStudentSubject.SubjectID.Split('(');
+                                <tr>
+                                    <td style="padding:10px;border:1px solid grey">@subjExtobt[0] (@reEvaluationStudentSubject.SubjectType.GetEnumDescription())</td>
+                                </tr>
+                            }
+                        </table>
+                    </td>
+                    <td style="width:800px !important">
+                        <table style="border:1px solid grey;border-collapse:collapse;">
+                            @foreach (ReEvaluationStudentSubject reEvaluationStudentSubject in item.SubjectsForEvaluation ?? new List<ReEvaluationStudentSubject>())
+                            {
+                                subjExtobt = reEvaluationStudentSubject.SubjectID.Split('(');
+                                <tr>
+                                    <td style="padding:10px;border:1px solid grey">@subjExtobt.Last().Replace(")", "").Replace("ExtMarksObt =", "")</td>
+                                </tr>
+                            }
+                        </table>
+                    </td>
+                    <td style="color:orangered">@item.CenterDetail</td>
+                    <td>@item.FeeAmount</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

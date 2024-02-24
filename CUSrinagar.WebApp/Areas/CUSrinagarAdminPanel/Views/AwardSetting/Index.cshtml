@@ -1,0 +1,124 @@
+﻿
+@{
+    ViewBag.Title = "Professors";
+}
+
+<div class="page-wrapper pager-table-text">
+
+    <div class="page-header">
+        <div style="padding-bottom: 30px;">
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <h1 class="heading-title pull-left">
+                        Award Settings
+                        <small>
+                            <i class="ace-icon fa fa-angle-double-right"></i>
+                            List of Professors
+                        </small>
+                    </h1>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Professors
+                            <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                            </span>
+
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="col-sm-12 search-box">
+                            <label class="col-sm-12">Advance Search</label>
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span> Award Type<span id="AwardTypeValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div>
+                                    @Html.DropDownList("AwardType", (IEnumerable<SelectListItem>)ViewBag.AwardTypes, new { @class = "chosen-select form-control required SearchDDL jsfilterelement", data_ddltype = "Course", @data_column = "AwardType", @data_operator = "EqualTo" })
+                                </div>
+                            </div>
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span> Batch/Year<span id="BatchValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div>
+                                    @Html.TextBox("Batch", "", new { @class = " form-control jsfilterelement required", @data_column = "Batch", @data_operator = "EqualTo" })
+                                </div>
+                            </div>
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span> College<span id="College_IDValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div>
+                                    @Html.DropDownList("College_ID", (IEnumerable<SelectListItem>)ViewBag.Colleges, new { @class = "chosen-select form-control required SearchDDL jsfilterelement", data_ddltype = "Course", @data_tablealias = "AppUsers", @data_column = "College_ID", @data_operator = "EqualTo" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span> Course<span id="Course_IDValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div id="Course">
+                                    @Html.DropDownList("Course_ID", (IEnumerable<SelectListItem>)ViewBag.Courses, new { @class = "chosen-select form-control required jsfilterelement", @data_column = "Course_ID", @data_operator = "EqualTo" })
+                                </div>
+                            </div>
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span> Semester<span id="SemesterValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div>
+                                    @Html.DropDownList("Semester", (IEnumerable<SelectListItem>)ViewBag.Semesters, new { @class = "chosen-select form-control required jsfilterelement", @data_tablealias = "AwardSettings", @data_column = "Semester", @data_operator = "EqualTo" })
+                                </div>
+                            </div>
+                            <div class="col-sm-1 lbl bigger-120 no-padding-right">
+                                User Name
+                                <div>
+                                    @Html.TextBox("UserName", "", new { @class = " form-control jsfilterelement", @data_column = "UserName", @data_operator = "Like" })
+                                </div>
+                            </div>
+                            <div class="col-sm-1 " style="padding-top: 17px;">
+                                <button type="button" class="btn btn-primary fa-search-btn"><i class="fa fa-search"></i>&nbsp;Search</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="js-table-content" data-url="@Url.Action("AwardSettingList", "AwardSetting", new { area = "CUSrinagarAdminPanel" })" data-DefaultOrderByColumn="UserName">
+
+                    </div>
+                    @{Html.RenderPartial("_JSPagerTableFooter");}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script src="~/Content/ThemeAdmin/Content/Scripts/JSAward/AwardSetting.js"></script>
+    <script>
+          var _ChangeStatus = "@Url.Action("ReleaseAward", "AwardSetting", new { area = "CUSrinagarAdminPanel" })";
+        var chilDDLPath = "@Url.Action("_GetChildDDL", "AwardSetting", new { area = "CUSrinagarAdminPanel" })";
+        $(document).ready(function () {
+
+            var $pagertable = $(".js-pager-table");
+
+            });
+
+
+
+    </script>
+
+
+}
+
+@section PageSpecificStyle{
+    <style>
+        .filter-btn a {
+            color: white !important
+        }
+    </style>
+}
+
+

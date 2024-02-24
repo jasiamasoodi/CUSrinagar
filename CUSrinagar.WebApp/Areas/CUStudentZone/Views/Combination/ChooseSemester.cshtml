@@ -1,0 +1,83 @@
+﻿@using CUSrinagar.Extensions;
+@{
+    ViewBag.Title = "Admission Form";
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area="CUStudentZone"})">Home</a>
+        </li>
+        <li>
+            <a href="#" class="active">Examination Form</a>
+        </li>
+    </ul>
+}
+<div class="page-header">
+    <br />
+    <h1>
+        &nbsp;&nbsp;
+        <i class="fa fa-credit-card"></i> Examination Form
+    </h1>
+</div>
+@{
+    <div class="row page-content">
+        <div class="col-md-12" style="border:2px solid #cacaca;border-radius:6px;">
+            <hr />
+            @using (Html.BeginForm("GetCombination", "Combination", FormMethod.Get, new { area = "CUStudentZone", @class = "form-horizontal", @id = "FRMCombination" }))
+            {
+                <div class="col-sm-12" style="background-color:white;padding-bottom: 10px">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Apply for semester </label>
+                        <div class="col-sm-9">
+                            <select name="semester" id="semester" required>
+                                <option value=""> -- Choose Semester -- </option>
+                                <option value="1">Semester-I</option>
+                                <option value="2">Semester-II</option>
+                                <option value="3">Semester-III</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> </label>
+                        <div class="col-sm-9">
+                            <button type="submit" id="jsExamFormbtn" class="btn btn-sm btn-success"><i class="fa fa-download"></i> Proceed</button>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <hr />
+                <hr />
+            }
+        </div>
+        <div class="col-md-3"></div>
+        <div class="col-lg-12"><br /><br /><br /><br /></div>
+    </div>
+}
+
+@section PageSpecificJSFiles
+{
+    <script>
+        $(document).ready(function () {
+          
+            $("#FRMCombination").submit(function () {
+                //var _semester = $("#semester option:selected").val();
+                //if (isNullOrEmpty(_semester) || _semester.length == 0 || parseInt(_semester) < 0) {
+                //    showErrorMessage('Please choose semester.');
+                //    return false;
+                //}
+                //var $form = $(this);
+                //var formtype = $("[name='FormType']:checked").val();
+
+                //if (formtype == "backlog") {
+                //    $form.attr('action', '/CUStudentZone/Examination/BacklogForm');
+                //}
+
+
+            });
+
+
+        });
+    </script>
+}

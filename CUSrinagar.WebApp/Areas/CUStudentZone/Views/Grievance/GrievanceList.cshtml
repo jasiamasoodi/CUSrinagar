@@ -1,0 +1,77 @@
+﻿@model List<CUSrinagar.Models.GrievanceList>
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th class="wd-35"><input class="ace checkbox checkbox-inline jsSelectAllChk" type="checkbox"><span class="lbl padding-right-10"></span>S.No.</th>
+            <th data-property="Date" class="wd-150">Date</th>
+            <th data-property="Category">Category</th>
+            <th data-property="Subject">Query</th>
+            <th data-property="Status">Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input class="ace checkbox checkbox-inline jsSelectChk" type="checkbox"><span class="lbl padding-right-10"></span><span class="js-sno"></span>
+                        @Html.HiddenFor(it=>item.Grievance_ID,new { @class= "jsEntity_ID" })
+                    </td>
+                    <td>
+                        @item.Date.ToString("dd-MMMM-yyyy")
+                    </td>
+                    <td>
+                        <a href="#">@CUSrinagar.Extensions.Helper.GetEnumDescription(item.Category)</a>
+                    </td>
+                    <td>
+
+                        <h4 class="title no-margin-top">@item.Subject <small><span class="time"><i class="fa fa-clock-o"></i>&nbsp;@item.Date.ToString("dd-MMMM-yyyy")</span> <span class="location"><i class="fa fa-map-marker"></i><a href="#"> @CUSrinagar.Extensions.Helper.GetEnumDescription(item.Category)</a></span></small> </h4>
+                        <p class="desc overflow-hidden-ht no-margins">@item.Message</p>
+
+                    </td>
+                    <td>
+                        @CUSrinagar.Extensions.Helper.GetEnumDescription(item.Status)
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Detail","Grievance",new {@area="CUStudentZone", @id=item.Grievance_ID})" class="btn btn-sm btn-primary">View Detail</a>
+                    </td>
+                </tr>
+            }
+        }
+        @*<tr>
+                <td>
+                    <a href="#">Examination</a>
+                </td>
+                <td>
+
+                    <h3 class="title no-margin-top">Examination Scheduling date <small><span class="time"><i class="fa fa-clock-o"></i>@DateTime.Now.ToString("dd-MMMM-yyyy")</span> <span class="location"><i class="fa fa-map-marker"></i><a href="#">Examination</a></span></small> </h3>
+                    <p class="desc">Assalaam u alikum sir , when will be our semester exams (second semester).</p>
+
+                </td>
+                <td>
+                    Closed
+                </td>
+                <td>
+                    <a href="@Url.Action("Detail","Grievance")" class="btn btn-sm btn-primary">View Detail</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="#">Result</a>
+                </td>
+                <td>
+                    <h3 class="title no-margin-top">Result Issue <small><span class="time"><i class="fa fa-clock-o"></i>@DateTime.Now.ToString("dd-MMMM-yyyy")</span> <span class="location"><i class="fa fa-map-marker"></i><a href="#">Result</a></span></small> </h3>
+                    <p class="desc">Our practical marks has not been added to first semester result(PG student).</p>
+
+                </td>
+                <td>Open</td>
+                <td>
+                    <a href="@Url.Action("Detail","Grievance")" class="btn btn-sm btn-primary">View Detail</a>
+                </td>
+            </tr>*@
+    </tbody>
+</table>

@@ -1,0 +1,140 @@
+﻿@using CaptchaMvc.HtmlHelpers
+@model CUSrinagar.Models.ResultNotification
+
+<div class="page-wrapper pager-table-text">
+    <div class="row visible-print-inline">
+        <center>
+            <img src="~/Content/ThemePublic/Libraries/images/cus-logo1.svg" />
+        </center>
+    </div>
+    <header class="page-heading clearfix hidden-print margin-bottom-5">
+        <h1 class="heading-title pull-left">
+            Result
+            <small>
+                <i class="ace-icon fa fa-angle-double-right"></i>
+            </small>
+            <small>@Model.Description</small>
+        </h1>
+    </header>
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="jobs-wrapper col-md-12 col-sm-12 hidden-print">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><a href="job-single.html">Search by</a></h3>
+                    </div>
+                    <div class="panel-body">
+                        <form class="jsMainForm" method="post" action="@Url.Action("ViewResult")">
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("id", Model.ResultNotification_ID)
+                            <div class="col-sm-12">
+                                <center> <label for="examrollnumber" class="control-label">Enter Exam Roll Number/CUS Registration No</label></center>
+                            </div>
+                            <div class="col-sm-12">
+                                <center><input type="text" autofocus class="form-control wd-200" name="searchvalue" value="" placeholder="Enter here" autocomplete="off" required /></center>
+                            </div>
+                            <div class="col-sm-12">
+                                <center>
+                                    <div class="form-group">
+                                        @Html.Captcha("", "Enter above verification code", 4, "required", true)
+                                    </div>
+                                </center>
+                            </div>
+                            <div class="col-sm-12 padding-top-30">
+                                <center> <button type="submit" class="btn btn-primary">Search</button></center>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="row">
+                            <ul class="list-inline col-md-8 col-sm-6 col-xs-6">
+                                <li><a href="job-single.html"></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-wrapper col-md-12 col-sm-12 jsSingleContent" style="display:none;"></div>
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJS{
+    @Scripts.Render("~/bundles/Libraries/jqueryvalidation")
+}
+
+@{
+    //ViewBag.Title = "Result";
+    //var resultNotification = (CUSrinagar.Models.ResultNotification)ViewBag.ResultNotification;
+}
+@*Html.Hidden("ResultNotification", Newtonsoft.Json.JsonConvert.SerializeObject(resultNotification))*@
+@* <div class="page-wrapper pager-table-text">
+                    <div class="row visible-print-inline">
+                        <center>
+                            <img src="~/Content/ThemePublic/Libraries/images/cus-logo1.svg" />
+                        </center>
+                    </div>
+                    <header class="page-heading clearfix hidden-print margin-bottom-5">
+                        <h1 class="heading-title pull-left">
+                            Result
+                            <small>
+                                <i class="ace-icon fa fa-angle-double-right"></i>
+                                @*resultNotification.Description
+                            </small>
+                        </h1>
+                    </header>
+                    <div class="page-content">
+                        <div class="row page-row">
+                            <div class="jobs-wrapper col-md-12 col-sm-12 hidden-print">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title"><a href="job-single.html">Search by</a></h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <form class="form-inline">
+                                            <div class="form-group">
+                                                <div class="btn-group" data-toggle="buttons">
+                                                    <label class="btn active">
+                                                        <input type="radio" name='search-by' id="s_c_1" checked value="rollno" tabindex="1">
+                                                        <i class="fa fa-circle-o fa-lg"></i>
+                                                        <i class="fa fa-dot-circle-o fa-lg"></i>
+                                                        <span for="s_c_1"> Roll Number Or University Registration Number</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group input-group">
+                                                <span class="input-group-addon btn-theme">
+                                                </span>
+                                                <input type="text" id="jsSearchText" tabindex="4" autofocus class="form-control search-query" placeholder="Roll No/University Regst. No." value="" />
+                                                <span class="input-group-btn" id="jsSearchButton">
+                                                    <button type="button" class="btn btn-theme" tabindex="5">
+                                                        <span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
+                                                        Search
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="panel-footer">
+                                        <div class="row">
+                                            <ul class="list-inline col-md-8 col-sm-6 col-xs-6">
+                                                <li><a href="job-single.html"></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>-->
+    <!--//panel-->
+    <!--</div>
+        <div class="content-wrapper col-md-12 col-sm-12 jsSingleContent" style="display:none;"></div>
+    </div>
+    <!--</div>-->
+    <!--</div>-->
+    <!--@section PageSpecificJS{
+        <script src="~/Scripts/Pages/result.js"></script>
+    }
+    @section PageSpecificCSS
+    {
+
+    }
+*@

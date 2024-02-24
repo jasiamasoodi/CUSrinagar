@@ -1,0 +1,182 @@
+﻿
+@{
+    ViewBag.Title = "Professors";
+}
+
+<div class="page-wrapper pager-table-text">
+
+    <div class="page-header">
+        <div style="padding-bottom: 30px;">
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <h1 class="heading-title pull-left">
+                        Award Settings
+                        <small>
+                            <i class="ace-icon fa fa-angle-double-right"></i>
+                            List of Filters
+                        </small>
+                    </h1>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <h2 class="blink">Update Internal-External Bit Before Opening Link</h2>
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Filters
+                            <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                            </span>
+
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="col-sm-12 search-box">
+                            <label class="col-sm-12">Advance Search</label>
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span> Award Type<span id="AwardTypeValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div>
+                                    @Html.DropDownList("AwardType", (IEnumerable<SelectListItem>)ViewBag.AwardTypes, new { @class = "chosen-select form-control required SearchDDL awarddl jsfilterelement", data_ddltype = "Course", @data_column = "AwardType", @data_operator = "EqualTo" })
+                                </div>
+                            </div>
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                Programme<span id="ProgrammeValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div>
+                                    @Html.DropDownList("Programme", (IEnumerable<SelectListItem>)ViewBag.Programmes, "--ALL--", new { @class = "chosen-select form-control  SearchDDL jsfilterelement", data_ddltype = "Course", @data_column = "Programme", @data_operator = "EqualTo" })
+                                </div>
+                            </div>
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                Semester<span id="SemesterValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div>
+                                    @Html.DropDownList("Semester", (IEnumerable<SelectListItem>)ViewBag.Semesters, "--ALL--", new { @class = "chosen-select form-control  jsfilterelement", @data_column = "Semester", @data_operator = "EqualTo" })
+                                </div>
+                            </div>
+                            @*<div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span> College<span id="College_IDValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                    <div>
+                                        @Html.DropDownList("College_ID", (IEnumerable<SelectListItem>)ViewBag.College, "--ALL--", new { @class = "chosen-select form-control  SearchDDL jsfilterelement", @data_column = "College_ID", @data_operator = "EqualTo" })
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span> Course<span id="Course_IDValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                    <div id="Course">
+                                        @Html.DropDownList("Course_ID", (IEnumerable<SelectListItem>)ViewBag.Courses, "--ALL--", new { @class = "chosen-select form-control  jsfilterelement", @data_column = "Course_ID", @data_operator = "EqualTo" })
+                                    </div>
+                                </div>*@
+
+
+                            <div class="col-sm-1 " style="padding-top: 17px;">
+                                <button type="button" class="btn btn-primary fa-search-btn"><i class="fa fa-search"></i>&nbsp;Search</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="js-table-content" data-url="@Url.Action("AwardFiltersList", "AwardSetting", new { area = "CUSrinagarAdminPanel" })" data-DefaultOrderByColumn="Semester">
+
+                    </div>
+                    @{Html.RenderPartial("_JSPagerTableFooter");}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="AllowFormsModal" tabindex="-1" role="dialog" aria-hidden="true" class="modal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="bootbox-close-button close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Enter Start and End Dates</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <tbody>
+
+                        @Html.Hidden("Awardfilter_Id", "")
+                        @Html.Hidden("RecieverMail", "khrshdmir@gmail.com")
+
+                        <tr>
+                            <td>End Date</td>
+                            <td>
+                                @{
+
+                                    string parsedDate = (DateTime.Now.Year + "-" + (DateTime.Now.Month.ToString().Length == 1 ? "0" + DateTime.Now.Month : DateTime.Now.Month.ToString()) + "-" + (DateTime.Now.Day.ToString().Length == 1 ? "0" + DateTime.Now.Day : DateTime.Now.Day.ToString()) + "T" + (DateTime.Now.Hour.ToString().Length == 1 ? "0" + DateTime.Now.Hour : DateTime.Now.Hour.ToString()) + ":" + (DateTime.Now.Minute.ToString().Length == 1 ? "0" + DateTime.Now.Minute : DateTime.Now.Minute.ToString())).Trim();
+                                }
+                                <input type="datetime-local" id="Model_EndDate" name="Model_EndDate" value="@parsedDate" class="form-control" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h4 class="blinkfast" id="onlyTheoryText"> CLICK ON BELOW BUTTON FOR UPDATING BACKLOGS TO LATERON(Only First-Time) </h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary jsAllowDownloadForm" id="updatebacklog">UPDATING BACKLOGS TO LATERON</button>
+                <button data-dismiss="modal" type="button" class="btn btn-default jscancelModel">Cancel</button>
+                <button type="button" class="btn btn-primary" id="AllowFormsModalBtn">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJS{
+
+    <script src="~/Content/ThemeAdmin/Content/Scripts/JSAward/AwardSetting.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            var $pagertable = $(".js-pager-table");
+
+            loadpagertable();
+        });
+    </script>
+
+
+}
+
+@section PageSpecificStyle{
+    <style>
+        .filter-btn a {
+            color: white !important
+        }
+    </style>
+}
+
+
+
+<script type="text/javascript">
+    function blink_text() {
+        $('.blink').fadeOut(2000);
+        $('.blink').fadeIn(2000);
+        $('.blink').css("text-align", "center");
+        $('.blink').css("color", "red");
+
+    }
+    setInterval(blink_text, 1000);
+</script>
+
+<script type="text/javascript">
+    function blink_textc() {
+
+        $('.blinkfast').fadeIn(2000);
+        $('.blinkfast').fadeOut(2000);
+        $('.blinkfast').css("text-align", "center");
+        $('.blinkfast').css("color", "red");
+        $('.blinkfast').css("text-decoration", "underline");
+        $('.blinkfast').css("text-transform", "capitalize");
+    }
+    setInterval(blink_textc, 1000);
+</script>

@@ -1,0 +1,107 @@
+﻿@model CUSrinagar.Models.ADMCombinationMaster
+@{ViewBag.Title = "Add New Combination";}
+<div class="row">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header">
+
+                <h4 class="widget-title"><i class='menu-icon fa fa-bars'></i> New Combination</h4>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="alert alert-warning text-center" style="display:none;" id="jsstatus"><i class="ace-icon fa fa-spinner fa-spin orange bigger-125"></i> Working...</div>
+                    @using (Html.BeginForm("Index", "Combination", FormMethod.Post, new { @id = "CombinationForm", @class = "form-horizontal" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">
+                                @Html.LabelFor(m => m.College_ID)
+                                <span class="red">*</span>
+                            </label>
+                            <div class="col-sm-6 disable-element disabled chosen-disabled">
+                                <span class="red"> @Html.ValidationMessageFor(m => m.College_ID)</span>
+                                @Html.DropDownListFor(m => m.College_ID, (IEnumerable<SelectListItem>)ViewBag.Colleges, new { @class = "chosen-select form-control", @readonly="readonly" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">
+                                @Html.LabelFor(m => m.Semester) <span class="red">*</span>
+                            </label>
+                            <div class="col-sm-6">
+                                <span class="red">@Html.ValidationMessageFor(m => m.Semester)</span>
+                                @Html.DropDownListFor(m => m.Semester, (IEnumerable<SelectListItem>)ViewBag.Semesters, string.Empty, new { @class = "chosen-select form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">
+                                @Html.LabelFor(m => m.Course_ID) <span class="red">*</span>
+                            </label>
+                            <div class="col-sm-6">
+                                <span class="red">@Html.ValidationMessageFor(m => m.Course_ID)</span>
+                                <div id="CourseDiv">  @Html.DropDownListFor(m => m.Course_ID, (IEnumerable<SelectListItem>)ViewBag.Courses, string.Empty, new { @class = "chosen-select form-control" })</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">
+                                @Html.LabelFor(m => m.CombinationCode) <span class="red">*</span>
+                            </label>
+                            <div class="col-sm-6">
+                                @Html.TextBoxFor(m => m.CombinationCode, new { @maxlength = "10" })
+                                <span class="red">@Html.ValidationMessageFor(m => m.CombinationCode)</span>
+                            </div>
+                        </div>
+
+                        <div id="jssubjects">
+                            @if (Model?.CombinationHelper?.FinalCombinations?.Any() ?? false)
+                            {
+                                @Html.Partial("_SubjectsHelper", Model)
+                            }
+                        </div>
+                    }
+
+                </div>
+
+
+
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+@section PageSpecificJSFiles
+ {
+    <script src="~/Scripts/JSChosen.js"></script>
+    @Scripts.Render("~/bundles/Libraries/jqueryval", "~/bundles/Libraries/jqueryForm")
+
+}
+@section PageSpecificJS{
+    <script>
+        $(document).ready(function () {
+
+            //$(".nc").addClass("active");
+            //$(".dt").addClass("active open");
+
+            $("#College_ID").trigger('change');
+            $("#CombinationForm").submit(function (e) {
+                for (var name in localStorage) {
+                    if (localStorage.length == 0) break;
+                    removeLocalStorage(name);
+                }
+                return true;
+            });
+
+
+        });
+
+    </script>
+}

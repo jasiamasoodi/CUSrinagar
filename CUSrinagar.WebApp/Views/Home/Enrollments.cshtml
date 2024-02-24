@@ -1,0 +1,77 @@
+﻿@model List<CUSrinagar.Models.StudentsCourseWiseStatistics>
+@if (Model != null)
+{
+    <div style="overflow:auto !important">
+        <table class="table table-hover table-bordered js-table">
+            <thead style="white-space: nowrap;">
+                <tr>
+                    <td data-property="S.No." style="width:1%;padding-top: 49px;padding-left: 33px;font-weight:bold">Year</td>
+                    <td style="background: whitesmoke;text-align:center;width:3%;">
+                        <img class="img-responsive" src='@Url.Content("~/Content/ThemePublic/Libraries/images/banners/SPC.jpg")' a alt="" style="margin-left:55px;width:25%;" />
+                        <span style="text-align: center;">
+                            <b>Sri Pratap College</b>
+                        </span> <br />
+                        <small>M.A.Road,Srinagar</small>
+                    </td>
+                    <td style="background: whitesmoke;text-align:center;width:3%;">
+                        <img class="img-responsive" src='@Url.Content("~/Content/ThemePublic/Libraries/images/banners/ASC.jpg")' a alt="" style="margin-left:55px;width:25%;" />
+                        <span><b>Amar Singh College</b> </span><br />
+                        <small>Gogjibagh, Srinagar</small>
+                    </td>
+                    <td style="background: whitesmoke;text-align:center;width:2%;">
+                        <img class="img-responsive" src='@Url.Content("~/Content/ThemePublic/Libraries/images/banners/AAA.jpg")' a alt="" style="margin-left:55px;width:25%;" />
+                        <span><b>Abdul Ahad Azad</b> </span><br />
+                        <small>Degree College,Bemina</small>
+
+                    </td>
+                    <td style="background: whitesmoke;text-align:center;width:1%;">
+                        <img class="img-responsive" src='@Url.Content("~/Content/ThemePublic/Libraries/images/banners/GWC.jpg")' alt="" style="margin-left:55px;width:25%;" />
+                        <span><b>Govt College Women</b> </span><br />
+                        <small>M.A.Road,Srinagar</small>
+
+                    </td>
+                    <td style="background: whitesmoke;text-align:center;width:3%;">
+                        <img class="img-responsive" src='@Url.Content("~/Content/ThemePublic/Libraries/images/banners/IASE.jpg")' alt="" style="margin-left:55px;width:25%;" />
+                        <span><b>Inst. of Adv. Studies </b> </span><br />
+                        <small>M.A.Road,Srinagar</small>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    var batches = Model.Select(x => x.SemesterBatch).Distinct().OrderByDescending(x => x).ToList();
+                    foreach (var item in batches)
+                    {
+                        var _list = Model.Where(x => x.SemesterBatch == item)?.ToList();
+                        if (_list != null)
+                        {
+                            <tr style="text-align:center;border: 1px solid groove;">
+                                <td>
+                                    <h4>@item</h4>
+                                </td>
+                                <td>
+                                    <h4>@(_list.Where(x => x.CollegeFullName.ToLower().Contains("sri")).Sum(x => x.NoOfStudents))</h4>
+                                </td>
+
+                                <td>
+                                    <h4>@(_list.Where(x => x.CollegeFullName.ToLower().Contains("amar")).Sum(x => x.NoOfStudents))</h4>
+                                </td>
+                                <td>
+                                    <h4>@(_list.Where(x => x.CollegeFullName.ToLower().Contains("abdul")).Sum(x => x.NoOfStudents))</h4>
+                                </td>
+                                <td>
+                                    <h4>@(_list.Where(x => x.CollegeFullName.ToLower().Contains("women")).Sum(x => x.NoOfStudents))</h4>
+                                </td>
+                                <td>
+                                    <h4>@(_list.Where(x => x.CollegeFullName.ToLower().Contains("institu")).Sum(x => x.NoOfStudents))</h4>
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+}
+

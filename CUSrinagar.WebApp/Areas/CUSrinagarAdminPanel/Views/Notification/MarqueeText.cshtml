@@ -1,0 +1,45 @@
+﻿@{
+    ViewBag.Title = "MarqueeText - CUSrinagar";
+    string Vals = ViewBag.MarqueeText + "";
+}
+<div id="response">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+</div>
+<div class="page-wrapper pager-table-text">
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Marquee Text
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        @using (Html.BeginForm("MarqueeText", "Notification", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="col-sm-12">
+                                Enter Text <span style="color:red">(Important! -> Empty means remove marquee / scrolling. -> HTML is also allowed.)</span>
+                                <div id="Course">
+                                    @Html.TextArea("MarqueeText", Vals, new { @class = "allowHTML form-control", @rows = "5", cols = "10" })
+                                </div>
+                                <div class="col-sm-12 center" style="padding-top: 17px;">
+                                    <button type="submit" class="btn btn-success">Save &amp; Apply</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

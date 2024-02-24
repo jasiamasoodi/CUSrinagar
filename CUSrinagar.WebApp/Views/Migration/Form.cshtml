@@ -1,0 +1,29 @@
+﻿﻿@{string programme = ViewBag.PrintProgrammeIs + ""; }
+<div class="col-md-1 col-sm-1"></div>
+<div class="col-md-9 col-sm-9 ">
+
+        <div class="panel-body">
+       <p><h2>Migration Certificate to be issued</h2></p>
+
+
+            @model CUSrinagar.Models.MigrationPI
+            <div class="col-sm-12 col-md-6 center-block">
+                @using (Html.BeginForm("Migration", "Migration", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-group ">
+                        <label for="Type">    @Html.Label("Type")</label>
+                        @Html.DropDownList("FormType", (IEnumerable<SelectListItem>)ViewBag.FormTypeList, new { @class = "form-control " })
+                    </div>
+                    <div class="form-group">
+                        <label for="Programme">  @Html.Label("Programme")</label>
+                        @Html.DropDownList("Programme", (IEnumerable<SelectListItem>)ViewBag.PrintProgrammeList, new { @class = "form-control" })
+                    </div>
+
+                    <button type="submit" name="proceed" value="Proceed" id="proceed" tabindex="1" class="btn btn-theme">Proceed</button>
+                }
+            </div>
+
+        </div>
+</div>
+

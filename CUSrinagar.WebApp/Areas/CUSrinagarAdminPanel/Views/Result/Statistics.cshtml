@@ -1,0 +1,315 @@
+﻿@{
+    /**/
+
+    ViewBag.Title = "CUS::Result";
+}
+
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUSrinagarAdminPanel"})">Home</a>
+            </li>
+            <li class="active">Result List</li>
+        </ul><!-- /.breadcrumb -->
+    </div>
+    <div class="col-md-7">
+        @*<h2 class="no-margins">
+                Result Reports
+            </h2>*@
+    </div>
+    <div class="col-md-4">
+    </div>
+}
+
+<div class="row">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+    <div class="col-md-12 jsTableContent">
+        <div class="panel panel-primary js-pager-table" data-otherparam1="@CUSrinagar.Enums.PrintProgramme.UG">
+            <div class="panel-heading hidden-print">
+                <h3 class="panel-title">
+                    Result
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        List of Student
+                    </small>
+                    <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                        <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                    </span>
+                </h3>
+            </div>
+            <div class="panel-body hidden-print">
+                <div class="search-box">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <label>Batch</label><br />
+                            <div class="jsDDLContainer">
+                                <select class="jsfilterelement form-control" data-column="Batch" data-tablealias="S" data-operator="EqualTo" id="BatchDDL">
+                                    <option value="">All</option>
+                                    @for (int i = DateTime.Now.Year; i > 2016; i--)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Choose College</label><br />
+                            <div class="jsDDLContainer">
+                                @Html.DropDownList("CollegeDDL", new SelectList(ViewBag.College, "Value", "Text"), "------ All Colleges ------",
+                               new
+                               {
+                                   @class = "chosen-select jsfilterelement jsCollegeDDL",
+                                   @data_column = "AcceptCollege_ID",
+                                   @data_operator = "EqualTo",
+                                   @data_scope = "row1"
+                               })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Programme</label><br />
+                            <div class="wd-140 jsDDLContainer">
+                                @Html.DropDownList("ProgrammeDDL", new SelectList(ViewBag.Programmes, "Value", "Text", (short)CUSrinagar.Enums.Programme.UG), null,
+                                           new
+                                           {
+                                               @class = "form-control chosen-select jsProgrammeDDL jsfilterelement",
+                                               @data_column = "Programme",
+                                               @data_operator = "EqualTo",
+                                               @data_tablealias = "course",
+                                               @data_scope = "row1"
+                                           })
+                            </div>
+                        </div>
+                        <div class="form-group courseddl" style="display:none !important;">
+                            <label>Choose Course</label><br />
+                            <div class="jsDDLContainer  wd-200">
+                                @{List<SelectListItem> ddlCourses = ViewBag.Courses;}
+                                @Html.DropDownList("Course", new SelectList(ddlCourses, "Value", "Text", ddlCourses.First().Value),
+                                new
+                                {
+                                    @class = "form-control chosen-select jsfilterelement",
+                                    @data_column = "Course_ID",
+                                    @data_operator = "EqualTo",
+                                    @data_scope = "row1",
+                                    @data_tablealias = "Course"
+                                })
+                            </div>
+                        </div>
+
+                        <div class="form-group departmentddl">
+                            <label>Choose Department</label><br />
+                            <div class="jsDDLContainer wd-200">
+                                @{List<SelectListItem> ddldeparment = ViewBag.Departments;}
+                                @Html.DropDownList("Department_ID", new SelectList(ddldeparment, "Value", "Text", ddldeparment.First().Value),
+                                       new
+                                       {
+                                           @class = "form-control chosen-select jsDepartmentDDL jsfilterelement",
+                                           @data_column = "Department_ID",
+                                           @data_operator = "EqualTo",
+                                           @data_scope = "row1",
+                                       })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Choose Semester</label><br />
+                            <div class="jsDDLContainer">
+                                @Html.DropDownList("Semester", new SelectList(ViewBag.Semesters, "Value", "Text"), "-- All --",
+                                            new
+                                            {
+                                                @class = "form-control chosen-select jsSemesterDDL jsfilterelement",
+                                                @data_column = "Semester",
+                                                @data_operator = "EqualTo",
+                                                @data_scope = "row1",
+                                                @data_tablealias = "Comb"
+                                            })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Choose Subjects</label><br />
+                            <div class="jsDDLContainer wd-200">
+                                <select required id="SubjectDDL" class="jsfilterelement chosen-select form-control jsVWSCSubjectDDL" data-column="CombinationSubjects" data-operator="Contains" data-defaulttextvalue="All Subjects," data-scope="row1">
+                                    <option value="" selected>All Subjects</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Statistics type</label><br />
+                            <div class="jsDDLContainer wd-200">
+                                <select class="jsfilterelement chosen-select form-control" data-column="ShowSubjectWiseStatistics" data-scope="row1">
+                                    <option value="CourseWise" selected>Show Course Wise</option>
+                                    <option value="SubjectWise">Show Course Subject Wise</option>
+                                    <option value="ChoosenSubjectWise">Show By Choosen Subject Wise</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            Result Date (>=)<br />
+                            @Html.TextBox("GreaterThanDate", "", new { @data_tablealias = "RN", @data_column = "Dated", @data_operator = "GreaterThanEqualTo", @class = "form-control jsfilterelement datetime", @type = "date" })
+                        </div>
+                        <div class="form-group">
+                            Result Date (<=)<br />
+                            @Html.TextBox("LessThanDate", "", new { @data_tablealias = "RN", @data_column = "Dated", @data_operator = "LessThanEqualTo", @class = "form-control jsfilterelement datetime", @type = "date" })
+                        </div>
+
+                        <div class="form-group">
+                            <label>Regst No</label><br />
+                            <input type="text" placeholder="Regist Number" name="SearchRegNo" class="form-control jsfilterelement" data-column="CUSRegistrationNo" data-operator="EqualTo" data-scope="row1" />
+                        </div>
+                        <div class="form-group">
+                            <label class="invisible">for styling purpose</label><br />
+                            <button type="button" class="btn btn-primary btn-sm fa-search-btn js-search"><i class="fa fa-search"></i>&nbsp;Search</button>
+                            <div class="btn-group">
+                                <button data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle" type="button">
+                                    Action
+                                    <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-default dropdown-info">
+                                    @*<li>
+                                            <a href="javascript:void(0)" class="js-exportToCSV" data-url="@Url.Action("PrintMarksSheet","Result",new { area="CUSrinagarAdminPanel"})" data-otherparam1="printProgramme=@CUSrinagar.Enums.PrintProgramme.UG">
+                                                Print Marks Sheets
+                                            </a>
+                                        </li>*@
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="js-table-content" data-url=@Url.Action("StatisticsListPartial") data-DefaultOrderByColumn="ExamRollNumber">
+            </div>
+            @*@{Html.RenderPartial("_JSPagerTableFooter");}*@
+        </div>
+    </div>
+</div>
+
+@*--------- Upload result -----------------------*@
+<div id="ModalUploadEntranceResult" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter no-margin"><i class="fa fa-file-excel-o"></i>&nbsp;Upload External Result</h3>
+            </div>
+
+            <div class="modal-body JSUploadEntranceResult">
+                <div class="msg20"></div>
+                @using (Html.BeginForm("UploadExamResult", "Result", FormMethod.Post, new { id = "frmUploadExamResult", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken();
+
+                    <div class="form-group">
+                        <label><span class="red">*</span>Programme</label><br />
+                        <span>@Html.ValidationMessage("Programme")</span>
+                        <div class="wd-400 jsDDLContainer">
+                            @Html.DropDownList("Programme", new SelectList(ViewBag.Programmes, "Value", "Text", (short)CUSrinagar.Enums.Programme.UG), null,
+                                       new
+                                       {
+                                           @class = "form-control chosen-select jsProgrammeDDL jsfilterelement",
+                                           @data_column = "Programme",
+                                           @data_operator = "EqualTo",
+                                           @data_scope = "row2"
+                                       })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label><span class="red">*</span>Choose Course</label><br />
+                        <span>@Html.ValidationMessage("Course")</span>
+                        <div class="jsDDLContainer wd-400">
+                            @Html.DropDownList("Course", new SelectList(ViewBag.Courses, "Value", "Text", (short)CUSrinagar.Enums.Programme.UG), " -- All Courses --",
+                                       new
+                                       {
+                                           @class = "form-control chosen-select  ",
+                                           @data_column = "Course_ID",
+                                           @data_operator = "EqualTo",
+@data_scope = "row2"
+                                       })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label><span class="red">*</span>Choose Semester</label><br />
+                        <span>@Html.ValidationMessage("Semester")</span>
+                        <div class="jsDDLContainer wd-400">
+                            @Html.DropDownList("Semester", new SelectList(ViewBag.Semesters, "Value", "Text"), null,
+                                                               new
+                                                               {
+                                                                   @class = "form-control chosen-select jsSemesterDDL jsfilterelement",
+                                                                   @data_column = "Semester",
+                                                                   @data_operator = "EqualTo",
+                                                                   @data_scope = "row2"
+                                                               })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label><span class="red">*</span>Choose Subjects</label><br />
+                        <span>@Html.ValidationMessage("Subject")</span>
+                        <div class="jsDDLContainer wd-400">
+                            <select required id="Subject" name="Subject" class="jsfilterelement chosen-select form-control jsVWSCSubjectDDL" data-column="Subject" data-operator="Contains" ," data-scope="row2">
+                                <option value="" selected>All Subjects</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="col-sm-12">
+                        <label class=" control-label no-padding-right">
+                            Select Result File(CSV) without header <span class="red">*</span>
+                        </label>
+                        <span class="red erMsg"></span>
+                        <span>
+                            <br /><strong style="color:red;">1. First Column should be ExamRollNo<br />2. Second Column should be External Marks</strong>
+                            <input name="CSVResultFile" id="CSVResult" type="file" class="form-control" required onchange="return valFile('#CSVResult',0,1048576,'KB','CSV,csv','.erMsg');" , title="Only CSV file is allowed." />
+                        </span>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <div class="col-sm-12" style="margin-bottom:1%;"></div>
+                    <br />
+                    <div class="col-sm-12 text-center">
+                        <button type="submit" class="btn btn-sm btn-success JSUploadEntranceResultBtn">
+                            <i class="fa fa-file-excel-o"></i>&nbsp;Upload Result
+                        </button>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                }
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times"></i>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+@section PageSpecificJS{
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/Pages/reports-result.js")"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#BatchDDL').change(function () {
+                var batchSelected = $(this).val();
+                var programmeUG = $("#ProgrammeDDL").val();
+                if (Number(batchSelected) >= 2022 && programmeUG == "1") {
+                    $(".departmentddl").removeAttr('style')
+                    $(".departmentddl select").addClass("jsDepartmentDDL").addClass("jsfilterelement");
+                    $(".courseddl").css('display', 'none')
+                    $(".courseddl select").removeClass("jsCourseDDL").removeClass("jsfilterelement");;
+                } else {
+                    $(".courseddl").removeAttr('style')
+                    $(".courseddl select").addClass("jsCourseDDL").addClass("jsfilterelement");
+                    $(".departmentddl").css('display', 'none')
+                    $(".departmentddl select").removeClass("jsDepartmentDDL").removeClass("jsfilterelement");;
+                }
+            });
+        });
+    </script>
+
+
+}

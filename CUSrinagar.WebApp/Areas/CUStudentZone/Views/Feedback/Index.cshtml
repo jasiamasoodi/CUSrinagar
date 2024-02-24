@@ -1,0 +1,255 @@
+﻿@model CUSrinagar.Models.DailyLectureFeedBack
+
+@{
+    ViewBag.Title = "Daily Lecture Feedback- CUSrinagar";
+    string batch = Convert.ToString(ViewBag.studentBatch ?? "0");
+}
+
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area="CUS " })">Home</a>
+        </li>
+
+        <li>
+            <a href="#" class="active">Daily Lecture Feedback</a>
+        </li>
+    </ul>
+}
+
+@using (Html.BeginForm("Index", "Feedback", FormMethod.Post, new { @class = "jsMainForm rnd5 form-horizontal" }))
+{
+    <div class="row">
+        <div class="col-md-12">
+            <h4 style="padding-left:20px;">
+                Academic Bank of Credits ID (ABC ID)
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="https://www.abc.gov.in/" target="_blank">Apply for New ABC ID Here</a>
+            </h4>
+            <hr class="no-margin-top" />
+            <div style="padding-left:20px;">
+                @if (TempData["response"] != null)
+                {
+                    @Html.Raw(TempData["response"])
+                }
+                <div class="form-group">
+                    <label for="name" class="col-sm-2 bold">Enter your ABC ID<span class="red">*</span></label>
+                    <div class="col-sm-10">
+                        @if (Model == null)
+                        {
+                            @Html.TextBoxFor(model => model.ABCID, new { @class = "width-20", @maxlength = "12", @Value = ViewBag.ABCIDOfCurrentStd })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(model => model.ABCID, new { @class = "width-20", @maxlength = "12" })
+                        }
+                        @Html.ValidationMessageFor(model => model.ABCID)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <hr class="no-margin-top" />
+            <h4 style="padding-left:20px;">
+                Daily Lecture Feedback
+            </h4>
+            <hr class="no-margin-top" />
+            <div style="padding-left:20px;">
+                @Html.AntiForgeryToken()
+
+                @Html.HiddenFor(model => model.Student_ID)
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="name" class="col-sm-5">Subject<span class="red">*</span></label>
+                            <div class="col-sm-7 ">
+                                @Html.ValidationMessageFor(model => model.Subject_ID)
+                                @Html.DropDownListFor(model => model.Subject_ID, (IEnumerable<SelectListItem>)ViewBag.SubjectList, "--Select--", new { @class = "width-80" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-5">@Html.LabelFor(model => model.FacultyName)<span class="red">*</span></label>
+                            <div class="col-sm-7">
+                                @Html.TextBoxFor(model => model.FacultyName, new { @class = "width-80" })
+                                @Html.ValidationMessageFor(model => model.FacultyName)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-5">@Html.LabelFor(model => model.LectureDateTime)<span class="red">*</span></label>
+                            <div class="col-sm-7">
+                                @{
+                                    string currentDateString = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
+                                    string minDateString = DateTime.Now.AddDays(-365).ToString("yyyy-MM-dd"); ;
+                                }
+                                @Html.TextBoxFor(model => model.LectureDateTime, new { @type = "datetime-local", @min = minDateString, @max = currentDateString })
+                                @Html.ValidationMessageFor(model => model.LectureDateTime)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-5">@Html.LabelFor(model => model.FacultyType)<span class="red">*</span></label>
+                            <div class="col-sm-7">
+                                @Html.DropDownListFor(model => model.FacultyType, (IEnumerable<SelectListItem>)ViewBag.FacultyTypeList, "--Select--", new { @class = "width-80" })
+                                @Html.ValidationMessageFor(model => model.FacultyType)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-5">@Html.LabelFor(model => model.LectureTopic)<span class="red">*</span></label>
+                            <div class="col-sm-7">
+                                @Html.TextBoxFor(model => model.LectureTopic, new { @class = "width-80" })
+                                @Html.ValidationMessageFor(model => model.LectureTopic)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-5">@Html.LabelFor(model => model.ModeOfTeaching)<span class="red">*</span></label>
+                            <div class="col-sm-7">
+                                @Html.DropDownListFor(model => model.ModeOfTeaching, (IEnumerable<SelectListItem>)ViewBag.ModeOfTeachingList, "--Select--", new { @class = "width-80" })
+                                @Html.ValidationMessageFor(model => model.ModeOfTeaching)
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="name" class="col-sm-5">@Html.LabelFor(model => model.FacultyArrivesOnTime)<span class="red">*</span></label>
+                            <div class="col-sm-7">
+                                @foreach (SelectListItem item in (IEnumerable<SelectListItem>)ViewBag.YesNo)
+                                {@Html.RadioButtonFor(model => model.FacultyArrivesOnTime, item.Value) <span>&nbsp;@item.Text &emsp; </span>}
+                                @Html.ValidationMessageFor(model => model.FacultyArrivesOnTime)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-5">@Html.LabelFor(model => model.FacultyLeavessOnTime)<span class="red">*</span></label>
+                            <div class="col-sm-7">
+                                @foreach (SelectListItem item in (IEnumerable<SelectListItem>)ViewBag.YesNo)
+                                {@Html.RadioButtonFor(model => model.FacultyLeavessOnTime, item.Value) <span>&nbsp;@item.Text &emsp; </span>}
+                                @Html.ValidationMessageFor(model => model.FacultyLeavessOnTime)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-5">@Html.LabelFor(model => model.FacultyBehaviour) <span class="red">*</span></label>
+                            <div class="col-sm-7">
+                                @Html.DropDownListFor(model => model.FacultyBehaviour, (IEnumerable<SelectListItem>)ViewBag.RatingList, "--Select--", new { @class = "width-80" })
+                                @Html.ValidationMessageFor(model => model.FacultyBehaviour)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-5">@Html.LabelFor(model => model.RateTheLecture)<span class="red">*</span></label>
+                            <div class="col-sm-7">
+                                @Html.DropDownListFor(model => model.RateTheLecture, (IEnumerable<SelectListItem>)ViewBag.RatingList, "--Select--", new { @class = "width-80" })
+                                @Html.ValidationMessageFor(model => model.RateTheLecture)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-5">@Html.LabelFor(model => model.MaterialProvided)<span class="red">*</span></label>
+                            <div class="col-sm-7">
+                                @Html.DropDownListFor(model => model.MaterialProvided, (IEnumerable<SelectListItem>)ViewBag.MaterialProvidedList, "--Select--", new { @class = "width-80" })
+                                @Html.ValidationMessageFor(model => model.MaterialProvided)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-5">@Html.LabelFor(model => model.AnyRemarks)</label>
+                            <div class="col-sm-7">
+                                @Html.TextAreaFor(model => model.AnyRemarks, new { @class = "width-80" })
+                                @Html.ValidationMessageFor(model => model.AnyRemarks)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 pull-right center" style="padding-top: 17px;">
+                    <input type="submit" class="jsSave btn btn-success" value="Submit Feedback" />
+                </div>
+            </div>
+
+            <div class="clearfix"><br /><br /></div>
+
+            <!--External section-->
+            <div class="page-content">
+                <div class="row page-row">
+                    <div class="content-wrapper col-md-10 col-sm-7 jsSingleContent"></div>
+                    <div class="col-md-12 jsTableContent">
+                        <div class="panel panel-primary js-pager-table">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    FeedBacks
+                                    <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                        <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                                    </span>
+
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+
+                                <div class="col-sm-12 search-box">
+
+                                    <div class="col-sm-5 lbl bigger-120 no-padding-right">
+                                        Teacher Name
+                                        <div>
+                                            @Html.TextBox("FacultyName", "", new { @class = "jsfilterelement form-control ", @data_column = "FacultyName", @data_operator = "Contains" })
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5 lbl bigger-120 no-padding-right">
+                                        Subject
+                                        <div>
+                                            @Html.DropDownList("Subject_IDIS", (IEnumerable<SelectListItem>)ViewBag.SubjectList, "--Select--", new { @class = "jsfilterelement form-control ", @data_column = "Subject_ID", @data_operator = "EqualTo", @data_tablealias = "d" })
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-sm-1 pull-right" style="padding-top: 17px;">
+                                        <button type="button" class="btn btn-primary fa-search-btn"><i class="fa fa-search"></i>&nbsp;Search</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="js-table-content" data-url=@Url.Action("FeedbackList", "Feedback", new { area = "CUStudentZone" }) data-DefaultOrderByColumn="CreatedOn">
+
+                            </div>
+                            @{Html.RenderPartial("_JSPagerTableFooter");}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+
+
+@section PageSpecificStyle{
+    <style>
+        .field-validation-error {
+            color: red !important;
+        }
+    </style>
+}
+
+@section PageSpecificJSFiles{
+    <script>
+        $(document).ready(function ($) {
+            $(".jsMainForm").submit(function (e) {
+                if ($(this).valid()) {
+                    if (confirm("Are you sure you want to Submit Feedback?")) {
+                        $(".jsSave").text("Saving....").prop("disabled", true);
+                        return true;
+                    }
+                    return false;
+                } else {
+                    return false;
+                }
+            });
+
+            var $pagertable = $(".js-pager-table");
+            loadpagertable();
+
+            $("#Subject_ID").change(function () {
+                $("#Subject_IDIS").val($(this).val());
+            });
+        });
+    </script>
+}
+

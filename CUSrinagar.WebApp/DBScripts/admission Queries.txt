@@ -1,0 +1,145 @@
+SELECT * FROM	 dbo.ADMCollegeMaster WHERE CollegeFullName IN
+('Govt. Women College','Abdul Ahad Azad Memorial College ','Sri Pratap College','Amar Singh College'
+) ORDER BY CollegeFullName
+
+ SELECT * FROM dbo.ADMCourseMaster WHERE CourseFullName IN
+('B.Sc. Medical','B.A','B.Com','B.Sc. Home-Science','B.Sc. Non-Medical'
+)ORDER BY CourseFullName
+go
+SELECT CollegeFullName,CourseFullName,COUNT(*) Countt
+FROM dbo.StudentCollegePreference Pref
+JOIN dbo.ADMCollegeCourseMapping Mapping ON Mapping.College_ID = Pref.College_ID AND Mapping.Course_ID = Pref.Course_ID
+JOIN dbo.ADMCollegeMaster ON ADMCollegeMaster.College_ID = Mapping.College_ID
+JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = Mapping.Course_ID
+WHERE Pref.IsAllowed=1
+GROUP BY CollegeFullName,CourseFullName
+ORDER BY CollegeFullName,CourseFullName
+
+
+SELECT TOP 500
+CollegeFullName,CourseFullName,Pref.PreferenceOrder,P.Gender,P.StudentFormNo,P.DOB,
+CASE WHEN P.IsProvisional = 1 THEN  p.CATEntrancePoints ELSE CAST(CAST(((CAST(((q.MarksObt / q.MaxMarks) * 100) AS DECIMAL(5, 2)) * 60)/100) AS DECIMAL(5,2))+p.CATEntrancePoints AS VARCHAR(7)) END AS [Total Points]
+,dbo.FNStudentSelectionStatus(c.StudentSelectionStatus),Pref.IsAllowed
+,'UPDATE ARGCoursesApplied_IH SET StudentSelectionStatus=5 where student_id='''+
+CAST(P.Student_ID AS VARCHAR(max))+''''+' and course_id='''+'A3EE7F98-7B82-4D95-A2C0-FABA7A18240E'+''''
+,'UPDATE StudentCollegePreference SET IsAllowed=1 where student_id='''+
+CAST(P.Student_ID AS VARCHAR(max))+''''+' and course_id='''+CAST(Pref.Course_ID AS VARCHAR(max))+''''
++' and College_ID='''+CAST(Pref.College_ID AS VARCHAR(max))+''''
+FROM dbo.StudentCollegePreference Pref
+JOIN dbo.ARGPersonalInformation_IH P ON P.Student_ID = Pref.Student_ID
+JOIN ARGStudentAddress_IH Ad ON Ad.Student_ID = P.Student_ID
+JOIN dbo.ARGStudentPreviousQualifications_IH q ON q.Student_ID=p.Student_ID
+JOIN dbo.ARGCoursesApplied_IH C ON C.Student_ID = P.Student_ID AND C.Course_ID='A3EE7F98-7B82-4D95-A2C0-FABA7A18240E' AND c.StudentSelectionStatus=6
+JOIN dbo.ADMCollegeCourseMapping M ON M.College_ID = Pref.College_ID AND M.Course_ID = Pref.Course_ID
+JOIN dbo.ADMCollegeMaster ON ADMCollegeMaster.College_ID = M.College_ID
+JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = M.Course_ID
+LEFT JOIN (SELECT DISTINCT Student_ID FROM dbo.StudentCollegePreference WHERE IsAllowed=1) AlreadyAllowed ON AlreadyAllowed.Student_ID = P.Student_ID
+WHERE AlreadyAllowed.Student_ID IS NULL  AND Pref.IsAllowed=0 AND CourseFullName LIKE '%B.Sc. Med%'  AND CollegeFullName LIKE '%SRI%' AND Pref.PreferenceOrder=1
+ORDER BY CollegeFullName,CourseFullName,[Total Points] DESC,Pref.PreferenceOrder
+
+go
+SELECT * FROM dbo.ARGPersonalInformation_UG WHERE EntranceRollNo=210483
+
+	SELECT p.StudentFormNo,P.DOB,P.EntranceRollNo,P.FullName,CourseFullName,dbo.FNStudentSelectionStatus(C.StudentSelectionStatus),C.*
+	FROM dbo.ARGPersonalInformation_IH P
+	JOIN dbo.ARGCoursesApplied_IH C ON C.Student_ID = P.Student_ID
+	JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = C.Course_ID
+	WHERE P.StudentFormNo='cus-ih-200260'
+	go
+	SELECT CollegeFullName,CourseFullName,StudentCollegePreference.* FROM  dbo.StudentCollegePreference
+	JOIN dbo.ADMCollegeMaster ON ADMCollegeMaster.College_ID = StudentCollegePreference.College_ID
+	JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = StudentCollegePreference.Course_ID
+	WHERE Student_ID='6C0E4340-F788-4675-BCBF-28EAA31D1993'
+	
+	
+	
+	
+	
+SELECT 'UPDATE ARGCoursesApplied_IH SET StudentSelectionStatus=5 where student_id='''+
+CAST(StudentCollegePreference.Student_ID AS VARCHAR(max))+''''+' and course_id='''+'A3EE7F98-7B82-4D95-A2C0-FABA7A18240E'+''';'+
+'UPDATE StudentCollegePreference SET IsAllowed=1 where student_id='''+
+CAST(StudentCollegePreference.Student_ID AS VARCHAR(max))+''''+' and course_id='''+CAST(StudentCollegePreference.Course_ID AS VARCHAR(max))+''''
++' and College_ID='''+CAST(College_ID AS VARCHAR(max))+'''',dbo.FNStudentSelectionStatus(ARGCoursesApplied_IH.StudentSelectionStatus) FROM dbo.StudentCollegePreference 
+LEFT JOIN (SELECT DISTINCT Student_ID FROM dbo.StudentCollegePreference WHERE IsAllowed=1) AlreadyAllowed ON AlreadyAllowed.Student_ID = StudentCollegePreference.Student_ID
+JOIN dbo.ARGPersonalInformation_IH ON ARGPersonalInformation_IH.Student_ID = StudentCollegePreference.Student_ID
+JOIN dbo.ARGCoursesApplied_IH ON ARGCoursesApplied_IH.Student_ID = StudentCollegePreference.Student_ID
+WHERE College_ID='8B585643-CEB5-4C96-8328-862A9911CD51' AND AlreadyAllowed.Student_ID IS NULL
+AND StudentCollegePreference.Course_ID='B18A12B2-9025-4057-8E38-DF723649D941' --AND ARGPersonalInformation_IH.Gender<>'male'
+AND PreferenceOrder=1 AND IsAllowed=0 AND CAST(StudentCollegePreference.CreatedOn AS DATE) <='2020-06-02'
+ AND ARGCoursesApplied_IH.StudentSelectionStatus=6
+
+
+
+ SELECT StudentCollegePreference.Student_ID,dbo.FNStudentSelectionStatus(ARGCoursesApplied_IH.StudentSelectionStatus),Preference_ID 
+ FROM dbo.ARGCoursesApplied_IH  
+ JOIN dbo.StudentCollegePreference ON StudentCollegePreference.Student_ID = ARGCoursesApplied_IH.Student_ID
+ LEFT JOIN (SELECT DISTINCT Student_ID FROM dbo.StudentCollegePreference) AlreadyAllowed ON AlreadyAllowed.Student_ID = ARGCoursesApplied_IH.Student_ID
+ WHERE StudentSelectionStatus NOT IN (6,5,11) AND IsAllowed=1 AND AlreadyAllowed.Student_ID IS NULL 
+ --AND ARGCoursesApplied_IH.Course_ID=''
+ ORDER BY StudentCollegePreference.Student_ID
+ 
+ 
+ 
+ -------------------- Joined UG -------------------------------------
+SELECT CollegeFullName,CourseFullName,COUNT(*) [Total Applied(Fee Paid)]
+FROM ARGPersonalInformation_UG
+JOIN  dbo.StudentCollegePreference Pref ON ARGPersonalInformation_UG.Student_ID = Pref.Student_ID
+JOIN dbo.ADMCollegeMaster ON ADMCollegeMaster.College_ID = Pref.College_ID
+JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = Pref.Course_ID
+WHERE Pref.IsAllowed=1 AND Batch=2020 AND EntranceRollNo IS NOT NULL
+GROUP BY CollegeFullName,CourseFullName
+ORDER BY CollegeFullName,CourseFullName
+----------------- CollegePreferenceUpdated UG ----------------------------------
+SELECT CollegeFullName,CourseFullName,COUNT(*) [Total(Saved Prefs)]
+FROM ARGCoursesApplied_IH
+JOIN  dbo.StudentCollegePreference Pref ON ARGCoursesApplied_IH.Student_ID = Pref.Student_ID
+JOIN dbo.ARGPersonalInformation_IH ON ARGPersonalInformation_IH.Student_ID = ARGCoursesApplied_IH.Student_ID
+JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = Pref.Course_ID
+JOIN dbo.ADMCollegeMaster ON ADMCollegeMaster.College_ID = Pref.College_ID
+WHERE Batch=2020 AND EntranceRollNo IS NOT NULL AND 
+ARGCoursesApplied_IH.Course_ID='A3EE7F98-7B82-4D95-A2C0-FABA7A18240E' AND StudentSelectionStatus=6
+GROUP BY CollegeFullName,CourseFullName
+ORDER BY CollegeFullName,CourseFullName
+-------------------------- College and student details ----------------------
+SELECT CollegeFullName,CourseFullName,StudentFormNo,FullName,FathersName,Gender,EntranceRollNo,ARGStudentAddress_UG.PermanentAddress,
+ARGStudentAddress_UG.District,ARGStudentAddress_UG.Mobile,ARGStudentAddress_UG.Email,
+ARGStudentPreviousQualifications_UG.ExamName,
+ARGStudentPreviousQualifications_UG.Stream,
+ARGStudentPreviousQualifications_UG.Subjects,
+ARGStudentPreviousQualifications_UG.Session,
+ARGStudentPreviousQualifications_UG.Year,
+ARGStudentPreviousQualifications_UG.RollNo,
+ARGStudentPreviousQualifications_UG.MaxMarks,
+ARGStudentPreviousQualifications_UG.MarksObt,
+ARGStudentPreviousQualifications_UG.ExamBody,AssemblyConstituency,ParliamentaryConstituency
+FROM ARGPersonalInformation_UG
+JOIN  dbo.StudentCollegePreference Pref ON ARGPersonalInformation_UG.Student_ID = Pref.Student_ID
+JOIN dbo.ARGStudentAddress_UG ON ARGStudentAddress_UG.Student_ID = ARGPersonalInformation_UG.Student_ID
+JOIN dbo.ADMCollegeMaster ON ADMCollegeMaster.College_ID = Pref.College_ID
+JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = Pref.Course_ID
+LEFT JOIN dbo.ARGStudentPreviousQualifications_UG ON ARGStudentPreviousQualifications_UG.Student_ID = ARGPersonalInformation_UG.Student_ID
+WHERE Pref.IsAllowed=1 AND Batch=2020 AND EntranceRollNo IS NOT NULL --AND StudentFormNo='CUS-IH-2005488'
+AND CollegeFullName='Abdul Ahad Azad Memorial College' AND CAST(Pref.CreatedOn AS DATE)>='2020-06-15'
+ORDER BY CollegeFullName,CourseFullName,Pref.PreferenceOrder ASC
+
+
+----------------------------------- ig details ---------------------------------------
+SELECT DISTINCT CourseFullName,StudentFormNo,FullName,FathersName,Gender,EntranceRollNo,ARGStudentAddress_Ih.PermanentAddress,
+ARGStudentAddress_Ih.District,ARGStudentAddress_Ih.Mobile,ARGStudentAddress_Ih.Email,
+ARGStudentPreviousQualifications_Ih.ExamName,
+ARGStudentPreviousQualifications_Ih.Stream,
+ARGStudentPreviousQualifications_Ih.Subjects,
+ARGStudentPreviousQualifications_Ih.Session,
+ARGStudentPreviousQualifications_Ih.Year,
+ARGStudentPreviousQualifications_Ih.RollNo,
+ARGStudentPreviousQualifications_Ih.MaxMarks,
+ARGStudentPreviousQualifications_Ih.MarksObt,
+ARGStudentPreviousQualifications_Ih.ExamBody,AssemblyConstituency,ParliamentaryConstituency
+FROM ARGPersonalInformation_Ih
+JOIN dbo.ARGCoursesApplied_IH ON ARGCoursesApplied_IH.Student_ID = ARGPersonalInformation_IH.Student_ID
+JOIN dbo.ARGStudentAddress_Ih ON ARGStudentAddress_Ih.Student_ID = ARGPersonalInformation_Ih.Student_ID
+JOIN dbo.ADMCourseMaster ON ADMCourseMaster.Course_ID = ARGCoursesApplied_IH.Course_ID
+LEFT JOIN dbo.ARGStudentPreviousQualifications_Ih ON ARGStudentPreviousQualifications_Ih.Student_ID = ARGPersonalInformation_Ih.Student_ID
+WHERE StudentSelectionStatus IN (1,12) AND Batch=2020 AND EntranceRollNo IS NOT NULL AND AppearedInEntrance=1
+ORDER BY CourseFullName
+

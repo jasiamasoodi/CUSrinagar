@@ -1,0 +1,252 @@
+﻿@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@model CUSrinagar.Models.CorrectionForm
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>CUS Correction Form - @DateTime.Now.Year</title>
+    <style type="text/css">
+        @@media print {
+            .noneOnPrint {
+                display: none;
+            }
+
+            @@page {
+                size: portrait;
+            }
+
+            .breakpagehere {
+                page-break-after: always !important;
+            }
+        }
+
+        p {
+            padding: 0mm;
+            margin: 0mm;
+        }
+
+        .tblpad tr td {
+            padding: 4px;
+        }
+
+
+        .watermark {
+            right: 20%;
+            top: 33%;
+            color: silver;
+            opacity: 0.3;
+            font-size: 100px;
+            position: absolute;
+            transform: rotate(-45deg);
+            background-color: transparent
+        }
+    </style>
+</head>
+<body style="background: #e0e0e0;margin: auto;display: table;font-size:17px" oncontextmenu="return false;">
+    <div style="background: white; width: 900px;margin:0mm; padding:10px; font-family: 'Roboto';">
+        <center>
+            <table style="">
+                <tbody>
+                    <tr>
+                        <td style="text-align:left;" rowspan="2">
+                            <img src="~/Content/ThemePublic/PrintImages/MarksSheetLogo.png" style="width:70px;" />
+                        </td>
+
+                        <td style="text-align:center;">
+                            <div style="margin-right:16px;">
+                                <div style="font-family: Arial, sans-serif;font-size: 7mm;font-weight: bold;position:relative;z-index: 1;display: inline-block;  -webkit-font-smoothing: antialiased;  -moz-osx-font-smoothing: grayscale;            transform: scale(1, 1.5); -webkit-transform: scale(1, 1.5); -moz-transform: scale(1, 1.5);  -o-transform: scale(1, 1.5);  -ms-transform: scale(1, 1.5);">
+                                    <span style="letter-spacing:0.8mm;font-family: Algerian,Times, 'Times New Roman', serif;font-weight: normal;                color: #2F5485;                text-shadow: 0.03em 0.03em 0px #b3b3b3;">
+                                        &nbsp;&nbsp;Cluster University Srinagar
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p style="text-align:center;">
+                                <b>
+                                    Application form for correction in Name/Parentage/Sub-Caste/DOB
+                                    @if (Model.HasDegreeCertificatePrinted)
+                                    {
+                                        <text><br />(After Issuance of Degree)</text>
+                                    }
+                                    else if (Model.HasTranscriptPrinted)
+                                    {
+                                        <text><br />(After Issuance of Transcript)</text>
+                                    }
+                                </b>
+                                <br />
+                                www.cusrinagar.edu.in
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </center>
+        <table>
+            <tbody>
+                <tr>
+                    <td style="width:720px"><div style="text-align:left">(Downloaded on : @DateTime.Now.ToLongDateString())</div></td>
+                    <td>
+                        <div style="color:silver;float:right">Developed by I.T Cell</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <hr />
+        <table style="width:100%;font-size:15px" class="tblpad">
+            <tbody>
+                <tr>
+                    <td>
+                        <table style="width:100%;">
+                            <tr>
+                                <td>
+                                    <strong>
+                                        Name/Parentage/Sub-Caste recorded in
+                                        the University records
+                                    </strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>1) Name of Candidate : <b><u>@Model.PresentFullName.ToUpper() </u></b></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    2) Father's Name : <b><u>@Model.PresentFathersName.ToUpper()</u></b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3) University Registration No. :  <b><u>@Model.CUSRegistrationNo.ToUpper()</u></b></td>
+                            </tr>
+                            <tr>
+                                <td>4) DOB : <b><u>@Model.PresentDOB.ToString("dd-MMMM-yyyy")</u></b><br /></td>
+                            </tr>
+                            <tr>
+                                <td>5) Transcript Printed : <b><u>@(Model.HasTranscriptPrinted?"YES":"NO")</u></b><br /></td>
+                            </tr>
+                            <tr>
+                                <td>6) Degree Certificate Printed : <b><u>@(Model.HasDegreeCertificatePrinted?"YES":"NO")</u></b></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="float:right">
+                        <img src="https://www.cusrinagar.edu.in/@Model.Photograph" width="120" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table style="width:100%;">
+                            <tr>
+                                <td>
+                                    <strong>
+                                        Change in Name/parentage/Sub-Caste/DOB to be
+                                        made by the applicant (as per matriculation
+                                        certificate issued by the concerned authority)
+                                    </strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>1) Name (Full) : <b><u>@Model.NewFullName.ToUpper() </u></b></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    2) Father's Name (Full) : <b><u>@Model.NewFathersName.ToUpper()</u></b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3) DOB : <b><u>@Model.NewDOB.ToString("dd-MMMM-yyyy")</u></b></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        4) Reasons & Documentary proof in support
+                        of effecting the change in the University
+                        records<br />&nbsp;&nbsp;&nbsp;(Attach the relevant document in
+                        support) :<br />&nbsp;&nbsp;&nbsp;<b><u>@(Model.ReasonAndDocumentaryProof?? "Not Applicable") &nbsp;&nbsp;</u></b>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        5) Fee of Rs. <b>
+                            <u>
+                                @Model.PaymentDetail.TxnAmount/-
+                            </u>
+                        </b>in the shape of online Payment made via Transaction No
+                        <b><u>&nbsp;&nbsp;@Model.PaymentDetail.TxnReferenceNo&nbsp;&nbsp;</u></b>
+                        Dated :&nbsp;&nbsp;
+                        <b>
+                            <u>
+                                @Model.PaymentDetail.TxnDate.ToString("dd-MM-yyyy")
+                            </u>
+                        </b>&nbsp;&nbsp;
+                        for correction in Transcript/ Degree Certificate.
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Dated: ____/____/________
+                    </td>
+                    <td>
+                        <b>Signature of Applicant</b><br /><br />
+                        Full Address____________________<br /><br />
+                        _________________________________<br /><br />
+                        Contact No. ____________________
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <hr />
+        <div style="padding:0px 0 10px 0">
+            No: ____________________________ <div style="text-align:right;padding-top:-10px;">Dated: ______/_____/_________</div>
+            <br />
+            Forwarded to the Registrar, Cluster University Srinagar for necessary action. The change applied for is
+            recommended.
+            <br /><br />
+            <div style="text-align:right;padding:0;">
+                <br />
+                <b>
+                    Seal & Signature of<br />
+                    Principal of the College
+                </b>
+            </div>
+        </div>
+        <hr />
+
+        <fieldset class="padding-0" style="font-size:14px;">
+            <legend style="text-align:center;margin:0;color:red">Instructions</legend>
+            <ol>
+                <li>
+                    The request for change in Name/Parentage/Sub-Caste can be considered by the University only after the change has been affected by the
+                    J&K Board, School Education at the matriculation/Higher Secondary Part-II Level.
+                </li>
+                <li>
+                    This application must be accompanied with the following documents:<br />
+                    &nbsp;&nbsp;i. Application duly forwarded by the concerned college principal to the Registrar, along with following documents;<br />
+                    &nbsp;&nbsp;ii. Original Transcript;<br />
+                    &nbsp;&nbsp;iii. Newspaper (Full Page mentioning day and date of publication);<br />
+                    &nbsp;&nbsp;iv. 10th /12th Marks Sheet (Original as well as photocopy issued by JKBOSE or CBSE etc);<br />
+                    &nbsp;&nbsp;v. 10th D.O.B (Qualification Certificate);<br />
+                    &nbsp;&nbsp;vi. Original copy of the order issued by the J&K Board of School Education authorizing the said change.
+                </li>
+            </ol>
+        </fieldset>
+    </div>
+    <br />
+    <br />
+    <br />
+    <div class="noneOnPrint" style="height:40px;background-color:lightslategrey;width:920px;position:fixed;bottom:0;z-index:100;text-align:center;padding-top:10px">
+        <button style="height: 32px;" href="#" class="btn btn-theme" onclick="window.print();"><b>Download or Print</b></button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:white">Developed &amp; Maintained by I.T Cell</span>
+    </div>
+</body>
+</html>
+
+

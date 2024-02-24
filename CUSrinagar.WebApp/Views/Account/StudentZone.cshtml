@@ -1,0 +1,262 @@
+﻿@using CUSrinagar.Models
+@using CaptchaMvc.HtmlHelpers
+
+@model ARGReprint
+
+@{
+    ViewBag.Title = $"Student Zone";
+}
+
+<div class="page-header">
+    <h1>
+        <i class="fa fa-graduation-cap"></i> Student Zone - SignIn
+    </h1>
+</div>
+@if (ViewBag.PrintProgrammeOption != null)
+{
+    <div class="row">
+        <div id="response" style="margin:0 auto;width:80%">
+            @if (TempData["response"] != null)
+            {
+                @Html.Raw(TempData["response"])
+            }
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-7" style="border:2px solid #cacaca;border-radius:6px;">
+            <br />
+
+            @using (Html.BeginForm("StudentZone", "Account", FormMethod.Post, new { @class = "rnd5", @id = "frmSZone", @autocomplete = "off" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("R", (string)ViewBag.ReturnUrl)
+                @*------------------------------------Print Section-----------------------------------*@
+                <div class="col-lg-2">    </div>
+                <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                    <div class="content-wrapper">
+                        <label class="col-sm-7 lbl bigger-120 no-padding-right">
+                            @Html.LabelFor(model => model.FormNo)
+                            <span class="required">
+                                *
+                                @Html.ValidationMessageFor(model => model.FormNo)
+                            </span><br />
+                            @Html.TextBoxFor(model => model.FormNo, new { @class = "form-control jsfilterelement", @maxlength = "150", @autocomplete = "off", @onkeypress = "return forAdmissionRollNo(event);" })
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-lg-2">    </div>
+                <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                    <div class="content-wrapper">
+                        <label class="col-sm-7 lbl bigger-120 no-padding-right">
+                            @Html.LabelFor(model => Model.EnteredDOB, new { @class = "small-70" })
+                            <span class="required">
+                                *
+                                @Html.ValidationMessageFor(model => model.EnteredDOB)
+                            </span><br />
+                            @Html.TextBoxFor(model => model.EnteredDOB, new { @class = "form-control dateDDMMYYY", @maxlength = "10", placeholder = "dd-mm-yyyy", @autocomplete = "off" })
+                        </label>
+                    </div>
+                </div>
+
+
+                @Html.Hidden(nameof(Model.Batch), "2017")
+                <div class="col-lg-2">    </div>
+                <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                    <div class="content-wrapper">
+                        <label class="col-sm-7 lbl bigger-120 no-padding-right">
+                            Programme
+                            <span class="required">
+                                *
+                                @Html.ValidationMessageFor(model => model.PrintProgrammeOption)
+                            </span><br />
+                            @Html.DropDownListFor(model => model.PrintProgrammeOption, (IEnumerable<SelectListItem>)ViewBag.PrintProgrammeOption, string.Empty, new { @class = "form-control" })
+                        </label>
+                    </div>
+                    @if (!(ViewBag.IsLocalHost))
+                    {
+                        <center>
+                            @Html.Captcha("", "Enter above verification code", 4, "required", true)
+                        </center>
+                    }
+                </div>
+                <p class="text-center">
+                    <span id="hideButtons6">
+                        <button type="submit" id="jsStudentZone" class="btn btn-success"><i class="fa fa-twitter"></i>Sign In</button>
+                    </span>
+                </p>
+
+                @*------------------------------------End Print Section-----------------------------------*@
+                if (ViewBag.IsLocalHost)
+                {
+                    <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                        <div class="content-wrapper">
+                            <label class="col-sm-7 lbl bigger-120 no-padding-right">
+                                Batch (Optional)
+                                <input type="number" class="nav-search-input center" style="width:60rem;font-size:18px" id="SearchBatch" autocomplete="off">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                        <div class="content-wrapper">
+                            <label class="col-sm-7 lbl bigger-120 no-padding-right">
+                                Course*
+                                <input type="text" class="nav-search-input center" style="width:60rem;font-size:18px" id="studentListAutoComplete" autocomplete="off">
+                            </label>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <div class="col-md-3"></div>
+
+        <div class="col-lg-12"><br /><br /><br /><br /></div>
+    </div>
+}
+else
+{
+    <h1 class="quadraText">
+        The process of downloading Admit Cards is either closed or will be allowed soon.
+    </h1>
+}
+@section PageSpecificCSS
+{
+    <style>
+        .ui-autocomplete {
+            background-color: #FFF;
+            box-shadow: 0 2px 4px rgba(0,0,0,.2);
+            z-index: 3000;
+        }
+
+        .ui-autocomplete-category {
+            padding: 6px;
+            position: relative;
+            background-color: #EEF4F9;
+            color: #478FCA;
+            font-weight: bolder;
+            border: 1px solid #DAE6ED;
+            border-width: 1px 0
+        }
+
+        .ui-spinner-button {
+            border-width: 0 !important;
+            font-size: 10px;
+            height: 16px;
+            line-height: 16px;
+            color: #FFF !important;
+            text-shadow: 0 -1px 0 rgba(0,0,0,.25) !important;
+            position: absolute;
+            text-align: center;
+            padding: 0
+        }
+
+        .ui-spinner-up {
+            top: 0;
+            right: 5px
+        }
+
+        .ui-spinner-down {
+            bottom: 3px;
+            right: 5px
+        }
+
+        .ui-spinner-input {
+            margin-top: 0;
+            padding: 5px;
+            max-width: 100px;
+            font-size: 14px
+        }
+
+        .ui-tooltip {
+            background-color: #444;
+            color: #FFF
+        }
+
+        .ui-progressbar {
+            background-color: #f5f5f5;
+            height: 22px
+        }
+
+            .ui-progressbar .ui-progressbar-value {
+                margin: 0
+            }
+
+                .ui-progressbar .ui-progressbar-value[class=progress-bar] {
+                    background-color: #2A91D8
+                }
+
+        .ui-selectmenu-button {
+            border: 1px solid #aaa
+        }
+
+            .ui-selectmenu-button[aria-expanded=true] {
+                border-color: #4492C9
+            }
+
+            .ui-selectmenu-button span.ui-icon {
+                text-indent: 0;
+                margin-top: -10px
+            }
+
+            .ui-selectmenu-button .ui-icon:before {
+                display: inline-block;
+                color: #888;
+                font-size: 14px
+            }
+
+        .ui-jqgrid .ui-jqgrid-view {
+            z-index: auto
+        }
+
+        .ui-jqgrid .ui-jqgrid-view, .ui-jqgrid .ui-paging-info, .ui-jqgrid .ui-pg-selbox, .ui-jqgrid .ui-pg-table {
+            font-size: 13px
+        }
+
+        .ui-jqgrid .ui-jqgrid-title {
+            float: left;
+            margin: 8px
+        }
+
+        .ui-jqgrid .ui-jqgrid-title-rtl {
+            float: right;
+            margin: 8px
+        }
+
+        .ui-jqgrid-view > .ui-jqgrid-titlebar {
+            height: 40px;
+            line-height: 24px;
+            color: #FFF;
+            background: #307ECC;
+            padding: 0;
+            font-size: 15px
+        }
+
+        .ui-jqgrid tr.jqgrow.ui-row-rtl td:last-child {
+            border-right: none;
+            border-left: 1px solid #E1E1E1
+        }
+
+        .ui-jqgrid .ui-jqgrid-hdiv {
+            background-color: #EFF3F8;
+            border: 1px solid #D3D3D3;
+            border-width: 1px 0 0 1px;
+            line-height: 15px;
+            font-weight: 700;
+            color: #777;
+            text-shadow: none
+        }
+
+        .ui-jqgrid .ui-jqgrid-htable thead {
+            background-color: #EFF3F8
+        }
+
+        .ui-jqgrid .ui-jqgrid-htable th span.ui-jqgrid-resize {
+            height: 45px !important
+        }
+    </style>
+}
+
+@section PageSpecificJS
+{
+    @Scripts.Render("~/bundles/Libraries/jqueryval", "~/bundles/JQStudenZone")
+}

@@ -1,0 +1,178 @@
+﻿@using CUSrinagar.Models
+@model FTFileTracking
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>File History - CUSrinagar</title>
+    <style type="text/css">
+        .btn-theme {
+            background: #011c27;
+            border: 1px solid #84aac9;
+            color: #fff;
+        }
+
+            .btn-theme:hover {
+                background: #545677;
+                border: 1px solid #84aac9;
+                color: #fff;
+            }
+
+        .QRCode {
+            width: 95px;
+            position: absolute;
+            margin-top: -60px;
+            margin-left: 0
+        }
+
+        @@media print {
+            .QRCode {
+                width: 95px;
+                position: absolute;
+                margin-top: -60px;
+                margin-left: 0
+            }
+
+            .noneOnPrint {
+                display: none;
+            }
+
+            .dontbreakInside {
+                page-break-inside: avoid;
+            }
+
+
+            .blankspace {
+                height: 350px !important;
+            }
+        }
+
+        .breakpagehere {
+            page-break-after: always !important;
+            height: 10px;
+            background-color: grey !important;
+        }
+
+        table tr td {
+            padding: 5px 10px;
+        }
+
+        table tr td, table tr th {
+            max-width: 150px;
+            word-wrap: hyphenate !important;
+        }
+
+        table, table tr, table tr td, table tr th {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        div {
+            background-color: #fff;
+        }
+
+        .center {
+            text-align: center !important;
+        }
+
+        .pull-right {
+            float: right !important;
+        }
+
+        .pull-left {
+            float: left !important;
+        }
+    </style>
+</head>
+<body style="background-color:grey" onload="window.print();">
+    <div style="margin:0 auto;width:909px;padding:10px 10px;font-size:18px;">
+
+        @if (Model != null)
+        {
+            <h3 class="smaller lighter no-margin center">
+                <i class="fa fa-pdf"></i>&nbsp;File No: @Model.FileNo created on @Model.FileTrackingHistoryDetails.First(x => x.FileStatus == CUSrinagar.Enums.FTFileStatus.Created).Dated.ToString("dd MMMM, yyyy hh:mm tt") is currently in
+                @Model.UserID.Substring(Model.UserID.LastIndexOf("(")).Replace("(", "").Replace(")", "")
+            </h3>
+            //{ string prevUserID = ""; }
+            <ol>
+
+                @foreach (FTFileTrackingHistory item in Model.FileTrackingHistoryDetails ?? new List<FTFileTrackingHistory>())
+                {
+                    <li>
+                        <strong class="label label-info arrowed arrowed-in-left">
+                            @item.FileStatus.ToString()
+                            @if (item.FileStatus == CUSrinagar.Enums.FTFileStatus.Forwarded)
+                            {
+                                <text> from </text>
+                            }
+                            else
+                            {
+                                <text> in </text>
+                            }
+                            @item.Section
+                            @if (item.FileStatus == CUSrinagar.Enums.FTFileStatus.Forwarded)
+                            {
+                                <text> to </text>
+                            }
+                            else
+                            {
+                                <text> by </text>
+                            }
+                            @item.UserID
+                        </strong>
+
+                        <br />
+                        <div class="time">
+                            <span class="green">on @item.Dated.ToString("dd MMMM, yyyy hh:mm tt")</span>
+                        </div>
+                        @if (item.FileStatus == CUSrinagar.Enums.FTFileStatus.Created)
+                        {
+                            <b>Subject: </b>@Model.Subject <br />
+                            @Model.Description
+                        }
+                        else
+                        {
+                            if (!string.IsNullOrWhiteSpace(item.Remarks))
+                            {
+                                <text>Remarks : </text>@item.Remarks
+                            }
+                            else
+                            {
+                                <span style="color:#9a9999">No remarks</span>
+                            }
+
+                        }
+                        <br />
+                        <br />
+                    </li>
+
+                    //prevUserID = item.UserID;
+                }
+            </ol>
+        }
+        else
+        {
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter no-margin"><i class="fa fa-pdf"></i>&nbsp;Track Details</h3>
+            </div>
+            <b> No details found</b>
+        }
+    </div>
+    <div class="noneOnPrint" style="margin-left:-14px;height:40px;background-color:lightslategrey;width:100%;position:fixed;bottom:0;z-index:100;text-align:center;padding-top:10px">
+        @Html.ActionLink("Go Back", "AllFiles", "FileTracking", null, new { area = "CUSrinagarAdminPanel", style = "color:white;" })
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <button style="height: 32px;" href="#" class="btn btn-theme" onclick="window.print();"><b>Print</b></button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a style="height: 32px;color:white" href="https://www.wikihow.com/Save-a-Web-Page-as-a-PDF-in-Google-Chrome" target="_blank"><b>See How to Save as PDF</b></a>
+    </div>
+</body>
+</html>

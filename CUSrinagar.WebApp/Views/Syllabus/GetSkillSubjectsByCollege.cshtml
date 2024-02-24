@@ -1,0 +1,32 @@
+﻿
+@model  List<CUSrinagar.Models.ADMSubjectMaster>
+@{
+    Layout = null;
+}
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">       
+        <tr>
+            <th data-property="SubjectFullName">Subject</th>
+            <th data-property="Semester">Semester</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var row in Model)
+            {
+                <tr>
+                    <td>
+                        @row.SubjectFullName
+                    </td>
+                    <td>
+                        @row.Semester
+                    </td>
+
+                </tr>
+            }
+        }
+    </tbody>
+</table>

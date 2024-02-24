@@ -1,0 +1,329 @@
+﻿
+.form-control, .form-control, select, a.chosen-single span {
+    color: black !important;
+}
+@media print {
+    .noneOnPrint {
+        display: none;
+    }
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.js-table-content {
+    overflow-x: scroll;
+}
+/*JqGrid column data wrap*/
+.ui-jqgrid tr.jqgrow td {
+    white-space: normal !important;
+    height: auto;
+    vertical-align: text-top;
+}
+
+.disable-element {
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.waitingDialog {
+    display: none;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.7);
+    left: 0;
+    top: 0;
+    z-index: 200;
+    width: 100%;
+    height: 100%
+}
+
+    .waitingDialog p {
+        font-size: 30px;
+        font-weight: bold;
+        color: white;
+        margin-left: 28%;
+    }
+
+    .waitingDialog img {
+        position: relative;
+        left: 40%;
+        padding-top: 10%;
+    }
+
+.modal-dialog {
+    border: 2px solid #337ab7;
+}
+
+.modal-header {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #337ab7;
+}
+
+.modal-content {
+    border: 1px solid #337ab7;
+}
+
+    .modal-content table {
+        margin-top: 5px;
+    }
+
+.padding-0-10 {
+    padding: 0px 10px;
+}
+
+input.error {
+    border: 1px solid red;
+}
+
+label.error {
+    color: red;
+}
+
+.to-uppercase {
+    text-transform: uppercase;
+}
+/*loader start*/
+.loader {
+    position: fixed;
+    z-index: 999;
+    top: 35%;
+    left: 40%;
+    border: 9px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 9px solid #545677;
+    width: 65px;
+    height: 65px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+.no-margins {
+    margin: 0;
+}
+
+.no-margin-left {
+    margin-left: 0;
+}
+
+.margin-left-20 {
+    margin-left: 20px;
+}
+
+.no-margin-right {
+    margin-right: 0;
+}
+
+.no-margin-top {
+    margin-top: 0;
+}
+
+.margin-bottom-10 {
+    margin-bottom: 10px !important;
+}
+
+.margin-bottom-15 {
+    margin-bottom: 15px !important;
+}
+
+.margin-bottom-5 {
+    margin-bottom: 5px !important;
+}
+
+.margin-top-5 {
+    margin-top: 5px !important;
+}
+
+.padding-top-30 {
+    padding-top: 30px;
+}
+
+.padding-right-10 {
+    padding-right: 10px;
+}
+
+.no-margin-bottom {
+    margin-bottom: 0;
+}
+
+.max-height-200 {
+    max-height: 200px;
+}
+
+.filter-btn a {
+    color: white;
+}
+
+th[data-property] {
+    cursor: pointer;
+}
+
+    th[data-property].sort::after {
+        float: right;
+        content: '\f0dc';
+        font-family: FontAwesome;
+        opacity: 0.4;
+    }
+
+    th[data-property].asc::after {
+        float: right;
+        content: '\f0dd';
+        font-family: FontAwesome;
+    }
+
+    th[data-property].desc::after {
+        float: right;
+        content: '\f0de';
+        font-family: FontAwesome;
+    }
+
+select[disabled] {
+    color: #848484 !important;
+    background-color: #EEE !important
+}
+
+    select[disabled]:hover {
+        border-color: #D5D5D5 !important
+    }
+
+select[readonly] {
+    color: #939192;
+    background: #F5F5F5 !important;
+    cursor: default;
+}
+
+    select[readonly]:hover {
+        border-color: #c3c3c3
+    }
+
+    select[readonly]:focus {
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        border-color: #AAA;
+        background-color: #F9F9F9
+    }
+
+.overflow-hidden-ht {
+    /*white-space: nowrap;
+    overflow: hidden;*/
+    overflow: hidden;
+    height: 20px;
+}
+/*Grid - table*/
+
+.wd-35 {
+    width: 35px;
+}
+
+.wd-60 {
+    width: 60px;
+}
+
+.wd-100 {
+    width: 100px;
+}
+
+.wd-120 {
+    width: 120px;
+}
+
+.wd-150 {
+    width: 150px;
+}
+
+.wd-140 {
+    width: 140px;
+}
+
+.wd-200 {
+    width: 200px;
+}
+
+.wd-230 {
+    width: 230px;
+}
+
+.wd-250 {
+    width: 250px;
+}
+
+.wd-280 {
+    width: 280px;
+}
+
+.wd-300 {
+    width: 280px;
+}
+
+.wd-350 {
+    width: 280px;
+}
+
+.wd-400 {
+    width: 400px;
+}
+
+.wd-650 {
+    width: 700px;
+}
+
+.wd-700 {
+    width: 700px;
+}
+
+/*end grid table*/
+
+/*modal dialog*/
+
+/*modal dialog*/
+
+.jumbotron {
+    background: #358CCE;
+    color: #FFF;
+    border-radius: 0px;
+}
+
+.jumbotron-sm {
+    padding-top: 24px;
+    padding-bottom: 24px;
+}
+
+.jumbotron small {
+    color: #FFF;
+}
+
+.h1 small {
+    font-size: 24px;
+}
+
+.blink_me {
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+    40% {
+        opacity: 0.4;
+    }
+}
+.watermark {
+    right: 20%;
+    top: 33%;
+    color: silver;
+    opacity: 0.3;
+    font-size: 100px;
+    position: absolute;
+    transform: rotate(-45deg);
+    background-color: transparent
+}

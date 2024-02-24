@@ -1,0 +1,166 @@
+﻿@model CUSrinagar.Models.PaymentDetails
+
+@using CUSrinagar.Models
+@using CUSrinagar.BusinessManagers
+@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc;
+@using CUSrinagar.Extensions
+
+@{
+    ViewBag.Title = $"Graduation Registration Form {DateTime.UtcNow.Year}- ";
+    ARGFormNoMaster formNoMaster = ViewBag.FormNoMater;
+    PersonalInformationCompact personalInformationCompact = ViewBag.PersonalInfoCompact;
+}
+
+<div class="row">
+
+
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped" style="width: 16.6%">
+            <a href="#" style="color:white">Personal Info</a>
+        </div>
+        <div class="progress-bar progress-bar-striped" style="width: 16.6%">
+            <a href="#" style="color:white">Academic Qualification</a>
+        </div>
+        <div class="progress-bar progress-bar-striped" style="width: 16.6%">
+            <a href="#" style="color:white">Stream Preference</a>
+        </div>
+        <div class="progress-bar progress-bar-striped" style="width: 16.6%">
+            <a href="#" style="color:white">College Preference</a>
+        </div>
+        <div class="progress-bar progress-bar-striped" style="width: 16.6%">
+            <a href="#" style="color:white">Documents</a>
+        </div>
+        <div class="progress-bar progress-bar-striped" style="width: 16.8%">
+            <a href="#" style="color:white">Make Payment</a>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div id="response">
+                        @if (TempData["ErrorMessage"] != null)
+                        {
+                            @Html.Raw(TempData["ErrorMessage"])
+                        }
+                        @if (ViewBag.SuccessMessage != null)
+                        {
+                            <div class="alert alert-success alert-dismissible active" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <strong>Success!</strong> @ViewBag.SuccessMessage
+                            </div>
+                        }
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <div class="content-wrapper text-center" style="padding:5px;font-size:20px;color:green">
+                                <i class="fa fa-check-circle"></i> Step 6 - Please note your Form No. and DOB and make Online Payment to complete your Registration<br />
+                                <br /><strong style="color:purple;font-size:18px">@CUSrinagar.Enums.NEPProgrammesAdmTitle.Year_4_UG_Honors_Programmes.GetEnumDescription() Form</strong>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-8">
+                                <h4>Registration Details</h4>
+                                <hr class="no-margin-top" />
+                                <div class="clearfix"></div>
+                                <div class="form-group" style="font-size:18px !important">
+                                    <span>Form No. : </span>
+                                    <label>&nbsp;&nbsp; @personalInformationCompact.StudentFormNo</label>
+                                </div>
+                                <div class="clearfix"></div>
+                                <hr class="no-margin-top" />
+
+                                <div class="form-group" style="font-size:18px !important">
+                                    <span>Date of Birth(dd-mm-yyyy) : </span>
+                                    <label>&nbsp;&nbsp;@personalInformationCompact.DOB.ToString("dd-MM-yyyy")</label>
+                                </div>
+                                <div class="clearfix"></div>
+                                <hr class="no-margin-top" />
+                                <div class="form-group" style="font-size:18px !important">
+                                    <span>Batch :  </span>
+                                    <label>&nbsp;&nbsp;@personalInformationCompact.Batch</label>
+                                </div>
+                                <div class="clearfix"></div>
+                                <hr class="no-margin-top" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @if (Model != null && Model.Payment_ID != Guid.Empty && ViewBag.HasDBPayment)
+                {
+                    <div class="content-wrapper" style="font-size:20px">
+                        <div class="row">
+                            <h3 class="pull-right">
+                                <span>(Registration Fee) Amount Paid : </span>
+                                <label>@Model.TxnAmount </label>
+                            </h3>
+                        </div>
+                    </div>
+                    <a href="@Url.Action("Print", new {r = Model.Entity_ID.ToString().EncryptCookieAndURLSafe() })" class="btn btn-lg btn-theme pull-right">Print or Download</a>
+
+                    <a href="@Url.Action("DocumentUpload", new {r = Model.Entity_ID.ToString().EncryptCookieAndURLSafe() })" class="btn btn-lg btn-theme pull-right" style="margin-left:10px;margin-right:10px;">Previous</a>
+                }
+                else
+                {
+                    <div class="content-wrapper" style="font-size:20px">
+                        @using (Html.BeginForm("MakePayment", "NEP", FormMethod.Post, new { @class = "" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="programme" value="1" />
+                            @Html.HiddenFor(model => model.Student_ID)
+                            @Html.HiddenFor(model => model.Entity_ID)
+                            @Html.HiddenFor(model => model.ModuleType)
+                            @Html.HiddenFor(model => model.TxnAmount)
+                            @Html.HiddenFor(model => model.Email)
+                            @Html.HiddenFor(model => model.PhoneNumber)
+                            @Html.HiddenFor(model => model.AdditionalInfo)
+
+                            <div class="row">
+                                <h3 class="pull-right">
+                                    <span>(Registration Fee) Amount to Pay : </span>
+                                    <label>@Model.TxnAmount </label>
+                                </h3>
+                            </div>
+                            <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                                <div class="content-wrapper" style="padding:5px;font-size:18px">
+                                    Important :
+                                    <ol>
+                                        <li>
+                                            <strong style="color:#ff6a00;font-size:20px">
+                                                It is mandatory to have printout of the form for future reference or submission.
+                                            </strong>
+                                        </li>
+                                        <li style="font-weight:bold">
+                                            If you have already submitted Fee and you are still unable to print your Admission Form visit Cluster University I.T Section
+                                            by or before last date
+                                        </li>
+                                        <li>After payment is successfull then you will be able to Print your form.</li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button type="submit" style="margin-right:10px;margin-left:10px;" class="btn btn-lg btn-success pull-right">Make Payment</button>
+                                    <a href="@Url.Action("DocumentUpload", new {r = Model.Entity_ID.ToString().EncryptCookieAndURLSafe() })" class="btn btn-lg btn-theme pull-right">Previous</a>
+                                </div>
+                            </div>
+                            <br />
+                        }
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJS{
+    @Scripts.Render("~/bundles/Libraries/jqueryval", "~/bundles/Libraries/jqueryregNEP")
+}
+

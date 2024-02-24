@@ -1,0 +1,96 @@
+﻿
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header">
+
+                <h4 class="widget-title"><i class='menu-icon fa fa-pencil-square-o'></i>Search Student</h4>
+
+
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <span class="required">@ViewBag.ErrorMessage</span>
+                    @using (Html.BeginForm("GetList", "StudentInfo", FormMethod.Post, new { enctype = "multipart/form-data", @name = "validation-form", @id = "validation-form", @class = "form-horizontal", @role = "form" }))
+                    {
+
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">
+                                <span class="red bigger-110">*</span> @Html.Label("Enter Student info")
+                            </label>
+                            <div class="col-sm-6 ">
+
+                                @Html.TextBox("SearchQuery", "", new { @class = "width -100", @maxlength = "150" })
+
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="submit" class="btn btn-sm btn-primary save-button">
+                                    <i class="ace-icon fa fa-check"></i>
+                                    Search
+                                </button>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            </div>
+            @model List<CUSrinagar.Models.PersonalInformationCompact>
+
+            <div id="StudentList">
+                <div class="widget-body">
+                    <div class="widget-main">
+                        @if (Model.Count() >= 1)
+                        {
+                            <div class="table-responsive panel table-bordered">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Admitted Batch</th>
+                                            <th>Fathers Name</th>
+                                            <th>Class Roll No</th>
+                                            <th>Exam RollNo</th>
+                                            <th>Registration No</th>
+                                            <th>Form No</th>
+                                            <th>Board Reg No</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (CUSrinagar.Models.PersonalInformationCompact item in Model)
+                                        {
+                                        <tr>
+                                            <td>@item.FullName</td>
+                                            <td class="quadraText">@item.Batch</td>
+                                            <td>@item.FathersName</td>
+                                            <td>@item.ClassRollNo</td>
+                                            <td>@item.ExamRollNumber</td>
+                                            <td>@item.CUSRegistrationNo</td>
+                                            <td>@item.StudentFormNo</td>
+                                            <td>@item.BoardRegistrationNo</td>
+                                            <td>
+                                                @Html.ActionLink(
+                                                "View",                                                  // linkText
+                                                "GetInfo",                                    // actionName
+                                                new
+                                                {                                                     // htmlAttributes
+                                                    PrintProgramme = item.PrintProgramme.ToString(),
+                                                    Student_Id = item.Student_ID.ToString(),
+                                                }
+                                                )
+                                            </td>
+                                        </tr>}
+                                </table>
+                            </div>
+                        }
+                        else
+                        {<span> No Student Found</span>}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

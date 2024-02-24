@@ -1,0 +1,164 @@
+﻿@model CUSrinagar.Models.ARGStudentPreviousQualifications
+
+@using CUSrinagar.Models
+@using CUSrinagar.BusinessManagers
+@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc;
+@using CUSrinagar.Extensions
+
+@{
+    ViewBag.Title = $"PG Registration Form {DateTime.UtcNow.Year}- ";
+    ARGFormNoMaster formNoMaster = ViewBag.FormNoMater;
+    bool AllowProv = false; // allow result awaited
+}
+
+<div class="row">
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped" style="width: 20%">
+            <a href="#" style="color:white">Personal Info</a>
+        </div>
+        <div class="progress-bar progress-bar-striped" style="width: 20%">
+            <a href="#" style="color:white">Academic Qualification</a>
+        </div>
+        <div class="progress-bar" style="width: 20%;background-color:whitesmoke;">
+            <span class="text-primary">Stream Preference</span>
+        </div>
+        <div class="progress-bar" style="width: 20%;background-color:whitesmoke;">
+            <span class="text-primary">Documents</span>
+        </div>
+        <div class="progress-bar" style="width: 20%;background-color:whitesmoke;">
+            <span class="text-primary">Payment</span>
+        </div>
+    </div>
+
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="col-sm-12">
+
+                @using (Html.BeginForm("PreviousQualification", "NEPPG", FormMethod.Post, new { @class = "" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model => model.Student_ID)
+                    @Html.HiddenFor(model => model.Qualification_ID)
+                    @Html.HiddenFor(model => model.UpdatedBy)
+                    @Html.HiddenFor(model => model.UpdatedOn)
+                    @Html.HiddenFor(model => model.CreatedBy)
+                    @Html.HiddenFor(model => model.CreatedOn)
+                    <input type="hidden" name="programme" value="2" />
+                    <input type="hidden" name="Student_ID" value="@Model.Student_ID" />
+                    <div class="row">
+                        <h3>Academic Qualification Detail - Step 2 <strong style="float:right;color:purple;font-size:18px">@CUSrinagar.Enums.NEPProgrammesAdmTitle.Post_Graduation_Programmes.GetEnumDescription() Form</strong></h3>
+                        <div id="response">
+                            @if (ViewBag.ErrorMessage != null)
+                            {
+                                @Html.Raw(ViewBag.ErrorMessage)
+                            }
+                            @if (ViewBag.SuccessMessage != null)
+                            {
+                                <div class="alert alert-success alert-dismissible active" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <strong>Success!</strong> @ViewBag.SuccessMessage
+                                </div>
+                            }
+                        </div>
+                        <hr class="no-margin-top" />
+                        <div class="form-group col-sm-12 text-center">
+                            @if (AllowProv)
+                            {
+                                <input type="hidden" name="IsProv" value="@(("provisionaladmallowed").EncryptCookieAndURLSafe())" />
+                                <strong>
+                                    <label class="col-sm-1 no-padding-right quadrat" style="width:132px">
+                                        Graduation Result
+                                    </label>
+                                </strong>
+                                <strong>
+
+                                    <label class="col-sm-3 lbl bigger-120 no-padding-right">
+                                        @Html.DropDownListFor(model => model.IsProvisional, (IEnumerable<SelectListItem>)ViewBag.Provisional, new { @class = "form-control" })
+                                    </label>
+                                </strong>
+                            }
+                            else
+                            {
+                                <input type="hidden" name="IsProv" value="@(("notallowed").EncryptCookieAndURLSafe())" />
+                            }
+                        </div>
+                        <div id="trToRemove">
+                            <div class="form-group col-sm-6">
+                                <label for="ExamName">ExamName<span class="required">*</span></label>
+
+                                <strong style="font-size:18px;">@Model.ExamName</strong>
+                                @Html.HiddenFor(model => model.ExamName)
+                                @Html.HiddenFor(model => model.ReadOnly, new { value = "True" })
+
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="form-group col-sm-6">
+                                <label for="Stream">Stream<span class="required">*@Html.ValidationMessageFor(model => model.Stream)</span></label>
+                                @Html.TextBoxFor(model => model.Stream, new { @class = "form-control width100", @maxlength = "80", @onkeypress = "return forAddressOnly(event);", @title = "e,g: BA", @placeholder = "e,g: BA" })
+                            </div>
+
+                            <div class="form-group col-sm-6">
+                                <label for="Subjects">Subjects separated by ,(comma)<span class="required">*@Html.ValidationMessageFor(model => model.Subjects)</span></label>
+                                @Html.TextBoxFor(model => model.Subjects, new { @class = "form-control width100", @maxlength = "400", @onkeypress = "return forAddressOnly(event);", @title = "Subjects separated by comma" })
+                            </div>
+
+                            <div class="form-group col-sm-6">
+                                <label for="Session">Session<span class="required">*@Html.ValidationMessageFor(model => model.Session)</span></label>
+                                @Html.DropDownListFor(model => model.Session, (IEnumerable<SelectListItem>)ViewBag.Sessions, string.Empty, new { @class = "form-control width100" })
+                            </div>
+
+                            <div class="form-group col-sm-6">
+                                <label for="Year">Year<span class="required">*@Html.ValidationMessageFor(model => model.Year)</span></label>
+                                @Html.TextBoxFor(model => model.Year, new { @class = "form-control width100", @maxlength = "4", @onkeypress = "return numbersOnly(event);", @title = "Year Of Passing" })
+                            </div>
+
+                            <div class="form-group col-sm-6">
+                                <label for="Religion">RollNo<span class="required">*@Html.ValidationMessageFor(model => model.RollNo)</span></label>
+                                @Html.TextBoxFor(model => model.RollNo, new { @class = "form-control width100", @maxlength = "80", @onkeypress = "return forAdmissionRollNo(event);", @title = "RollNo" })
+                            </div>
+
+                            <div class="form-group col-sm-6">
+                                <label for="Category">MaxMarks / Max CGPA<span class="required">*@Html.ValidationMessageFor(model => model.MaxMarks)</span></label>
+                                @Html.TextBoxFor(model => model.MaxMarks, new { @class = "form-control width100 jsvalmm", @maxlength = "4", @onkeypress = "return floatNumbersOnly(event);", @title = "Maximum Marks" })
+                            </div>
+
+                            <div class="form-group col-sm-6">
+                                <label for="MarksObt">MarksObt / CGPA Obt<span class="required">*@Html.ValidationMessageFor(model => model.MarksObt)</span></label>
+                                @Html.TextBoxFor(model => model.MarksObt, new { @class = "form-control width100 jsvalminm", @maxlength = "7", @onkeypress = "return floatNumbersOnly(event);", @title = "Marks Obtained" })
+                            </div>
+
+                            <div class="form-group col-sm-6">
+                                <label for="ExamBody">ExamBody<span class="required">*@Html.ValidationMessageFor(model => model.ExamBody)</span></label>
+                                @Html.DropDownListFor(model => model.ExamBody, (IEnumerable<SelectListItem>)ViewBag.University, string.Empty, new { @class = "form-control width100" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            @if (Model != null && Model.Student_ID != Guid.Empty && Model.Qualification_ID != Guid.Empty)
+                            {
+                                <a href="@Url.Action("SubjectPreference", new {r = Model.Student_ID.ToString().EncryptCookieAndURLSafe() })" class="btn btn-lg btn-theme pull-right">Next</a>
+                            }
+                            <button style="margin-right:10px;margin-left:10px;" type="submit" class="btn btn-lg btn-success pull-right">Save & Next</button>
+                            @if (Model != null && Model.Student_ID != Guid.Empty)
+                            {
+                                <a href="@Url.Action("PersonalInfo", new {r = Model.Student_ID.ToString().EncryptCookieAndURLSafe(),programme=CUSrinagar.Enums.PrintProgramme.UG })" class="btn btn-lg btn-theme pull-right">Previous</a>
+                            }
+                        </div>
+                    </div>
+                    <br />
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJS{
+    @Scripts.Render("~/bundles/Libraries/jqueryval", "~/bundles/Libraries/jqueryregNEPPG")
+}
+

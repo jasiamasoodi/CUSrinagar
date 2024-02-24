@@ -1,0 +1,416 @@
+﻿@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@using CUSrinagar.Models
+@model List<Transcript>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Transcript</title>
+
+    <style type="text/css">
+        @@page {
+            size: A4 portrait;
+            width: 210mm;
+            height: 297mm;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        /** Fix for Chrome issue #273306 **/
+        @@media print {
+            .noneOnPrint {
+                display: none;
+            }
+        }
+
+        /** For screen preview **/
+        @@media screen {
+            body {
+                background: #e0e0e0;
+            }
+
+            .sheet {
+                background: white;
+            }
+        }
+
+        body {
+            margin: 0;
+        }
+
+            body.middle {
+                margin: auto;
+                vertical-align: middle;
+                display: table;
+            }
+
+        .sheet {
+            margin: 0;
+            overflow: hidden;
+            box-sizing: border-box;
+            page-break-after: always;
+            width: 210mm;
+            height: 297mm;
+            /*border: 1px solid red;*/
+        }
+
+        /*.page-break-after-auto {
+            page-break-after: auto;
+        }*/
+
+        .printable-section {
+            margin-right: 8mm;
+            margin-left: 5mm;
+            font-family: monospace;
+            /*border:1px solid green;*/
+        }
+
+
+
+
+        /*Header LOGO Section Begins*/
+        table.logo-section {
+            line-height: 0px;
+            display: block;
+            width: 100%;
+            height: 10mm;
+        }
+
+            table.logo-section tbody {
+                width: 100%
+            }
+
+                table.logo-section tbody tr {
+                }
+
+                    table.logo-section tbody tr td {
+                        margin: 0px;
+                        padding: 0px;
+                    }
+
+                        table.logo-section tbody tr td:nth-child(1) {
+                            text-align: right;
+                            line-height: 4mm;
+                            width: 200mm;
+                            padding-top: 0mm;
+                        }
+        /*Header LOGO Section Ends*/
+
+        /*Header General Info Section Begins*/
+        table.general-info-section {
+            line-height: 4mm;
+        }
+
+            table.general-info-section tbody {
+                text-align: left;
+            }
+
+                table.general-info-section tbody tr td:nth-child(1) {
+                    width: 20mm;
+                }
+
+                table.general-info-section tbody tr td:nth-child(2) {
+                    width: 100mm;
+                    font-weight: bold;
+                }
+
+                table.general-info-section tbody tr td:nth-child(3) {
+                    width: 35mm;
+                }
+
+                table.general-info-section tbody tr td:nth-child(4) {
+                    width: 45mm;
+                    font-weight: bold;
+                }
+
+
+        /*Header General Info Section Ends*/
+
+        /*Subject Section Begins*/
+        table.subject-section {
+            border-collapse: collapse;
+            border: 0.1mm solid;
+            border-color: lightgray;
+            width: 197mm;
+            display: inline-table;
+        }
+
+            table.subject-section th {
+                border: 0.1mm solid slategray;
+            }
+
+            table.subject-section tbody tr td:nth-child(1), table.subject-section tbody tr th:nth-child(1) {
+                text-align: left;
+                padding-left: 10px;
+            }
+
+            table.subject-section tbody tr td {
+                vertical-align: middle;
+            }
+        /*Subject Section Ends*/
+        /*Footer Points Section Begins*/
+        table.footer-points-section {
+            margin-top: 1mm;
+            line-height: 4mm;
+        }
+
+            table.footer-points-section td:nth-child(odd) {
+                width: 120mm;
+            }
+
+            table.footer-points-section td:nth-child(even) {
+                width: 80mm;
+            }
+        /*Footer Points Section Ends*/
+
+        /*Footer Sign Section Begins*/
+        table.footer-sign-section {
+        }
+
+            table.footer-sign-section td {
+                width: 65mm;
+                text-align: center;
+            }
+
+            table.footer-sign-section img {
+                height: 15mm;
+                width: 30mm;
+            }
+        /*Footer Sign Section Ends*/
+
+
+        .margin-top-0 {
+            margin-top: 0px;
+        }
+
+        .margin-bottom-0 {
+            margin-bottom: 0px;
+        }
+
+        .no-margin {
+            margin: 0px;
+        }
+
+        .no-padding {
+            padding: 0px;
+        }
+
+        .text-center {
+            text-align: center !important;
+        }
+        @@media print {
+            .footer {
+                position: fixed;
+                bottom: 3mm;
+            }
+        }
+        .capitalize {
+            text-transform: capitalize !important;
+        }
+    </style>
+</head>
+<body class="middle ">
+    @if (Model.IsNotNullOrEmpty())
+    {
+        foreach (var transcript in Model)
+        {
+            if (transcript != null && transcript.Subject.IsNotNullOrEmpty() && transcript.SGPA.IsNotNullOrEmpty() && transcript.CGPA.IsNotNullOrEmpty())
+            {
+                <section class="sheet">
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <div class="printable-section">
+                        <!--Header LOGO Section Begins-->
+                        <table class="logo-section">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <small><i></i> </small> <br />
+                                        <b><i><small> @transcript.CGPA.FirstOrDefault().MarksSheetNo</small></i></b>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!--Header LOGO Section Ends-->
+
+                        <hr class="margin-bottom-0" style="margin-top:0.3mm" />
+
+                        <!--Header General Info Section Begins-->
+                        <table class="general-info-section" border="0">
+                            <tbody style="">
+                                <tr>
+                                    <td>Name:</td>
+                                    <td class="capitalize">@transcript.FullName.ToLower()</td>
+                                    <td>Registration No:</td>
+                                    <td>@transcript.CUSRegistrationNo.ToUpper()</td>
+                                </tr>
+                                <tr>
+                                    <td>Father:</td>
+                                    <td class="capitalize">@transcript.FathersName.ToLower()</td>
+                                    <td>Exam Roll No:</td>
+                                    <td>@transcript.ExamRollNumber</td>
+                                </tr>
+                                <tr>
+                                    @*<td>Mother:</td>
+                                        <td>@transcript.MothersName</td>*@
+                                    <td>Programme:</td>
+                                    <td class="">@transcript.CourseFullName</td>
+                                    <td>Batch:</td>
+                                    <td>@transcript.Batch</td>
+                                </tr>
+                                <tr>
+                                    <td>College:</td>
+                                    <td class="capitalize">@transcript.CollegeFullName.ToLower()</td>
+                                    <td>Mode:</td>
+                                    <td>Regular</td>
+
+                                </tr>
+                                @*<tr>
+
+
+                                    </tr>*@
+                            </tbody>
+                        </table>
+                        <!---Header General Info Section Ends-->
+                        <!--Subject Section Begins-->
+                        <table class="subject-section" border="1">
+                            <tbody>
+                                <tr>
+                                    <th class="text-center">Course</th>
+                                    <th class="text-center">Credit</th>
+                                    <th class="text-center">Grade Letter</th>
+                                    <th class="text-center">Grade Points</th>
+                                    <th class="text-center">Credit Points</th>
+                                    <th class="text-center">SGPA</th>
+                                </tr>
+                                @{
+                                    var Semesters = transcript.SGPA.Select(x => x.Semester).Distinct().OrderBy(x => x)?.ToList();
+                                    if (Semesters.IsNotNullOrEmpty())
+                                    {
+                                        for (int Semester = 1; Semester <= Semesters.Count; Semester++)
+                                        {
+                                            <tr>
+                                                <th title="Semester" colspan="6">@(CUSrinagar.Extensions.Helper.GetEnumDescription((Semester)(Semester))) </th>
+                                            </tr>
+                                            var _SGPATypes = transcript.SGPA.Where(x => x.Semester == Semester)?.ToList();
+                                            if (_SGPATypes.IsNotNullOrEmpty())
+                                            {
+                                                foreach (var _SGPAType in _SGPATypes)
+                                                {
+                                                    var _Subjects = transcript.Subject.Where(x => x.Semester == Semester && x.SGPAType == _SGPAType.SGPAType).ToList();
+                                                    if (_Subjects.IsNotNullOrEmpty())
+                                                    {
+                                                        _Subjects = (from m in _Subjects orderby m.SubjectType, m.SubjectTitle select m).ToList();
+                                                        foreach (var item in _Subjects)
+                                                        {
+                                                            string code = CUSrinagar.DataManagers.GeneralFunctions.GetSubjectTypeCode(item.SubjectType);
+                                                            <tr>
+                                                                <td title="Title"><span class="">@item.SubjectTitle.ToUpper().Trim()</span> @(string.IsNullOrEmpty(code) ? "" : "(" + code + ")") </td>
+                                                                <td title="Credit" class="text-center">@item.Credit</td>
+                                                                <td title="Grade Letter" class="text-center">@item.GradeLetter</td>
+                                                                <td title="Grade Points" class="text-center">@item.GradePoints</td>
+                                                                <td title="Credit Points" class="text-center">@(item.Credit * item.GradePoints)</td>
+                                                                <td title="SGPA" class="text-center"></td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                    <tr>
+                                                        <th title="Total" class="text-center">Total</th>
+                                                        <th title="Total Credit" class="text-center">@_SGPAType.Credits</th>
+                                                        <th colspan="2"></th>
+                                                        <th title="Total Credit Points" class="text-center">@_SGPAType.CreditPoints</th>
+                                                        <th title="SGPA" class="text-center">@_SGPAType.SGPA</th>
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <!--Subject Section Ends-->
+                        <!---Footer Points Section Begins-->
+                        <table border="0" class="footer-points-section footer">
+                            <tbody>
+                                @if (transcript.CGPA.IsNotNullOrEmpty())
+                                {
+                                    foreach (var item in transcript.CGPA.OrderBy(x => x.SGPAType).ToList())
+                                    {
+                                        <tr>
+                                            <td>
+                                                Total Credits Earned: <b> @item.TotalCreditsEarned</b>
+                                            </td>
+                                            <td>
+                                                Total Credit Points: <b> @item.TotalCreditPoints</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Commulative Grade Point Average(CGPA): <b> @item.CGPA</b>
+                                            </td>
+                                            <td>
+                                                Percentage Equivalent: <b>@item.Percentage</b>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                <tr>
+                                    <td>
+                                        Date of Passing: <b>
+                                            @if (@transcript.CGPA.FirstOrDefault().DateofDeclaration == null)
+                                            {<span></span>}
+                                            else
+                                            {<span>@transcript.CGPA.FirstOrDefault().DateofDeclaration.ToString("dd-MMM-yyyy")</span>}@*@transcript.CGPA.First().DateofDeclaration.ToString("dd-MMM-yyyy")*@
+                                        </b>
+                                    </td>
+                                    <td>
+                                        Notification No.: <b> @transcript.CGPA.FirstOrDefault().NotificationNo@*@transcript.CGPA.First().NotificationNo*@</b>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!---Footer Points Section Ends-->
+                        <!---Footer Sign Section Begins-->
+                        <table border="0" class="footer-sign-section footer">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <img src="~/FolderManager/Transcript/Prog.png" /><br />
+                                        Dealing Assistant
+                                    </td>
+                                    <td>
+                                        <img src="~/FolderManager/Transcript/AR.png" /><br />
+                                        Assistant Controller
+                                    </td>
+                                    <td>
+                                        <img src="~/FolderManager/Transcript/Controller.png" /><br />
+                                        Controller Of Examination
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" style="text-align:left;"> <small><b>Errors and Omissions Excepted.</b></small></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!---Footer Sign Section Ends-->
+                    </div>
+                </section>
+            }
+        }
+    }
+    else
+    {
+        <section class="sheet padding-5mm">
+            <p>Result Not Found .... </p>
+        </section>
+    }
+
+</body>
+</html>

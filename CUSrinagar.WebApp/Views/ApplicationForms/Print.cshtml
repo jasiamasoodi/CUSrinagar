@@ -1,0 +1,176 @@
+﻿@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@model CUSrinagar.Models.CertificateVerification
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>CUS Academic Certification Verification Form</title>
+    <style type="text/css">
+        @@media print {
+            .noneOnPrint {
+                display: none;
+            }
+        }
+
+        p {
+            padding: 0mm;
+            margin: 0mm;
+        }
+        .watermark {
+            right: 20%;
+            top: 33%;
+            color: silver;
+            opacity: 0.3;
+            font-size: 100px;
+            position: absolute;
+            transform: rotate(-45deg);
+            background-color: transparent
+        }
+    </style>
+</head>
+<body style="background: #e0e0e0;margin: auto;display: table;" oncontextmenu="return false;">
+    <section style="background: white;padding:0;margin: 0;overflow: hidden;box-sizing: border-box;width: 210mm;height: 297mm;position:relative;page-break-after: always;">
+        <div style="margin:0mm;margin-right: 4mm;margin-left: 4mm;margin-top:4mm;font-family:'Roboto';font-size:smaller">
+
+            <center>
+                <table style="">
+                    <tbody>
+                        <tr>
+                            <td style="text-align:left;">
+                                <img src="~/Content/ThemePublic/PrintImages/MarksSheetLogo.png" style="width:64px;" />
+                            </td>
+                            <td style="text-align:center;">
+                                <div style="margin-right:16px;">
+                                    <div style="font-family: Arial, sans-serif;font-size: 7mm;font-weight: bold;            position: relative;   z-index: 1;display: inline-block;  -webkit-font-smoothing: antialiased;  -moz-osx-font-smoothing: grayscale;            transform: scale(1, 1.5); -webkit-transform: scale(1, 1.5); -moz-transform: scale(1, 1.5);  -o-transform: scale(1, 1.5);  -ms-transform: scale(1, 1.5);">
+                                        <span style="letter-spacing:0.8mm;font-family: Algerian,Times, 'Times New Roman', serif;                font-weight: normal;                color: #2F5485;                text-shadow: 0.03em 0.03em 0px #b3b3b3;">
+                                            &nbsp;&nbsp;Cluster University Srinagar
+                                        </span>
+                                    </div>
+                                </div>
+                                <br />
+                                <p> <b>APPLICATION FOR VERIFICATION OF ACADEMIC CERTIFICATES </b></p>
+                                <span>(To be submitted by Department / Organisation)</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </center>
+
+            <table>
+                <tbody>
+                    <tr>
+                        <td style="width:100mm;"><strong>Printed on : @DateTime.Now.ToLongDateString()</strong></td>
+                        <td style="width:100mm;"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr style="margin:0mm;margin-top:0.3mm;margin-bottom: 2mm;" />
+            <div class="watermark">Confidential</div>
+            <table style="width:95%;font-size:15px">
+                <tbody>
+                    <tr>
+                        <td style="width:2mm;"></td>
+                        <td>Name of certificate holder : <b><u>@Model.FullName.ToUpper() </u></b></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            Father's Name : <b><u>@Model.FathersName.ToUpper()</u></b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>University Registration No. :  <b><u>@Model.CUSRegistrationNo.ToUpper()</u></b></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td> Name of the college last attended : <b><u>@Model.CollegeFullName</u></b><br/><br /></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Reason for verification of Degree certificate : <b><u>@Model.ReasonForVerification</u></b>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            Department / Organisation Name and Postal Address where from verification is sought
+                            and verification certificate is to be submitted confidentially :
+                            <b><u> @Model.OrgNamePostalAddress</u></b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Department / Organisation Email Id : <b><u>@Model.OrgEmail </u></b></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Documents attached for verification : <b><u>@Model.DocsAttachedForVerification</u></b></td>
+                    </tr>
+                </tbody>
+            </table> <br />
+            <br />
+            <p><strong style="float:right">Signature of the Applicant</strong></p>
+            <br />
+            <hr style="margin-top:2mm;margin-bottom:2mm;" />
+            <br />
+            <p style="font-size:17px">
+                <strong>
+                    Note:
+                </strong> Hardcopy of downloaded application form and documents (photocopy) to be verified shall be submitted at Receipt Section of the Cluster
+                University Srinagar, Administrative Block, Gogji-Bagh Srinagar J&K India 190008.
+
+            </p>
+            <br />
+            <br />
+
+
+            <div style="color:grey;text-align:center">Developed by I.T Cell</div>
+
+            <hr style="margin:0mm;margin-top:0.3mm;margin-bottom: 0mm;" />
+            <table>
+                <tbody>
+                    <tr>
+                        <td style="width:60mm;vertical-align:top;font-size:16px">
+                            <p>
+                                Fee of Rs.@Model.PaymentDetail.TxnAmount/- (Non-Refundable) in the shape of online payment Transaction  No.:-<u><small><b>@Html.DisplayFor(model => model.PaymentDetail.TxnReferenceNo)</b></small></u>,&nbsp;
+                                <br/>Dated:-<u><small><b>@Model.PaymentDetail.TxnDate.ToString("dd-MMM-yyy")</b></small></u>
+                            </p>
+                        </td>
+                        <td style="width:80mm;border-left:1px solid black;padding-left:1mm;vertical-align:top;">
+                            <center><b>FOR OFFICE USE ONLY</b></center>
+                            <br/>
+                            <p style="text-align:justify;font-size:16px">Credentials mentioned in the certificates are verified 
+                            from University records and are found __________________________. Hence submitted for further action.</p>
+                            <br /><br /><br />
+                            <center> <b> Dealing Assistant<br/>(Result Section-IT)</b></center>
+                        </td>
+                        <td style="border-left:1px solid black;padding-left:1mm;vertical-align:top;font-size:14px">
+                            <strong>Order of the Competent Authority</strong><br /><br />
+                            <p style=""> Approved&nbsp;_______________________</p><br />
+                            <p style="">Not Approved&nbsp;__________________</p>
+                            <br /><br /><br />
+                            <center><strong>Deputy/Assistant Registrar<br />(Registration)</strong></center>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr style="margin:0mm;margin-top:0.3mm;margin-bottom: 4mm;" />
+            <p style=""><br />
+                <span> Date of Issue:- ___/____/@DateTime.Now.Year</span>
+            </p>
+        </div>
+    </section>
+
+    <div class="noneOnPrint" style="height:40px;background-color:lightslategrey;width:794px;position:fixed;bottom:0;z-index:100;text-align:center;padding-top:10px">
+        <button style="height: 32px;" href="#" class="btn btn-theme" onclick="window.print();"><b>Download or Print</b></button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:white">Developed &amp; Maintained by I.T Cell</span>
+    </div>
+</body>
+</html>
+
+

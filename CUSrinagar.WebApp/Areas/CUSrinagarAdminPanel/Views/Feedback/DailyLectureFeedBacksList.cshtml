@@ -1,0 +1,56 @@
+﻿@model  List<CUSrinagar.Models.DailyLectureFeedBack>
+@using CUSrinagar.Extensions
+
+@{
+    Layout = null;
+}
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th>Faculty Detail</th>
+            <th>Lecture Detail</th>
+            <th>Rating</th>
+            <th>Student Detail</th>
+            <th style="width:20%">Remarks</th>
+        </tr>
+    </thead>
+
+    <tbody style="background: azure;">
+        @if (Model != null)
+        {
+            foreach (var row in Model)
+            {
+                <tr>
+                    <td>
+                        <span style="font-family: Arial Rounded MT; font-size: large; color:#337AB7;"> @row.FacultyName</span><br />
+                        <b>Type: </b>@row.FacultyType.GetEnumDescription()<br /><b>Arrives on Time:</b> @(row.FacultyArrivesOnTime?"YES":"NO")<br />
+                        <b>Leaves on Time:</b> @(row.FacultyLeavessOnTime?"YES":"NO")<br />
+                        <br />
+                    </td>
+                    <td>
+                        <b>Course :</b> <strong style="color:#337AB7; font-size: 17px">@row.CourseFullName</strong> <br />
+                        <b>Lecture Date:</b> @row.LectureDateTime.ToLongDateString() @row.LectureDateTime.ToShortTimeString()<br />
+                        <b>Subject:</b> @row.SubjectFullName-@row.SubjectType (Semester-@row.Semester) <br />
+                        <b>Topic:</b> @row.LectureTopic<br />
+                        <b>Mode of Lecture: </b> @row.ModeOfTeaching.GetEnumDescription() <br />
+                        <b>Material Provided: </b>@row.MaterialProvided.GetEnumDescription()
+                    </td>
+                    <td>
+                        <b>Lecture Rating: </b> @row.RateTheLecture.GetEnumDescription()<br />
+                        <b>Faculty Behaviour: </b> @row.FacultyBehaviour.GetEnumDescription()
+                    </td>
+                    <td>
+                        @row.FullName<br />
+                        <b>Regn. No.: </b><br /> @row.CUSRegistrationNo<br />
+                        <strong>@row.CollegeFullName</strong><br />
+                    </td>
+                    <td>
+                        @row.AnyRemarks
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+

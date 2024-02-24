@@ -1,0 +1,262 @@
+﻿@using Nut
+@using CUSrinagar.Enums
+@using CUSrinagar.Models
+@model  List<CUSrinagar.Models.AwardModel>
+@{
+    Layout = null;
+    int MaxMarksTheory = (ViewBag.ExternalMaxMarks != null && ViewBag.ExternalMaxMarks > 0) ? @ViewBag.ExternalMaxMarks : 50;
+    int MaxMarksPractical = (ViewBag.InternalMaxMarks != null && ViewBag.InternalMaxMarks > 0) ? @ViewBag.InternalMaxMarks : 28;
+    int MaxMarksPracticalAtt = (ViewBag.InternalAttendance_AssessmentMaxMarks != null && ViewBag.InternalAttendance_AssessmentMaxMarks > 0) ? @ViewBag.InternalAttendance_AssessmentMaxMarks : 2;
+    int MaxMarksTheoryAtt = (ViewBag.ExternalAttendance_AssessmentMaxMarks != null && ViewBag.ExternalAttendance_AssessmentMaxMarks > 0) ? @ViewBag.ExternalAttendance_AssessmentMaxMarks : 4;
+    string subjectid = (ViewBag.SubjectID).ToString();
+    string SemesterId = (ViewBag.SemesterId).ToString();
+    int marksfor = Convert.ToInt16(ViewBag.DefaultMarksFor);
+    bool ISAwardSubmit = ViewBag.ISAwardSubmitted;
+    bool showcol1 = ViewBag.ShowInternalColumn;
+    bool showcol2 = ViewBag.ShowInternalAttendanceColumn;
+    bool showcol3 = ViewBag.ShowExternalColumn;
+    bool showcol4 = ViewBag.ShowExternalAttendanceColumn;
+
+    string col1 = showcol1 ? "" : "hidden";
+    string col2 = showcol2 ? "" : "hidden";
+    string col3 = showcol3 ? "" : "hidden";
+    string col4 = showcol4 ? "" : "hidden";
+    ADMSubjectMaster subject = (ADMSubjectMaster)ViewData["SubjectData"];
+
+    bool col1isparti = subject.InternalIsPartOf == MarksIsPartOf.Internal && subject.InternalVisibleTo == AwardModuleType.University;
+    bool col2isparti = subject.InternalAttendance_AssessmentIsPartOf == MarksIsPartOf.Internal && subject.InternalAttendance_AssessmentVisibleTo == AwardModuleType.University;
+    bool col3isparti = subject.ExternalIsPartOf == MarksIsPartOf.Internal && subject.ExternalVisibleTo == AwardModuleType.University;
+    bool col4isparti = subject.ExternalAttendance_AssessmentIsPartOf == MarksIsPartOf.Internal && subject.ExternalAttendance_AssessmentVisibleTo == AwardModuleType.University;
+    bool col1isparte = subject.InternalIsPartOf == MarksIsPartOf.External && subject.InternalVisibleTo == AwardModuleType.University;
+    bool col2isparte = subject.InternalAttendance_AssessmentIsPartOf == MarksIsPartOf.External && subject.InternalAttendance_AssessmentVisibleTo == AwardModuleType.University;
+    bool col3isparte = subject.ExternalIsPartOf == MarksIsPartOf.External && subject.ExternalVisibleTo == AwardModuleType.University;
+    bool col4isparte = subject.ExternalAttendance_AssessmentIsPartOf == MarksIsPartOf.External && subject.ExternalAttendance_AssessmentVisibleTo == AwardModuleType.University;
+}
+
+
+
+
+<table class="table table-hover table-bordered js-table css-table" data-afterappendingrows="setFocus">
+    @if (Model != null)
+    {
+        string checkClass = ISAwardSubmit ? "hidden" : "";
+
+        <thead style="white-space: nowrap;">
+
+            <tr>
+
+                <th class="@checkClass"></th>
+                <th>S.No.</th>
+
+                <th data-property="ExamRollNumber">Exam Roll No.</th>
+                <th data-property="ClassRollNo" data-isalphanumeric="true">Class Roll No.</th>
+                <th>CUS Registrartion No</th>
+                @*<th data-property="StudentCode">Student Code.</th>*@
+                <th style="display:none"></th>
+                <th>Internal Result</th>
+                <th class="@col1" data-property="InternalMarks">@ViewBag.InternalLabel ( <=@MaxMarksPractical  )</th>
+                <th class="@col2" data-property="InternalAttendance_AssessmentMarks">@ViewBag.InternalAttendanceLabel ( <=@MaxMarksPracticalAtt )</th>
+                <th class="@col3" data-property="ExternalMarks">@ViewBag.ExternalLabel ( <= @MaxMarksTheory)</th>
+                <th class="@col4" data-property="ExternalAttendance_AssessmentMarks">@ViewBag.ExternalAttendanceLabel ( <=@MaxMarksTheoryAtt )</th>
+
+
+            </tr>
+        </thead>
+
+        <tbody title=" -1 => Not Available    -2 => Absent     -3 => Later On     Don't put any column blank (Blank means 0)">
+
+            @Html.Hidden("SubjectID", subjectid)
+            @Html.Hidden("Semester", SemesterId)
+            @Html.Hidden("marksFor", marksfor)
+            @{int i = ViewBag.OFFSET;
+                var style = "";
+
+            }
+            @foreach (var row in Model)
+            {
+                int igtotal = 0; int egtotal = 0;
+                int pmarks = Convert.ToInt32(row.InternalMarks);
+                string pmarksInWords = (pmarks < 0) ? ((CUSrinagar.Enums.ResultStatus)pmarks).ToString() : pmarks.ToText(Language.English).ToUpper();
+                int pamarks = Convert.ToInt32(row.InternalAttendance_AssessmentMarks);
+                string pamarksInWords = (pamarks < 0) ? ((CUSrinagar.Enums.ResultStatus)pamarks).ToString() : pamarks.ToText(Language.English).ToUpper();
+                int tamarks = Convert.ToInt32(row.ExternalAttendance_AssessmentMarks);
+                string tamarksInWords = (tamarks < 0) ? ((CUSrinagar.Enums.ResultStatus)tamarks).ToString() : tamarks.ToText(Language.English).ToUpper();
+                int tmarks = Convert.ToInt32(row.ExternalMarks);
+                string tmarksInWords = (tmarks < 0) ? ((CUSrinagar.Enums.ResultStatus)tmarks).ToString() : tmarks.ToText(Language.English).ToUpper();
+                if (showcol1 && col1isparti)
+                { igtotal = igtotal + pmarks; }
+                if (showcol2 && col2isparti)
+                { igtotal = igtotal + pamarks; }
+                if (showcol3 && col3isparti)
+                { igtotal = igtotal + tmarks; }
+                if (showcol4 && col4isparti)
+                { igtotal = igtotal + tamarks; }
+                if (showcol1 && col1isparte)
+                { egtotal = egtotal + pmarks; }
+                if (showcol2 && col2isparte)
+                { egtotal = egtotal + pamarks; }
+                if (showcol3 && col3isparte)
+                { egtotal = egtotal + tmarks; }
+                if (showcol4 && col4isparte)
+                { egtotal = egtotal + tamarks; }
+                if ((row._ID != null && row._ID != Guid.Empty) && ((ViewBag.HaveInternalColumn && (igtotal < 0 || igtotal < ViewBag.MinInternalMarks)) || (ViewBag.HaveExternalColumn && (egtotal < 0 || egtotal < ViewBag.MinExternalMarks))))
+                { style = "style=background-color: #ffe8e8;"; }
+                else { style = ""; }
+
+                <tr @style>
+                    @if (!ISAwardSubmit)
+                    {
+                        if ((!row.ExternalSubmitted || row.ResultNotification_ID != null) && row.InternalResult && !row.OverallResult)
+                        {
+                            <td class="tdd"><input class="ÏsUpdated " data-loop="@i" id="ÏsUpdated_@i" name="ÏsUpdated" type="checkbox" value="true"><span class="lbl"></span></td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    }
+                    <td class="js-sno"></td>
+                    <td>@row.ExamRollNumber</td>
+                    <td>@row.ClassRollNo</td>
+                    <td>@row.CUSRegistrationNo</td>
+                @*    <td>@row.StudentCode</td>*@
+                    <td style="display:none">
+                        @Html.Hidden("semesterModelList[" + i + "]._ID", row._ID)
+                        @Html.Hidden("semesterModelList[" + i + "].FullName", row.FullName)
+                        @Html.Hidden("semesterModelList[" + i + "].CUSRegistrationNo", row.CUSRegistrationNo)
+                        @Html.Hidden("semesterModelList[" + i + "].ExamRollNumber", row.ExamRollNumber)
+                        @Html.Hidden("semesterModelList[" + i + "].ClassRollNo", row.ClassRollNo)
+                        @Html.Hidden("semesterModelList[" + i + "].Student_ID", row.Student_ID)
+                        @Html.Hidden("semesterModelList[" + i + "].Batch", row.Batch)
+                        @Html.Hidden("semesterModelList[" + i + "].Subject_ID", subjectid)
+                        @Html.Hidden("semesterModelList[" + i + "].RecordStatus", CUSrinagar.Enums.RecordState.Old)
+                        @Html.Hidden("semesterModelList[" + i + "].InternalSubmitted", row.InternalSubmitted)
+                        @Html.Hidden("semesterModelList[" + i + "].ExamForm_ID", row.ExamForm_ID)
+                    </td>
+                    @{
+                        var clssi1 = col1isparti ? "intClass" : "";
+                        var clsse1 = col1isparte ? "extClass" : "";
+                    }
+                    <td>
+                        @if (row.InternalResult)
+                        {<span style=" color:green">Pass</span>}
+                        else
+                        {<span style=" color:red">Fail</span>}
+                    </td>
+                    <td class="  @col1">
+                        @if (!row.ExternalSubmitted)
+
+                        {
+                            <span>@Html.TextBox("semesterModelList[" + @i + "].InternalMarks", (int)row.InternalMarks, new { @class = clssi1 + " " + clsse1 + " jsinteger   textboxSub ", data_loop = @i, @max = MaxMarksPractical, @maxlength = "3" })</span>
+                            <span> (@pmarksInWords)</span>}
+                        else
+                        { @Html.Hidden("semesterModelList[" + @i + "].InternalMarks", row.InternalMarks) <span>@pmarks (@pmarksInWords)</span>}
+                    </td>
+                    @{
+                        var clssi2 = col2isparti ? "intClass" : "";
+                        var clsse2 = col2isparte ? "extClass" : "";
+                    }
+                    <td class="  @col2">
+                        @if (!row.ExternalSubmitted)
+                        {<span>
+                                @Html.TextBox("semesterModelList[" + i + "].InternalAttendance_AssessmentMarks", (int)row.InternalAttendance_AssessmentMarks, new { @class = clssi2 + " " + clsse2 + "  jsinteger textboxSub ", @data_loop = @i, @max = MaxMarksPracticalAtt, @maxlength = "3" })
+                            </span><span> (@pamarksInWords)</span>}
+                        else
+                        { @Html.Hidden("semesterModelList[" + @i + "].InternalAttendance_AssessmentMarks", row.InternalAttendance_AssessmentMarks)<span>@pamarks (@pamarksInWords)</span>}
+                    </td>
+                    @{
+                        var clssi3 = col3isparti ? "intClass" : "";
+                        var clsse3 = col3isparte ? "extClass" : "";
+                    }
+                    <td class="@col3">
+                        @if ((!row.ExternalSubmitted || row.ResultNotification_ID != null) && row.InternalResult && !row.OverallResult)
+                        {
+                            @Html.Hidden("semesterModelList[" + @i + "].ExternalSubmitted", false)
+                            <span title="-1=>Not Available -2=>Absent -3=>Later On">
+                                @Html.TextBox("semesterModelList[" + @i + "].ExternalMarks", (int)row.ExternalMarks, new { @class = clssi3 + " " + clsse3 + " jsinteger textboxSub ", @data_loop = @i, @max = MaxMarksTheory, @maxlength = "3" })
+                            </span><span> (@tmarksInWords)</span> }
+                        else
+                        {
+                            @Html.Hidden("semesterModelList[" + @i + "].ExternalSubmitted", row.ExternalSubmitted)
+                            @Html.Hidden("semesterModelList[" + @i + "].ExternalMarks", row.ExternalMarks) <span>@tmarks (@tmarksInWords)</span>
+                        }
+                    </td>
+                    @{
+                        var clssi4 = col4isparti ? "intClass" : "";
+                        var clsse4 = col4isparte ? "extClass" : "";
+                    }
+                    <td class="  @col4">
+                        @if (!row.ExternalSubmitted)
+                        {<span>
+                                @Html.TextBox("semesterModelList[" + @i + "].ExternalAttendance_AssessmentMarks", (int)row.ExternalAttendance_AssessmentMarks, new { @class = clssi4 + " " + clsse4 + "  jsinteger textboxSub ", @max = MaxMarksTheoryAtt, @data_loop = @i, @maxlength = "3" })
+                            </span><span> (@tamarksInWords)</span>}
+                        else
+                        { @Html.Hidden("semesterModelList[" + @i + "].ExternalAttendance_AssessmentMarks", row.ExternalAttendance_AssessmentMarks) <span>@tamarks (@tamarksInWords)</span>}
+                    </td>
+
+                </tr>
+                i++;
+            }
+
+
+        </tbody>
+
+
+    }
+    else
+    {
+        <tr><td colspan="10">No Student Found</td></tr>
+    }
+</table>
+@if (Model != null && Model.Count > 0)
+{
+    <div class="text-center col-sm-12 savebtn css-btnsave hidden submitAwardBtn" title=" -1 => Not Available    -2 => Absent     -3 => Later On     Don't put any column blank (Blank means 0)">
+        <input id="Save" value="Save" type="submit" class="btn btn-primary" title=" -1 => Not Available    -2 => Absent     -3 => Later On     Don't put any column blank (Blank means 0)" />
+    </div>
+}
+
+<style>
+    .css-btnsave {
+        bottom: 0 !important;
+        position: fixed;
+        z-index: 700 !important;
+        height: 60px;
+        background-color: #dedede;
+        padding: 10px;
+    }
+
+    .css-table {
+        /*display: block;
+        overflow: auto;
+        height: 600px;
+        width: 100%;*/
+        margin: 0 auto;
+        width: 100%;
+        /*position: absolute;*/
+        bottom: 0px;
+        top: 0px;
+        overflow: auto;
+        max-height: 600px;
+        /*display: block;*/
+    }
+
+
+    .col-center-block {
+        float: none;
+        display: block;
+        margin: 0 auto;
+        /* margin-left: auto; margin-right: auto; */
+    }
+
+
+
+    .setwidth1 {
+        width: 3% !important;
+    }
+</style>
+<script>
+    var isAwardSubmitted = "@ISAwardSubmit";
+    var MinMarksInternal = "@ViewBag.MinInternalMarks";
+     var MinMarksExternal = "@ViewBag.MinExternalMarks";
+
+</script>

@@ -1,0 +1,61 @@
+﻿@using CUSrinagar.Enums
+@model  List<CUSrinagar.Models.ADMSubjectMasterCompact>
+@{
+    Layout = null;
+    var ISChecked = "";
+}
+<table class="table table-hover table-bordered js-table">
+    <thead>
+        <tr>
+            <th>S.No.</th>
+            <th data-property="Programme">Programme</th>
+            <th data-property="CourseFullName">Course</th>
+            <th data-property="Semester" class="wd-100">Sem</th>
+            <th data-property="SubjectType">Subject Type</th>
+            <th data-property="SubjectFullName">Subject Title</th>
+            <th data-property="DepartmentFullName">Department</th>
+            <th data-property="TotalCredit">Total Credit</th>
+            <th data-property="Status">Active</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var row in Model)
+            {
+                <tr>
+                    <td>
+                        <span class="js-sno"></span>
+                        @Html.HiddenFor(model => row.Subject_ID, new { @class = "jsRow_ID" })
+                    </td>
+                    <td>@row.Programme.ToString()</td>
+                    <td>@(row.CourseFullName + (string.IsNullOrEmpty(row.CollegeCode) ? "" : ":" + row.CollegeCode))</td>
+                    <td>@((short)row.Semester)</td>
+                    <td>@row.SubjectType</td>
+                    <td><a href='@Url.Action("CreateEdit","Subject",new { area = "CUSrinagarAdminPanel", @id = row.Subject_ID })' target="_blank">@row.SubjectFullName</a></td>
+                    <td>@row.DepartmentFullName</td>
+                    <td>@row.TotalCredit</td>
+                    <td>
+                        @if (row.Status)
+                        {
+                            ISChecked = "checked = 'checked'";
+                        }
+                        else
+                        { ISChecked = ""; }
+                        <label class='pull-center inline'>
+                            <input class='ace ace-switch ace-switch-5' id='@row.Subject_ID' type='checkbox' @ISChecked onclick='return IsActive(this)' />
+                            <span class='lbl middle'></span>
+                        </label>
+                    </td>
+                    <td>
+                        <a href="#">
+                            <i class="ace-icon fa fa-trash-o js-delete-row"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+

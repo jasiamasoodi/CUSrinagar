@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "Program Structure";
+}
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUSrinagarAdminPanel"})">Home</a>
+            </li>
+            <li class="active">Program Structure</li>
+        </ul><!-- /.breadcrumb -->
+    </div>
+    <div class="col-md-7"></div>
+    <div class="col-md-4"></div>
+}
+<div class="row">
+    <div class="col-md-12 jsTableContent">
+        <div class="panel panel-primary js-pager-table" data-otherparam1="@CUSrinagar.Enums.PrintProgramme.UG">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Program
+                    <i class="ace-icon fa fa-angle-double-right"></i>
+                    List
+                    <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                        <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                    </span>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="search-box">
+                    <div class="form-inline">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                Description<br />
+                                @Html.TextBox("Description", "", new { @class = "form-control jsfilterelement ", @data_column = "Description", @data_operator = "Contains" })
+                                <input type="hidden" class="jsfilterelement" value="Course Structure" data-column="Description" data-operator="Contains" />
+                            </div>
+                            <div class="form-group">
+                                <div style="padding-top:20px !important;">
+                                    <button type="button" class="btn btn-primary btn-sm fa-search-btn js-search"><i class="fa fa-search"></i>&nbsp;Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="js-table-content tbl" data-url="/CUSrinagarAdminPanel/Transcript/ProgramStructureList" data-DefaultOrderByColumn="Description">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJSFiles
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            loadpagertableWithDefaultParams();
+        });
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,132 @@
+﻿@using CUSrinagar.Extensions
+@model CUSrinagar.Models.StudentProfile
+@{
+    Layout = null;
+    List<CUSrinagar.Models.PaymentDetails> paymentDetails = ViewBag.PaymentDetails;
+    List<CUSrinagar.Models.ReEvaluationStudentSubject> subjects = ViewBag.ReEvaluatedSubjects;
+    List<CUSrinagar.Models.ReEvaluationStudentSubject> reEvaluationSubjects = subjects == null ? null : subjects.Where(x => x.OptForReEvaluation).ToList();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Re-evaluation Form - CUS</title>
+    <link href='@Url.Content("~/Content/ThemePublic/Libraries/css/printer-frndly.css")' rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Content/ThemePublic/Libraries/disableBack.js")"></script>
+</head>
+<body class="A4 middle">
+    <section class="sheet padding-5mm">
+        <div class="center">
+            <center>
+                <table border="0" style="width:500px">
+                    <tr>
+                        <td>
+                            <img src="@Url.Content("~/Content/ThemePublic/Libraries/images/logo-green-t3.jpg")" width="75" />
+                        </td>
+                        <th style="border:0 !important"><strong style="font-size:30px">Cluster University Srinagar</strong><br/>www.cusrinagar.edu.in</th>
+                    </tr>
+                </table>
+            </center>
+            <hr />
+            <h3>@Model.CollegeCode</h3>
+            <h3>Re-Evaluation Form for Semester - @ViewBag.Semester</h3>
+            <hr />
+        </div>
+        <table class="table-boxed bordered">
+            <tbody>
+                <tr>
+                    <td>Registration No</td>
+                    <td>@Model.RegistrationNumber</td>
+                </tr>
+                <tr>
+                    <td>Exam Roll Number</td>
+                    <td>@Model.RollNumber</td>
+                </tr>
+                <tr>
+                    <td>Name</td>
+                    <td>@Model.Name</td>
+                </tr>
+                <tr>
+                    <td>Father's Name</td>
+                    <td>@Model.FathersName</td>
+                </tr>
+                <tr>
+                    <td>Mobile No</td>
+                    <td>@(string.IsNullOrEmpty(Model.MobileNumber) ? paymentDetails.FirstOrDefault()?.PhoneNumber : Model.MobileNumber)</td>
+
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>@(string.IsNullOrEmpty(Model.Email) ? paymentDetails.FirstOrDefault()?.Email : Model.Email)</td>
+                </tr>
+            </tbody>
+        </table>
+        <hr />
+        <div>
+            <br />
+            <h3 class="no-margin-bottom"> <u>ReEvaluation Applied For</u></h3>
+
+            @if (reEvaluationSubjects != null)
+            {
+                <ol class="list-item">
+                    @foreach (var subject in reEvaluationSubjects)
+                    {
+                        <li>Subject : @subject.SubjectID || Form Number : @subject.FormNumber</li>
+                    }
+                </ol>
+            }
+            else
+            {
+                <h4 class="center"> No subject found. </h4>
+            }
+            <br />
+        </div>
+        <hr />
+        <div>
+            <br />
+            <h3 class="no-margin-bottom"> <u>Payment Details</u></h3>
+            <hr />
+            <table class="table-boxed bordered">
+                <tbody>
+                    @{
+                        if (paymentDetails != null)
+                        {
+                            foreach (var paymentDetail in paymentDetails)
+                            {
+                                <tr>
+                                    <td>Trans Date</td>
+                                    <td>@paymentDetail.TxnDate.ToString("dd-MM-yyyy") </td>
+
+                                    <td>Ref No.</td>
+                                    <td>@paymentDetail.TxnReferenceNo </td>
+
+                                    <td>Date.</td>
+                                    <td>@paymentDetail.TxnDate.ToShortDateString() </td>
+
+                                    <td>Trans Amount</td>
+                                    <td>@paymentDetail.TxnAmount </td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+            <br />
+            <hr />
+            <p style="margin-top:10%" class="pull-text-right">
+                <b>Signature of the student</b>
+            </p>
+        </div>
+        <hr />
+        <div>
+            <p>Please print this page for your reference. This Receipt has been Printed On <strong><i>@DateTime.Now</i></strong></p>
+        </div>
+    </section>
+
+    <div class="noneOnPrint print-download-strip" style="opacity:1">
+        <a href="@Url.Action("ReEvaluation", "ReEvaluation")"><span class="btn btn-primary">Back</span> </a>
+        <button class="btn btn-default" onclick="window.print();"><b>Download / Print Form </b></button>
+    </div>
+
+</body>
+</html>

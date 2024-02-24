@@ -1,0 +1,31 @@
+﻿@model  List<CUSrinagar.Models.StudentExamFormList>
+@{
+    Layout = null;
+}
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th>S.No</th>
+            <th data-property="FullName">FullName</th>
+            <th data-property="CUSRegistrationNo">Registration No.</th>
+            <th data-property="FormNumber">Form No</th>
+            <th data-property="Status">Status</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td class="js-sno"></td>
+                    <td>@item.FullName</td>
+                    <td>@item.CUSRegistrationNo</td>
+                    <td>@item.FormNumber</td>
+                    <td>@(item.Status == 0 ? "Not downloaded" : item.Status.ToString())</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

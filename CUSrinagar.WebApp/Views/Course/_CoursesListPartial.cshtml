@@ -1,0 +1,54 @@
+﻿@model List<CUSrinagar.Models.ADMCollegeMaster>
+@{var collegeCount = 1;
+    var Expand = "in";}
+<div class="page-wrapper">
+    <div class="page-content">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="panel-group" id="accordion">
+
+                @foreach (var college in Model)
+                {
+                    if (collegeCount > 1)
+                    {
+                        Expand = "";
+                    }
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse_@collegeCount"><b>@college.CollegeFullName.Trim() </b></a>
+                            </h3>
+                        </div>
+                        <div id="collapse_@collegeCount" class="panel-collapse collapse @Expand">
+                            <div class="panel-body text-justify">
+                                @{var courseCount = 1;}
+                                @foreach (var course in college.Courses)
+                                {
+                                    <div class="col-sm-12 course">
+                                        <div class="col-sm-12 ">
+                                            <h6>  <b><a href="@Url.Action("GetCombinations", "Course", new { area = "", @CourseCode = course.CourseCode, @CollegeCode = college.CollegeCode, @CourseName = course.CourseFullName, @CollegeName = college.CollegeFullName })">@courseCount <span>.</span>  @course.CourseFullName.Trim()</a></b></h6>
+                                        </div>
+
+
+                                    </div>
+                                    courseCount++;
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                                        collegeCount++;
+                                    }
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .subject {
+        padding: 0 !important;
+    }
+
+    .course {
+        padding: 2px !important;
+    }
+</style>

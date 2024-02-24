@@ -1,0 +1,376 @@
+﻿@using CUSrinagar.Extensions;
+
+@model CUSrinagar.Models.ARGPersonalInformation
+@{
+    ViewBag.Title = "Student Info ";
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area="CUStudentZone"})">Home</a>
+        </li>
+        <li>
+            <a href="#" class="active">Student Profile</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+<div id="response">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+</div>
+<div class="page-content">
+    <div class="row panel panel-success">
+        <div class="page-header no-margin-bottom">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6">
+                    <h1>
+                        <i class="fa fa-users"></i> Student Profile
+                    </h1>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-2">
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-4">
+                </div>
+                @if (ViewBag.CourseName != null && ((string)ViewBag.CourseName).ToUpper() == "b.Sc. Home-Science".ToUpper())
+                {
+                    <div class="col-sm-12 center">
+                        <a href="@Url.Action("HardCodeFee","Examination",new { @area="CUStudentZone"})" class="btn btn-success">
+                            Pay fee 275 for subject english
+                        </a>
+                    </div>
+                }
+            </div>
+
+        </div><!-- /.page-header -->
+        @if (Model != null)
+        {
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12">
+                        <div class="row">
+                            <div class="col-lg-9 col-md-9">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a data-toggle="tab" href="#Summry" class="text-success"><i class="fa fa-indent"></i> University Details</a></li>
+                                    <li><a data-toggle="tab" href="#PersonalInfo" class="text-success"><i class="fa fa-bookmark-o"></i> Personal Info</a></li>
+                                    <li><a data-toggle="tab" href="#Address" class="text-success"><i class="fa fa-home"></i> Address</a></li>
+                                    <li class=""><a data-toggle="tab" href="#AccademicDetail" class="text-success"><i class="fa fa-info"></i> Prev. Academic Details</a></li>
+                                    <li class=""><a data-toggle="tab" href="#SubjectDetail" class="text-success"><i class="fa fa-book"></i> Subjects Assigned by College</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div id="Summry" class="tab-pane fade in active">
+                                        <div class="table-responsive panel">
+                                            <table class="table">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-user"></i> Form No.</td>
+                                                        <td>@Model.StudentFormNo</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-user"></i> CUS Registration No</td>
+                                                        <td>@Model.CUSRegistrationNo</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-book"></i> Course</td>
+                                                        <td>@ViewBag.CourseName</td>
+                                                    </tr>
+                                                    @*<tr>
+            <td class="text-success"><i class="fa fa-list-ol"></i> Combination</td>
+            <td>
+                @ViewBag.StudentSubjects<br />
+                @ViewBag.StudentAdditionalSubjects
+            </td>
+        </tr>*@
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-group"></i> Class &amp; Section</td>
+                                                        <td>@Model.ClassRollNo</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-calendar"></i> DOB</td>
+                                                        <td>@Model.DOB.ToString("dd-MMMM-yyyy")</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-calendar"></i> Board Registration No.</td>
+                                                        <td>@Model.BoardRegistrationNo</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-calendar"></i> Batch</td>
+                                                        <td>@Model.Batch</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-calendar"></i> Current Semester</td>
+                                                        <td>@Model.CurrentSemesterOrYear</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-university"></i> College</td>
+                                                        <td>
+                                                            @Model.AcceptCollegeID
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-university"></i> ABC ID</td>
+                                                        <td>
+                                                            @(string.IsNullOrWhiteSpace(Model.ABCID)?
+                                                                Model.CurrentSemesterOrYear>0?
+                                                                Html.Raw("Not Available &nbsp;&nbsp;&nbsp;&nbsp;<a href=\"/CUStudentZone/Feedback/\" style=\"height:60px\"><i class=\"menu-icon fa fa-book\"></i> <span class=\"menu-text\">Add here</span></a>")
+                                                                :""
+                                                                : string.Join("-", Enumerable.Range(0, Model.ABCID.Length / 3).Select(i => Model.ABCID.Substring(i * 3, 3))))
+                                                        </td>
+                                                    </tr>
+                                                    @if (Model.IsLateralEntry)
+                                                    {
+                                                        <tr>
+                                                            <td class="text-success"><i class="fa fa-empire"></i> Lateral Entry</td>
+                                                            <td>
+                                                                Yes
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-thumbs-up"></i> Status</td>
+                                                        @if (Model.FormStatus == CUSrinagar.Enums.FormStatus.FeePaid && CUSrinagar.Models.AppUserHelper.OrgPrintProgramme == CUSrinagar.Enums.PrintProgramme.IH)
+                                                        {
+                                                            <td>Entrance FeePaid</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>@Model.FormStatus.GetEnumDescription()</td>
+                                                        }
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <p>
+                                            @*<h4 class="quadraTextSuccess">Student having any discrepancy in the details should visit the admission section of their college.</h4>*@
+
+                                            @if (ViewBag.IsBEDMED == true)
+                                            {
+                                                <h5 class="quadraText"><b>Attention BED-MED Students</b></h5>
+                                                <h5>Examination forms for BED-MED programms shall be avaiable soon ... Please try again later. Thankyou!</h5>
+                                                <h6>There has been some discrepancy in examination fee calculation. </h6>
+                                                <h6>Studnets of BED-MED Programs who have already downloaded the examination forms need to re-download forms </h6>
+                                            }
+                                        </p>
+                                    </div>
+
+                                    <div id="PersonalInfo" class="tab-pane fade">
+                                        <div class="table-responsive panel">
+                                            <table class="table">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-user"></i> Full Name</td>
+                                                        <td>@Model.FullName</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-user"></i> Father's Name</td>
+                                                        <td>@Model.FathersName</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-user"></i> Mother's Name</td>
+                                                        <td>@Model.MothersName</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-user"></i> Gender</td>
+                                                        <td>@Model.Gender</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-user"></i> Religion</td>
+                                                        <td>@Model.Religion</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-user"></i> Category</td>
+                                                        <td>@Model.Category</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-envelope-o"></i> Email ID</td>
+                                                        <td><a href="mailto:@Model.StudentAddress.Email ?subject=Cluster University">@Model.StudentAddress.Email</a></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="glyphicon glyphicon-phone"></i> Mobile Number</td>
+                                                        <td><a class="phone" href="tel: @Model.StudentAddress.Mobile">@Model.StudentAddress.Mobile</a></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <div id="Address" class="tab-pane fade">
+                                        <div class="table-responsive panel">
+                                            <table class="table">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-home"></i> Address</td>
+                                                        <td colspan="4">@Model.StudentAddress.PermanentAddress</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa "></i>Pincode</td>
+                                                        <td colspan="2">@Model.StudentAddress.PinCode</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa "></i>Block</td>
+                                                        <td>@Model.StudentAddress.Block</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa "></i>Tehsil</td>
+                                                        <td colspan="2">@Model.StudentAddress.Tehsil</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa "></i>Assembly Constituency</td>
+                                                        <td colspan="2">@Model.StudentAddress.AssemblyConstituency</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa "></i>Parliamentary Constituency</td>
+                                                        <td>@Model.StudentAddress.ParliamentaryConstituency</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa "></i>District</td>
+                                                        <td>@Model.StudentAddress.District</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-success"><i class="fa fa-flag"></i> State</td>
+                                                        <td colspan="2">@Model.StudentAddress.State</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <div id="AccademicDetail" class="tab-pane fade">
+                                        <div class="table-responsive panel">
+                                            <table class="table">
+                                                <tbody>
+                                                    @if (Model.AcademicDetails != null)
+                                                    {
+                                                        foreach (var item in Model.AcademicDetails)
+                                                        {
+                                                            <tr>
+                                                                <td class="text-success"><i class="fa fa-university"></i> Last School</td>
+                                                                <td>@item.ExamBody</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-success"><i class="fa fa-book"></i> Stream</td>
+                                                                <td>@item.Stream</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-success"><i class="fa fa-list-ol"></i> Subjects</td>
+                                                                <td>@item.Subjects</td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td class="text-success"><i class="fa fa-calendar"></i> Roll Number</td>
+                                                                <td>@item.RollNo </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-success"><i class="fa fa-calendar"></i>Sessoin / Academic Year</td>
+                                                                <td>@item.Session /  @item.Year</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-success">Marks </td>
+                                                                <td>@item.MarksObt.ToString()  /  @item.MaxMarks.ToString() =  @item.Percentage %</td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+
+                                    <div id="SubjectDetail" class="tab-pane fade">
+                                        <div class="table-responsive panel">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Batch</th>
+                                                        <th>Sem</th>
+                                                        <th>Subject details</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if (Model != null && Model.SelectedCombinations.IsNotNullOrEmpty())
+                                                    {
+                                                        foreach (var item in Model.SelectedCombinations.OrderBy(x => x.Semester)?.ToList())
+                                                        {
+                                                            if (item.Subjects != null && item.Subjects.Count > 0)
+                                                            {
+                                                                var semSub = item.Subjects.Select(x => new { x.SubjectFullName, x.SubjectType, x.DepartmentFullName }).OrderBy(x => x.SubjectFullName).OrderBy(x => x.SubjectType).ToList();
+                                                                <tr>
+                                                                    <td>@item.SemesterBatch</td>
+                                                                    <td>@item.Semester</td>
+                                                                    <td>
+                                                                        <ol>
+                                                                            @for (int i = 0; i < semSub.Count; i++)
+                                                                            {
+                                                                                var x = semSub[i];
+                                                                                <li>
+                                                                                    <span title="Department/Subject">@(string.IsNullOrEmpty(x.DepartmentFullName) ? "Not Available" : x.DepartmentFullName)</span>:
+                                                                                    <span title="Title">@x.SubjectFullName </span>
+                                                                                    <span title="Type">@("(" + CUSrinagar.Extensions.Helper.GetEnumDescription<CUSrinagar.Enums.SubjectType>(x.SubjectType) + ")")</span>
+                                                                                </li>
+                                                                            }
+                                                                        </ol>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <tr>
+                                                            <td colspan="3">No Subjects assigned yet</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                <div style="text-align:center;font-weight:bold;padding:5px 10px 5px 10px" class="left padding-top-10">
+                                    <img src="@Url.Content(Model.Photograph)" class="img-responsive img-thumbnail" width="150" style="float:left">
+                                    <p class="quadraTextSuccess">Students having any discrepancy in the details should visit the Admission Section of their respective colleges.</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+@*<div class="modal fade" id="PhotoOption" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="width:30%;height:30%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title text-success" id="myModalLabel"><i class="fa fa-gear"></i> <span class="text-right">@Model.FullName</span></h4>
+                </div>
+                <div class="modal-body">
+                    <center>
+                        <img src="upload/profile_pic/701b4263f7d38604699b7c1f89a3e6a6.jpg" class="img-responsive img-thumbnail">
+                    </center>
+                </div>
+                <div class="modal-footer">
+                    <a href="" class="btn btn-success"><i class="fa fa-photo"></i> Upload</a>
+                    <a href="" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>*@
+
+
+@section PageSpecificJSFiles{
+
+}

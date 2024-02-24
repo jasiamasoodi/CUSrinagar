@@ -1,0 +1,33 @@
+﻿@model List<CUSrinagar.Models.ADMCollegeMaster>
+@{
+    ViewBag.Title = "CUS :: Course List";
+    string currentYear = DateTime.Now.Year + "";
+
+}
+
+<div class="page-wrapper pager-table-text">
+    <header class="page-heading clearfix">
+        <h1 class="heading-title pull-left">
+            Courses
+            <small>
+                <i class="ace-icon fa fa-angle-double-right"></i>
+                List of Courses
+            </small>
+        </h1>
+    </header>
+
+    @Html.Partial("_CoursesListPartial", Model)
+
+</div>
+<script>
+    var _CurrentSection = "Academics";
+</script>
+<style>
+    .filter-btn a {
+        color: white !important
+    }
+</style>
+
+
+
+

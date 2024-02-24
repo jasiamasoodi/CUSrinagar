@@ -1,0 +1,124 @@
+﻿@model IEnumerable<CUSrinagar.Models.ResultList>
+@using CUSrinagar.Enums
+@using CUSrinagar.Extensions
+<table class="table table-hover table-bordered ">
+    <thead>
+        <tr>
+            <th>S.No</th>
+            <th data-property="CourseFullName">Course</th>
+            <th title="Examination Roll Number" data-property="ExamRollNumber"> Exam Roll No</th>
+            <th class="wd-200" data-property="CUSRegistrationNo">Registration No</th>
+            <th data-property="FullName">Full Name</th>
+            <th data-property="SubjectFullName">Subject</th>
+
+            @*<th title="Internal Marks" data-property="InternalMarks">Int</th>
+            <th title="Internal Attedance/Assessment Marks" data-property="InternalAttendance_AssessmentMarks">Int.A</th>
+            <th title="External Attendance/Assessment Marks" data-property="ExternalAttendance_AssessmentMarks">Ext.A</th>
+            <th title="External Marks" data-property="ExternalMarks">Ext</th>*@
+
+            <th title="Total Internal marks">T Int</th>
+            <th title="Total External marks">T Ext</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td class="js-sno"></td>
+                    <td>@item.CourseFullName</td>
+                    <td>@item.ExamRollNumber</td>
+                    <td>@item.CUSRegistrationNo</td>
+                    <td>@item.FullName</td>
+                    <td>@item.SubjectFullName</td>
+
+                    @*<td>
+                        @if (item.HasInternalComponent)
+                        {
+                            <span>@item.InternalMarks</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.IsInternalAttendance_AssessmentApplicable)
+                        {
+                            <span>@item.InternalAttendance_AssessmentMarks</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.IsExternalAttendance_AssessmentApplicable)
+                        {
+                            <span>@item.ExternalAttendance_AssessmentMarks</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.IsExternalMarksApplicable)
+                        {
+                            <span>@item.ExternalMarks</span>
+                        }
+                    </td>*@
+
+                    <td title="Total Internal marks">
+                        @if (item.HasInternalComponent)
+                        {
+                            if ((item.InternalStatus == ResultStatus.P || item.InternalStatus == ResultStatus.F))
+                            {
+                                <span>@item.TotalInternalMarksObtained.Value.ToString("f0")</span>
+                                <sup>@item.InternalStatus.ToString()</sup>
+                            }
+                            else
+                            {
+                                <span>@item.InternalStatus.ToString()</span>
+                            }
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                    <td title="">
+                        @if (item.HasExternalComponent)
+                        {
+                            if (item.HasInternalComponent)
+                            {
+                                if (item.InternalStatus == ResultStatus.P)
+                                {
+                                    if (item.TotalExternalMarksObtained.HasValue && (item.ExternalStatus == ResultStatus.P || item.ExternalStatus == ResultStatus.F))
+                                    {
+                                        <span>@item.TotalExternalMarksObtained.Value.ToString("f0")</span>
+                                        <sup>@item.ExternalStatus.ToString()</sup>
+                                    }
+                                    else
+                                    {
+                                        <span>@item.ExternalStatus.ToString()</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <sup>F</sup>
+                                }
+                            }
+                            else
+                            {
+                                if (item.TotalExternalMarksObtained.HasValue && (item.ExternalStatus == ResultStatus.P || item.ExternalStatus == ResultStatus.F))
+                                {
+                                    <span>@item.TotalExternalMarksObtained.Value.ToString("f0")</span>
+                                    <sup>@item.ExternalStatus.ToString()</sup>
+                                }
+                                else
+                                {
+                                    <span>@item.ExternalStatus.ToString()</span>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+
+                </tr>
+            }
+        }
+    </tbody>
+</table>

@@ -1,0 +1,194 @@
+﻿@model  CUSrinagar.Models.AppUsers
+
+@{ string hideen = "";
+
+    int track;
+    int trackint = ViewBag.track != null ? ViewBag.track + 1 : 0;
+    int count = (Model != null && Model.EvalvatorSubjects != null && Model.EvalvatorSubjects.Count() > 0) ? Model.EvalvatorSubjects.Count : (trackint + 1);
+    bool hasValue = (Model != null && Model.EvalvatorSubjects != null && Model.EvalvatorSubjects.Count() > 0);
+    bool hasmaxValue = (Model != null && Model.EvalvatorSubjects != null && Model.EvalvatorSubjects.Count() > 0 && Model.EvalvatorSubjects[trackint].MaxRollNo != null);
+    bool hasminValue = (Model != null && Model.EvalvatorSubjects != null && Model.EvalvatorSubjects.Count() > 0 && Model.EvalvatorSubjects[trackint].MinRollNo != null);
+}
+@for (track = trackint; track < count; track++)
+{
+    string display = "display:none;";
+    string Ischecked = "checked";
+    if (Model != null && Model.EvalvatorSubjects != null && Model.EvalvatorSubjects.Count() == 0)
+    { Model.EvalvatorSubjects = null; }
+    if (Model != null && Model.EvalvatorSubjects != null)
+    {
+        if (Model.EvalvatorSubjects[track].ExamRollNoFrom != null || Model.EvalvatorSubjects[track].ExamRollNoTo != null)
+        {
+            display = "display:block;";
+            Ischecked = "";
+        }
+    }
+<div>
+    @{var sno = track + 1;
+    }
+    @if (sno == 1)
+    {
+        <div class=" align-left col-sm-12 no-padding-right no-padding-left  ">
+            <a title="deleteall" href="#" id="DeleteAll" class="bigger-240 red " data-UserID="@Model.User_ID">
+                <i class="fa fa-trash "></i>
+            </a>Delete All Selected
+        </div>
+    }
+   @if (Model != null && Model.EvalvatorSubjects != null)
+    {
+    <div class="no-padding-right no-padding-left" style="width:3%">  <input class="jsdeleteall" data-evalid="@Model.EvalvatorSubjects[track].EvaluatorSubject_ID" type="checkbox" id="d_@track"></div>
+    }
+    <div id="Div_@track" class="col-sm-11 jssubjectcontainer no-padding-right no-padding-left">
+
+        <div class="col-sm-2 lbl bigger-120 no-padding-right ">
+            <span class="bigger-120"><b>@sno .</b>&nbsp;</span>
+            <span style="color:red"> *</span> Course/Deptt <span id="Course_IDValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+            <div>
+                @Html.DropDownListFor(model => model.EvalvatorSubjects[track].Course_ID, new SelectList(ViewBag.CourseDDLList, "Value", "Text", (hasValue) ? Model.EvalvatorSubjects[track].Course_ID : Guid.Empty),
+    "--Select--", new { @class = "ParentDDL chosen-select tag-input-style SearchDDL form-control jsfilterelement", @data_typeis = "Evalvator", @data_id = track, @data_column = "Course_ID", @data_operator = "EqualTo", data_ddltype = "Semester", @data_ddlchildtype = "Subject", @data_ddlsubchildtype = "" })
+            </div>
+
+            <div class="col-sm-2">
+                @Html.ValidationMessageFor(model => model.EvalvatorSubjects[track].Course_ID, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+            </div>
+        </div>
+        <div class="col-sm-1 lbl bigger-120 no-js no-padding-right">
+
+            <span style="color:red;"> *</span> Semester <span id="Semester_IDValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+            <div id="Semester_@track">
+                @Html.DropDownListFor(model => model.EvalvatorSubjects[track].Semester, new SelectList((IEnumerable<SelectListItem>)ViewData["SemesterDDLList" + track], "Value", "Text", (hasValue) ? Model.EvalvatorSubjects[track].Semester : 0),
+                       "--Select--", new { @class = "ParentDDL chosen-select tag-input-style SearchDDL form-control jsfilterelement SemesterChange", @data_id = track, @data_operator = "EqualTo", @data_typeis = "Evalvator", data_ddltype = "Subject", @data_ddlchildtype = "", @data_ddlsubchildtype = "", data_track = track })
+            </div>
+
+            <div class="col-sm-2">
+                @Html.ValidationMessageFor(model => model.EvalvatorSubjects[track].Semester, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+            </div>
+
+        </div>
+
+        <div class="col-sm-2 lbl bigger-120 no-padding-right">
+
+            <span style="color:red"> *</span> Subject <span id="Course_IDValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+
+
+            <div id="Subject_@track">
+                @Html.DropDownListFor(model => model.EvalvatorSubjects[track].Subject_ID, new SelectList((IEnumerable<SelectListItem>)ViewData["SubjectDDLList" + track], "Value", "Text", (hasValue) ? Model.EvalvatorSubjects[track].Subject_ID : Guid.Empty),
+    "--Select--", new { @class = " chosen-select tag-input-style SearchDDL form-control jsfilterelement", @data_id = track, @data_typeis = "Evalvator", @data_operator = "EqualTo", @data_ddlchildtype = "", @data_ddlsubchildtype = "" })
+
+            </div>
+
+            <div class="col-sm-2">
+                @Html.ValidationMessageFor(model => model.EvalvatorSubjects[track].Subject_ID, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+            </div>
+
+        </div>
+        <div class="col-sm-2 lbl bigger-120 ">
+
+            <span style="color:red;"> *</span> Colleges <span id="CollegesValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+            <div id="Colleges_@track">
+                @Html.DropDownListFor(model => model.EvalvatorSubjects[track].CollegeList, (IEnumerable<SelectListItem>)ViewData["CollegesDDLList" + track], "ALL",
+               new { @class = " form-control multiselect  CollegesChange", @multiple = "", @data_TypeIs = "Evalvator", @data_id = track, @data_column = "Colleges", data_track = track, @style = "display: none;" })
+            </div>
+
+            <div class="col-sm-2">
+                @Html.ValidationMessageFor(model => model.EvalvatorSubjects[track].Colleges, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+            </div>
+
+        </div>
+
+
+        <div class="col-sm-1 lbl bigger-120 no-js no-padding-right">
+            All Roll-Nos
+            <div id="Rangeall_@track">
+                <input id="RangeCB_@track" type="checkbox" value="Rangeall" name="Rangeall" style="margin-top: 17px;" onclick="ShowHideDivEval(this,@track,'ExamRollNo')" @Ischecked />
+            </div>
+        </div>
+        @{ hasmaxValue = (Model != null && Model.EvalvatorSubjects != null && Model.EvalvatorSubjects.Count() > 0 && Model.EvalvatorSubjects[track].MaxRollNo != null);
+            hasminValue = (Model != null && Model.EvalvatorSubjects != null && Model.EvalvatorSubjects.Count() > 0 && Model.EvalvatorSubjects[track].MinRollNo != null);
+        }
+        <div class="col-sm-2  no-padding-right no-padding-left" id="ExamRollNo_@track" style=@display>
+            <div class="col-sm-6 lbl bigger-120 no-js no-padding-right no-padding-left">
+                @*style="padding-top: 18px;"*@
+                <div id="RollNoFrom">
+                    From
+                    @Html.TextBoxFor(model => model.EvalvatorSubjects[track].ExamRollNoFrom, new { @class = "roolf form-control width100 jsvalrollnofrom", @min = hasminValue ? @Model.EvalvatorSubjects[track].MinRollNo : "9999999", @max = hasmaxValue ? @Model.EvalvatorSubjects[track].MaxRollNo : "9999999", @data_id = track, @maxlength = hasmaxValue ? @Model.EvalvatorSubjects[track].MaxRollNo.ToString().Length : 15, @onkeypress = "return numbersOnly(event);", @title = "RollNo From", placeholder = "Class Roll No. From" })
+                </div>
+            </div>
+
+            <div class="col-sm-6 lbl bigger-120 no-js ">
+                @*style="padding-top: 18px;"*@
+                <div id="RollNoTo">
+                    To
+                    @Html.TextBoxFor(model => model.EvalvatorSubjects[track].ExamRollNoTo, new { @class = "roolt form-control width100 jsvalRange", @min = hasminValue ? @Model.EvalvatorSubjects[track].MinRollNo : "9999999", @max = hasmaxValue ? @Model.EvalvatorSubjects[track].MaxRollNo : "9999999", @data_id = track, @maxlength = hasmaxValue ? @Model.EvalvatorSubjects[track].MaxRollNo.ToString().Length : 15, @onkeypress = "return floatNumbersOnly(event);", @title = "RollNo To", placeholder = "Class Roll No. To" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-1 lbl bigger-120 no-js no-padding-right no-padding-left" style="margin-top:13px;color: #2c30a9;">
+            @Html.HiddenFor(model => model.EvalvatorSubjects[track].MinRollNo)
+            @Html.HiddenFor(model => model.EvalvatorSubjects[track].MaxRollNo)
+            <div id="MinMaxExamRollNo_@track" style="color: #2c30a9;@display">
+                First RollNo: @(hasminValue ? Model.EvalvatorSubjects[track].MinRollNo : "0")<br />Last RollNo: @(hasmaxValue ? Model.EvalvatorSubjects[track].MaxRollNo : "0")
+                <br />No. of Students: @(hasValue ? Model.EvalvatorSubjects[track].NoofStudents : "0")
+            </div>
+        </div>
+        @if (Model != null && Model.EvalvatorSubjects != null && Model.EvalvatorSubjects[track] != null && count > 1)
+        {
+            hideen = "hidden";
+            <div class="col-sm-1 align-right" style="margin-top:26px;">
+                @*<a href="@Url.Action("Delete", "UserProfile", new { area = "CUCollegeAdminPanel",user_id=Model.User_ID, id = Model.EvalvatorSubjects[track].EvalvatorSubject_ID})" class="jsDeleteItem fa  fa-trash-o red bigger-240"></a>*@
+
+                <a title="delete" href="#" class="jsDeleteItem red bigger-240" data-url="@Url.Action("DeleteEval", "UserProfile", new { area = "CUSrinagarAdminPanel",user_id=Model.User_ID, id = Model.EvalvatorSubjects[track].EvaluatorSubject_ID})"><i class="fa fa-trash "></i></a>
+
+            </div>
+        }
+        @if (Model == null)
+        {
+            hideen = "hidden";
+            <div class="  align-right" style="margin-top:26px;" id="DeleteNew_@track">
+                <a title="delete" href="#" id="DeleteNew" data-id="@(track)" class="red bigger-240">
+                    <i class="fa fa-trash "></i>
+                </a>
+            </div>
+        }
+
+
+
+    </div>
+</div>
+}
+
+
+@*<script>$("#DeleteNew_@(track-1)").remove();</script>*@
+
+
+
+
+@if ((Model == null && track == 1) || (Model != null))
+{<div class="col-sm-1 lbl bigger-120 no-js" style="margin-top:18px;margin-bottom:10px">
+        <button type="button" id="addNew" data-id="@(track - 1)" class="btn btn-success btn-sm"> Add New</button>
+
+    </div>
+}
+
+
+
+@section PageSpecificJS{
+    <script type="text/javascript">
+    var trackap=@track;
+        $(document).ready(function () {
+            if($("#DeleteNew_@(track-1)").length>0){
+                $("#DeleteNew_@(track-1)").remove();
+            }
+        });
+    </script>
+}
+
+
+
+
+

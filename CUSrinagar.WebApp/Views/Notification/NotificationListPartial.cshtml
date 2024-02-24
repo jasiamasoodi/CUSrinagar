@@ -1,0 +1,47 @@
+﻿@model  List<CUSrinagar.Models.Notification>
+@{
+    Layout = null;
+}
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th data-property="Description">Description</th>
+            <th data-property="StartDate">Posting Date</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var row in Model)
+            {
+                <tr class="@row.NotificationType.ToString()">
+                    <td>
+                        @row.Description
+                        @if (DateTime.Now.Date <= row.CreatedOn.Date.AddDays(6))
+                        {<img src="@Url.Content("~/Content/ThemePublic/PrintImages/new.gif")" />}
+
+                    </td>
+                    <td>@row.StartDate.ToString("dd-MMMM-yyyy")</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(row.Link))
+                        {
+                            var href = ((row.IsLink) ? "http://" : "") + (row.Link.ToLower().Replace("http://", "").Replace("https://", ""));
+                            if (row.IsLink)
+                            {
+                                <a target="_blank" title='@row.Description' href='@href'> View Detail </a>
+                            }
+                            else
+                            {
+                                //href = "https://docs.google.com/gview?url=http://www.cusrinagar.edu.in" + href+ "&embedded=true";
+                                <a title='@row.Description' href='@href'> View Detail </a>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

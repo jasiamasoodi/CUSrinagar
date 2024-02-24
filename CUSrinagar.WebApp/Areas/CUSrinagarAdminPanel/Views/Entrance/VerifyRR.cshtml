@@ -1,0 +1,120 @@
+﻿@model CUSrinagar.Models.SearchFirstSemesterRR
+
+@{
+    ViewBag.Title = "Verify 1st Semester RR";
+}
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUCollegeAdminPanel"})">Home</a>
+            </li>
+            <li>Entrance Centers</li>
+            <li class="active">Verify 1st Semester RR</li>
+        </ul>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Verify 1st Semester RR
+                    <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                        <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                    </span>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="search-box">
+                    @using (Html.BeginForm("DownloadFirstSemesterRR", "Entrance", FormMethod.Post, new { id = "frmVerifyRR" }))
+                    {
+                        @Html.AntiForgeryToken()
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label class="control-label no-padding-right">
+                                    @Html.LabelFor(rr => rr.Programme) <span class="red">*</span>
+                                </label>
+                                <span class="red">@Html.ValidationMessageFor(rr => rr.Programme)</span><br />
+                                @Html.DropDownListFor(rr => rr.Programme, (IEnumerable<SelectListItem>)ViewBag.Programme, string.Empty, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label class="control-label no-padding-right">
+                                    @Html.LabelFor(rr => rr.Batch) <span class="red">*</span>
+                                </label>
+                                <span class="red">@Html.ValidationMessageFor(rr => rr.Batch)</span><br />
+                                @Html.TextBoxFor(rr => rr.Batch, new { @type = "number", min = "2017", max = "9999", @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-7">
+                                <label class="control-label no-padding-right">
+                                    @Html.LabelFor(rr => rr.Course_ID) <span class="red">*</span>
+                                </label>
+                                <span class="red">@Html.ValidationMessageFor(rr => rr.Course_ID)</span><br />
+                                <span class="CourseID">
+                                    @Html.DropDownListFor(rr => rr.Course_ID, (IEnumerable<SelectListItem>)ViewBag.CourseID, string.Empty, new { @class = "form-control", @style = "width:150px" })
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-7">
+                                <label class="control-label no-padding-right">
+                                    @Html.LabelFor(rr => rr.College_ID) <span class="red">*</span>
+                                </label>
+                                <span class="red">@Html.ValidationMessageFor(rr => rr.College_ID)</span><br />
+                                <span class="">
+                                    @Html.DropDownListFor(rr => rr.College_ID, (IEnumerable<SelectListItem>)ViewBag.Colleges, string.Empty, new { @class = "form-control", @style = "width:150px" })
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label class="control-label no-padding-right">
+                                    @Html.LabelFor(rr => rr.EntranceRollNos) <span class="red"></span>
+                                </label>
+                                <span class="red">@Html.ValidationMessageFor(rr => rr.EntranceRollNos)</span><br />
+                                @Html.TextAreaFor(rr => rr.EntranceRollNos, new { @class = "form-control", @cols = "25" })
+                            </div>
+                        </div>
+                        <span class="errorMsg quadraText"></span>
+                        <div class="form-group ">
+                            <br />
+                            <button type="submit" class="btn btn-sm btn-primary JSSubmitBtn" data-url="@Url.Action("_GetListOfFirstSemesterRRPartial","Entrance",new {area="CUSrinagarAdminPanel"})"><i class="fa fa-search"></i>&nbsp;Search</button>
+                        </div>
+
+                        <div class="form-group">
+                            <br />
+                            <button type="submit" class="btn btn-sm btn-primary jsExcelbtn" data-url=""><i class="fa fa-excel"></i>&nbsp;Download as Excel</button>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+            <div class="js-table-content" id="JSDisplayDetails">
+                @{Html.RenderPartial("_GetListOfFirstSemesterRRPartial", new List<CUSrinagar.Models.FirstSemesterRR>());}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJSFiles{
+    @Scripts.Render("~/bundles/Libraries/jqueryval")
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSEntranceCenters/JSVerifyRR.js")"></script>
+}
+
+@section PageSpecificStyle
+{
+    <style type="text/css">
+    </style>
+}

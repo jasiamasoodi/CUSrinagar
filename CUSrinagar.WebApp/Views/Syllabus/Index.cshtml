@@ -1,0 +1,281 @@
+﻿@{
+    ViewBag.Title = "CUS :: Syllabus List";
+    string currentYear = DateTime.Now.Year + "";
+}
+@section PageSpecificCSS{
+
+}
+<style>
+    .required {
+        color: black;
+    }
+</style>
+<header class="page-heading clearfix">
+    <h3 class="heading-title pull-left">
+        Syllabus
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            List of Syllabus
+        </small>
+    </h3>
+</header>
+<br />
+<div class="col-sm-12" style="overflow:auto">
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse_cus">
+                        <span style="text-align:center;font-size: medium; ">Syllabus of  Common Subjects of all Under Graduate, Integrated and Honors Programmes</span>
+                    </a>
+                </h3>
+            </div>
+            <div id="collapse_cus" class="panel-collapse collapse">
+                <div class="panel-body text-justify">
+                    <table class="table table-hover table-bordered js-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center; padding-left: 15em">Semester 1</th>
+                                <th style="text-align: center; padding-left: 15em">Semester 2</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding-left: 10em;"><a class="" href='@Url.Content("~/FolderManager/Syllabus/Common/English_Ist_sem_2017.pdf")' target="_blank">English(AECC) for batch 2017 only</a></td>
+                                <td style="padding-left: 10em; "><a class="" href='@Url.Content("~/FolderManager/Syllabus/Common/English_2nd_sem_2017.pdf")' target="_blank">English(AECC) for batch 2017 only</a></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 10em; "><a class="" href='@Url.Content("~/FolderManager/Syllabus/Common/EnglishSem-1.pdf")' target="_blank">English(AECC)</a></td>
+                                <td style="padding-left: 10em; "><a class="" href='@Url.Content("~/FolderManager/Syllabus/Common/EnglishSem-2.pdf")' target="_blank">English(AECC)</a></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 10em; "><a class="" href='@Url.Content("~/FolderManager/Syllabus/Common/EVSSem1.pdf")' target="_blank">Environmental Studies</a></td>
+                                <td style="padding-left: 10em; "><a class="" href='@Url.Content("~/FolderManager/Syllabus/Common/EVSSem2.pdf")' target="_blank">Environmental Studies</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading" style="background-color: white;">
+                <h3 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse_colg">
+
+                        <span style="text-align:center;font-size: medium;">Syllabus of Learning / Teaching Objectives for Under Graduate in Science Stream</span>
+                    </a>
+                </h3>
+            </div>
+            <div id="collapse_colg" class="panel-collapse collapse ">
+                <div class="panel-body">
+                    <table class="table table-hover table-bordered js-table">
+                        <tbody>
+                            <tr>
+                                <td><a class="" href='@Url.Content("~/FolderManager/Syllabus/LearningTeachingObjectives/Chemistryleaningobjectives.zip")'>Chemistry</a></td>
+                                <td><a class="" href='@Url.Content("~/FolderManager/Syllabus/LearningTeachingObjectives/Learningobjectives_dept_ofevs.zip")'>Environmental Science</a></td>
+                                <td><a class="" href='@Url.Content("~/FolderManager/Syllabus/LearningTeachingObjectives/Learningobjectivesandlessonplans.zip")'>Lesson Plans</a></td>
+                                <td><a class="" href='@Url.Content("~/FolderManager/Syllabus/LearningTeachingObjectives/LearningObjectivesEvs.zip")'>Environmental Science (Aecc/Core)</a></td>
+                                <td><a class="" href='@Url.Content("~/FolderManager/Syllabus/LearningTeachingObjectives/Teachingobjectiveslearningoutcomeofvariouscourses.zip")'>Teaching &amp; Learning outcome of Physics</a></td>
+                                <td><a class="" href='@Url.Content("~/FolderManager/Syllabus/LearningTeachingObjectives/learning objectives of Dean HLA.zip")'>Arabic, Music, Kashmiri</a></td>
+                                <td><a class="" href='@Url.Content("~/FolderManager/Syllabus/LearningTeachingObjectives/learning objectives of Dean Sciences.zip")'>Anthropology, Botany, Bio-Resources</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="page-content">
+    <div class="row page-row">
+        <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+        <div class="col-md-12 jsTableContent">
+            <div class="panel panel-primary js-pager-table">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Syllabus
+                        <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                            <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                        </span>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <h4>Programmes</h4>
+                                <div class="widget-box no-padding">
+
+                                    <div class="widget-body" style="background-color: #EFF3FB;">
+                                        <div class="widget-main">
+                                            <div>
+                                                <h4>@Html.ActionLink("NEP", "Index", "Syllabus", new { @id = "True", pp = CUSrinagar.Enums.Programme.UG, }, null)</h4>
+                                                <p class="margin-bottom-15"></p>
+                                            </div>
+                                            <div>
+                                                <h4>@Html.ActionLink("Graduation (CBCS)", "Index", "Syllabus", new { @id = "False", pp = CUSrinagar.Enums.Programme.UG }, null)</h4>
+
+                                                <p class="margin-bottom-15"></p>
+                                            </div>
+                                            <div>
+                                                <h4>@Html.ActionLink("Integrated (IG/PG)", "Index", "Syllabus", new { @id = "False", pp = CUSrinagar.Enums.Programme.IG }, null)</h4>
+                                                <p class="margin-bottom-15"></p>
+                                            </div>
+                                            <div>
+                                                <h4>@Html.ActionLink("Honor's", "Index", "Syllabus", new { @id = "False", pp = CUSrinagar.Enums.Programme.HS }, null)</h4>
+                                                <p class="margin-bottom-15"></p>
+                                            </div>
+                                            <div>
+                                                <h4>@Html.ActionLink("Professional", "Index", "Syllabus", new { @id = "False", pp = CUSrinagar.Enums.Programme.Professional }, null)</h4>
+                                                <p class="margin-bottom-15"></p>
+                                            </div>
+                                            <div>
+                                                <h4>@Html.ActionLink("Post-Graduation", "Index", "Syllabus", new { @id = "False", pp = CUSrinagar.Enums.Programme.PG }, null)</h4>
+                                                <p class="margin-bottom-15"></p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div><!-- /.span -->
+                            <div class="col-xs-12 col-sm-9">
+                                <div class="widget-box">
+                                    <div class="widget-body">
+                                        <div class="widget-main text-center">
+                                            <form class="form-inline">
+                                                @Html.Hidden("IsNEP", ViewBag.isNEP ? "True" : "False", new { @class = "jsfilterelement", @data_column = "IsNEP", @data_operator = "EqualTo", })
+                                                @Html.Hidden("Programme", (int)ViewBag.Programme, new { @data_column = "Programme", @data_operator = "EqualTo", @class = "jsfilterelement", @data_tablealias = "C" })
+                                                @Html.Hidden("Status", "1", new { @data_column = "Status", @data_operator = "EqualTo", @class = "jsfilterelement", @data_tablealias = "Syllabus" })
+                                                <div class="form-group">
+                                                    <label>Batch</label><br />
+                                                    <div class="form-group">
+                                                        @Html.DropDownList("SessionDDL", new SelectList(ViewBag.Year, "Value", "Text", ViewBag.isNEP ? 2022 : 2018), "-- All --",
+                                                            new
+                                                            {
+                                                                @class = "form-control chosen-select jsSessionDDL jsfilterelement",
+                                                                @data_column = "Session",
+                                                                @data_scope = "row1",
+                                                                @data_operator = "Like"
+                                                            })
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>
+                                                        @if (ViewBag.isNEP)
+                                                        {
+                                                            <span>Subject Type</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>Course</span>
+                                                        }
+
+                                                    </label><br />
+                                                    <div class="jsDDLContainer  wd-200" style="text-align:left !important;">
+                                                        @if (ViewBag.isNEP)
+                                                        {
+                                                            @Html.DropDownList("SubjectType", new SelectList(ViewBag.SubjectTypesOrCourses, "Value", "Text"), " -- All Subject Types --",
+                                                                               new
+                                                                               {
+                                                                                   @class = "form-control chosen-select  jsfilterelement",
+                                                                                   @data_column = "SubjectType",
+                                                                                   @data_tablealias = "S",
+                                                                                   @data_defaulttextvalue = " -- All Subject Types --,",
+                                                                                   @data_scope = "row1",
+                                                                               })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.DropDownList("Course_ID", new SelectList(ViewBag.SubjectTypesOrCourses, "Value", "Text"), " -- All Courses --",
+                                                                              new
+                                                                              {
+                                                                                  @class = "form-control chosen-select  jsfilterelement",
+                                                                                  @data_column = "Course_ID",
+                                                                                  @data_tablealias = "C",
+                                                                                  @data_defaulttextvalue = " -- All Courses --,",
+                                                                                  @data_scope = "row1",
+                                                                              })
+                                                        }
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group">
+                                                    <label>Semester</label><br />
+                                                    <div class="jsDDLContainer">
+                                                        @Html.DropDownList("Semester", new SelectList(ViewBag.Semesters, "Value", "Text"),
+                                                                   new
+                                                                   {
+                                                                       @class = "form-control chosen-select jsSemesterDDL jsfilterelement",
+                                                                       @data_column = "Semester",
+                                                                       @data_tablealias = "Syllabus",
+                                                                       @data_defaulttextvalue = " -- All Semesters --,",
+                                                                       @data_scope = "row1"
+                                                                   })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Enter Subject title or dept.</label><br />
+                                                    <input type="text" placeholder="title or deparment name" class="form-control jsfilterelement" data-column="SubjectFullName,DepartmentFullName,Remark" data-operator="Contains" data-scope="row1" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="invisible">for styling purpose</label><br />
+                                                    <button type="button" class="btn btn-primary btn-sm fa-search-btn js-search btn-click-syllabus-search"><i class="fa fa-search"></i>&nbsp;Search</button>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="js-table-content" data-url=@Url.Action("SyllabusListPartial", "Syllabus", new { area = string.Empty }) data-DefaultOrderByColumn="SubjectFullName">
+                                </div>
+                                @{Html.RenderPartial("_JSPagerTableFooter");}
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script src="@Url.Content("~/Scripts/JSChosen.js")"></script>
+    <script src="~/Scripts/General/custom-select.js"></script>
+    <script>
+        var _CurrentSection = "Academics";
+        loadpagertableWithDefaultParams();
+        $(document).ready(function () {
+            $("#SessionDDL,#SubjectType,#Course_ID,#Semester").change(function () {
+                $(".btn-click-syllabus-search").trigger("click");
+            });
+        });
+    </script>
+}
+<style>
+    .filter-btn a {
+        color: white !important
+    }
+</style>
+
+
+
+

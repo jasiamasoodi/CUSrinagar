@@ -1,0 +1,257 @@
+﻿@model IEnumerable<CUSrinagar.Models.ResultList>
+@using CUSrinagar.Enums
+<table class="table table-hover table-bordered ">
+    <thead>
+        <tr>
+            <th>S.No</th>
+            <th data-property>Course</th>
+            <th title="Examination Roll Number">Roll No</th>
+            <th class="wd-200">Registration No</th>
+            <th>Full Name</th>
+            <th>Subject</th>
+
+            @*<th title="Internal Submitted">Int</th>*@
+            <th title="Internal Marks">Int</th>
+            <th title="Internal Attedance/Assessment Marks">Int.A</th>
+            <th title="External Attendance/Assessment Marks">Ext.A</th>
+
+            @*<th title="External Submitted">Ext</th>*@
+            <th title="External Marks">Ext</th>
+            <th title="Total Internal marks">T Int</th>
+            <th title="Total External marks">T Ext</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                if (!item.HasResult) { continue; }
+                bool InternalApplicable = false; decimal InternalMaxMarks = 0; decimal InternalMinPassMarks = 0; decimal? InternalMarksObtained = null; var InternalMarksTitle = "";
+                bool ExternalApplicable = false; decimal ExternalMaxMarks = 0; decimal ExternalMinPassMarks = 0; decimal? ExternalMarksObtained = null; var ExternalMarksTitle = "";
+
+                <tr>
+                    <td>
+                        <input class="ace checkbox checkbox-inline jsSelectChk" type="checkbox"><span class="lbl padding-right-10"></span><span class="js-sno"></span>
+                        @Html.HiddenFor(model => item.Student_ID, new { @class = "jsEntity_ID" })
+                    </td>
+                    <td>@item.CourseFullName</td>
+                    <td>@item.ExamRollNumber</td>
+                    <td>@item.CUSRegistrationNo</td>
+                    <td>@item.FullName</td>
+                    <td>@item.SubjectFullName</td>
+                    <td title="Internal marks obtained">@item.InternalMarks</td>
+                    <td title="Internal attend/assessment marks">@item.InternalAttendance_AssessmentMarks</td>
+                    <td title="External attend/assessment marks">@item.ExternalAttendance_AssessmentMarks</td>
+                    <td title="External marks">@item.ExternalMarks</td>
+                    <td title="Total Internal marks">
+                        @if (item.IsInternalMarksApplicable)
+                        {
+                            if (item.InternalIsPartOf == MarksIsPartOf.Internal)
+                            {
+                                InternalApplicable = true; InternalMinPassMarks += item.InternalMinPassMarks; InternalMaxMarks += item.InternalMaxMarks;
+                                if (item.InternalSubmitted)
+                                {
+                                    if (decimal.TryParse(item.InternalMarks, out decimal _Marks) && _Marks >= 0)
+                                    {
+                                        InternalMarksObtained = InternalMarksObtained.HasValue ? InternalMarksObtained : 0;
+                                        InternalMarksObtained += _Marks;
+                                    }
+                                    else
+                                    {
+                                        InternalMarksTitle += item.InternalMarks + "#";
+                                    }
+                                }
+                            }
+                        }
+                        @if (item.IsInternalAttendance_AssessmentApplicable)
+                        {
+                            if (item.InternalAttendanceIsPartOf == MarksIsPartOf.Internal)
+                            {
+                                InternalApplicable = true; InternalMinPassMarks += item.InternalAttendance_AssessmentMinPassMarks; InternalMaxMarks += item.InternalAttendance_AssessmentMaxMarks;
+                                if (item.InternalSubmitted)
+                                {
+                                    if (decimal.TryParse(item.InternalAttendance_AssessmentMarks, out decimal _Marks) && _Marks >= 0)
+                                    {
+                                        InternalMarksObtained = InternalMarksObtained.HasValue ? InternalMarksObtained : 0;
+                                        InternalMarksObtained += _Marks;
+                                    }
+                                    else
+                                    {
+                                        InternalMarksTitle += item.InternalAttendance_AssessmentMarks + "#";
+                                    }
+                                }
+                            }
+                        }
+                        @if (item.IsExternalMarksApplicable)
+                        {
+                            if (item.ExternalIsPartOf == MarksIsPartOf.Internal)
+                            {
+                                InternalApplicable = true; InternalMinPassMarks += item.ExternalMinPassMarks; InternalMaxMarks += item.ExternalMaxMarks;
+                                if (item.InternalSubmitted)
+                                {
+                                    if (decimal.TryParse(item.ExternalMarks, out decimal _Marks) && _Marks >= 0)
+                                    {
+                                        InternalMarksObtained = InternalMarksObtained.HasValue ? InternalMarksObtained : 0;
+                                        InternalMarksObtained += _Marks;
+                                    }
+                                    else
+                                    {
+                                        InternalMarksTitle += item.ExternalMarks + "#";
+                                    }
+                                }
+                            }
+                        }
+                        @if (item.IsExternalAttendance_AssessmentApplicable)
+                        {
+                            if (item.ExternalAttendanceIsPartOf == MarksIsPartOf.Internal)
+                            {
+                                InternalApplicable = true; InternalMinPassMarks += item.ExternalAttendance_AssessmentMinPassMarks; InternalMaxMarks += item.ExternalAttendance_AssessmentMaxMarks;
+                                if (item.InternalSubmitted)
+                                {
+                                    if (decimal.TryParse(item.ExternalAttendance_AssessmentMarks, out decimal _Marks) && _Marks >= 0)
+                                    {
+                                        InternalMarksObtained = InternalMarksObtained.HasValue ? InternalMarksObtained : 0;
+                                        InternalMarksObtained += _Marks;
+                                    }
+                                    else
+                                    {
+                                        InternalMarksTitle += item.ExternalAttendance_AssessmentMarks + "#";
+                                    }
+                                }
+                            }
+                        }
+
+                        @if (InternalApplicable)
+                        {
+                            if (InternalMarksObtained.HasValue)
+                            {
+                                <span title="@InternalMarksObtained.Value.ToString("f0")/@InternalMaxMarks">@InternalMarksObtained.Value.ToString("f0")</span>
+                                if (InternalMarksObtained < InternalMinPassMarks)
+                                {
+                                    <sup title="Fail">F</sup>
+                                }
+                                else
+                                {
+                                    <sup title="Pass">P</sup>
+                                }
+                            }
+                            else
+                            {
+                                <span title="@InternalMarksTitle">N.A</span>
+                            }
+                        }
+                        else
+                        {
+                            <span title="Not applicable">N.A</span>
+                        }
+                    </td>
+                    <td title="total external marks">
+                        @if (item.IsInternalMarksApplicable)
+                        {
+                            if (item.InternalIsPartOf == MarksIsPartOf.External)
+                            {
+                                ExternalApplicable = true; ExternalMinPassMarks += item.InternalMinPassMarks; ExternalMaxMarks += item.InternalMaxMarks;
+                                if (item.ExternalSubmitted)
+                                {
+                                    if (decimal.TryParse(item.InternalMarks, out decimal _Marks) && _Marks >= 0)
+                                    {
+                                        ExternalMarksObtained = ExternalMarksObtained.HasValue ? ExternalMarksObtained : 0;
+                                        ExternalMarksObtained += _Marks;
+                                    }
+                                    else
+                                    {
+                                        ExternalMarksTitle += item.InternalMarks + "#";
+                                    }
+                                }
+                            }
+                        }
+                        @if (item.IsInternalAttendance_AssessmentApplicable)
+                        {
+                            if (item.InternalAttendanceIsPartOf == MarksIsPartOf.External)
+                            {
+                                ExternalApplicable = true; ExternalMinPassMarks += item.InternalAttendance_AssessmentMinPassMarks; ExternalMaxMarks += item.InternalAttendance_AssessmentMaxMarks;
+                                if (item.ExternalSubmitted)
+                                {
+                                    if (decimal.TryParse(item.InternalAttendance_AssessmentMarks, out decimal _Marks) && _Marks >= 0)
+                                    {
+                                        ExternalMarksObtained = ExternalMarksObtained.HasValue ? ExternalMarksObtained : 0;
+                                        ExternalMarksObtained += _Marks;
+                                    }
+                                    else
+                                    {
+                                        ExternalMarksTitle += item.InternalAttendance_AssessmentMarks + "#";
+                                    }
+
+                                }
+                            }
+                        }
+                        @if (item.IsExternalMarksApplicable)
+                        {
+                            if (item.ExternalIsPartOf == MarksIsPartOf.External)
+                            {
+                                ExternalApplicable = true; ExternalMinPassMarks += item.ExternalMinPassMarks; ExternalMaxMarks += item.ExternalMaxMarks;
+                                if (item.ExternalSubmitted)
+                                {
+                                    if (decimal.TryParse(item.ExternalMarks, out decimal _Marks) && _Marks >= 0)
+                                    {
+                                        ExternalMarksObtained = ExternalMarksObtained.HasValue ? ExternalMarksObtained : 0;
+                                        ExternalMarksObtained += _Marks;
+                                    }
+                                    else
+                                    {
+                                        ExternalMarksTitle += item.ExternalMarks + "#";
+                                    }
+
+                                }
+                            }
+                        }
+                        @if (item.IsExternalAttendance_AssessmentApplicable)
+                        {
+                            if (item.ExternalAttendanceIsPartOf == MarksIsPartOf.External)
+                            {
+                                ExternalApplicable = true; ExternalMinPassMarks += item.ExternalAttendance_AssessmentMinPassMarks; ExternalMaxMarks += item.ExternalAttendance_AssessmentMaxMarks;
+                                if (item.ExternalSubmitted)
+                                {
+                                    if (decimal.TryParse(item.ExternalAttendance_AssessmentMarks, out decimal _Marks) && _Marks >= 0)
+                                    {
+                                        ExternalMarksObtained = ExternalMarksObtained.HasValue ? ExternalMarksObtained : 0;
+                                        ExternalMarksObtained += _Marks;
+                                    }
+                                    else
+                                    {
+                                        ExternalMarksTitle += item.ExternalAttendance_AssessmentMarks + "#";
+                                    }
+                                }
+                            }
+                        }
+
+                        @if (ExternalApplicable)
+                        {
+                            if (ExternalMarksObtained.HasValue)
+                            {
+                                <span title="@ExternalMarksObtained.Value.ToString("f0")/@ExternalMaxMarks">@ExternalMarksObtained.Value.ToString("f0")</span>
+                                if (ExternalMarksObtained < ExternalMinPassMarks)
+                                {
+                                    <sup title="Fail">F</sup>
+                                }
+                                else
+                                {
+                                    <sup title="Pass">P</sup>
+                                }
+                            }
+                            else
+                            {
+                                <span title="@ExternalMarksTitle">N.A</span>
+                            }
+                        }
+                        else
+                        {
+                            <span title="Not applicable">N.A</span>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

@@ -1,0 +1,221 @@
+﻿@model CUSrinagar.Models.DailyLectureFeedBack
+
+@{
+    ViewBag.Title = "Daily Lecture Feedback- CUSrinagar";
+}
+
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area="CUS " })">Home</a>
+        </li>
+
+        <li>
+            <a href="#" class="active">Daily Lecture Feedback</a>
+        </li>
+    </ul>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h4 style="padding-left:20px;">
+            Daily Lecture Feedback
+        </h4>
+        <hr class="no-margin-top" />
+
+        <!--External section-->
+        <div class="page-content">
+            <div class="row page-row">
+                <div class="content-wrapper col-md-10 col-sm-7 jsSingleContent"></div>
+                <div class="col-md-12 jsTableContent">
+                    <div class="panel panel-primary js-pager-table">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                FeedBacks
+                                <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                    <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                                </span>
+
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="search-box">
+                                <form class="form-inline">
+                                    <div class="form-group">
+                                        <label>College</label><br />
+                                        <div class="form-group">
+                                            @Html.DropDownList("CollegeDDL", new SelectList(ViewBag.College, "Value", "Text"), "-- All Colleges --",
+                                                       new
+                                                       {
+                                                           @class = "form-control chosen-select jsCollegeDDL jsfilterelement",
+                                                           @data_column = "College_ID",
+                                                           @data_operator = "EqualTo",
+                                                           @data_scope = "row1",
+                                                           @data_tablealias = "c",
+                                                       })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Programme</label><br />
+                                        <div class="form-group jsDDLContainer wd-200">
+                                            @Html.DropDownList("ProgrammeDDL", new SelectList(ViewBag.Programmes, "Value", "Text"),
+                                                       new
+                                                       {
+                                                           @class = "form-control chosen-select jsProgrammeDDL jsfilterelement required",
+                                                          // @data_defaulttextvalue = " -- All Programmes --,",
+                                                           @data_column = "Programme",
+                                                           @data_operator = "EqualTo",
+                                                           @data_scope = "row1",
+                                                       })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Choose Course</label><br />
+                                        <div class="jsDDLContainer  wd-200">
+                                            @Html.DropDownList("Course", new SelectList(ViewBag.Courses, "Value", "Text", (short)CUSrinagar.Enums.Programme.UG), " -- All Courses --",
+                                                       new
+                                                       {
+                                                           @class = "form-control chosen-select jsCourseDDL jsfilterelement",
+                                                           @data_column = "Course_ID",
+                                                           @data_operator = "EqualTo",
+                                                           @data_defaulttextvalue = " -- All Courses --,",
+                                                           @data_scope = "row1",
+                                                           @data_tablealias = "c",
+
+                                                       })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Choose Semester</label><br />
+                                        <div class="jsDDLContainer">
+                                            @Html.DropDownList("SemesterDDL", new SelectList(ViewBag.Semesters, "Value", "Text"), "-- All Semesters --",
+                                                      new
+                                                      {
+                                                          @class = "form-control chosen-select jsSemesterDDL jsfilterelement",
+                                                          @data_column = "Semester",
+                                                          @data_operator = "EqualTo",
+                                                          @data_scope = "row1",
+                                                          @data_tablealias = "s"
+                                                      })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Subject Title</label><br />
+                                        <input type="text" placeholder="Enter subject title" name="SubjectFullName" class="form-control jsfilterelement" data-column="SubjectFullName" data-operator="Contains" data-scope="row1" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Faculty Name</label><br />
+                                        <div class="wd-200">
+                                            @Html.TextBox("FacultyName", "",
+                                           new
+                                           {
+                                               @class = "jsfilterelement form-control ",
+                                               @data_column = "FacultyName",
+                                               @data_operator = "Contains"
+                                           })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Faculty Bahaviour</label><br />
+                                        <div class="wd-200">
+                                            @Html.DropDownList("FacultyBehaviour", new SelectList(ViewBag.RatingList, "Value", "Text"), "-- All Behaviours --",
+                                                        new
+                                                        {
+                                                            @class = "form-control chosen-select jsfilterelement",
+                                                            @data_column = "FacultyBehaviour",
+                                                            @data_operator = "EqualTo",
+                                                            @data_scope = "row1",
+                                                            @data_tablealias = "d"
+                                                        })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Lecture Rating</label><br />
+                                        <div class="wd-200">
+                                            @Html.DropDownList("RateTheLecture", new SelectList(ViewBag.RatingList, "Value", "Text"), "-- All Ratings --",
+                                                        new
+                                                        {
+                                                            @class = "form-control chosen-select jsfilterelement",
+                                                            @data_column = "RateTheLecture",
+                                                            @data_operator = "EqualTo",
+                                                            @data_scope = "row1",
+                                                            @data_tablealias = "d"
+                                                        })
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label>Faculty Type</label><br />
+                                        <div class="wd-200">
+                                            @Html.DropDownList("FacultyType", new SelectList(ViewBag.FacultyType, "Value", "Text"), "-- All --",
+                                                        new
+                                                        {
+                                                            @class = "form-control chosen-select jsfilterelement",
+                                                            @data_column = "FacultyType",
+                                                            @data_operator = "EqualTo",
+                                                            @data_scope = "row1",
+                                                            @data_tablealias = "d"
+                                                        })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Lecture Date</label><br />
+                                        <div class="wd-200">
+                                            @Html.TextBox("LectureDateTime", "",
+                                           new
+                                           {
+                                               @class = "jsfilterelement form-control ",
+                                               @data_column = "LectureDateTime",
+                                               @data_operator = "EqualTo",
+                                               @type = "date",
+                                               @data_tablealias = "d"
+                                           })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="invisible">for styling purpose</label><br />
+                                        <button type="button" class="btn btn-primary btn-sm fa-search-btn js-search"><i class="fa fa-search"></i>&nbsp;Search</button>
+
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="js-table-content" data-url=@Url.Action("DailyLectureFeedBacksList", "Feedback", new { area = "CUSrinagarAdminPanel" }) data-DefaultOrderByColumn="CreatedOn">
+
+                        </div>
+                      @*  @{Html.RenderPartial("_JSPagerTableFooter");}*@
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+@section PageSpecificStyle{
+    <style>
+        .field-validation-error {
+            color: red !important;
+        }
+    </style>
+}
+
+@section PageSpecificJSFiles{
+    <script>
+        $(document).ready(function ($) {
+            var $pagertable = $(".js-pager-table");
+
+        });
+    </script>
+}
+

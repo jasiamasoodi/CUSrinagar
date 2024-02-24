@@ -1,0 +1,360 @@
+﻿@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@using CUSrinagar.Models
+@model List<DegreeCertificate>
+@{
+
+}
+
+@if (Model.IsNotNullOrEmpty())
+{
+    var Degree = Model.Where(x => x.ExamRollNumber.IsNotNullOrEmpty()).OrderBy(x => x.ExamRollNumber).ToList();
+    var count = 1;
+
+    @section CUSSitemap{
+        <div class="col-md-12">
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="@Url.Action("Index", "Dashboard", new { area = "CUSrinagarAdminPanel" })">Home</a>
+                </li>
+
+            </ul>
+        </div>
+        <div class="col-md-7">
+        </div>
+        <div class="col-md-4">
+        </div>
+    }
+
+    <div class="page-content">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="widget-box transparent">
+                    <div class="widget-header">
+                        <h4 class="widget-title">
+                            <i class="ace-icon fa fa-star orange"></i>
+                            Transcript/Degree Certificates
+                        </h4>
+                        <div class="widget-toolbar">
+                            <a href="#" data-action="collapse">
+                                <i class="ace-icon fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="widget-body" style="display: block;">
+                        <div class="widget-main">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Transcripts</th>
+                                        <th>
+                                            <div class="row">
+                                                <div class="col-sm-1">S.No.</div>
+                                                <div class="col-sm-3">Dispatch Number</div>
+                                                <div class="col-sm-3">Degree Certificate</div>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        <tr>
+                                            <td>@(Model.Select(x => x.Student_ID).Distinct().ToList().Count)</td>
+                                            <td>
+                                                @{
+                                                    var _DispatchNumbers = Model.Where(x => x.HasDegreeCertificate)?.Select(x => x.DispatchNumber)?.Distinct()?.ToList();
+                                                    if (_DispatchNumbers.IsNotNullOrEmpty())
+                                                    {
+                                                        for (int i = 0; i < _DispatchNumbers.Count; i++)
+                                                        {
+                                                            <div class="row">
+                                                                <div class="col-sm-1">@(i + 1).</div>
+                                                                <div class="col-sm-3">@_DispatchNumbers[i]</div>
+                                                                <div class="col-sm-3">@(Model.Where(x => x.DispatchNumber == _DispatchNumbers[i]).Select(x => x.Student_ID).Distinct().ToList().Count)</div>
+                                                            </div>
+                                                        }
+                                                    }
+                                                }
+                                            </td>
+                                        </tr>
+
+                                    }
+                                </tbody>
+                            </table>
+                        </div><!-- /.widget-main -->
+                    </div><!-- /.widget-body -->
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="widget-box transparent">
+                    <div class="widget-header">
+                        <h4 class="widget-title ">
+                            <i class="ace-icon fa fa-star orange"></i>
+                            Student List
+                        </h4>
+                        <div class="widget-toolbar">
+                            <a href="#" data-action="collapse">
+                                <i class="ace-icon fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="widget-body" style="display: block;">
+                        <div class="widget-main">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th><input class="ace checkbox checkbox-inline jsSelectAllChk" type="checkbox"><span class="lbl padding-right-10"></span>S.No.</th>
+                                        <th data-property="CUSRegistrationNo">Registration No</th>
+                                        <th data-property="ExamRollNumber">ExamRollNo</th>
+                                        <th data-property="FullName">Full Name</th>
+                                        <th data-property="DegreeCompletionDate">Result Date</th>
+                                        <th data-property="IssueNumber">Dispatch Number</th>
+                                        <th data-property="IssueNumber">Issue</th>
+                                        <th data-property="SerialNumber">Serial</th>
+                                        <th data-property="CreatedOn">Created On</th>
+                                        <th data-property="ValidatedOn">Validated On</th>
+                                        <th data-property="PrintedOn">Printed On</th>
+                                        <th data-property="HandedOverOn">HandedOver On</th>
+                                        <th data-property="">Duplicates Issued</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <th>
+                                                <input class="ace checkbox checkbox-inline jsSelectChk" type="checkbox" value="@item.Student_ID">
+                                                <span class="lbl padding-right-10"></span><span class="js-sno"></span>
+                                                @Html.HiddenFor(model => item.Student_ID, new { @class = "jsEntity_ID" })
+                                            </th>
+                                            <td>@item.CUSRegistrationNo</td>
+                                            <td>@item.ExamRollNumber</td>
+                                            <td>@item.FullName</td>
+                                            <td>
+                                                @item.DegreeCompletionDate.ToString("dd-MMM-yyyy")
+                                            </td>
+                                            <td>@item.DispatchNumber</td>
+                                            <td>@item.IssueNumber </td>
+                                            <td>@item.SerialNumber</td>
+                                            <td>
+                                                @if (item.HasDegreeCertificate)
+                                                {
+                                                    <span>@item.CreatedOn.Value.ToString("dd-MMM-yyyy")</span>
+                                                }
+                                                else
+                                                {
+                                                    <button class="btn btn-sm jsShowDegreeCertificateDialog" title="Create Degree Certificate">Generate</button>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (item.HasDegreeCertificate)
+                                                {
+                                                    if (item.ValidatedBy_ID.HasValue)
+                                                    {
+                                                        <span>@item.ValidatedOn.Value.ToString("dd-MMM-yyyy")</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button class="btn btn-sm jsValidated" value="@item.Student_ID">Good</button>
+                                                    }
+                                                }
+                                               else
+                                                { 
+                                                <button class="btn btn-sm jsValidated" value="@item.Student_ID">Validated On</button>
+                                                }
+                                            </td>
+                                            <th>
+                                                @if (item.IsValidated)
+                                                {
+                                                    if (item.PrintedOn != null)
+                                                    {
+                                                        <span>@item.PrintedOn.Value.ToString("dd-MMM-yyyy")</span>
+                                                        string lbl = "th";
+                                                        if (item.TotalDuplicatesIssued + 1 == 1)
+                                                        {
+                                                            lbl = "st";
+                                                        }
+                                                        else if (item.TotalDuplicatesIssued + 1 == 2)
+                                                        {
+                                                            lbl = "nd";
+                                                        }
+                                                        else if (item.TotalDuplicatesIssued + 1 == 3)
+                                                        {
+                                                            lbl = "rd";
+                                                        }
+
+                                                        <button class="btn btn-sm jsDuplicate" data-dno="@(item.TotalDuplicatesIssued + 1)@lbl" value="@item.Student_ID">Issue  @(item.TotalDuplicatesIssued + 1)@lbl Duplicate</button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button class="btn btn-sm jsPrinted" value="@item.Student_ID">Printed</button>
+                                                    }
+                                                }
+
+                                            </th>
+                                            <td>
+                                                @if (item.IsPrinted)
+                                                {
+                                                    if (item.HandedOverOn != null)
+                                                    {
+                                                        <span>@item.HandedOverOn.Value.ToString("dd-MMM-yyyy")</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button class="btn btn-sm jsHandedOver" value="@item.Student_ID">HandedOver</button>
+                                                    }
+                                                }
+                                            </td>
+
+                                            <td>
+                                                @if (item.PrintedOn != null && item.TotalDuplicatesIssued > 0)
+                                                {
+                                                    item.DuplicateIssuanceDetails += " (Printed On " + item.PrintedOn.Value.ToString("dd-MMM-yyyy") + ")";
+                                                }
+                                                @if (item.DuplicateIssuanceDetails != null && item.TotalDuplicatesIssued > 0)
+                                                {
+                                                    @Html.Raw(item.DuplicateIssuanceDetails.Replace(",", "<hr/>"))
+                                                }
+                                                else
+                                                {
+                                                    @item.DuplicateIssuanceDetails
+                                                }
+                                            </td>
+
+                                            <td>
+                                                @if(item.HasDegreeCertificate)
+                                                {
+                                                    <a title="Degree Certificate" target="_blank"
+                                                       href="@Url.Action("PrintDegreeCertificateEng", "DegreeCertificateEng", new {PrintProgramme = ViewBag.PrintProgramme,CUSRegistrationNo = item.CUSRegistrationNo })">
+                                                        <i class="fa fa-print fa-2x"></i>
+                                                    </a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div><!-- /.widget-main -->
+                    </div><!-- /.widget-body -->
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading hidden-print">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse6">
+                        <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                        &nbsp;Print for note
+                    </a>
+                </h4>
+            </div>
+
+            <div class="panel-collapse collapse" id="collapse6" style="page-break-after:always;">
+                <div class="panel-body">
+                    <table class="table table-bordered table-hover jsPrintTabContent">
+                        <thead>
+                            <tr>
+                                <th colspan="5">
+
+                                    <b>Sub :- </b>Issuance of degree certificates to students<br />
+                                    <p style="font-size: small;">Cluster University of Srinagar is running U.G,Professional,Honor's' and Post-Graduate degree programmes in its Constituent and Affliated colleges. The pass out students of the various programmes have been requesting for issuance of degree certificates. For this purpose, the IT Section has generated the degree certificates for the below mentioned courses and needs to print the degree certificates for issuance to the concerned candidates.</p>
+                                    @*<b>
+                                            Date of Declaration of Result : &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Semester :
+                                        </b>*@
+
+                                    <p style="font-size:small;"><br />Students whose roll numbers are attached have cleared their result on the same date. Hence are recommended for generation and issuing of degree certificates through their respective colleges.</p>
+                                    <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                    <b>degree certificates to be printed</b><br />
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>Batch</th>
+                                <th>College</th>
+                                <th>Course</th>
+                                <th>Total</th>
+                                <th>List of students</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            @{
+                                var batches = Degree.Select(x => x.Batch).Distinct().OrderBy(x => x);
+                                foreach (var batch in batches)
+                                {
+                                    count = 1;
+                                    var colleges = Degree.Where(x => x.Batch == batch).Select(x => x.CollegeFullName).Distinct().OrderBy(x => x);
+                                    foreach (var college in colleges)
+                                    {
+
+                                        var courses = Degree.Where(x => x.CollegeFullName == college).Select(x => x.CourseFullName).Distinct().OrderBy(x => x);
+                                        foreach (var course in courses)
+                                        {
+                                            var listOfStudents = Degree.Where(x => x.Batch == batch && x.CollegeFullName == college && x.CourseFullName == course).Select(x => x.ExamRollNumber).Distinct();
+                                            if (listOfStudents.IsNotNullOrEmpty())
+                                            {
+                                                <tr>
+                                                    <td>@batch</td>
+                                                    <td>@college</td>
+                                                    <td>@course</td>
+                                                    <td>@(listOfStudents.Count())</td>
+                                                    <td style="word-wrap:break-word;">
+                                                        <small>
+                                                            @(string.Join(", ", listOfStudents))
+                                                        </small>
+                                                    </td>
+                                                </tr>
+                                                count++;
+                                            }
+
+                                        }
+                                    }
+                                    <tr><td colspan="5" style="color:white;">|</td></tr>
+                                }
+
+                                <tr>
+                                    <td></td>
+                                    <th colspan="2">Grand total</th>
+                                    <th colspan="2">
+                                        <b>@(Model.Select(x => x.Student_ID).Distinct().Count())</b>
+                                    </th>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <br /><br />
+                    <table>
+                        <tr>
+
+                            <td width="33%">Dealing Assistant</td>
+                            <td width="33%">IT Incharge</td>
+                            <td width="33%">Controller Examinations</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+    </div>
+}
+else
+{
+    <h3> No, records found</h3>
+    <hr />
+}
+
+

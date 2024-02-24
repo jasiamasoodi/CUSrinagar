@@ -1,0 +1,143 @@
+﻿
+@{
+    string printProgramme = (ViewBag.PrintProgramme ?? "none").ToString();
+    string Student_ID = (ViewBag.Student_ID ?? Guid.Empty).ToString();
+}
+@Html.Hidden("StudentPrintProgramme", printProgramme)
+@Html.Hidden("StudentID", Student_ID)
+<div class="page-content">
+    <div class="row panel panel-success">
+        <div class="page-header no-margin-bottom">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6">
+                    <h1>
+                        <i class="fa fa-users"></i> Student Profile
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body no-padding no-margin">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#PersonalDetail" id="default-tab" class="text-success tab-click" data-tab="PersonalDetail"><i class="fa fa-indent"></i> Student Details</a></li>
+                        @if (HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_StudentInfo.ToString()))
+                        {
+                            <li><a data-toggle="tab" href="#AdmissionDetail" class="text-success tab-click" data-tab="AdmissionDetail"><i class="fa fa-bookmark-o"></i> Subjects Offered</a></li>
+                            <li><a data-toggle="tab" href="#ExaminationDetail" class="text-success tab-click" data-tab="ExaminationDetail"><i class="fa fa-home"></i> Examination Details</a></li>
+                            <li><a data-toggle="tab" href="#PaymentDetail" class="text-success tab-click" data-tab="PaymentDetail"><i class="fa fa-home"></i> Payment Details</a></li>
+                        }
+                    </ul>
+                    <div class="tab-content no-padding no-margin">
+                        <div id="PersonalDetail" class="tab-pane fade in active">
+                            Loading...
+                        </div>
+
+                        <div id="AdmissionDetail" class="tab-pane fade">
+                            Loading...
+                        </div>
+
+                        <div id="ExaminationDetail" class="tab-pane fade">
+                            Loading...
+                        </div>
+                        <div id="PaymentDetail" class="tab-pane fade">
+                            Loading...
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#default-tab").trigger("click");
+    });
+    $(document).on('click', '.tab-click', function () {
+        var action = $(this).data("tab");
+        var student_Id = $("#StudentID").val();
+        var printProgramme = $("#StudentPrintProgramme").val();
+
+        var _url = "/CUSrinagarAdminPanel/StudentInfo/" + action;
+        $.ajax({
+            url: _url,
+            dataType: "html",
+            type: "GET",
+            data: { student_Id: student_Id, printProgramme: printProgramme },
+            success: function (data) {
+                if (data != null) {
+                    $("#" + action).html(data);
+                }
+            },
+            error: function (xhr, error, msg) {
+
+            }
+        });
+    });
+
+    $(document).on('click', '#btnCancelAdmission,#btnIntraMigration,#btnInterMigration,#btnIssueMigration,#btnReceiveMigration', function () {
+        var $btn = $(this);
+        var _url = getBaseUrlAdmin();
+        var msg = "";
+        if ($btn.val().toLowerCase() == "CancelAdmission".toLowerCase()) {
+            _url += `StudentInfo/CancelAdmission?PrintProgramme=${$("#StudentPrintProgramme").val()}&Student_ID=${$("#StudentID").val()}`;
+            msg += '<h4>Cancel Admission:</h4>'
+            msg += '<h6>Are you sure to cancel admission of this student ?</b></h6>';
+        } else if ($btn.val().toLowerCase() == "IntraMigration".toLowerCase()) {
+            _url += `StudentInfo/IntraMigration?PrintProgramme=${$("#StudentPrintProgramme").val()}&Student_ID=${$("#StudentID").val()}&MigrationCollege_id=${$("#MigrationCollegeID").val()}`;
+            msg += '<h4>Within University Migration:</h4>'
+            msg += '<h6>Are you sure to migrate this student ?</b></h6>';
+        } else if ($btn.val().toLowerCase() == "InterMigration".toLowerCase()) {
+            _url += `StudentInfo/InterMigration?PrintProgramme=${$("#StudentPrintProgramme").val()}&Student_ID=${$("#StudentID").val()}`;
+            msg += '<h4>Outside University Migration:</h4>'
+            msg += '<h6>Degree completion migration ?</b></h6>';
+        } else if ($btn.val().toLowerCase() == "IssueMigration".toLowerCase()) {
+            _url += `StudentInfo/IssueMigration?PrintProgramme=${$("#StudentPrintProgramme").val()}&Student_ID=${$("#StudentID").val()}`;
+            msg += '<h4>Migration Certificate:</h4>'
+            msg += '<h6>Are you sure ,want to issue Migration?</b></h6>';
+        } else if ($btn.val().toLowerCase() == "ReceiveMigration".toLowerCase()) {
+            _url += `StudentInfo/ReceiveMigration?PrintProgramme=${$("#StudentPrintProgramme").val()}&Student_ID=${$("#StudentID").val()}`;
+            msg += '<h4>Receive Migration Certificate:</h4>'
+            msg += '<h6>Are you sure?</b></h6>';
+        }
+        showConfirmationDialog(msg);
+        $('#confirmationDialog').off('click.confirmation', 'button').on('click.confirmation', 'button', function () {
+            var $btn = $(this);
+            hideConfirmationDialog();
+            if ($btn.data('response') == 'yes') {
+                $.ajax({
+                    url: _url,
+                    type: "Post",
+                    contentType: 'application/json; charset=UTF-8',
+                    success: function (responseData) {
+                        if (responseData.IsSuccess) {
+                            showSuccessMessage(responseData.SucessMessage);
+                        }
+                        if (!isNullOrEmpty(responseData.ErrorMessage)) {
+                            showErrorMessage(responseData.ErrorMessage);
+                        }
+                    },
+                    beforeSend: function () { showLoader(); },
+                    complete: function () {
+                        $("#default-tab").trigger("click");
+                        hideLoader();
+                    },
+                    error: function (xhr, error, msg) {
+                        console.log(msg);
+                    }
+                });
+            }
+            else if ($btn.data('response') == 'no') {
+
+            } else {
+
+            }
+        });
+
+    });
+
+
+</script>
+

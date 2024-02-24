@@ -1,0 +1,30 @@
+﻿@model IEnumerable<CUSrinagar.Models.NotificationCompactList>
+
+<table class="table table-hover table-bordered">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th>Description</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var row in Model)
+            {
+                <tr class="">
+                    <td>
+                        @row.Description
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(row.Link))
+                        {
+                            var href = ((row.IsLink) ? "http://" : "") + (row.Link.ToLower().Replace("http://", "").Replace("https://", ""));
+                            <a class="btn btn-sm btn-primary" target="_blank" title='' href='@href'>View </a>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

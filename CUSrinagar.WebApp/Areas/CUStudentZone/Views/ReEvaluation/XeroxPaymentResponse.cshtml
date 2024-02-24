@@ -1,0 +1,121 @@
+﻿@model CUSrinagar.Models.PaymentDetails
+
+@{
+    ViewBag.Title = "Payment Response";
+    string errorMessage = ViewBag.PaymentFailureMessage;
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area="CUStudentZone"})">Home</a>
+        </li>
+        <li>
+            <a href="@Url.Action("Xerox","ReEvaluation",new {@area= "CUStudentZone" })" class="active">ReEvaluation</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+
+<div class="page-content ">
+    <div class="row well">
+        <div class="col-xs-10 col-sm-10 col-md-6 col-xs-offset-1 col-sm-offset-1 col-md-offset-3">
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="row panel panel-body well">
+                    <div class="">
+                        <div class="text-center">
+                            <img src="@Url.Content("~/Content/ThemePublic/Libraries/images/cus-logo1.svg")" width="500" height="50" />
+                            <br />
+                            <br />
+                            <h4 class="text-success">
+                                If you have already submitted fee or money has been deducted from your account and you are still unable to print your examination form. Please visit Cluster Univeristy I.T. Cell by or before last date.
+                            </h4>
+                            <br />
+                            <h4 class="text-danger"><b>Error</b></h4>
+                            <h4 class="text-danger">@errorMessage</h4>
+
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row panel panel-body">
+
+                    <div class="" style="background-color:white;">
+
+                        <div class="text-center">
+                            <img src="@Url.Content("~/Content/ThemePublic/Libraries/images/cus-logo1.svg")" width="500" height="50" />
+                            <h3 class="text-success"><b>Payment Confirmation</b></h3>
+                            <h3><b>Your request for payment has been submitted successfully</b></h3>
+                        </div>
+                        <p class="margin-left-20"><strong><i>Your payment with reference number @Model.TxnReferenceNo has been received on @Model.TxnDate.ToString("dd-MMMM-yyyy")</i></strong></p>
+                        <div class="table-bordered" style="margin:20px">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td class="col-md-9">Transaction Date:<b> @Model.TxnDate.ToString("dd-MMMM-yyyy")</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-md-9">Form Number(s):<b> @Model.EntityID</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mobile No.:<b> @Model.PhoneNumber</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email: <b>@Model.Email</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right">
+                                            <p>
+                                                <strong>Total Amount Paid(INR) : @Model.TxnAmount</strong>
+                                            </p>
+                                        </td>
+                                    </tr>
+                                    <tr class="hidden-print">
+                                        <td>
+                                            <br />
+                                            <a href="@Url.Action("PrintReEvaluationForm","ReEvaluation",new { @area="CUStudentZone",@Semester=ViewBag.Semester})" class="btn btn-inverse"> <label><i class="glyphicon glyphicon-print"></i> Print</label></a>
+                                            @*<a href="#"  onclick="window.print();"> <label><i class="glyphicon glyphicon-print"></i> Print</label></a>*@
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br />
+                    </div>
+
+                    <div class="clearfix hidden-print"></div>
+                    <div>
+                        <h3>Terms & Conditions</h3>
+                        <ol>
+                            <li>All payments made are subject to realization of the same.</li>
+                            <li>The payment made by the customer vide this receipt shall under no circumstances be deemed for full and final settlement.</li>
+                        </ol>
+                        <hr />
+                        <b>Regd. Office</b>
+                        <address>
+                            <p class="adr clearfix col-md-12  col-sm-4">
+                                <span class="adr-group pull-left">
+                                    <span class="street-address">Cluster University Srinagar</span><br>
+                                    <span class="region">Camp Office- Zoology Block</span><br>
+                                    <span class="region">SP College, MA Road,Srinagar-190001</span><br>
+                                    <span class="email"><a href="mailto:info@cusrinagar.edu.in?Subject=ClusterUniversity"><i class="fa fa-envelope"></i>info@cusrinagar.edu.in</a></span>
+                                </span>
+                            </p>
+                        </address>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+
+
+@section PageSpecificJSFiles{
+    <script src="@Url.Content("~/Content/ThemePublic/Libraries/disableBack.js")"></script>
+}
+
+

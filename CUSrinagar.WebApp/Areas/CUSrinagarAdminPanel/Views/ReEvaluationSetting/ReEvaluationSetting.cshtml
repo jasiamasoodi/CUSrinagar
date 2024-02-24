@@ -1,0 +1,157 @@
+﻿@{
+    ViewBag.Title = "ReEvaluation/Xerox Setting";
+}
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUSrinagarAdminPanel"})">Home</a>
+            </li>
+            <li class="active">ReEvaluation Setting</li>
+        </ul><!-- /.breadcrumb -->
+    </div>
+    <div class="col-md-4">
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12 jsTableContent">
+        <div class="panel panel-primary js-pager-table" data-otherparam1="">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    ReEvaluation/Xerox Setting List
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        List
+                    </small>
+                    <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                        <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                    </span>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="search-box">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label>Exam Year</label><br />
+                            <div class="jsDDLContainer">
+                                <select class="jsfilterelement form-control" data-column="SubmittedYear" data-operator="EqualTo" data-scope="row1">
+                                    <option value="@DateTime.Now.Year">@DateTime.Now.Year</option>
+                                    <option value="@(DateTime.Now.Year-1)">@(DateTime.Now.Year - 1)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Choose Programme</label><br />
+                            <div class="form-group">
+                            @Html.DropDownList("CourseCategoryDDL", new SelectList(ViewBag.ExaminationCourseCategories, "Value", "Text"), " -- All--",
+                                        new
+                                        {
+                                            @class = "form-control jsfilterelement",
+                                            @data_column = "CourseCategory",
+                                            @data_operator = "EqualTo",
+                                            @data_scope = "row1"
+                                        })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Semester</label><br />
+                            <div class="">
+                                <select class="jsfilterelement form-control" data-column="Semester" data-operator="EqualTo" data-scope="row1">
+                                    <option value="">-- All --</option>
+                                    <option value="1">Semester-1</option>
+                                    <option value="2">Semester-2</option>
+                                    <option value="3">Semester-3</option>
+                                    <option value="4">Semester-4</option>
+                                    <option value="5">Semester-5</option>
+                                    <option value="6">Semester-6</option>
+                                    <option value="7">Semester-7</option>
+                                    <option value="8">Semester-8</option>
+                                    <option value="9">Semester-9</option>
+                                    <option value="10">Semester-10</option>
+                                    <option value="11">Semester-11</option>
+                                    <option value="12">Semester-12</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label><br />
+                            <div class="">
+                                <select class="jsfilterelement form-control" data-column="AllowDownloadForm" data-operator="EqualTo" data-scope="row1">
+                                    <option value="">-- All --</option>
+                                    <option value="1">Active</option>
+                                    <option value="2">Closed</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="invisible">for styling purpose</label><br />
+                            <button type="button" class="btn btn-sm btn-primary fa-search-btn js-search"><i class="fa fa-search"></i>&nbsp;Search</button>
+                            @*<div class="btn-group">
+                                    <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle">
+                                        Action
+                                        <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-default dropdown-info">
+                                        <li>
+                                            <a href="javascript:void(0)" class="js-exportToCSV hidden" data-url="@Url.Action("ResultCSV","CUSReports",new { area="CUSrinagarAdminPanel"})" data-otherparam1="printProgramme=@CUSrinagar.Enums.PrintProgramme.UG">
+                                                Download Excel(CSV)
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)" class="js-exportToCSV" data-url="@Url.Action("PrintGazette","CUSReports",new { area="CUSrinagarAdminPanel"})" data-otherparam1="printProgramme=@CUSrinagar.Enums.PrintProgramme.UG">
+                                                Print
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>*@
+                        </div>
+                        <div class="form-group pull-right">
+                            <label class="invisible">for styling purpose</label><br />
+                            <a class="btn btn-success" href="@Url.Action("CreateEdit","ReEvaluationSetting")">Create</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="js-table-content" data-url=@Url.Action("ReEvaluationSettingList", "ReEvaluationSetting", new { area = "CUSrinagarAdminPanel" }) data-DefaultOrderByColumn="SubmittedYear">
+            </div>
+            @{Html.RenderPartial("_JSPagerTableFooter");}
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJS{
+    <script>
+        $(document).ready(function () {
+            loadpagertableWithDefaultParams();
+
+
+        });
+
+        function ChangeStatus(event) {
+            var _url = getBaseUrlAdmin() + "ReEvaluationSetting/ChangeStatus";
+            var _id = $(event).closest('tr').find('.jsRow_ID').val();
+            $.ajax({
+                url: _url,
+                type: "Post",
+                datatype: "Json",
+                data: { id: _id },
+                beforeSend: function () { showLoader(); },
+                complete: function () { hideLoader(); },
+                success: function (responseData) {
+                    if (responseData.IsSuccess) {
+                        showSuccessMessage(responseData.NumberOfRecordsEffected + ' ' + responseData.SuccessMessage);
+                    } else {
+                        showErrorMessage(responseData.ErrorMessage);
+                    }
+                },
+                error: function (xhr, error, msg) {
+                    showErrorMessage(msg);
+                }
+            });
+        }
+
+    </script>
+}

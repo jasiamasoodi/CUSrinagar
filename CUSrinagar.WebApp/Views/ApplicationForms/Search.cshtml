@@ -1,0 +1,124 @@
+﻿@using CUSrinagar.Extensions;
+@using CUSrinagar.Enums
+
+
+@model CUSrinagar.Models.AttemptCertificate
+@{
+    ViewBag.Title = "Academic Certificate Verification Form";
+}
+
+
+<div id="response">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+</div>
+<div class="col-md-1 col-sm-1"></div>
+<div class="col-md-10 col-sm-10 ">
+    <div class="panel panel-default">
+
+        <div class="panel-body">
+
+            @using (Html.BeginForm("Search", "ApplicationForms", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="page-content">
+
+                    <div class="panel-body">
+                        <table style="width:100%">
+                            <tbody>
+                                <tr>
+                                    <td align="center">
+                                        <font size="6">
+                                            <b>
+                                                <span style="font-family:Arial;font-size:medium">
+                                                    Application Form for Verification of Academic Certificates<br />
+                                                    (To be submitted by Department / Organisation)
+                                                </span>
+                                            </b>
+                                        </font>
+                                        <br />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br />
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <span> @Html.ValidationMessage("CusRegistrationNo", new { @class = "red" })@Html.ValidationMessageFor(model => model.personalInformationCompact.Student_ID, "", new { @class = "red" })</span>
+
+                            </div>
+                            <div class="col-sm-8">
+                                <div class="form-group col-sm-8">
+                                    <label class="col-sm-8 control-label no-padding-right">
+                                        <span class="red bigger-110">*</span>Programme
+
+                                    </label>
+                                    <div class="col-sm-4">
+                                        @Html.DropDownListFor(model => model.personalInformationCompact.PrintProgramme, (IEnumerable<SelectListItem>)ViewBag.PrintProgrammeList, "", new { @Style = "width:170px", @required = "required" })@Html.ValidationMessageFor(model => model.personalInformationCompact.PrintProgramme, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+                                    </div>
+
+
+                                </div>
+                                <div class="form-group col-sm-8">
+                                    <label class="col-sm-8 control-label no-padding-right">
+                                        <span class="red bigger-110">*</span>Registration Number
+
+                                    </label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.personalInformationCompact.CUSRegistrationNo, new { @class = "", @required = "required" })@Html.ValidationMessageFor(model => model.personalInformationCompact.CUSRegistrationNo, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+                                    </div>
+
+
+                                </div>
+                                <div class="form-group col-sm-8">
+                                    <label class="col-sm-8 control-label no-padding-right">
+                                        <span class="red bigger-110">*</span>DOB
+
+                                    </label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.personalInformationCompact.DOB, new { @class = "datetime", @type = "date", @required = "required" })@Html.ValidationMessageFor(model => model.personalInformationCompact.DOB, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-8">
+                                <div class="col-sm-6"></div>
+                                <div class="col-sm-6">
+                                    <button id="SearchDetail" class="btn btn-theme" value="Search" type="submit" style="color:white !important">Search</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .width100 {
+        width: 100% !important;
+    }
+
+    .page-header h1 {
+        margin: 28px;
+    }
+
+    .panel {
+        background-color: #f5f5f5 !important;
+    }
+
+    .red {
+        color: red !important;
+    }
+
+    .space-10 {
+        margin-top: 28px;
+    }
+</style>
+
+
+

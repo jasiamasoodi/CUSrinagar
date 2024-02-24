@@ -1,0 +1,413 @@
+﻿@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@model CUSrinagar.Models.IssuingOfDegreeCertificate
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>CUS Issuing of Degree Certificate Form - @DateTime.Now.Year</title>
+    <style type="text/css">
+        @@media print {
+            .noneOnPrint {
+                display: none;
+            }
+
+            @@page {
+                size: portrait;
+            }
+
+            .breakpagehere {
+                page-break-after: always !important;
+            }
+        }
+
+        p {
+            padding: 0mm;
+            margin: 0mm;
+        }
+
+        .tblpad tr td {
+            padding: 4px;
+        }
+
+
+        .watermark {
+            right: 20%;
+            top: 33%;
+            color: silver;
+            opacity: 0.3;
+            font-size: 100px;
+            position: absolute;
+            transform: rotate(-45deg);
+            background-color: transparent
+        }
+    </style>
+</head>
+<body style="background: #e0e0e0;margin: auto;display: table;font-size:17px" oncontextmenu="return false;">
+    <div style="background: white; width: 900px;margin:0mm; padding:10px; font-family: 'Roboto';">
+        <center>
+            <table style="">
+                <tbody>
+                    <tr>
+                        <td style="text-align:left;">
+                            <img src="~/Content/ThemePublic/PrintImages/MarksSheetLogo.png" style="width:64px;" />
+                        </td>
+                        <td style="text-align:center;">
+                            <div style="margin-right:16px;">
+                                <div style="font-family: Arial, sans-serif;font-size: 7mm;font-weight: bold;position:relative;z-index: 1;display: inline-block;  -webkit-font-smoothing: antialiased;  -moz-osx-font-smoothing: grayscale;            transform: scale(1, 1.5); -webkit-transform: scale(1, 1.5); -moz-transform: scale(1, 1.5);  -o-transform: scale(1, 1.5);  -ms-transform: scale(1, 1.5);">
+                                    <span style="letter-spacing:0.8mm;font-family: Algerian,Times, 'Times New Roman', serif;font-weight: normal;                color: #2F5485;                text-shadow: 0.03em 0.03em 0px #b3b3b3;">
+                                        &nbsp;&nbsp;Cluster University Srinagar
+                                    </span>
+                                </div>
+                            </div>
+                            <br />
+                            <p> <b>APPLICATION FORM FOR ISSUING OF DEGREE CERTIFICATE</b></p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </center>
+
+        <table>
+            <tbody>
+                <tr>
+                    <td style="width:720px"><div style="text-align:left">(Downloaded on : @DateTime.Now.ToLongDateString())</div></td>
+                    <td>
+                        <div style="color:silver;float:right">Developed by I.T Cell</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <hr />
+        <table style="width:100%;font-size:15px" class="tblpad">
+            <tbody>
+                <tr>
+                    <td>
+                        <table style="width:100%;">
+                            <tr>
+                                <td>1) Name of Candidate : <b><u>@Model.FullName.ToUpper() </u></b></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    2) Father's Name : <b><u>@Model.FathersName.ToUpper()</u></b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3) University Registration No. :  <b><u>@Model.CUSRegistrationNo.ToUpper()</u></b></td>
+                            </tr>
+                            <tr>
+                                <td>4) DOB : <b><u>@Model.DOB.ToString("dd-MMMM-yyyy")</u></b><br /><br /></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="float:left">
+                        <img src="https://www.cusrinagar.edu.in/@Model.Photograph" width="120" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <h4 style="margin-bottom:8px">
+                            5) Details of Qualifying Examination previously passed (On basis of which Admission was obtained) : <br />
+                            Make necessary correction if required
+                        </h4>
+                        @if (Model.StudentPreviousQualification != null)
+                        {
+                            <table style="width:100%; border-collapse:collapse" border="1">
+                                <tr>
+                                    <th>Exam</th>
+                                    <th>Stream</th>
+                                    <th>Session</th>
+                                    <th>Year</th>
+                                    <th>Roll No</th>
+                                    <th>Max Marks</th>
+                                    <th>Marks Obt</th>
+                                    <th>%age</th>
+                                </tr>
+                                <tr>
+                                    <td rowspan="2">@Model.StudentPreviousQualification.ExamName</td>
+                                    <td>@Model.StudentPreviousQualification.Stream</td>
+                                    <td>@Model.StudentPreviousQualification.Session</td>
+                                    <td>@Model.StudentPreviousQualification.Year</td>
+                                    <td>@Model.StudentPreviousQualification.RollNo</td>
+                                    <td>@Model.StudentPreviousQualification.MaxMarks</td>
+                                    <td>@Model.StudentPreviousQualification.MarksObt</td>
+                                    <td>@Model.StudentPreviousQualification.Percentage</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4"><b>Subjects</b>: @Model.StudentPreviousQualification.Subjects</td>
+                                    <td colspan="4"><b>Exam Body</b>: @Model.StudentPreviousQualification.ExamBody</td>
+                                </tr>
+                            </table>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <br />
+                        6) Name of the Examination/Course under which degree is required:
+                        <b><u>&nbsp;&nbsp;&nbsp;@Model.CourseFullName &nbsp;&nbsp;&nbsp;</u></b>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        7) University Exam RollNo :
+                        <b><u> @Model.ExamRollNumber</u></b>
+                        Session : <b><u>&nbsp;&nbsp;&nbsp; Annual &nbsp;&nbsp;&nbsp;</u></b>
+                        @if (Model.DateOfDeclaration.Year > 2017)
+                        {
+                            <span>
+                                CGPA: <b><u> &nbsp; &nbsp; &nbsp;@Model.CGPA &nbsp;</u></b>
+                                Year(declaration of result) : <b><u> &nbsp; &nbsp; &nbsp; @Model.DateOfDeclaration.Year & nbsp; &nbsp; &nbsp;</u></b>
+                            </span>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">8) Name of the dept./College/Centre : <b><u>@Model.CollegeFullName &nbsp;&nbsp;&nbsp;&nbsp;</u></b></td>
+                </tr>
+                <tr>
+                    <td colspan="2">9) Specialization (if any) : <b><u>@(Model.Specializations?? "Not Applicable") &nbsp;&nbsp;</u></b></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        10) Residential address :
+                        <b><u>@Model.StudentAddress.PermanentAddress.ToUpper(), @Model.StudentAddress.Tehsil, @Model.StudentAddress.District, @Model.StudentAddress.State &nbsp;&nbsp;</u></b>
+                        <br />Pin : <b><u>@Model.StudentAddress.PinCode &nbsp;&nbsp;&nbsp;</u></b>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        11) Present status of the candidate:- <br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;i) Perusing Higher Education in  & Programme (if any) :
+                        <b><u>@(Model.PerusingHigherEduInAndProgramme?? "Not Applicable") &nbsp;&nbsp;</u></b><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;ii) Employment Status: <b><u>@Model.EmploymentStatus (✓)</u></b>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        12) (i) Personal Contact No:
+                        <b><u>&nbsp;&nbsp;@Model.StudentAddress.Mobile&nbsp;&nbsp;</u></b>
+                        (ii) Personal Email:
+                        <b><u>&nbsp;&nbsp;@Model.StudentAddress.Email&nbsp;&nbsp;</u></b>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        13) Fee of Rs. <b>
+                            <u>
+                                @Model.PaymentDetail.TxnAmount/-
+                            </u>
+                        </b>in the shape of online Payment Transaction No
+                        <b><u>&nbsp;&nbsp;@Model.PaymentDetail.TxnReferenceNo&nbsp;&nbsp;</u></b>
+                        Dated :&nbsp;&nbsp;
+                        <b>
+                            <u>
+                                @Model.PaymentDetail.TxnDate.ToString("dd-MM-yyyy")
+                            </u>
+                        </b>&nbsp;&nbsp;
+                        stands received from the candidate.
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <br />
+                        <b>Declaration by Candidate</b>
+                        <br />
+                        <i>
+                            Details given above and provided in the already received Transcript
+                            are correct and shall not calim for any change or correction after issuing of the Degree Certificate.
+                        </i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p><strong style="float:right">Signature of the Candidate</strong></p>
+
+
+        <h3 style="text-align:center"><u>REPORT OF THE OFFICE</u></h3>
+        <div style="padding-left:30px;font-size:16px;margin-bottom:8px">
+            The application has been examined/verified and found in order. The candidate has completed all the required
+            formalities and has satisfied all the requirements of
+            the statutes including the deposition of Fee as prescribed for the purpose.
+            <br />  <br /><br />
+            @if (Model.PrintProgramme == PrintProgramme.UG || Model.PrintProgramme == PrintProgramme.BED)
+            {
+                <strong style="margin-right:150px"><i>College Dealing Assistant</i></strong>
+                <strong style="margin-right:180px"><i>College Admission Coordinator</i></strong>
+                <strong><i>Principal</i></strong>
+            }
+            else
+            {
+                <strong style="margin-right:36px"><i>Dealing Assistant</i></strong>
+                <strong style="margin-right:37px"><i>Incharge IT Results</i></strong>
+                <strong style="margin-right:38px"><i>Assistant Controller (Certificates)</i></strong>
+                <strong style="margin-right:37px"><i>Controller Of Examination</i></strong>
+            }
+        </div>
+        <fieldset class="padding-0">
+            <legend style="text-align:center;margin:0;color:red">IMPORTANT</legend>
+            <ol>
+                <li style="font-weight:bold; font-size:20px;text-decoration:underline;">
+                    Candidate must attach NOC issued by the Concerned College with this form.
+                </li>
+                <li>Application form received from above candidate, if found incomplete/erroneous information on scrutiny later, is liable to be rejected.</li>
+                @if (Model.PrintProgramme == PrintProgramme.UG || Model.PrintProgramme == PrintProgramme.BED)
+                {
+                    <li>
+                        Candidates of UG &amp; B.Ed Programmes are directed to deposit Hard Copy of this Application Form at Certificate / Admission Section of his/her concerned College
+                        along with self-attested marks sheet (on basis of which admission was obtained (@Model.StudentPreviousQualification.ExamName)).
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        Candidates of IG, Professional, Honor's &amp; PG Programmes are directed to deposit Hard Copy of this Application Form at certificate section of the University
+                        along with self-attested marks sheet (on basis of which admission was obtained (@Model.StudentPreviousQualification.ExamName)).
+                    </li>
+                    <li>
+                        <i>
+                            Candidates admitted in PG Programmes from other Universities shall submit self-attested hardcopy of Migration Certificate
+                            (Original in-case of not submitted at the time of admission in College)  issued from the previously attended University.
+                        </i>
+                    </li>
+                    <li>Acknowledgement receipt shall be mailed at candidates email address.</li>
+                }
+            </ol>
+        </fieldset>
+    </div>
+    <p class="breakpagehere"></p>
+    <div style="background: white; width: 920px;">
+        <center>
+            <table style="">
+                <tbody>
+                    <tr>
+                        <td style="text-align:left;">
+                            <img src="~/Content/ThemePublic/PrintImages/MarksSheetLogo.png" style="width:64px;" />
+                        </td>
+                        <td style="text-align:center;">
+                            <div style="margin-right:16px;">
+                                <div style="font-family: Arial, sans-serif;font-size: 7mm;font-weight: bold;position:relative;z-index: 1;display: inline-block;  -webkit-font-smoothing: antialiased;  -moz-osx-font-smoothing: grayscale;            transform: scale(1, 1.5); -webkit-transform: scale(1, 1.5); -moz-transform: scale(1, 1.5);  -o-transform: scale(1, 1.5);  -ms-transform: scale(1, 1.5);">
+                                    <span style="letter-spacing:0.8mm;font-family: Algerian,Times, 'Times New Roman', serif;font-weight: normal;                color: #2F5485;                text-shadow: 0.03em 0.03em 0px #b3b3b3;">
+                                        &nbsp;&nbsp;Cluster University Srinagar
+                                    </span>
+                                </div>
+                            </div>
+                            <br />
+                            <p>
+                                <b>APPLICATION FORM FOR ISSUING OF DEGREE CERTIFICATE</b>
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </center>
+
+        <table>
+            <tbody>
+                <tr>
+                    <td style="width:720px">
+                        <div style="text-align:left">
+                            @if (Model.PrintProgramme == PrintProgramme.UG || Model.PrintProgramme == PrintProgramme.BED)
+                            {
+                                <h2 style="padding:0;margin:0">@Model.CollegeFullName</h2>
+                            }
+                        </div>
+                    </td>
+                    <td>
+                        <div style="color:silver;float:right">Developed by I.T Cell</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <hr />
+        <br />
+        <div style="padding-left:30px;font-size:18px">
+            <table>
+                <tr>
+                    <th style="width:30%;border:1px dashed black"><i>Attention</i></th>
+                    <th style="width:70%">ACKNOWLEDGEMENT</th>
+                    <th>S.No._____________</th>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <br />
+                        (This slip must be produced by the candidate named below at the Certificate Section of the college for taking the documents)
+                        <br />
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <table style="text-align:left;width:100%">
+                <tr>
+                    <td>1. </td>
+                    <td style="width:35%">Name of the Candidate : </td>
+                    <th style="border-bottom:1px solid black">@Model.FullName</th>
+                </tr>
+                <tr>
+                    <td>2. </td>
+                    <td>University Registration No : </td>
+                    <th style="border-bottom:1px solid black"> @Model.CUSRegistrationNo</th>
+                </tr>
+                <tr>
+                    <td>3. </td>
+                    <td>Programme : </td>
+                    <th style="border-bottom:1px solid black">@Model.CourseFullName</th>
+                </tr>
+                <tr>
+                    <td>4. </td>
+                    <td>Exam passed in the year (session/year) : </td>
+                    <th style="border-bottom:1px solid black">ANNUAL/@Model.DateOfDeclaration.Year</th>
+                </tr>
+                <tr>
+                    <td>5. </td>
+                    <td>Name of the dept./College/Centre : </td>
+                    <th style="border-bottom:1px solid black">@Model.CollegeFullName</th>
+                </tr>
+                <tr>
+                    <td>6. </td>
+                    <td>Fee Deposited under Transaction No : </td>
+                    <th style="border-bottom:1px solid black">
+
+                        @Model.PaymentDetail.TxnReferenceNo
+                        Amount :   @Model.PaymentDetail.TxnAmount
+                        Dated :  @Model.PaymentDetail.TxnDate.ToString("dd-MMMM-yyyy")
+
+                    </th>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <p style="float:right">
+                            <strong>
+                                @if (Model.PrintProgramme == PrintProgramme.UG || Model.PrintProgramme == PrintProgramme.BED)
+                                {
+                                    <text>College </text>
+                                }
+                                Dealing Assistant<br />
+                            </strong>
+                            (Certificate Section)<br />
+                            <strong>Dated:___/___/@DateTime.Now.Year</strong>
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <div class="noneOnPrint" style="height:40px;background-color:lightslategrey;width:920px;position:fixed;bottom:0;z-index:100;text-align:center;padding-top:10px">
+        <button style="height: 32px;" href="#" class="btn btn-theme" onclick="window.print();"><b>Download or Print</b></button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:white">Developed &amp; Maintained by I.T Cell</span>
+    </div>
+</body>
+</html>
+
+

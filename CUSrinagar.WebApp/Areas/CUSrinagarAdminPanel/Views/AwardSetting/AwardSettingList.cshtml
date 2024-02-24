@@ -1,0 +1,70 @@
+﻿@model  List<CUSrinagar.Models.AwardSettingsModel>
+@using CUSrinagar.Extensions
+
+@{
+    Layout = null;
+    var ISChecked = "";
+}
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th>S.No</th>
+            <th data-property="UserName">User Name</th>
+            <th data-property="SubjectFullName">Subject</th>
+            @if (ViewBag.AwardTypeIs == ((int)CUSrinagar.Enums.AwardType.Practical).ToString())
+            {
+                <th data-property="ISFinalSubmit">Practical Submitted</th>
+            }
+            else
+            {
+                <th data-property="ISFinalSubmitTheory">External Submitted</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var row in Model)
+            {
+
+
+                <tr>
+                    <td class="js-sno"></td>
+                    <td>@row.UserName  </td>
+                    <td>@row.SubjectFullName</td>
+                    @if (ViewBag.AwardTypeIs ==((int)CUSrinagar.Enums.AwardType.Practical).ToString())
+                    {
+                        <td>
+                            @if (row.ISFinalSubmit)
+                            {
+                                ISChecked = "checked = 'checked'";
+                            }
+                            else
+                            { ISChecked = ""; }
+                            <label class='pull-center inline'>
+                                <input class='ace ace-switch ace-switch-5' id='@row.AwardSettings_ID' type='checkbox' @ISChecked onclick='return IsSubmitted(this)' />
+                                <span class='lbl middle'></span>
+                            </label>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            @if (row.ISFinalSubmitTheory)
+                            {
+                                ISChecked = "checked = 'checked'";
+                            }
+                            else
+                            { ISChecked = ""; }
+                            <label class='pull-center inline'>
+                                <input class='ace ace-switch ace-switch-5' id='@row.AwardSettings_ID' type='checkbox' @ISChecked onclick='return IsSubmitted(this)' />
+                                <span class='lbl middle'></span>
+                            </label>
+                        </td>
+}
+                </tr>
+            }
+        }
+    </tbody>
+</table>

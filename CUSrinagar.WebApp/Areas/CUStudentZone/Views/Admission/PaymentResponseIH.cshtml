@@ -1,0 +1,121 @@
+﻿@model CUSrinagar.Models.PaymentDetails
+@{
+    ViewBag.Title = "PaymentResponse";
+    Layout = "~/Areas/CUStudentZone/Views/Shared/_CUStudentZoneLayout.cshtml";
+    ViewBag.Title = "Payment Response";
+    string errorMessage = ViewBag.PaymentFailureMessage;
+}
+
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area="CUStudentZone"})">Home</a>
+        </li>
+        <li>
+            <a href="@Url.Action("UploadCertificateIH", new { R=CUSrinagar.Extensions.Helper.EncryptCookieAndURLSafe(((short)CUSrinagar.Enums.PrintProgramme.IH).ToString())})" class="active">Upload Certificates</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+
+<div class="page-content ">
+    <div class="row ">
+        <div class="col-xs-10 col-sm-10 col-md-6 col-xs-offset-1 col-sm-offset-1 col-md-offset-3">
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="row panel panel-body well">
+                    <div class="">
+                        <div class="text-center">
+                            <img src="@Url.Content("~/Content/ThemePublic/Libraries/images/cus-logo1.svg")" width="500" height="50" />
+                            <br />
+                            <br />
+                            <h4 class="text-success">
+                                If you have already submitted fee or money has been deducted from your account and you are still unable to view your application form. Please mail at admission@@cusrinagar.edu.in Cluster Univeristy I.T. Cell.
+                            </h4>
+                            <br />
+                            <h4 class="text-danger"><b>Error</b></h4>
+                            <h4 class="text-danger">@errorMessage</h4>
+
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row panel panel-body well">
+                    <div class="">
+                        <div class="text-center">
+                            <img src="@Url.Content("~/Content/ThemePublic/Libraries/images/cus-logo1.svg")" width="500" height="50" />
+                            <h4 class="text-success"><b>Payment Confirmation</b></h4>
+                            <h4 class="hidden-print"><b>Your request for payment has been submitted successfully</b></h4>
+                        </div>
+                        <div class="table-bordered" style="margin:20px">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td class="col-md-9">Transaction Reference Number:<b> @Model.TxnReferenceNo</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-md-9">Transaction Date:<b> @Model.TxnDate.ToString("dd-MMMM-yyyy")</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-md-9">College Preferences:<b> @Model.AdditionalInfo</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mobile No.:<b> @Model.PhoneNumber</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email: <b>@Model.Email</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right">
+                                            <p>
+                                                Amount Paid : <strong>Rs.@Model.TxnAmount</strong>
+                                            </p>
+                                        </td>
+                                    </tr>
+                                    <tr class="hidden-print">
+                                        <td>
+                                            <a href="@Url.Action("ProvAdmFormPrint")" class="btn-default" style="padding:5px"> <label><i class="glyphicon glyphicon-print"></i> Print</label></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br />
+                    </div>
+
+                    <div class="clearfix hidden-print"></div>
+                    <div>
+                        <h3>WARNING !</h3>
+                        <ol>
+                            <li>In case of any discrepancy please visit University I.T. Section.</li>
+                        </ol>
+                        <hr />
+                        <b>Address</b>
+                        <address>
+                            <p class="adr clearfix col-md-12  col-sm-4">
+                                <span class="adr-group pull-left">
+                                    <span class="street-address">Cluster University Srinagar</span><br>
+                                    <span class="region">Gogji-Bagh, Srinagar-190008</span><br>
+                                    <span class="email"><a href="mailto:admissions@cusrinagar.edu.in?Subject=ClusterUniversity"><i class="fa fa-envelope"></i>admissions@cusrinagar.edu.in</a></span><br />
+                                    <span class="phone">Phone number: - 0194-2475603</span>
+                                </span>
+                            </p>
+                        </address>
+                        <hr />
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJSFiles{
+    <script src="@Url.Content("~/Content/ThemePublic/Libraries/disableBack.js")"></script>
+}
+
+
+
+

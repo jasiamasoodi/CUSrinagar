@@ -1,0 +1,13 @@
+﻿
+@{
+    string Type = ViewBag.Type;
+    int track = ViewBag.Track;
+    string typeName = Type == "Semester" ? (Type ) : (Type + "_ID");
+    string ClassName = Type == "Semester" ? ("SemesterChange") : ("");
+    string key = (Type == "Semester") ? "Value" : "Key";
+    var ValuesDDL = ViewBag.ChildValues != null ? ViewBag.ChildValues : new List<SelectListItem>();
+}
+@*@Html.DropDownList("ProfessorSubjects["+track+"]."+ typeName, new SelectList(ValuesDDL, "Value", "Text"),
+                                     "--Select--", new { @class = "chosen-select tag-input-style SearchDDL  form-control jsfilterelement ", @id= "ProfessorSubjects_"+track+"__"+typeName, @data_column = @typeName, @data_operator = "EqualTo"})*@
+@Html.DropDownList("ProfessorSubjects[" + track + "]." + typeName, new SelectList(ValuesDDL, "Value", "Text"),
+                                     "--Select--", new { @class = "chosen-select tag-input-style SearchDDL  form-control jsfilterelement "+ClassName, @id = "ProfessorSubjects_" + track + "__" + typeName, @data_column = @typeName, @data_operator = "EqualTo",@data_track=track })

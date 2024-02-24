@@ -1,0 +1,110 @@
+﻿@{
+    ViewBag.Title = "Examination Form";
+}
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUCollegeAdminPanel"})">Home</a>
+            </li>
+            <li class="active">Form</li>
+        </ul><!-- /.breadcrumb -->
+    </div>
+    <div class="col-md-7">
+        @*<h2 class="no-margins">
+                Examination Forms
+            </h2>*@
+    </div>
+    <div class="col-md-4">
+    </div>
+}
+
+<div class="page-header">
+    <h1>
+        Examination
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            Student Examination Form
+        </small>
+    </h1>
+</div><!-- /.page-header -->
+
+<div class="row">
+    <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <form class="form-horizontal disabled" role="form" name="ExamFormModel" id="ExamFormModel">
+            @Html.Hidden("Student_ID", null)
+            @Html.Hidden("ExamRollNumber", null)
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="Year"> Programme </label>
+                <div class="col-sm-9">
+                    @Html.DropDownList("PrintProgramme", new SelectList(ViewBag.PrintProgrammeList, "Value", "Text", (short)CUSrinagar.Enums.PrintProgramme.UG),
+                                    null, new
+                                    {
+                                        @class = "col-xs-10 col-sm-5 js-accept-frm",
+                                        @required = "required"
+                                    })
+                </div>
+            </div>
+
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="Year"> Year </label>
+                <div class="col-sm-9">
+                    <input type="text" required id="Year" name="Year" placeholder="Year" value="@DateTime.Now.Year" readonly class="col-xs-10 col-sm-5" />
+                </div>
+            </div>
+
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Semester </label>
+                <div class="col-sm-9">
+                    <select id="Semester" required name="Semester" class="col-xs-10 col-sm-5" readonly disabled>
+                        <option value="1">Semester-I</option>
+                        <option value="2" selected="selected">Semester-II</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="space-4"></div>
+            @Html.Hidden("Status", "4")
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="form-field-2"> Form Number </label>
+                <div class="col-sm-9">
+                    <input type="text" required id="FormNumber" name="FormNumber" placeholder="Enter Form Number" class="col-xs-10 col-sm-5 js-accept-frm" autofocus value="" onfocus="this.selectionStart=0;this.selectionEnd=25;" />
+                    <span class="help-inline col-xs-12 col-sm-7">
+                        <span class="middle">Student Form Number</span>
+                    </span>
+                </div>
+            </div>
+
+
+
+            <div class="clearfix form-actions">
+                <div class="col-md-offset-3 col-md-9">
+                    <button class="btn btn-info js-accept-frm" type="button">
+                        <i class="ace-icon fa fa-check bigger-110"></i>
+                        Accept
+                    </button>
+                </div>
+            </div>
+
+            <div class="hr hr-24"></div>
+        </form>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/Pages/clg-examination-form.js")"></script>
+    <script>
+        $(document).ready(function () {
+            $(".e1").addClass("active");
+            $(".exmlt").addClass("active open");
+        });
+    </script>
+}

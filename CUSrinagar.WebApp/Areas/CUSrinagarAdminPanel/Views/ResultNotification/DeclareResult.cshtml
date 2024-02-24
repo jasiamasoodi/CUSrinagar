@@ -1,0 +1,118 @@
+﻿@model  CUSrinagar.Models.ResultNotification
+@{
+    ViewBag.Title = "Declare Result";
+
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header">
+                <h4 class="widget-title"><i class='menu-icon fa fa-pencil-square-o'></i>Declare Result</h4>
+
+
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="table-responsive panel">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td class="text-success"><i class="fa fa-user"></i>Semester</td>
+                                    <td>      @Html.DisplayFor(model => model.Semester)</td>
+
+                                </tr>
+                                <tr>
+                                    <td class="text-success"><i class="fa fa-user"></i>Batch</td>
+                                    <td>      @Html.DisplayFor(model => model.Batch)</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-success"><i class="fa fa-book"></i>Programme</td>
+                                    <td>  @Html.DisplayFor(model => model.PrintProgramme)</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-success"><i class="fa fa-user"></i> Title</td>
+                                    <td>
+                                        @Html.DisplayFor(model => model.Title)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-success"><i class="fa fa-address-book"></i> Description</td>
+                                    <td>   @Html.DisplayFor(model => model.Description)</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-success"><i class="fa fa-calendar"></i> Dated</td>
+                                    <td>
+                                        @Model.Dated.ToShortDateString()
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-success"><i class="fa fa-address-book"></i> Remark</td>
+                                    <td>
+                                        @Html.DisplayFor(model => model.Remark)
+                                    </td>
+                                </tr>
+                                @using (@Html.BeginForm("DeclareResults", "ResultNotification", FormMethod.Post, new { @class = " form-horizontal", @id = "DeclareResult" }))
+                                {
+                                    @Html.HiddenFor(model => model.Dated)
+                                    @Html.HiddenFor(model => model.ResultNotification_ID)
+                                    @Html.HiddenFor(model => model.IsBacklog)
+                                    @Html.HiddenFor(model => model.ExamFormSubmissionYear)
+                                    @Html.HiddenFor(model => model.Description)
+                                    @Html.HiddenFor(model => model.Title)
+                                    @Html.HiddenFor(model => model.Remark)
+                                    @Html.HiddenFor(model => model.Semester)
+                                    @Html.HiddenFor(model => model.PrintProgramme)
+                                    @Html.HiddenFor(model => model.Batch)
+                                    <tr>
+                                        <td class="text-success">
+                                            <i class="fa fa-book"></i> Course
+                                        </td>
+                                        <td>
+                                            <div class="jsDDLContainer wd-650">
+                                                @Html.DropDownListFor(model => model.CourseIds, new SelectList(ViewBag.Courses, "Value", "Text", Model.CourseIds), " -- All Courses --",
+                                               new
+                                               {
+                                                   @class = "form-control chosen-select jsCourseDDL ",
+                                                   multiple = "multiple"
+                                               })
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td class=" pull-text-right pull-right">
+                                            <button type="submit" class="btn btn-success declareresult">Declare Result</button>
+                                        </td>
+                                    </tr>
+                                }
+
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            @if (TempData["response"] != null)
+            {
+                @Html.Raw(TempData["response"]);
+                <script>
+                    $(".declareresult").attr("disabled", "disabled");</script>
+            }
+        </div>
+    </div>
+</div>
+<script>
+   $(document).ready(function () {
+            @if(Model.CourseIds != null)
+            {
+                foreach (var d in Model.CourseIds)
+                {
+                @:var val = "@d".toUpperCase();
+                @:$("#CourseIds option[value='" + val + "']").prop("selected", true);
+          }
+      }
+});
+</script>

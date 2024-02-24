@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewBag.Title = "PG Certificate Check";
+}
+
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUSrinagarAdminPanel"})">Home</a>
+            </li>
+            <li class="active">Certificate Check</li>
+        </ul>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12  jsTableContent">
+        <div class="panel panel-primary js-pager-table">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Certificate Check
+                    <span class="filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                        <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                    </span>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="search-box">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label class="control-label no-padding-right">
+                                    Choose Programme<span class="red">*</span>
+                                </label>
+                                <span id="PrintProgrammeValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span><br />
+                                @Html.DropDownList("printProgramme", new SelectList(ViewBag.Programme, "Value", "Text"), "------ Programme ------", new { @class = "jsfilterelement required", @data_column = "PrintProgramme", @data_operator = "EqualTo" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label class="control-label no-padding-right">
+                                    CUS Form No. or Entrance No<span class="red">*</span>
+                                </label>
+                                <span id="FormNoValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <input type="text" id="formNo" name="formNo" style="width:100%" class="jsfilterelement required" data-column="FormNo" data-operator="Like" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <br />
+                            <button type="button" class="btn btn-primary btn-sm fa-search-btn js-search"><i class="fa fa-search"></i>&nbsp;Search</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="js-table-content" data-url="@Url.Action("StudentCertificates", "Admission", new { area = "CUSrinagarAdminPanel" })" data-DefaultOrderByColumn="UploadingDate">
+            </div>
+            @{Html.RenderPartial("_JSPagerTableFooter");}
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var $pagertable = $(".js-pager-table");
+        });
+    </script>
+}
+
+
+
+

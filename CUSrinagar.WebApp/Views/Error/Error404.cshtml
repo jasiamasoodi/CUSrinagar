@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewBag.Title = "ErrorPage";
+    if (ViewBag.IsAjaxRequest)
+    {
+        Layout = null;
+    }
+}
+
+
+<div>
+    <div style="padding:20px;">
+        <h1>
+            404
+        </h1>
+        <h3>
+            Sorry,The resource you requested cannot be found!
+        </h3>        
+
+        <h6>@Html.ActionLink("Go Back To Home Page", "Index", "Home", new { area = string.Empty }, null)</h6>
+
+    </div>
+</div>
+

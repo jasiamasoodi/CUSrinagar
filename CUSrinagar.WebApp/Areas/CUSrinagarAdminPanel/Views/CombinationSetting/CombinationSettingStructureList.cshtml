@@ -1,0 +1,51 @@
+﻿@model IEnumerable<CUSrinagar.Models.CombinationSettingStructure>
+@{
+    Layout = null;
+}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>S.No.</th>
+            <th data-property="Remark">Remark</th>
+            <th data-property="TotalNumberOfSubjects">TotalSubjects</th>
+            <th data-property="TotalSubjectCredits">SubjectCredits</th>
+            <th data-property="TotalResultCredits">ResultCredits</th>
+            <th data-property="Core_Count">Core_Count</th>
+            <th data-property="DCE_DSE_Count">DCE_DSE_Count</th>
+            <th data-property="GE_OE_Count">GE_OE_Count</th>
+            <th data-property="AE_Count">AE_Count</th>
+            <th data-property="MIL_Count">MIL_Count</th>
+            <th data-property="SEC_Count">SEC_Count</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td class="js-sno"></td>
+                    <td>
+                        @item.Remark
+                        @Html.HiddenFor(model=>item.CombinationSettingStructure_ID,new { @class = "jsEntity_ID" })
+                    </td>
+                    <td>@item.TotalNumberOfSubjects</td>
+                    <td>@item.TotalSubjectCredits</td>
+                    <td>@item.TotalResultCredits</td>
+                    <td>@item.Core_Count</td>
+                    <td>@item.DCE_DSE_Count</td>
+                    <td>@item.GE_OE_Count</td>
+                    <td>@item.AE_Count</td>
+                    <td>@item.MIL_Count</td>
+                    <td>@item.SEC_Count</td>
+                    <td>
+                        <a href="#"><i class="copy-to-clipboard fa fa-circle-o"></i></a>
+                        <a href="@Url.Action("CombinationSettingStructureCreateEdit",new { @id=item.CombinationSettingStructure_ID})" target="_blank"><i class="fa fa-edit"></i></a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+
+</table>

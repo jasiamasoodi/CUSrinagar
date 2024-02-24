@@ -1,0 +1,39 @@
+﻿@model List<CUSrinagar.Models.Message>
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th class="wd-35"><input class="ace checkbox checkbox-inline jsSelectAllChk" type="checkbox"><span class="lbl padding-right-10"></span>S.No.</th>
+            <th data-property="Dated" class="wd-150">Date</th>
+            <th data-property="MessageTitle">Title</th>
+            <th data-property="Category">Message</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input class="ace checkbox checkbox-inline jsSelectChk" type="checkbox"><span class="lbl padding-right-10"></span><span class="js-sno"></span>
+                        @Html.HiddenFor(it => item.Message_ID, new { @class = "jsEntity_ID" })
+                    </td>
+                    <td>
+                        @item.Date.ToString("dd-MMMM-yyyy")
+                    </td>
+                    <td>
+                        @item.MessageTitle
+                    </td>
+                    <td>
+                        <p class="desc overflow-hidden-ht no-margins">@item.MessageBody</p>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Edit","Message",new {@area="CUSrinagarAdminPanel", @id=item.Message_ID})" class="btn btn-sm btn-primary">View Detail</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

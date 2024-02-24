@@ -1,0 +1,121 @@
+﻿@{
+    Layout = "~/Areas/CUCollegeAdminPanel/Views/Shared/_CUCollegeAdminPanelLayout.cshtml";
+}
+
+@{
+    ViewBag.Title = "Enrollments";
+}
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUCollegeAdminPanel"})">Home</a>
+            </li>
+            <li class="active">Combination Wise Enrollments</li>
+        </ul>
+    </div>
+    <div class="col-md-7">
+        @*<h2 class="no-margins">
+                Examination Forms
+            </h2>*@
+    </div>
+    <div class="col-md-4"></div>
+}
+
+@*<div class="page-wrapper pager-table-text">*@
+@*<header class="page-heading clearfix">
+        <h1 class="heading-title pull-left">
+            Enrollments
+            <small>
+                <i class="ace-icon fa fa-angle-double-right"></i>
+                Count
+            </small>
+        </h1>
+    </header>*@
+<div class="page-content">
+    <div class="row page-row">
+        <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+        <div class="col-md-12 jsTableContent">
+            <div class="panel panel-primary js-pager-table">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Combination Wise Enrollments
+                        <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                            <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                        </span>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="search-box">
+                        <form class="form-inline" action="@Url.Action("SubjectWise","Result")" id="combination-wise-list">
+                            <input type="hidden" data-column="AcceptCollege_ID" data-operator="EqualTo" class="jsfilterelement" value="@CUSrinagar.Models.AppUserHelper.College_ID" />
+                            <div class="form-group">
+                                <label>Batch</label><br />
+                                <div class="jsDDLContainer">
+                                    <select class="jsfilterelement form-control" data-column="SemesterBatch" data-operator="EqualTo" data-scope="row1">
+                                        @for (int i = DateTime.Now.Year; i >= 2017; i--)
+                                        {
+                                            <option value="@i">@i</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Programme</label><span class="red">*</span><br />
+                                <div class="jsDDLContainer">
+                                    @Html.DropDownList("Programme", new SelectList(ViewBag.Programmes, "Value", "Text"), "--select--", new { @class = "chosen-select required jsfilterelement form-control jsProgrammeDDL", @data_column = "Programme", @data_operator = "EqualTo", @data_scope = "row1" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Course</label><span class="red">*</span> <br />
+                                <div class="jsDDLContainer wd-300">
+                                    @Html.DropDownList("Course", new SelectList(ViewBag.Courses, "Value", "Text"), null, new { @class = "chosen-select form-control jsfilterelement jsCourseDDL required", @data_column = "Course", @data_operator = "EqualTo", @data_scope = "row1" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Semester</label><span class="red">*</span> <br />
+                                <div class="jsDDLContainer">
+                                    @Html.DropDownList("Semester", new SelectList(ViewBag.Semesters, "Value", "Text"), null, new { @class = "jsfilterelement tag-input-style jsSemesterDDL required", @data_column = "Semester", @data_operator = "EqualTo", @data_scope = "row1" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="invisible">for styling purpose</label><br />
+                                <button type="button" class="btn btn-primary btn-sm fa-search-btn js-search"><i class="fa fa-search"></i>&nbsp;Search</button>
+                                <div class="btn-group">
+                                    <button data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle">
+                                        Action
+                                        <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-default dropdown-info">
+                                        <li><a href="javascript:void(0)" data-url="@Url.Action("GetCombinationsCountCSV", "AssignCombination", new { area = "CUCollegeAdminPanel" })" id="" class="js-exportToCSV" data-otherparam1="printProgramme=@CUSrinagar.Enums.PrintProgramme.UG" style="width:100%">Download Excel</a></li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+                <div class="js-table-content" data-url='@Url.Action("_CombinationCountList","AssignCombination",new { area = "CUCollegeAdminPanel"})' data-DefaultOrderByColumn="AssignedStudentCount">
+                </div>
+                @{Html.RenderPartial("_JSPagerTableFooter");}
+            </div>
+        </div>
+    </div>
+</div>
+@*</div>*@
+@section PageSpecificJS{
+    <script>
+        $(document).ready(function () {
+            $(".cc").addClass("active");
+            $(".dts").addClass("active open");
+        });
+    </script>
+
+    <script>
+        var chilDDLPath = '@Url.Action("_GetChildDDL", "AssignCombination", new { area = "CUCollegeAdminPanel" })';
+    </script>
+    <script src="~/Content/ThemeAdmin/Content/Scripts/Pages/assign-combination.js"></script>
+    <script src="@Url.Content("~/Scripts/JSChosen.js")"></script>
+}

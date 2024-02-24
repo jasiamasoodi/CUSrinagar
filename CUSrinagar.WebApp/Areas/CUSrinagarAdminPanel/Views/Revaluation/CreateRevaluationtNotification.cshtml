@@ -1,0 +1,198 @@
+﻿@model  CUSrinagar.Models.ResultNotification
+@{
+    ViewBag.Title = "CreateRevaluation";
+
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header">
+                <h4 class="widget-title"><i class='menu-icon fa fa-pencil-square-o'></i>Create Revaluation Result Notification</h4>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+
+                    <h2 class="center" style="color:deepskyblue;">  @TempData["Message"]   </h2>
+                    @if (TempData["RevaluationNotification"] != null)
+                    {
+                        <h4 class="center" style="color:red;">Please Save Result NotificationID For Future Use : @TempData["RevaluationNotification"]</h4>
+
+                    }
+                    @using (@Html.BeginForm("CreateRevaluation", "Revaluation", FormMethod.Post, new { @class = "jsMainForm form-horizontal", @id = "ResultNotification" }))
+                    {
+
+
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">  @Html.LabelFor(model => model.ParentNotification_ID)</label>
+                            <div class="col-sm-8 wd-650">
+                                @Html.DropDownListFor(model => model.ParentNotification_ID, new SelectList(ViewBag.ParentNotifications, "Value", "Text", Model.ParentNotification_ID),
+                                  "--Select--", new
+                                   {
+                                       @class = "form-control chosen-select child",
+                                       required = "required"
+                                   })
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">Semester</label>
+                            <div class="col-sm-8 wd-650">
+                                @Html.DropDownListFor(model => model.Semester, new SelectList(ViewBag.Semesters, "Value", "Text"),
+                                    null, new
+                                    {
+                                        @class = "form-control chosen-select child",
+                                        required = "required"
+                                    })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">Batch</label>
+                            <div class="col-sm-8  wd-650">
+                                <div class="jsDDLContainer">
+                                    @Html.DropDownListFor(model => model.Batch, new SelectList(ViewBag.Batchs, "Value", "Text"), new
+                                      {
+                                           @class = "form-control chosen-select  ",
+                                       })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2">
+                                @Html.ValidationMessageFor(model => model.Batch, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">Programme</label>
+                            <div class="col-sm-8 wd-650">
+                                @Html.DropDownListFor(model => model.PrintProgramme, new SelectList(ViewBag.PrintProgrammes, "Value", "Text", Model.PrintProgramme),
+                                       null, new
+                                       {
+                                           @class = "form-control chosen-select child",
+                                           required = "required"
+                                       })
+                            </div>
+                        </div>
+
+
+                        @*<div class="form-group">
+                                <label for="name" class="col-sm-3">Programme</label>
+                                <div class="col-sm-8 wd-650">
+                                    @Html.DropDownListFor(model => model.Programme, new SelectList(ViewBag.Programmes, "Value", "Text"), new
+                                  {
+                                      @class = "form-control chosen-select child",
+                                      required = "required"
+                                  })
+                                </div>
+                            </div>*@
+
+
+
+
+
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">  @Html.LabelFor(model => model.ExamFormSubmissionYear)</label>
+                            <div class="col-sm-8  wd-650">
+                                <div class="jsDDLContainer">
+                                    @Html.DropDownListFor(model => model.ExamFormSubmissionYear, new SelectList(ViewBag.Batchs, "Value", "Text"), new
+                                    {
+                                       @class = "form-control chosen-select child",
+                                       required = "required"
+                                   })
+
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                @Html.ValidationMessageFor(model => model.ExamFormSubmissionYear, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">Notification No.</label>
+                            <div class="col-sm-8 wd-400">
+                                @Html.TextBoxFor(model => model.NotificationNo, new { @class = "child", required = "required" })
+                            </div>
+                            <div class="col-sm-2">
+                                @Html.ValidationMessageFor(model => model.NotificationNo, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">Title</label>
+                            <div class="col-sm-8 wd-400">
+                                @Html.TextBoxFor(model => model.Title, new { required = "required", @class = "child" })
+                            </div>
+                            <div class="col-sm-2">
+                                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">Dated</label>
+                            <div class="col-sm-8 wd-650">
+                                @Html.TextBoxFor(model => model.Dated, new { required = "required", @class = "date-picker " })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">Description</label>
+                            <div class="col-sm-8 wd-650">
+                                @Html.TextAreaFor(model => model.Description, new { required = "required", @cols = 80, @rows = 5 })
+                            </div>
+                            <div class="col-sm-2">
+                                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">Remark</label>
+                            <div class="col-sm-8 wd-650">
+                                @Html.TextAreaFor(model => model.Remark, new { required = "required", @cols = 80, @rows = 5 })
+                            </div>
+                            <div class="col-sm-2">
+                                @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">Is Active</label>
+                            <div class="col-sm-8 wd-650">
+                                @Html.CheckBoxFor(model => model.IsActive)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <div class=" pull-text-right pull-right">
+                                    <button id="flip" type="submit" class="btn btn-success ">Create</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.date-picker').datepicker({
+        autoclose: true,
+        todayHighlight: true,
+        dateFormat: 'mm/dd/yy',
+        format: 'mm/dd/yy'
+    })
+</script>
+<style>
+    .child {
+        width: inherit;
+        height: 100%;
+    }
+</style>
+

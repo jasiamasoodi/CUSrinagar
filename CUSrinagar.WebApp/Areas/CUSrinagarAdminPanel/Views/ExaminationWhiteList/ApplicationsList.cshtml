@@ -1,0 +1,78 @@
+﻿@model IEnumerable<CUSrinagar.Models.ExaminationWhiteList>
+
+@{
+    ViewBag.Title = "ApplicationsList";
+    Layout = null;
+}
+
+<hr />
+
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th> Serial No.</th>
+            <th data-property="">
+                Date
+            </th>
+
+            <th data-property="CUSRegistrationNo">
+                Reg. No
+            </th>
+            <th data-property="">
+                Student Name
+            </th>
+            <th data-property="">
+                User
+            </th>
+            <th data-property="">
+                Semester
+            </th>
+            <th data-property="">
+                Exam Year
+            </th>
+            <th data-property="">
+                Remarks
+            </th>
+            <th data-property="">
+                Application
+            </th>
+        </tr>
+
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            var index = 1;
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td class="center">@index</td>
+                    <td>
+                        @item.CreatedOn.ToString("dd/mm/yyyy")
+                    </td>
+                    <td>@item.CUSRegistrationNo</td>
+                    <td>
+                        @item.StudentName.ToUpper()
+                    </td>
+                    <td>
+                        @item.AllowedByName
+                    </td>
+                    <td>
+                        @item.Semester
+                    </td>
+                    <td>
+                        @item.ExaminationYear
+                    </td>
+                    <td>
+                        @item.Remarks
+                    </td>
+                    <td>
+                        <a href="@item.ApplicationPath"> View Application</a>
+                    </td>
+                </tr>
+                index++;
+            }
+        }
+    </tbody>
+</table>

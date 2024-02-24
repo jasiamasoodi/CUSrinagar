@@ -1,0 +1,179 @@
+﻿@using CUSrinagar.Models
+@using CUSrinagar.Extensions
+
+@{
+    ViewBag.Title = $"Apply for Self Financed Seat-{DateTime.UtcNow.Year} - ";
+    List<ARGCoursesApplied> coursesApplied = (List<ARGCoursesApplied>)ViewBag.CoursesApplied;
+    bool showPayment = false;
+    string EligibleCourses = ViewBag.EligibleCourses;
+    bool batchHasEntrance = (AppUserHelper.AppUsercompact?.OrgBatch ?? 0) != 2022;
+}
+
+<div class="page-header">
+    <h1>
+        Entrance @DateTime.Now.Year - Apply for Self Financed Seat
+    </h1>
+</div>
+@if ((bool)ViewBag.PrintProgrammeOption)
+{
+    if (coursesApplied.IsNotNullOrEmpty())
+    {
+        <div class="row">
+            <div id="response" style="width:85%;margin:0 auto">
+                @if (TempData["response"] != null)
+                {
+                    @Html.Raw(TempData["response"])
+                }
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-9" style="border:2px solid #cacaca;border-radius:6px;">
+                <br />
+
+                @using (Html.BeginForm("Apply", "SelfFinanced", FormMethod.Post, new { @class = "rnd5", @id = "frmSFS", area = "CUStudentZone" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    if (batchHasEntrance && AppUserHelper.TableSuffix == CUSrinagar.Enums.PrintProgramme.IH && !coursesApplied.Any(x => x.Course_ID == new Guid("FC32E138-4EE2-4DA2-9453-5C8368180BC3")))
+                    {
+                        <p class="center"><strong>CATPoints : @ViewBag.CATPoints</strong></p>
+                    }
+
+
+                    @*------------------------------------Print Section-----------------------------------*@<table class="table-bordered table">
+                        <thead>
+                            <tr>
+                                <th class="quadraText">Apply</th>
+                                <th>Course</th>
+                                @if (batchHasEntrance)
+                                {
+                                    <th>Appeared In Entrance</th>
+                                }
+                                <th>Fee (INR)</th>
+                                @if (batchHasEntrance)
+                                {
+                                    <th>Subject Entrance Points</th>
+                                }
+                                @if (!coursesApplied.Any((x => x.Preference == null || x.Preference == 0)))
+                                {
+                                    <th>Preference Given</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.CATPoints != "Not appeared in CAT")
+                            {
+                                foreach (var item in coursesApplied)
+                                {
+                                    string appearedinEntrance = item.AppearedInEntrance ? "Yes" : "No";
+                                    <tr>
+                                        <th class="text-center">
+                                            @if (item.AppearedInEntrance && item.SelfFinancedPayment_ID == null)
+                                            {
+                                                if ((string.IsNullOrWhiteSpace(EligibleCourses)) || EligibleCourses.ToLower().Contains(item.Course_ID.ToString().ToLower()))
+                                                {
+                                                    showPayment = true;
+                                                    <input type="checkbox" name="CoruseAppied_ID" value="@item.Course_ID" style="cursor:pointer" />
+                                                    <label for="CoruseAppied_ID">Click here</label>
+                                                }
+                                                else
+                                                {
+                                                    <text><span style="color:red">Course Not Eligible</span></text>
+                                                }
+                                            }
+                                            else if (!item.AppearedInEntrance)
+                                            {
+                                                <text><span style="color:red">Candidate Not Eligible</span></text>
+                                            }
+                                            else if (item.AppearedInEntrance && item.SelfFinancedPayment_ID != null)
+                                            {
+                                                <text><span style="color:green">Applied</span></text>
+                                            }
+                                        </th>
+                                        <th>@item.CourseName</th>
+                                        @if (batchHasEntrance)
+                                        {
+                                            <th>@appearedinEntrance</th>
+                                        }
+                                        <th>@ViewBag.SFAmount</th>
+                                        @if (batchHasEntrance)
+                                        {
+                                            <th>@item.SubjectEntrancePoints</th>
+                                        }
+                                        @if (!coursesApplied.Any((x => x.Preference == null || x.Preference == 0)))
+                                        {
+                                            <th class="text-center">@item.Preference</th>
+                                        }
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <th colspan="5" style="color:red;text-align:center">You are not eligible for Self-Financed Seats (@ViewBag.CATPoints)</th>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <div class="row page-row" style="background-color:white;">
+                        <div class="content-wrapper" style="padding:5px;font-size:18px">
+                            <fieldset>
+                                <legend></legend>
+                                <ul>
+                                    <li>You can apply one by one or multiple courses at a time by checking the checkboxes provided above aganist each course(s).</li>
+                                    <li>Please read carefully all related  <a href="/Notification/Notification/" target="_blank">Notifications Here</a> before applying.</li>
+                                    <li style="color:#ff6a00;font-weight:bold">If you have already submitted Fee and you are still unable to print your Form visit Cluster University I.T Section.</li>
+                                </ul>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <br />
+                    <p class="text-center JSprogress">
+                        @if (showPayment)
+                        {
+                            if (coursesApplied.Any(x => x.AppearedInEntrance && x.SelfFinancedPayment_ID != null))
+                            {
+                                <span id="hideButtons6" style="margin-right:20px;">
+                                    <button type="submit" id="jsSFFresh" class="btn btn-success"><i class="fa fa-money"></i> Apply Now</button>
+                                </span>
+                            }
+                            else
+                            {
+                                <span id="hideButtons6" style="margin-right:20px;">
+                                    <button type="submit" id="jsSFFresh" class="btn btn-success"><i class="fa fa-money"></i> Apply &amp; Make Payment</button>
+                                </span>
+                            }
+                        }
+
+                        <span id="hideButtons6">
+                            <a href="@Url.Action("PrintReceipt", "SelfFinanced", new { area = "CUStudentZone" })" id="jsSFReprint" class="btn btn-success"><i class="fa fa-money"></i> Reprint Receipt(s)</a>
+                        </span>
+                    </p>
+
+                    @*------------------------------------End Print Section-----------------------------------*@
+
+                }
+            </div>
+            <div class="col-md-3"></div>
+
+            <div class="col-lg-12"><br /><br /><br /><br /></div>
+        </div>
+    }
+    else
+    {
+
+        <h3 style="color:red;text-align:center;font-size:22px;">
+            &nbsp;&nbsp;&nbsp;Course which you have applied is not eligible for Self-Financed Seats.
+        </h3>
+
+    }
+}
+else
+{
+    <h1 class="quadraText">
+        The process of applying for Self Financed Seats online is either closed or will be allowed soon.
+    </h1>
+}
+@section PageSpecificJSFiles{
+    @Scripts.Render("~/bundles/Libraries/jqueryval", "~/bundles/Libraries/jqueryregSFS")
+}

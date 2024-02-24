@@ -1,0 +1,23 @@
+DELETE FROM ARGCoursesApplied_PG WHERE Student_ID in
+(SELECT Student_ID FROM ARGPersonalInformation_PG 
+WHERE Batch =2018  AND AcceptCollege_ID IS NULL)
+GO
+DELETE FROM ARGSelectedCombination_PG WHERE Student_ID in
+(SELECT Student_ID FROM ARGPersonalInformation_PG 
+WHERE Batch =2018 AND AcceptCollege_ID IS NULL)
+GO
+DELETE FROM ARGStudentPreviousQualifications_PG WHERE Student_ID in
+(SELECT Student_ID FROM ARGPersonalInformation_PG 
+WHERE Batch =2018  AND AcceptCollege_ID IS NULL)
+GO
+DELETE FROM ARGStudentAddress_PG WHERE Student_ID in
+(SELECT Student_ID FROM ARGPersonalInformation_PG 
+WHERE Batch =2018  AND AcceptCollege_ID IS NULL)
+GO
+DELETE FROM PaymentDetails_PG WHERE Entity_ID in
+(SELECT Student_ID FROM ARGPersonalInformation_PG 
+WHERE Batch =2018  AND AcceptCollege_ID IS NULL)
+GO
+DELETE FROM ARGPersonalInformation_PG 
+WHERE Batch =2018  AND AcceptCollege_ID IS NULL
+GO

@@ -1,0 +1,210 @@
+﻿@using CUSrinagar.Models;
+@using CUSrinagar.Extensions;
+
+@model List<CenterNotice>
+
+@{
+    Layout = null;
+    List<CenterNotice> centerNotices = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Download Center Notice - CUSrinagar</title>
+    <style type="text/css">
+        .btn-theme {
+            background: #011c27;
+            border: 1px solid #84aac9;
+            color: #fff;
+        }
+
+            .btn-theme:hover {
+                background: #545677;
+                border: 1px solid #84aac9;
+                color: #fff;
+            }
+
+        .QRCode {
+            width: 95px;
+            position: absolute;
+            margin-top: -60px;
+            margin-left: 0
+        }
+
+        @@media print {
+            .QRCode {
+                width: 95px;
+                position: absolute;
+                margin-top: -60px;
+                margin-left: 0
+            }
+
+            .noneOnPrint {
+                display: none;
+            }
+
+            .dontbreakInside {
+                page-break-inside: avoid;
+            }
+
+
+            .blankspace {
+                height: 350px !important;
+            }
+        }
+
+        .breakpagehere {
+            page-break-after: always !important;
+            height: 10px;
+            background-color: grey !important;
+        }
+
+        table tr td {
+            padding: 5px 10px;
+        }
+
+        table tr td, table tr th {
+            max-width: 150px;
+            word-wrap: break-word !important;
+            border: 0;
+        }
+
+        .Displaytable, .Displaytable tr, .Displaytable tr td, .Displaytable tr th {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        div {
+            background-color: #fff;
+        }
+
+        .center {
+            text-align: center !important;
+        }
+
+        .pull-right {
+            float: right !important;
+        }
+
+        .pull-left {
+            float: left !important;
+        }
+    </style>
+</head>
+<body style="background-color:grey">
+    <div style="margin:0 auto;width:909px;padding:10px 10px">
+        @{
+            string bothRegularBacklogMsg = "";
+            if (Model?.Any(x => !string.IsNullOrWhiteSpace(x.RegularSeries) && !string.IsNullOrWhiteSpace(x.BacklogSeries)) ?? false)
+            {
+                bothRegularBacklogMsg = " Regular & Backlog ";
+            }
+            else if (Model?.Any(x => !string.IsNullOrWhiteSpace(x.RegularSeries) && string.IsNullOrWhiteSpace(x.BacklogSeries)) ?? false)
+            {
+                bothRegularBacklogMsg = " Regular";
+            }
+            else
+            {
+                bothRegularBacklogMsg = " Backlog";
+            }
+        }
+        @foreach (var College in Model?.GroupBy(c => c.College_ID))
+        {
+            centerNotices = Model.Where(_ => _.College_ID == College.Key).ToList();
+            <table class="tablenobdr">
+                <thead>
+                    <tr>
+                        <th colspan="3">
+                            <div class="center">
+                                <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" style="width:90px;height:68px;" />
+                                <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                                <br />
+                            </div>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th colspan="3">
+                            <strong style="font-size:20px;">
+                                Center Notice
+                            </strong>
+                            <br />
+                            <b>for @centerNotices[0].CourseCategory.GetEnumDescription() @bothRegularBacklogMsg Semester-@centerNotices[0].Semester (@centerNotices[0].ExamYear)</b>
+                            <br />
+                            <span style="font-size:22px;">@centerNotices[0].CollegeFullName</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="2">
+                            <table style="width:60%;margin:0 auto;" class="Displaytable">
+                                <tr>
+                                    <th style="width:20%">Center No.</th>
+                                    <th colspan="3">Roll No. Series</th>
+                                </tr>
+                                @foreach (var item in centerNotices.OrderBy(x => x.CenterCode.SortAlphaNumeric()))
+                                {
+                                    <tr>
+                                        <td colspan="3">
+                                            <span style="font-size:18px;">@item.CourseFullName</span>
+                                        </td>
+                                    </tr>
+                                    if (!string.IsNullOrWhiteSpace(item.BacklogSeries) && !string.IsNullOrWhiteSpace(item.RegularSeries))
+                                    {
+                                        <tr>
+                                            <th rowspan="2">@item.CenterCode</th>
+                                            <th>@item.RegularSeries</th>
+                                            <td rowspan="2" style="width:80px;text-align:center">Total<br />@item.TotalStudentesAssigned</td>
+                                        </tr>
+                                        <tr>
+                                            <th>@item.BacklogSeries</th>
+                                        </tr>
+                                    }
+                                    else if (!string.IsNullOrWhiteSpace(item.BacklogSeries))
+                                    {
+                                        <tr>
+                                            <th>@item.CenterCode</th>
+                                            <th>@item.BacklogSeries</th>
+                                            <td style="width:80px;text-align:center">Total @item.TotalStudentesAssigned</td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <th>@item.CenterCode</th>
+                                            <th>@item.RegularSeries</th>
+                                            <td style="width:80px;text-align:center">Total<br />@item.TotalStudentesAssigned</td>
+                                        </tr>
+                                    }
+                                }
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br />
+            <text>Printed On : </text> <strong>@DateTime.Now.ToString("dd MMM, yyyy h:m tt") (Developed by Cluster University I.T Cell)</strong>
+            <div class="breakpagehere"></div>
+        }
+    </div>
+    <span class="noneOnPrint">
+        <br />
+        <br />
+        <br />
+    </span>
+    <div class="noneOnPrint" style="margin-left:-14px;height:40px;background-color:lightslategrey;width:100%;position:fixed;bottom:0;z-index:100;text-align:center;padding-top:10px">
+        <button style="height: 32px;" href="#" class="btn btn-theme" onclick="window.print();"><b>Print Center Notice</b></button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a style="height: 32px;color:white" href="https://www.wikihow.com/Save-a-Web-Page-as-a-PDF-in-Google-Chrome" target="_blank"><b>See How to Save as PDF</b></a>
+    </div>
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/Libraries/jquery-2.1.4.min.js")"></script>
+    <script type="text/javascript">
+        window.oncontextmenu = function () { return false; }
+    </script>
+</body>
+</html>

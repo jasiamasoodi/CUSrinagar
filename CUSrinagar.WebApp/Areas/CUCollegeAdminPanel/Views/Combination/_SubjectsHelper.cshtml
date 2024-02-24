@@ -1,0 +1,67 @@
+﻿@model CUSrinagar.Models.ADMCombinationMaster
+
+
+@{ int sno = 1; int index = 0;}
+@if (Model?.CombinationHelper != null)
+{
+    @Html.HiddenFor(m => m.CombinationHelper.MinSubjectsAllowed)
+    @Html.HiddenFor(m => m.CombinationHelper.MaxSubjectsAllowed)
+}
+@for (index = 0; index < Model?.CombinationHelper?.MinSubjectsAllowed; index++)
+{
+    <div class="form-group">
+        @if (!Model.CombinationHelper.FinalCombinations[index].IsCompulsary)
+        {
+            <label class="col-sm-3 control-label no-padding-right">
+                @Html.LabelFor(m => m.CombinationHelper.FinalCombinations[index].Subject_ID) @sno <span class="red">*</span>
+            </label>
+            <div class="col-sm-6">
+                <span class="red">@Html.ValidationMessageFor(m => m.CombinationHelper.FinalCombinations[index].Subject_ID)</span>
+                @Html.DropDownListFor(m => m.CombinationHelper.FinalCombinations[index].Subject_ID, (IEnumerable<SelectListItem>)Model.CombinationHelper.SubjectSelectListItems, string.Empty, new { @class = "chosen-select form-control DDL" })
+
+            </div>
+        }
+        else
+        {
+            <label class="col-sm-3 control-label no-padding-right">
+                @Html.HiddenFor(m => m.CombinationHelper.FinalCombinations[index].IsCompulsary)
+                @Html.HiddenFor(m => m.CombinationHelper.FinalCombinations[index].SubjectsName)
+                @Html.LabelFor(m => m.CombinationHelper.FinalCombinations[index].Subject_ID) @sno <span class="red">*</span>
+            </label>
+            <div class="col-sm-6">
+                @Html.HiddenFor(m => m.CombinationHelper.FinalCombinations[index].Subject_ID)
+                <div class="well well-sm">@Html.DisplayFor(m => m.CombinationHelper.FinalCombinations[index].SubjectsName)</div>
+            </div>
+        }
+    </div>
+    sno = sno + 1;
+}
+<div id="jsExtraSubj"></div>
+@Html.Hidden("IndexLevel", index)
+@Html.Hidden("RmIndexLevel", index)
+@if (Model.CombinationHelper.MinSubjectsAllowed < Model.CombinationHelper.MaxSubjectsAllowed)
+{
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right"></label>
+        <div class="col-sm-6">
+            <br />
+            <button id="addSubject" type="button" class="btn btn-danger btn-block"><i class="ace-icon glyphicon glyphicon-plus"></i> Add Another Subject</button>
+        </div>
+    </div>
+
+    if (Model?.CombinationHelper?.SubjectSelectListItems != null)
+    {
+        @Html.DropDownList("helperDDL", (IEnumerable<SelectListItem>)Model.CombinationHelper.SubjectSelectListItems, string.Empty, new { style = "display:none;" })
+    }
+}
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+    </label>
+    <div class="col-sm-6 " id="Save">
+
+        <input id="Save" type="submit" value="Save" class="btn btn-lg btn-success" />
+
+    </div>
+
+</div>
+

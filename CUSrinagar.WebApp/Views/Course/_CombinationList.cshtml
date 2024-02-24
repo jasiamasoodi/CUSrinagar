@@ -1,0 +1,65 @@
+﻿@model CUSrinagar.Models.ADMCourseMaster
+<div style="max-height:600px;padding:0" id="CombinationSet">
+
+    <table id="simple-table" class="table  table-bordered table-hover ">
+
+        <thead>
+            <tr>
+                <th >S No.</th>
+                <th title="Subject Combination Code">Code</th>
+                <th title="Semester">Semester</th>
+                <th class="center" colspan="12">Subjects</th>
+            </tr>
+        </thead>
+        @if (Model == null || Model.CombinationDetails == null || !(Model.CombinationDetails.Any()))
+            {
+            <tbody>
+                <tr>
+                    <th colspan="6" class="center">No Combinations found</th>
+                </tr>
+            </tbody>
+        }
+        else
+        {
+            int sno = 0;
+            <tbody>
+                @for (int index = 0; index < Model.CombinationDetails.Count(); index++)
+                {
+                    <tr>
+
+                        @{ sno = index + 1;}
+                        <td >@sno</td>
+                         <th  title="Subject Combination Code">@Model.CombinationDetails[index].CombinationCode</th>
+                        <th title="Semester">@Model.CombinationDetails[index].Semester</th>
+
+                        @*<td>*@
+                            @{ int ssno = 1;}
+                            @*<table>
+                                <tbody>
+                                    <tr>*@
+                                        @foreach (var subject in Model.CombinationDetails[index].SubjectsDetails)
+                                        {
+                                            <td>
+                                                <span >@subject.SubjectFullName @* todo <br /> @subject.SubjectCode*@&nbsp;&nbsp;&nbsp;</span>
+                                            </td>
+                                            ssno = ssno + 1;
+                                        }
+                                    @*</tr>
+            </tbody>
+
+        </table>
+    </td>*@
+                        @*<td>
+                                <span>
+                                @string.Join(" - ", Model.CombinationDetails[index].SubjectsDetails.Select(x => x.SubjectCode).ToList())
+                                </span>
+                            </td>*@
+
+
+                    </tr>
+                                }
+            </tbody>
+                                }
+    </table>
+</div>
+

@@ -1,0 +1,285 @@
+﻿@model CUSrinagar.Models.ResultCompact
+@using CUSrinagar.Enums
+@{
+    ViewBag.Title = "Result:";
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action(" Index","Dashboard",new { area="CUSrinagarAdminPanel" })">Home</a>
+        </li>
+        <li>
+            <a href="@Url.Action("Result","Result",new { area="CUSrinagarAdminPanel" })" class="">Result List</a>
+        </li>
+        <li>
+            <a href="#" class="active">Edit</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+
+@section PageSpecificStyle{
+
+}
+@if (Model != null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <h4 class="">
+                Create/Edit Result
+            </h4>
+            <hr class="no-margin-top" />
+            @using (Html.BeginForm("Edit", "Result", FormMethod.Post, new { @class = "jsMainForm form-horizontal", @id = "SaveEditSingleStudentResult" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.AcceptCollege_ID)
+                @Html.HiddenFor(model => model.Batch)
+                @*@Html.HiddenFor(model => model.CombinationSubjects)*@
+                @Html.HiddenFor(model => model.Combination_ID)
+                @Html.HiddenFor(model => model.CourseFullName)
+                @Html.HiddenFor(model => model.CUSRegistrationNo)
+                @Html.HiddenFor(model => model.AcceptCollege_ID)
+                @Html.HiddenFor(model => model.ExamRollNumber)
+                @Html.HiddenFor(model => model.Semester)
+                @Html.HiddenFor(model => model.Student_ID)
+                @Html.HiddenFor(model => model.PrintProgramme)
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group" id="jsCourseField">
+                            <label for="name" class="col-sm-3">Batch</label>
+                            <div class="col-sm-8">@Model.Batch</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">Program</label>
+                            <div class="col-sm-8">@Model.PrintProgramme</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">Semester</label>
+                            <div class="col-sm-8">@Model.Semester</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">Course</label>
+                            <div class="col-sm-8">@Model.CourseFullName</div>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">Registration No</label>
+                            <div class="col-sm-8">@Model.CUSRegistrationNo</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">Full Name</label>
+                            <div class="col-sm-8">@Model.FullName</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">Fathers Name</label>
+                            <div class="col-sm-8">@Model.FathersName</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">Exam Roll No.</label>
+                            <div class="col-sm-8">@Model.ExamRollNumber</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3">Class Roll No.</label>
+                            <div class="col-sm-8">@Model.ClassRollNo</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <!--External section-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h3>Marks</h3>
+                        <hr class="no-margin-top" />
+                    </div>
+                    <div class="col-sm-12">
+                        <table class="table table-hover table-bordered ">
+                            <thead>
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>Subject</th>
+
+                                    <th title="Internal Marks">Int Marks</th>
+                                    <th title="Internal Attedance/Assessment Marks">Int.A</th>
+                                    <th title="External Attendance/Assessment Marks">Ext.A</th>
+                                    <th title="External Marks">Ext Marks</th>
+                                    <th title="set result notification" class="wd-200">Result Notification</th>
+                                    <th title="set examination form id">ExamForm ID</th>
+                                    <th>Ext Sub</th>
+                                    <th>Int Sub</th>
+                                    <th title="Total Internal marks">T Int</th>
+                                    <th title="Total External marks">T Ext</th>
+                                    <th>Cancel Result</th>
+                                </tr>
+                            </thead>
+                            <tbody class="center">
+                                @if (Model != null)
+                                {
+                                    if (Model.SubjectResults != null)
+                                    {
+                                        var index = 0;
+                                        foreach (var item in Model.SubjectResults.OrderBy(x => x.SubjectFullName).ThenBy(x => CUSrinagar.DataManagers.GeneralFunctions.GetSubjectTypeCode(x.SubjectType)))
+                                        {
+                                            if (!item.HasResult) { continue; }
+                                            <tr class="jsSubjectResult">
+                                                <td class="js-sno">
+                                                    <span>@(index + 1)</span>
+                                                    @Html.Hidden("SubjectResults[" + index + "]._ID", item._ID, new { @class = "js_ID" })
+                                                    @Html.Hidden("SubjectResults[" + index + "].Subject_ID", item.Subject_ID)
+                                                    @Html.Hidden("SubjectResults[" + index + "].NotificationDate", item.NotificationDate)
+                                                    @Html.Hidden("SubjectResults[" + index + "].NotificationNo", item.NotificationNo)
+                                                    @Html.Hidden("SubjectResults[" + index + "].ParentNotification_ID", item.ParentNotification_ID)
+                                                    @Html.Hidden("SubjectResults[" + index + "].Programme", item.Programme)
+                                                    @Html.Hidden("SubjectResults[" + index + "].SubjectType", item.SubjectType)
+                                                    @Html.Hidden("SubjectResults[" + index + "].SubjectFullName", item.SubjectFullName)
+                                                    @Html.Hidden("SubjectResults[" + index + "].HasResult", item.HasResult)
+                                                    @Html.Hidden("SubjectResults[" + index + "].HasExaminationFee", item.HasExaminationFee)
+                                                    @Html.Hidden("SubjectResults[" + index + "].ResultSubjectNotification_ID", item.ResultNotification_ID)
+                                                    @Html.Hidden("SubjectResults[" + index + "].ResultSubjectExamFormID", item.ExamForm_ID)
+                                                    @Html.Hidden("SubjectResults[" + index + "].RecordState", item._ID == Guid.Empty ? CUSrinagar.Enums.RecordState.New : CUSrinagar.Enums.RecordState.Old)
+                                                </td>
+                                                <td>@item.SubjectFullName</td>
+                                                <td>
+                                                    @Html.TextBox("SubjectResults[" + index + "].InternalMarks", item.InternalMarks, new { @class = "form-control" })
+                                                </td>
+                                                <td>
+                                                    @Html.TextBox("SubjectResults[" + index + "].InternalAttendance_AssessmentMarks", item.InternalAttendance_AssessmentMarks, new { @class = "form-control" })
+                                                </td>
+                                                <td>
+                                                    @Html.TextBox("SubjectResults[" + index + "].ExternalAttendance_AssessmentMarks", item.ExternalAttendance_AssessmentMarks, new { @class = "form-control" })
+                                                </td>
+                                                <td>
+                                                    @Html.TextBox("SubjectResults[" + index + "].ExternalMarks", item.ExternalMarks, new { @class = "form-control" })
+                                                </td>
+                                                <td>
+                                                    <div class="form-group col-sm-12">
+                                                        <div class="col-sm-6">
+                                                            @Html.TextBox("SubjectResults[" + index + "].ResultNotification_ID", item.ResultNotification_ID, new { @class = "form-control " })
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="checkbox">
+                                                                <label class="block">
+                                                                    <input type="checkbox" class="ace input-lg jsSetResultNotification" Checked='checked' />
+                                                                    <span class="lbl bigger"> Same</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group col-sm-12 ">
+                                                        <div class="col-sm-6">
+                                                            @Html.TextBox("SubjectResults[" + index + "].ExamForm_ID", item.ExamForm_ID, new { @class = "form-control" })
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="checkbox">
+                                                                <label class="block">
+                                                                    <input type="checkbox" class="ace input-lg jsSetExamForm_ID" Checked='checked' />
+                                                                    <span class="lbl bigger"> Same</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td title="External submitted">
+                                                    <div class="form-group">
+                                                        <div class="checkbox">
+                                                            <label class="block">
+                                                                <input type="checkbox" name="ResultCompact.SubjectResults[@index].ExternalSubmitted" class="ace input-lg" @(item.ExternalSubmitted ? "Checked=checked" : "" ) />
+                                                                <span class="lbl bigger"></span>
+                                                                @Html.Hidden("SubjectResults[" + index + "].ExternalSubmitted", item.ExternalSubmitted)
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td title="Internal submitted">
+                                                    <div class="form-group">
+                                                        <div class="checkbox">
+                                                            <label class="block">
+                                                                <input type="checkbox" name="ResultCompact.SubjectResults[@index].InternalSubmitted" class="ace input-lg" @(item.InternalSubmitted ? "Checked=checked" : "" ) />
+                                                                <span class="lbl bigger"></span>
+                                                                @Html.Hidden("SubjectResults[" + index + "].InternalSubmitted", item.InternalSubmitted)
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td title="Total Internal marks">
+                                                    @if (item.InternalStatus == ResultStatus.NotApplicable)
+                                                    {
+                                                        <span title="Not applicable">N.A</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        if (item.TotalInternalMarksObtained.HasValue)
+                                                        {
+                                                            <span>@item.TotalInternalMarksObtained</span>
+                                                            <sup>@item.InternalStatus.ToString()</sup>
+                                                        }
+                                                        else
+                                                        {
+                                                            <sup>@item.InternalStatus.ToString()</sup>
+                                                        }
+                                                    }
+                                                </td>
+                                                <td title="total external marks">
+                                                    @if (item.HasExternalComponent)
+                                                    {
+                                                        <span>@item.TotalExternalMarksObtained</span>
+                                                        <sup>@item.ExternalStatus.ToString()</sup>
+
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <span title="Not applicable">-</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (item._ID != null & item.ExamForm_ID != null)
+                                                    {
+                                                        if (item.IsCancelled) 
+                                                        {<span>Already Cancelled</span> }
+                                                        else
+                                                        {<a href="/CUSrinagarAdminPanel/Result/ResultAnomaly?Subject_Id=@item.Subject_ID&&Student_ID=@item.Student_ID&&ExamForm_ID=@item.ExamForm_ID&&ResultNotification_ID=@item.ResultNotification_ID&&_ID=@item._ID&&PrintProgramme=@Model.PrintProgramme&&Semester=@item.Semester" id="CancelResult"><span class="glyphicon glyphicon-remove red"></span></a>}
+                                                    }
+                                                </td>
+                                            </tr>
+                                            index++;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="12">Result not found</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class=" pull-text-right pull-right">
+                        <button type="submit" class="btn btn-success" value="True" name="SaveAndCreateNew">Save & Update</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <h1>Student Not found</h1>
+}
+
+@section PageSpecificJS{
+    <script src="~/Content/ThemeAdmin/Content/Scripts/CustomScripts/admin-result.js"></script>
+}
+
+
+

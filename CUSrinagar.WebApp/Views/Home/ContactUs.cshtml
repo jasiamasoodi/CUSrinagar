@@ -1,0 +1,61 @@
+﻿@model CUSrinagar.WebApp.Controllers.Contact
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <div class="">
+            <article class="contact-form col-md-8 col-sm-7  page-row">
+                <div class="page-heading clearfix">
+                    <h1 class="heading-title pull-left">Contact</h1>
+                </div>
+                @if (ViewBag.Message != null && ViewBag.Message != "")
+                {
+                    <div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong>@ViewBag.Message</strong></div>
+
+                }
+                @using (Html.BeginForm("ContactUsSave", "Home", FormMethod.Post, new { area = string.Empty, enctype = "multipart/form-data", @name = "validation-form", @id = "contact-form", @class = "form-horizontal", @role = "form" }))
+                {
+                    <div class="form-group name">
+                        <label for="name">Name</label>
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @placeholder = "Enter your name" })
+
+                    </div><!--//form-group-->
+                    <div class="form-group email">
+                        <label for="email">Email<span class="required">*</span></label>
+                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @placeholder = "Enter your email" })
+                        <div class="col-sm-3 ">
+                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "label label-sm label-danger arrowed-in-right " })
+
+                        </div>
+                    </div><!--//form-group-->
+                    <div class="form-group phone">
+                        <label for="phone">Phone</label>
+                        @Html.TextBoxFor(model => model.Phone, new { @class = "form-control", @placeholder = "Enter your contact number" })
+                    </div><!--//form-group-->
+                    <div class="form-group message">
+                        <label for="message">Message<span class="required">*</span></label>
+                        @Html.TextAreaFor(model => model.Message, 6, 50, new { @class = "form-control", @placeholder = "Enter your message here..." })
+                        <div class="col-sm-3 ">
+                            @Html.ValidationMessageFor(model => model.Message, "", new { @class = "label label-sm label-danger arrowed-in-right " })
+
+                        </div>
+                    </div><!--//form-group-->
+                    <button id="submitContact" type="submit" class="btn btn-theme">Send message</button>
+                }
+            </article><!--//contact-form-->
+            <aside class="page-sidebar  col-md-3 col-md-offset-1 col-sm-4 col-sm-offset-1">
+                @{ Html.RenderPartial("~/Views/Shared/_CUWebAppRightNavigation.cshtml");}
+            </aside><!--//page-sidebar-->
+        </div><!--//page-row-->
+
+    </div><!--//page-content-->
+</div><!--//page-wrapper-->
+<script>
+    var _CurrentSection = "Contact";
+
+</script>
+@section PageSpecificJS{
+    <script>
+        $(document).on('submit', '#contact-form', function (e) {
+            showLoader();
+            $("#submitContact").attr("disabled", "disabled");
+        });</script>}

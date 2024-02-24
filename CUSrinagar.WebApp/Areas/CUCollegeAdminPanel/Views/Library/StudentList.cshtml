@@ -1,0 +1,34 @@
+﻿@model  List<CUSrinagar.Models.LibraryForm>
+@{
+    Layout = null;
+}
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th data-property="FullName">Student Name</th>
+            <th data-property="FathersName">Parentage</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var row in Model)
+            {
+                <tr>
+                    <td>
+                        @row.FullName
+                    </td>
+                    <td>
+                        @row.FathersName
+                    </td>
+                   </tr>
+            }
+        }
+        else
+        {
+            <tr><td colspan="2"> No Record Found </td></tr>
+        }
+    </tbody>
+</table>

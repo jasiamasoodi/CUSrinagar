@@ -1,0 +1,82 @@
+﻿
+@model  List<CUSrinagar.Models.SalaryBillArchive>
+@{
+    ViewBag.Title = "CUS :: Salary Bill";
+    Layout = null;
+}
+@if (TempData["response"] != null)
+{
+    @Html.Raw(TempData["response"])
+}
+@if (Model != null)
+{
+    @*<div class="col-sm-12 align-right no-print" style="padding:10px">
+            <input class="btn btn-primary" type="button" onclick="window.print();" value="Print Salary" />
+        </div>*@
+    if (ViewBag.Month != null)
+    {<h4 class="align-center">
+            @{string month = new DateTime(2019, Convert.ToInt32(ViewBag.Month), 1).ToString("MMM"); }
+            Salary Bill for Month of @month - @ViewBag.Year
+        </h4>}
+
+    <table class="table table-hover table-bordered js-table">
+        <thead>
+            <tr>
+                <th>Employee Name</th>
+                <th>Pay Scale</th>
+                <th>Basic Pay</th>
+                <th>D.A</th>
+                <th>H.R.A</th>
+                <th>M.A</th>
+                <th>CCA</th>
+                <th>SPL.Pay</th>
+                <th>Charge Allow</th>
+                <th>Gross Amount</th>
+                <th>GPF.Sub</th>
+                <th>GPF.Ref</th>
+                <th>Group Ins</th>
+                <th>SLI-I</th>
+                <th>SLI-II</th>
+                <th>I.Tax</th>
+                <th>NPS Share</th>
+                <th>recovery on a/c of excess</th>
+                <th>Total Ded.</th>
+                <th>Net Pay</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (CUSrinagar.Models.SalaryBill bill in Model)
+            {
+                <tr>
+                    <td>@bill.EmployeeFullName</td>
+                    <td>@bill.PayScale</td>
+                    <td>@bill.BasicPay</td>
+                    <td>@bill.DA</td>
+                    <td>@bill.HRA</td>
+                    <td>@bill.MA</td>
+                    <td>@bill.CCA</td>
+                    <td>@bill.SPL_PAY</td>
+                    <td>@bill.ChargeAllow</td>
+                    <td>@bill.GrossAmount</td>
+                    <td>@bill.GPF_Sub</td>
+                    <td>@bill.GPF_ref</td>
+                    <td>@bill.GroupIns</td>
+                    <td>@bill.SLI_I</td>
+                    <td>@bill.SLI_II</td>
+                    <td>@bill.I_Tax</td>
+                    <td>@bill.NPSShare</td>
+                    <td>@bill.RecoveryExcess</td>
+                    <td>@bill.TotalDeduc</td>
+                    <td>@bill.NetPay</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<style>
+    @@media print {
+        .no-print, .no-print * {
+            display: none !important;
+        }
+    }
+</style>

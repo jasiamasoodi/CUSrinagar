@@ -1,0 +1,329 @@
+﻿@using CUSrinagar.Models
+@using CUSrinagar.Extensions
+@model CUSrinagar.Models.AssignSemesterCenters
+@{
+    ViewBag.Title = "Assign Semester Centers in Bulk - CUS";
+}
+<div id="Jspleasewait" style="position:fixed;background-color:rgba(0, 0, 0, 0.30);left:0;top:0;z-index:200;width:100%;height:100%">
+    <p style="font-size:30px;font-weight:bold;color:red;margin-top:12%;text-align:center">
+        Process may take several minutes to complete. Please be patient. <br />Working...
+    </p>
+</div>
+<div class="page-wrapper pager-table-text">
+    <div class="page-header">
+        <div style="padding-bottom: 30px;">
+            @if (TempData["error"] != null)
+            {
+                @Html.Raw(TempData["error"])
+            }
+            <div id="successMsg"></div>
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <h1 class="heading-title pull-left">
+                        Assign Semester Centers in Bulk
+                    </h1>
+                </div>
+                <div class="col-sm-6 align-right">
+                    <a type="button" href="#ModelArchiveOldCenters" data-toggle="modal" class="btn btn-sm btn-danger"><i class="fa fa-archive"></i>&nbsp;Archive Old Centers</a>
+                    <a type="button" href="#ModelRelocateCenter" data-toggle="modal" class="btn btn-sm btn-purple"><i class="fa fa-home"></i>&nbsp;Relocate Center</a>
+                    <a type="button" href="/CUSrinagarAdminPanel/SemesterCenters/Centers/" class="btn btn-sm btn-success"><i class="fa fa-arrow-left"></i>&nbsp;Back to Semester Centers</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            &nbsp; Assign Semester Centers in Bulk
+                        </h3>
+                    </div>
+                    <input type="hidden" name="AssignmentOrderIndex" value="0" />
+                    @using (Ajax.BeginForm("AssignCentersInBulk", "SemesterCenters", new
+                    {
+                        area = "CUSrinagarAdminPanel",
+                        id = "frmAssignCentersInBulk"
+                    }, new AjaxOptions
+                    {
+                        HttpMethod = "POST",
+                        UpdateTargetId = "successMsg",
+                        OnComplete = "clearOnComplete();",
+                        OnBegin = "onBegins();",
+                        Confirm = "Are you sure you want to proceed",
+                    }))
+                    {
+                        <div class="panel-body">
+                            <div class="col-sm-12 search-box">
+                                <div class="col-sm-2 lbl no-padding-right">
+                                    @Html.LabelFor(m => m.StudentesOfCollege_ID)
+                                    <span class="required">
+                                        *
+                                        @Html.ValidationMessageFor(m => m.StudentesOfCollege_ID)
+                                    </span>
+                                    <div id="Course">
+                                        @Html.DropDownListFor(m => m.StudentesOfCollege_ID, (IEnumerable<SelectListItem>)ViewBag.CenterLocation, string.Empty, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 lbl no-padding-right">
+                                    @Html.LabelFor(m => m.ARGExamForm_ID)
+                                    <span class="required">
+                                        *
+                                        @Html.ValidationMessageFor(m => m.ARGExamForm_ID)
+                                    </span>
+                                    <div id="Course">
+                                        @Html.DropDownListFor(m => m.ARGExamForm_ID, (IEnumerable<SelectListItem>)ViewBag.ExamFormsSettingsDDL, string.Empty, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 lbl no-padding-right">
+                                    @Html.LabelFor(m => m.SemesterCenterCategory)
+                                    <span class="required">
+                                        *
+                                        @Html.ValidationMessageFor(m => m.SemesterCenterCategory)
+                                    </span>
+                                    <div id="Course">
+                                        @Html.DropDownListFor(m => m.SemesterCenterCategory, (IEnumerable<SelectListItem>)ViewBag.SemesterCenterCategory, string.Empty, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 lbl no-padding-right">
+                                    @Html.LabelFor(m => m.Course_ID)
+                                    <span class="required">
+                                        *
+                                        @Html.ValidationMessageFor(m => m.Course_ID)
+                                    </span>
+                                    <span class="CourseID">
+                                        @Html.DropDownListFor(m => m.Course_ID, (IEnumerable<SelectListItem>)ViewBag.Courses, string.Empty, new { @class = "form-control" })
+                                    </span>
+                                </div>
+                                <div class="col-sm-4 lbl no-padding-right">
+                                    @Html.LabelFor(m => m.NoOfStudentsToBeAssignedPerCenter)
+                                    <span class="required">
+                                        *
+                                        @Html.ValidationMessageFor(m => m.NoOfStudentsToBeAssignedPerCenter)
+                                    </span>
+                                    @Html.TextBoxFor(m => m.NoOfStudentsToBeAssignedPerCenter, new { @type = "number", @class = "form-control", min = "1", max = "9999" })
+                                </div>
+                                <div class="col-sm-2 lbl no-padding-right">
+                                    @Html.LabelFor(m => m.CenterLocationCollege_ID)
+                                    <span class="required">
+                                        *
+                                        @Html.ValidationMessageFor(m => m.CenterLocationCollege_ID)
+                                    </span>
+                                    @Html.DropDownListFor(m => m.CenterLocationCollege_ID, (IEnumerable<SelectListItem>)ViewBag.CenterLocation, string.Empty, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+                        @*------------- Centers Available ------------*@
+                        <div style="max-height:50%; overflow:auto !important" id="JSDiplayContent">
+                            <table class="table-bordered table">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Center Number / Code</th>
+                                        <th>Assignment Order</th>
+                                        <th>Has Already Some Students</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th colspan="4" class="text-center">No centers are available</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-sm-12 text-center" style="padding-top: 17px;">
+                            <button type="submit" class="btn btn-primary JSBtnAssignCentersInBulk"><i class="fa fa-check"></i>&nbsp;Proceed</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*--------- Modal RelocateCenter -----------------------*@
+<div id="ModelRelocateCenter" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter no-margin"><i class="fa fa-home"></i>&nbsp;Relocate Center</h3>
+            </div>
+
+            <div class="modal-body JSRelocateCenter">
+                <div class="responseMsg"></div>
+                @using (Html.BeginForm("#", "#", FormMethod.Post, new { id = "frmRelocateCenter" }))
+                {
+                    @Html.AntiForgeryToken();
+
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <label class=" control-label no-padding-right">
+                                @Html.LabelFor(sc => sc.RelocateCenters.FromCenter_ID) <span class="red">*</span>
+                            </label>
+                            <span class="red">@Html.ValidationMessageFor(sc => sc.RelocateCenters.FromCenter_ID)</span>
+                            <span class="ToCenterID">
+                                @Html.DropDownListFor(sc => sc.RelocateCenters.FromCenter_ID, (IEnumerable<SelectListItem>)ViewBag.FromCCenterList, string.Empty, new { @class = "form-control" })
+                            </span>
+                        </div>
+                        <br />
+                        <br />
+                        <div class="col-sm-12">
+                            <label class=" control-label no-padding-right">
+                                @Html.LabelFor(sc => sc.RelocateCenters.FromCourse_ID) <span class="red">*</span>
+                            </label>
+                            <span class="red">@Html.ValidationMessageFor(sc => sc.RelocateCenters.FromCourse_ID)</span>
+                            <span class="FromCourseID">
+                                @Html.DropDownListFor(sc => sc.RelocateCenters.FromCourse_ID, (IEnumerable<SelectListItem>)ViewBag.CCourses, string.Empty, new { @class = "form-control" })
+                            </span>
+                        </div>
+                        <br />
+                        <br />
+                        <div class="col-sm-12">
+                            <label class=" control-label no-padding-right">
+                                @Html.LabelFor(sc => sc.RelocateCenters.ToCenter_ID) <span class="red">*</span>
+                            </label>
+                            <span class="red">@Html.ValidationMessageFor(sc => sc.RelocateCenters.ToCenter_ID)</span>
+                            <span class="ToCenterID">
+                                @Html.DropDownListFor(sc => sc.RelocateCenters.ToCenter_ID, (IEnumerable<SelectListItem>)ViewBag.ToCCenterList, string.Empty, new { @class = "form-control" })
+                            </span>
+                        </div>
+                        <br />
+                        <br />
+                        <br />
+                        <div class="col-sm-12"></div>
+                        <br />
+                        <br />
+                        <div class="col-sm-12 text-center">
+                            <button type="reset" class="btn btn-sm btn-purple">
+                                <i class="ace-icon fa fa-times"></i>&nbsp;Reset
+                            </button>
+                            <button type="button" class="btn btn-sm btn-success JSBtnRelocateCenter">
+                                <i class="fa fa-save"></i>&nbsp;Proceed
+                            </button>
+                        </div>
+                        <br />
+                    </div>
+                }
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times"></i>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*--------- Modal Archive Old Centers -----------------------*@
+<div id="ModelArchiveOldCenters" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter no-margin"><i class="fa fa-archive"></i>&nbsp;Archive Old Centers</h3>
+            </div>
+
+            <div class="modal-body JSArchiveCenters">
+                <div class="responseMsg2"></div>
+                @using (Html.BeginForm("#", "#", FormMethod.Post, new { id = "frmArchiveCenters" }))
+                {
+                    @Html.AntiForgeryToken();
+
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <label class=" control-label no-padding-right">
+                                @Html.LabelFor(sc => sc.ArchiveCenters.Semester) <span class="red">*</span>
+                            </label>
+                            <span class="red">@Html.ValidationMessageFor(sc => sc.ArchiveCenters.Semester)</span>
+                            <span class="ToCenterID">
+                                @Html.TextBoxFor(sc => sc.ArchiveCenters.Semester, new { @type = "number", @max = "20", @min = "1", @class = "form-control" })
+                            </span>
+                        </div>
+                        <br />
+                        <br />
+                        <div class="col-sm-12">
+                            <label class=" control-label no-padding-right">
+                                @Html.LabelFor(sc => sc.ArchiveCenters.Course_ID) <span class="red">*</span>
+                            </label>
+                            <span class="red">@Html.ValidationMessageFor(sc => sc.ArchiveCenters.Course_ID)</span>
+                            <span class="FromCourseID">
+                                @Html.DropDownListFor(sc => sc.ArchiveCenters.Course_ID, (IEnumerable<SelectListItem>)ViewBag.CCourses, string.Empty, new { @class = "form-control" })
+                            </span>
+                        </div>
+                        <br />
+                        <br />
+                        <br />
+                        <div class="col-sm-12"></div>
+                        <br />
+                        <br />
+                        <div class="col-sm-12 text-center">
+                            <button type="reset" class="btn btn-sm btn-purple">
+                                <i class="ace-icon fa fa-times"></i>&nbsp;Reset
+                            </button>
+                            <button type="button" class="btn btn-sm btn-success JSBtnArchiveCenter">
+                                <i class="fa fa-save"></i>&nbsp;Archive Now
+                            </button>
+                        </div>
+                        <br />
+                    </div>
+                }
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times"></i>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJS{
+    @Scripts.Render("~/bundles/Libraries/jqueryval");
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSSemesterCenters/JSAssignCentersBulk.js")"></script>
+
+    <script src="@Url.Content("~/Scripts/JSChosen.js")"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script type="text/javascript">
+        function clearOnComplete() {
+            try {
+                $("input[name='AssignmentOrderIndex']").val('0')
+                $('body').find('.AssignCentersAs').val('');
+                $('body').find('[id$="__HasToBeAssigned"]:checked').each(function (index) {
+                    $(this).prop("checked", false);
+                });
+            } catch { }
+
+            $("#Jspleasewait").addClass("hidden");
+        }
+        function onBegins() {
+            $('#successMsg').empty();
+            $("#Jspleasewait").removeClass("hidden");
+        }
+    </script>
+}
+
+@section PageSpecificStyle{
+    <style>
+        .filter-btn a {
+            color: white !important
+        }
+
+        .required {
+            color: red !important;
+        }
+    </style>
+}
+
+

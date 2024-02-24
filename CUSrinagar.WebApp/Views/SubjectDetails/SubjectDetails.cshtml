@@ -1,0 +1,48 @@
+﻿@model  List<CUSrinagar.Models.SubjectDetails>
+@{
+    Layout = null;
+}
+
+            <table class="table table-hover table-bordered js-table" style="margin-left:-20px;">
+                <thead style="white-space:normal;">
+                    <tr>
+                        @*<th data-property="FullName">CourseCode</th>*@
+                        <th data-property="UserName" width="20%">Course Name</th>
+                        <th data-property="UserName" width="7%">Semester</th>
+                        <th data-property="SubjectName" width="20%">Subject</th>
+                        <th data-property="FullName">Subject Type</th>
+                        <th data-property="UserName">Theory Credit</th>
+                        <th data-property="UserName">Practical Credit</th>
+                        <th data-property="SubjectName">Theory Max Marks</th>
+                        <th data-property="FullName">Theory Min Pass Marks</th>
+                        <th data-property="UserName">Practical Max Marks</th>
+                        <th data-property="UserName">Practical Min Pass Marks</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model != null)
+            {
+                foreach (var row in Model)
+                {
+                            <tr>
+                                @*<td>@row.CourseCode</td>*@
+                                <td>@row.CoursefullName</td>
+                                <td>@row.SemesterName</td>
+                                <td>@row.SubjectFullName</td>                                
+                                <td>@row.subjectType</td>
+                                <td>@row.TheoryAttendance</td>
+                                <td>@row.PracticalAttendence</td>
+                                <td>@row.TheoryMaxMarks</td>
+                                <td> @row.TheoryMinPassMarks</td>
+                                <td>@row.PracticalMaxMarks</td>
+                                <td> @row.PracticalMinPassMarks</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="2"> No Record Found </td></tr>
+                    }
+                </tbody>
+            </table>

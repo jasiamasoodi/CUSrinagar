@@ -1,0 +1,457 @@
+﻿@model CUSrinagar.Models.NEPPersonalInfo
+@using Nut
+@using CUSrinagar.Extensions
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@Model.PersonalInformation.StudentFormNo - CUSrinagar</title>
+    <style type="text/css">
+        .btn-theme {
+            background: #011c27;
+            border: 1px solid #84aac9;
+            color: #fff;
+        }
+
+            .btn-theme:hover {
+                background: #545677;
+                border: 1px solid #84aac9;
+                color: #fff;
+            }
+
+        .QRCode {
+            width: 95px;
+            float: right;
+            margin-left: 0;
+            margin-right: 10px;
+        }
+
+        @@media print {
+            body {
+                margin-top: -10px !important;
+                padding-top: 0 !important;
+            }
+
+            @@page {
+                size: portrait;
+            }
+
+            .QRCode {
+                width: 95px;
+                float: right;
+                margin-right: 10px;
+                margin-left: 0;
+            }
+
+            .noneOnPrint {
+                display: none;
+            }
+
+            .dontbreakInside {
+                page-break-inside: avoid;
+            }
+
+            .breakpagehere {
+                page-break-after: always !important;
+            }
+
+            .blankspace {
+                height: 350px !important;
+            }
+        }
+
+        .breakpagehere {
+            height: 10px;
+            background-color: grey !important;
+        }
+
+        table tr td {
+            padding: 10px;
+        }
+
+        table tr td, table tr th {
+            max-width: 150px;
+            word-wrap: break-word !important;
+        }
+
+        table, table tr, table tr td, table tr th {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        div {
+            background-color: #fff;
+        }
+
+        .center {
+            text-align: center !important;
+        }
+
+        .pull-right {
+            float: right !important;
+        }
+
+        .pull-left {
+            float: left !important;
+        }
+    </style>
+</head>
+<body style="background-color:grey">
+    @{
+        var base64 = Convert.ToBase64String(Model.PersonalInformation.QRCode);
+        var QRImgSrc = $"data:image/png;base64,{base64}";
+        string courseNames = "";
+    }
+    <div style="margin:0 auto;width:909px;padding:10px 10px">
+        <img src="@QRImgSrc" class="QRCode" />
+        <div class="center">
+            <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" style="width:90px;height:68px;" />
+            <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+            <br />
+            <strong style="font-size:20px;">
+                Registration Form For Admission in<br /> @ViewBag.courseApplied -  @Model.PersonalInformation.Batch
+            </strong>
+            @if (Model?.PersonalInformation?.CoursesApplied?.Any(x => x.SelfFinancedPayment_ID != null) ?? false)
+            {
+                <br /><strong style="font-size:20px;">Under Self-Finance Quota</strong>
+            }
+        </div>
+        <table>
+            @if (!string.IsNullOrWhiteSpace(Model.PersonalInformation.CUETApplicationNo))
+            {
+                <tr>
+                    <td colspan="3"><strong>CUET(PG) Application No.: @Model.PersonalInformation.CUETApplicationNo</strong></td>
+                    <td colspan="2"><strong>CUET(PG) Entrance Roll No.: @Model.PersonalInformation.CUETEntranceRollNo</strong></td>
+                </tr>
+            }
+            <tr>
+                <td colspan="2">
+                    @{var prov = (Model.PersonalInformation.IsProvisional ?? false) ? "Yes" : "No"; }
+                    <Text>Is provisional admission : @prov</Text>
+                </td>
+                <th>Batch : @Model.PersonalInformation.Batch</th>
+                <td colspan="3">
+                    <b style="float:right !important;">Form No. : @Model.PersonalInformation.StudentFormNo</b>
+                </td>
+            </tr>
+            <tr>
+                @if ((Model.PersonalInformation.EntranceRollNo ?? 0) > 2000)
+                {
+                    <td colspan="2">Board Registration No.: @Model.PersonalInformation.BoardRegistrationNo</td>
+                    <th colspan="2">Entrance Roll No.: @Model.PersonalInformation.EntranceRollNo</th>
+                }
+                else
+                {
+                    <td colspan="4">Board Registration No.: @Model.PersonalInformation.BoardRegistrationNo</td>
+                }
+
+                <td rowspan="5" class="center">
+                    @if (Model.PersonalInformation.StudentFormNo.ToLower() == "preview")
+                    {
+                        base64 = Convert.ToBase64String(ViewBag.BytePhotograph);
+                        var imgSrc = $"data:{ViewBag.PhotoType};base64,{base64}";
+                        <img class="img-responsive" src="@imgSrc" width="150" />
+                    }
+                    else
+                    {
+                        <img class="img-responsive" src="@Url.Content(Model.PersonalInformation.Photograph)" width="150" />
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td>@Model.PersonalInformation.FullName</td>
+                <td>Gender</td>
+                <td>@Model.PersonalInformation.Gender</td>
+            </tr>
+            <tr>
+                <td>Father's Name</td>
+                <td>@Model.PersonalInformation.FathersName</td>
+                <td>Religion</td>
+                <td>@Model.PersonalInformation.Religion</td>
+
+            </tr>
+            <tr>
+                <td>Mother's Name</td>
+                <td>@Model.PersonalInformation.MothersName</td>
+                <td>Mobile</td>
+                <td>@Model.PersonalInformation.StudentAddress.Mobile</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>@Model.PersonalInformation.StudentAddress.Email</td>
+
+                <td>Category</td>
+                <td>@Model.PersonalInformation.Category</td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td colspan="2">@Model.PersonalInformation.StudentAddress.PermanentAddress</td>
+                <td>DOB</td>
+                <td><b>@Model.PersonalInformation.DOB.ToString("dd-MM-yyyy")</b> </td>
+            </tr>
+            <tr>
+                <td>Pincode</td>
+                <td>@Model.PersonalInformation.StudentAddress.PinCode</td>
+                <td>Block</td>
+                <td colspan="2">@Model.PersonalInformation.StudentAddress.Block</td>
+            </tr>
+            <tr>
+                <td>Tehsil</td>
+                <td>@Model.PersonalInformation.StudentAddress.Tehsil</td>
+                <td>District</td>
+                <td colspan="2">@Model.PersonalInformation.StudentAddress.District</td>
+            </tr>
+            <tr>
+                <td>Assembly Constituency</td>
+                <td colspan="2">@Model.PersonalInformation.StudentAddress.AssemblyConstituency</td>
+                <td>Parliamentary Constituency</td>
+                <td>@Model.PersonalInformation.StudentAddress.ParliamentaryConstituency</td>
+            </tr>
+            <tr>
+                <td>State</td>
+                <td colspan="4">@Model.PersonalInformation.StudentAddress.State</td>
+            </tr>
+            @if (!string.IsNullOrWhiteSpace(Model.PersonalInformation.PreviousUniversityRegnNo))
+            {
+                <tr>
+                    <td><strong>Previous University Regn. No.</strong></td>
+                    <td colspan="4">
+                        <strong>
+                            @Model.PersonalInformation.PreviousUniversityRegnNo
+                        </strong>
+                    </td>
+                </tr>
+            }
+        </table>
+
+        @if (Model.PersonalInformation.AcademicDetails.IsNotNullOrEmpty())
+        {
+            <h3>Academic Details</h3>
+            <table>
+                <tr>
+                    <th>Exam Name</th>
+                    <th>Stream</th>
+                    <th>Session</th>
+                    <th>Year</th>
+                    <th>Roll No</th>
+                    <th>Max Marks/ Max CGPA</th>
+                    <th>Marks Obt/ CGPA Obt</th>
+                    <th>%age</th>
+                    @if (Model.PersonalInformation.AcademicDetails.Any(x => x.OverAllCGPA.HasValue))
+                    {
+                        <th>OverAllCGPA</th>
+                    }
+                </tr>
+                @if (Model.PersonalInformation.AcademicDetails != null)
+                {
+                    foreach (var item in Model.PersonalInformation.AcademicDetails)
+                    {
+                        <tr>
+                            <td rowspan="2">@item.ExamName</td>
+                            <td>@item.Stream</td>
+                            <td>@item.Session</td>
+                            <td>@item.Year</td>
+                            <td>@item.RollNo</td>
+                            <td>@item.MaxMarks</td>
+                            <td>@item.MarksObt</td>
+                            <td>@item.Percentage</td>
+                            @if (item.OverAllCGPA.HasValue)
+                            {
+                                <td>@item.OverAllCGPA</td>
+                            }
+                        </tr>
+                        <tr>
+                            @if (Model.PersonalInformation.IsLateralEntry)
+                            {
+                                <td colspan="4"><b>Subjects/Branch</b>: @item.Subjects</td>
+                            }
+                            else
+                            {
+                                <td colspan="4"><b>Subjects</b>: @item.Subjects</td>
+                            }
+                            <td colspan="4"><b>Exam Body</b>: @item.ExamBody</td>
+                        </tr>
+                    }
+                }
+            </table>
+        }
+
+        <div>
+            <h3>Programme &amp; Preferences Applied</h3>
+            <table>
+                <tr>
+                    <th style="width:60px">
+                        S.No.
+                    </th>
+                    <th>
+                        Programme
+                    </th>
+                    @if ((Model.PersonalInformation.CoursesApplied?.Any(x => x.Preference != 0) ?? false))
+                    {
+                        <th style="width:180px">
+                            Preference
+                        </th>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.PersonalInformation.CUETApplicationNo))
+                    {
+                        <th>
+                            CUET Points (In-Figure)
+                        </th>
+                    }
+                </tr>
+                <tbody>
+                    @{
+                        int sno = 1;
+                        List<CUSrinagar.Models.ARGCoursesApplied> aRGCoursesApplieds =
+                                                                    Model.PersonalInformation.CoursesApplied
+                                                                    ?.OrderBy(x => x.GroupName)
+                                                                    ?.OrderBy(x => x.Preference)?.ToList();
+
+                    }
+                    @foreach (var item in aRGCoursesApplieds)
+                    {
+                        <tr class="dontbreakInside">
+                            <td> @sno.</td>
+                            <td>
+                                <strong> @item.CourseName</strong>
+                            </td>
+                            @if ((Model.PersonalInformation.CoursesApplied?.Any(x => x.Preference != 0) ?? false))
+                            {
+                                <th>@item.Preference</th>
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(Model.PersonalInformation.CUETApplicationNo))
+                            {
+                                <th>
+                                    @item.SubjectEntrancePoints
+                                </th>
+                            }
+
+                            @{courseNames += item.CourseName + ", "; }
+                            @{sno++;}
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+
+            <br />
+        </div>
+
+        <div class="dontbreakInside" style="width:100% !important">
+            <h3>Declaration by the Applicant</h3>
+            <p style="width:100%;text-align:justify">
+                I hereby declare that all statements made in this application form are true and the copies of the testimonials
+                enclosed are genuine to the best of my knowledge, and in case the above information or my eligibility is found incorrect at any
+                stage my Admission & Application Form shall be rejected summarily without any notice in this regard..
+                <br /><br />
+                <span class="pull-left ">Place:<br />Dated :____/____/@DateTime.Now.Year</span>
+
+                <strong class="pull-right">
+                    <br />
+                    Signature of the Applicant
+                </strong>
+            </p>
+        </div>
+        <p class="breakpagehere"></p>
+
+        @if (Model.PersonalInformation.PaymentDetail.IsNotNullOrEmpty())
+        {
+            <div class="dontbreakInside">
+                <div class="center">
+                    <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                    <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" class="pull-left" style="width:90px;height:68px;" />
+                    <img src="@QRImgSrc" class="pull-right" />
+                    <h3 style="margin:0 !important;padding-bottom:0 !important">Student Copy</h3>
+                    <strong style="text-align:center">
+                        Registration Fee Receipt for Admission in @ViewBag.courseApplied -  @Model.PersonalInformation.Batch
+                        @if (Model?.PersonalInformation?.CoursesApplied?.Any(x => x.SelfFinancedPayment_ID != null) ?? false)
+                        {
+                            <br /><strong style="font-size:17px;">Under Self-Finance Quota</strong>
+                        }
+                        <br />
+                        Printed on : @DateTime.Now.ToLongDateString()
+                    </strong>
+                </div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td colspan="6" style="text-align:right"><strong>Form No. : @Model.PersonalInformation.StudentFormNo &nbsp;&nbsp;</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Name  </td>
+                            <td colspan="2">  @Model.PersonalInformation.FullName</td>
+                            <td>Father's Name  </td>
+                            <td colspan="2">  @Model.PersonalInformation.FathersName</td>
+                        </tr>
+                        <tr>
+                            <td>Contact No. </td>
+                            <td colspan="2">  @Model.PersonalInformation.StudentAddress.Mobile</td>
+                            <td>Email  </td>
+                            @if (!string.IsNullOrWhiteSpace(Model.PersonalInformation.StudentAddress.Email))
+                            {
+                                <td colspan="2">  @Model.PersonalInformation.StudentAddress.Email.ToLower()</td>
+                            }
+                            else
+                            {
+                                <td colspan="2">no email</td>
+                            }
+                        </tr>
+                        <tr style="border:0 !important;padding:0">
+                            <td style="border:0 !important;padding:0" colspan="6">
+                                <table style="width:100%;border:0">
+                                    <tr>
+                                        <td><strong>TxnReference No. </strong></td>
+                                        <th>Dated  </th>
+                                        <th><strong>Amount Paid</strong></th>
+                                    </tr>
+                                    @foreach (var item in Model.PersonalInformation.PaymentDetail)
+                                    {
+                                        <tr>
+                                            <td><strong> @item.TxnReferenceNo</strong></td>
+                                            <th>  @item.TxnDate.ToString("dd-MM-yyyy")</th>
+                                            <th> &#x20b9; @item.TxnAmount</th>
+                                        </tr>
+                                    }
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="center">
+                                <br />
+                                <br />
+                                Signature of Applicant
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        }
+        <br />
+        <br />
+        <br />
+        <br />
+    </div>
+
+    <div class="noneOnPrint" style="margin-left:-14px;height:40px;background-color:lightslategrey;width:100%;position:fixed;bottom:0;z-index:100;text-align:center;padding-top:10px">
+        @Html.ActionLink("Go Back", "index", "NEP", null, new { style = "color:white;" })
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <button style="height: 32px;" href="#" class="btn btn-theme" onclick="window.print();"><b>Download or Print</b></button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a style="height: 32px;color:white" href="https://www.wikihow.com/Save-a-Web-Page-as-a-PDF-in-Google-Chrome" target="_blank"><b>See How to Save as PDF</b></a>
+    </div>
+
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/Libraries/jquery-2.1.4.min.js")"></script>
+    <script src="@Url.Content("~/Content/ThemePublic/Libraries/disableBack.js")"></script>
+</body>
+</html>

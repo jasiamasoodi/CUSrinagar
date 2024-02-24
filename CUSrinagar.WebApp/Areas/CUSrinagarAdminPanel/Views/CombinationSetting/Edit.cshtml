@@ -1,0 +1,243 @@
+﻿@model CUSrinagar.Models.CombinationSetting
+@{
+    var subjectlist = (List<SelectListItem>)ViewBag.SubjetList;
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area= "CUSrinagarAdminPanel" })">Home</a>
+        </li>
+        <li>
+            <a href="@Url.Action("CombinationSetting","CombinationSetting",new { area= "CUSrinagarAdminPanel" })" class="">Combination Setting</a>
+        </li>
+        <li>
+            <a href="#" class="active">Edit</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+<div class="row">
+    <div class="col-md-12">
+        @using (Html.BeginForm("Edit", "CombinationSetting", FormMethod.Post, new { @class = "jsMainForm form-horizontal", @id = "CombinationSettingForm" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.CombinationSetting_ID)
+            <div class="col-sm-8">
+                <h4>CombinationSetting</h4>
+                <hr />
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Batch</label>
+                    <div class="col-sm-9">
+                        @Html.EditorFor(model => model.Batch, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Courses</label>
+                    <div class="col-sm-9">
+                        @Html.DropDownList("Course_ID", new SelectList(ViewBag.Courses, "Value", "Text", Model.Course_ID),
+                                   "Select course", new
+                                   {
+                                       @class = "form-control",
+                                       required = "required"
+                                   })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Semester</label>
+                    <div class="col-sm-9">
+                        @Html.DropDownList("Semester", new SelectList(ViewBag.Semesters, "Value", "Text", Model.Semester), new
+                   {
+                       @class = "form-control",
+                       required = "required"
+                   })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">SameAsPrevSemester</label>
+                    <div class="col-sm-9">
+                        @Html.EditorFor(model => model.SameAsPrevSemester)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Subjects</label>
+                    <div class="col-sm-9 jsDDLContainer">
+                        <select id='SubjectDDL' name='Subject' class="form-control multiselect" multiple="">
+                            @if (subjectlist != null)
+                            {
+                                foreach (var item in subjectlist)
+                                {
+                                    <option value="@item.Value" @(Model.CompulsarySubjects != null && Model.CompulsarySubjects.Contains(item.Value) ? "selected" : "")>@item.Text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <label for="name" class="col-sm-3 control-label invisible">style purpose</label>
+                    <div class="col-sm-9">
+                        @Html.HiddenFor(model => model.CompulsarySubjects, new { htmlAttributes = new { @class = "form-control" } })
+                        <p id="jsSubjectList" class="text-success small">
+                            @((Model.CompulsarySubject == null) ? "" : String.Join(", ", Model.CompulsarySubject.Select(x => x.SubjectFullName)?.ToList()))
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Instead Subject</label>
+                    <div class="col-sm-4 jsDDLContainer">
+
+                        @Html.DropDownListFor(model => model.InsteadSubjectCurrentSemester_ID1, new SelectList(ViewBag.CurrentSemSubject?? new List<SelectListItem>(), "Value", "Text", Model.InsteadSubjectCurrentSemester_ID1),
+                          "--Select--", new
+                          {
+                              @class = "form-control chosen-select",
+                              @data_defaulttextvalue = "--Select--,"
+                          })
+                    </div>
+                    <div class="col-sm-1">
+                        instead of
+                    </div>
+                    <div class="col-sm-4 jsDDLContainer">
+                        @Html.DropDownListFor(model => model.InsteadSubjectPreviousSemester_ID1, new SelectList(ViewBag.PrevSemSubject?? new List<SelectListItem>(), "Value", "Text", Model.InsteadSubjectPreviousSemester_ID1),
+                            "--Select--", new
+                            {
+                                @class = "form-control chosen-select",
+                                @data_defaulttextvalue = "--Select--,"
+                            })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Core Course Count</label>
+                    <div class="col-sm-9">
+                        @Html.EditorFor(model => model.CoreCourseCount, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Skill Enhancement CourseCount</label>
+                    <div class="col-sm-9">
+                        @Html.EditorFor(model => model.SkillEnhancementCourseCount, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Generic Elective CourseCount</label>
+                    <div class="col-sm-9">
+                        @Html.EditorFor(model => model.GenericElectiveCourseCount, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                @*<div class="form-group">
+                        <label for="name" class="col-sm-3 control-label">Set Max Number Of GE</label>
+                        <div class="col-sm-9">
+                            @Html.EditorFor(model => model.MaxNumberOfGESet)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3 control-label">Max Number Of GE</label>
+                        <div class="col-sm-9">
+                            @Html.EditorFor(model => model.MaxNumberOfGE, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>*@
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Descipline Centric Elective Course Count</label>
+                    <div class="col-sm-9">
+                        @Html.EditorFor(model => model.DesciplineCentricElectiveCourseCount, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Optional Core Course Count</label>
+                    <div class="col-sm-9">
+                        @Html.EditorFor(model => model.OptionalCoreCourseCount, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Additional Course Count</label>
+                    <div class="col-sm-9">
+                        @Html.EditorFor(model => model.AdditionalCourseCount, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">ExcludeMilSubject</label>
+                    <div class="col-sm-9">
+                        @Html.EditorFor(model => model.ExcludeMilSubject)
+                    </div>
+                </div>
+                @*<div class="form-group">
+                        <label for="name" class="col-sm-3 control-label">IncludeMilSubject</label>
+                        <div class="col-sm-9">
+                            @Html.EditorFor(model => model.IncludeMilSubject)
+                        </div>
+                    </div>*@
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">TotalCredit</label>
+                    <div class="col-sm-9">
+                        @Html.EditorFor(model => model.TotalCredit, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Validate By Total Credit</label>
+                    <div class="col-sm-9">
+                        @Html.EditorFor(model => model.ValidateByTotalCredit)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Total Subjects</label>
+                    <div class="col-sm-9">
+                        @Html.EditorFor(model => model.TotalNumberOfSubject, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Validate By No. Of Subjects</label>
+                    <div class="col-sm-9">
+                        @Html.EditorFor(model => model.ValidateByTotalNumberOfSubject)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">AllowCollegeChangeCombination</label>
+                    <div class="col-sm-9">
+                        @Html.EditorFor(model => model.AllowCollegeChangeCombination)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">AllowStudentChangeCombination</label>
+                    <div class="col-sm-9">
+                        @Html.EditorFor(model => model.AllowStudentChangeCombination)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">AllowDeleteCombination</label>
+                    <div class="col-sm-9">
+                        @Html.EditorFor(model => model.AllowDeleteCombination)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">CheckAdmissionForm</label>
+                    <div class="col-sm-9">
+                        @Html.EditorFor(model => model.CheckAdmissionForm)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">CheckExaminationForm</label>
+                    <div class="col-sm-9">
+                        @Html.EditorFor(model => model.CheckExaminationForm)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Remark</label>
+                    <div class="col-sm-9">
+                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">&nbsp;</label>
+                    <div class="col-sm-9">
+                        <button type="submit" id="submitForm" class="btn btn-primary pull-right">
+                            Update
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script src="~/Scripts/Pages/combinationsetting.js"></script>
+}
+
+
+

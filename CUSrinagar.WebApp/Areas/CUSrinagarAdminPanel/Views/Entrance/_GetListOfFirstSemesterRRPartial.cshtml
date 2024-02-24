@@ -1,0 +1,55 @@
+﻿@model  IEnumerable<CUSrinagar.Models.FirstSemesterRR>
+@using CUSrinagar.Extensions;
+
+@{
+    Layout = null;
+}
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th>S.No</th>
+            <th>Student FormNo</th>
+            <th>EntranceRollNo</th>
+            <th>FullName</th>
+            <th>Fathers Name</th>
+            <th>Category</th>
+            <th>College Name</th>
+            <th>Course Alloted By College</th>
+            <th>Courses Applied By Student</th>
+            <th>Mobile</th>
+            <th>Amount Paid</th>
+            <th>Accepted On</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model.IsNotNullOrEmpty())
+        {
+            string CSSClass = "";
+            foreach (var item in Model)
+            {
+                CSSClass = item.CoursesAppliedByStudent.ToLower().Contains(item.CourseAllotedByCollege.ToLower()) ? "" : "red";
+                <tr class="@CSSClass">
+                    <td>@item.Sno</td>
+                    <td>@item.StudentFormNo</td>
+                    <td>@item.EntranceRollNo</td>
+                    <td>@item.FullName</td>
+                    <td>@item.FathersName</td>
+                    <td>@item.Category</td>
+                    <td>@item.CollegeFullName</td>
+                    <td title="Course Alloted By College">@item.CourseAllotedByCollege</td>
+                    <td style="width:30%;" title="Courses Applied By Student">@Html.Raw(item.CoursesAppliedByStudent.Replace(";", "<br/>"))</td>
+                    <td>@item.Mobile</td>
+                    <td>Rs. @item.AmountPaid</td>
+                    <td>@item.AcceptedOn.ToLongDateString()</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <th colspan="10" class="center">No details were found</th>
+            </tr>
+        }
+    </tbody>
+</table>

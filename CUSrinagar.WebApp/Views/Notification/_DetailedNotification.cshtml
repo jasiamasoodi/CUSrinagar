@@ -1,0 +1,26 @@
+﻿@model CUSrinagar.Models.Notification
+<!-- ******CONTENT****** -->
+<div class="content container">
+    <div class="page-wrapper">
+
+        <div class="page-content">
+            <div class="row page-row">
+                <div class="news-wrapper col-md-8 col-sm-7">
+                    <article class="news-item">
+                        <div class="col-sm-12">
+                            <p class="meta text-muted col-sm-11">By: <a href="#">Admin</a> | Posted on: @Model.StartDate.ToString("MM/dd/yyyy")</p>
+                            <a class="btn btn-theme col-sm-1" href="/Notification/Notification">Back</a>
+                        </div>
+                        <h1>@Model.Title</h1>
+
+                        <p>@Html.Raw(Model.FullDescription)</p>
+                        <p class="box">
+                            @Model.Description
+                        </p>
+                    </article><!--//news-item-->
+                </div><!--//news-wrapper-->
+
+            </div><!--//page-row-->
+        </div><!--//page-content-->
+    </div><!--//page-->
+</div><!--//content-->

@@ -1,0 +1,156 @@
+﻿@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@using CUSrinagar.Models
+@using Nut
+
+@model IEnumerable<CUSrinagar.Models.BIL_BillDetails>
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Certificate for Paper Setter - Cluster University Srinagar</title>
+    <style type="text/css">
+        @@media print {
+            .noneOnPrint {
+                display: none;
+            }
+
+            .pbreak {
+                page-break-after: always !important;
+            }
+        }
+
+        p {
+            padding: 0mm;
+            margin: 0mm;
+        }
+
+        .tbl {
+            border-collapse: collapse;
+        }
+
+            .tbl tr, .tbl tr td, .tbl tr th {
+                border: 1px solid black;
+            }
+    </style>
+</head>
+<body style="background: #e0e0e0;margin: auto;display: table;" oncontextmenu="return false;">
+    @if (Model.IsNullOrEmpty())
+    {
+        <p style="text-align:center !important"> <strong style="font-size:18px;">No Certificate found</strong></p>
+    }
+    else if (Model.All(x => x.BillStatus != BillStatus.Paid))
+    {
+        <p style="text-align:center !important"> <strong style="font-size:18px;">Status for Bill(s) is @Model.First().BillStatus.GetEnumDescription() . Hence cannot be printed. </strong></p>
+    }
+    else
+    {
+        foreach (BIL_BillDetails billsGroup in Model)
+        {
+            <section style="background: white;padding:0;margin: 0;overflow: hidden;box-sizing: border-box;width: 210mm;position:relative;page-break-after: always;">
+                <div style="margin:0mm;margin-right: 4mm;margin-left: 4mm;margin-top:4mm;font-family:'Roboto';font-size:smaller">
+                    <center>
+                        <table style="">
+                            <tbody>
+                                <tr>
+                                    <td style="text-align:left;">
+                                        <img src="~/Content/ThemePublic/PrintImages/MarksSheetLogo.png" style="width:64px;" />
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <div style="margin-right:16px;">
+                                            <div style="font-family: Arial, sans-serif;font-size: 6mm;font-weight: bold;position: relative;z-index: 1;display: inline-block;  -webkit-font-smoothing: antialiased;  -moz-osx-font-smoothing: grayscale;            transform: scale(1, 1.5); -webkit-transform: scale(1, 1.5); -moz-transform: scale(1, 1.5);  -o-transform: scale(1, 1.5);  -ms-transform: scale(1, 1.5);">
+                                                <span style="letter-spacing:0.8mm;font-family: Algerian,Times, 'Times New Roman', serif;font-weight: normal;color: #2F5485;                text-shadow: 0.03em 0.03em 0px #b3b3b3;">
+                                                    &nbsp;&nbsp;Cluster University Srinagar
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <p style="font-size:15px;padding-top:6px;padding-bottom:6px;"> <b>Gogji-Bagh Campus Sriangar, 190008</b></p>
+                                        <span>
+                                            www.cusrinagar.edu.in
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            Developed by IT Cell
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr style="margin:0mm;margin-top:0.3mm;margin-bottom: 2mm;" />
+                        <p style="font-size:14px;text-align:center !important;font-weight:bold">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            CERTIFICATE FOR PAPER SETTER
+                        </p>
+                    </center>
+                    <hr style="margin:0mm;margin-top:0.3mm;margin-bottom: 2mm;" />
+                    <p style="text-align:center !important;margin-bottom:5px;">
+                    <p style="text-align:right !important;">
+                        Bill No. : @billsGroup.BillNo<br />
+                        Dated : @billsGroup.CreatedOn.ToLongDateString()
+                    </p>
+                    <p style="font-size:18px;text-align:center !important;font-weight:bolder">
+                        <u>To Whom It May Concern</u>
+                    </p>
+
+                    <div style="padding-top:2px;padding-bottom:3px;"></div>
+                    <p style="margin-top:10px;font-size:15px;line-height:25px;">
+                        This is to Certify that the faculty whose details are mentioned below  has been assigned the confidential
+                        work of paper setter for Semester <strong>@(((int)billsGroup.Semester).ToText().ToUpper())</strong> for Session
+                        <strong>
+                            @billsGroup.Session
+                            , @billsGroup.Batch
+                        </strong>by this office.
+
+                        <br />
+                        <br />
+                        Name : <strong>@billsGroup.FullName.ToUpper()</strong>
+                        <br />
+                        Department :  <strong>@billsGroup.DepartmentFullName</strong>
+                        <br />
+                        Paper Title :  <strong>@billsGroup.SubjectFullName</strong>
+                        <br />
+                        Institute :  <strong>@billsGroup.Institute</strong>
+                    </p>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <table style="font-size:17px;width:100%" border="0">
+                        <tr>
+                            <th style="text-align:end">
+                                <span>
+                                    Sd/-<br />
+                                    Assistant/Deputy Controller
+                                    <br />
+                                    (Secrecy)
+                                </span>
+                            </th>
+                        </tr>
+                    </table>
+                    <br />
+                    <br />
+                    <strong>Note:</strong>
+                    <ul>
+                        <li>This is an auto-generated file. It need not be counter-signed.</li>
+                    </ul>
+                    <br />
+                    <br />
+                </div>
+            </section>
+            <p style="background-color:#e0e0e0;height:10px;"></p>
+        }
+    }
+    <br />
+    <br />
+    <br />
+
+    <div class="noneOnPrint" style="height:40px;background-color:lightslategrey;width:794px;position:fixed;bottom:0;z-index:100;text-align:center;padding-top:10px">
+        <button style="height: 32px;" href="#" class="btn btn-theme" onclick="window.print();"><b>Download or Print</b></button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:white">Developed &amp; Maintained by I.T Cell</span>
+    </div>
+</body>
+</html>
+
+

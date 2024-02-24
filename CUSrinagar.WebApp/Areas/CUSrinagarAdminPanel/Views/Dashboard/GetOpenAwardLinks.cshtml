@@ -1,0 +1,83 @@
+﻿
+@model List<GeneralModels.ExaminationDashboard>
+@using CUSrinagar.Extensions
+@{
+    Layout = null;
+}
+
+@if (Model != null)
+{
+    <table class="table table-bordered table-striped">
+        <thead class="thin-border-bottom">
+            <tr>
+                <th>
+                    Course
+                </th>
+
+                <th>
+                    Semester
+                </th>
+                <th>
+                    Award-Type
+                </th>
+                <th>
+                    Batch/Exam Year
+                </th>
+                <th>
+                    End Date
+                </th>
+
+               
+            </tr>
+        </thead>
+
+        @foreach (var item in Model)
+        {
+            <tbody>
+                <tr>
+                    <td>@item.Course</td>
+                    <td>@item.Semester</td>
+
+                    @if (item.AwardType == "Theory")
+                    {
+                        <td><b class="red">External</b></td>
+                    }
+                    else
+                    {
+                        <td><b class="blue">Internal</b></td>
+                    }
+                    @if (item.AwardType == "Practical")
+                    {
+                        <td>
+                            <b class="blue">@item.Year</b>
+                        </td>
+                    }
+                    else
+                    {
+                        <td><b class="red">@item.Year</b></td>
+                    }
+                    @if (item.AwardType == "Practical")
+                    {
+                        <td>
+                            <b class="blue">@item.EndDate.ToString("dd-MMMM-yyyy hh:mm tt")</b>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <b class="red">@item.EndDate.ToString("dd-MMMM-yyyy hh:mm tt")</b>
+                        </td>
+                    }
+
+
+                </tr>
+            </tbody>
+        }
+    </table>
+}
+else
+{
+    <h4>No Open Award Links Found</h4>
+}
+
+

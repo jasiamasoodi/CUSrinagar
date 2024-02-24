@@ -1,0 +1,102 @@
+﻿@using Nut
+@model CUSrinagar.Models.ARGPersonalInformation
+@{
+    Layout = null;
+    var choosenSemester =(short)ViewBag.SemesterChoosen;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Exam Form</title>
+    <link href="~/Content/ThemePublic/Libraries/css/printer-frndly.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="A4 middle">
+    @if (Model != null && !string.IsNullOrEmpty(ViewBag.StudentExamFormNumber))
+    {
+        int? Fee = (int?)ViewBag.TotalExamFee;
+        string FeeInWords = Fee.HasValue ? Fee.Value.ToText(Language.English).ToUpper() + " RUPEES ONLY" : "";
+
+        <section class="sheet padding-5mm">
+            <div class="center">
+                <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                <h3>@(string.IsNullOrEmpty(Model.AcceptCollegeID) ? "College" : Model.AcceptCollegeID)</h3>
+                <h3>Examination Form  (Semester-@Model.CurrentSemesterOrYear)</h3>
+            </div>
+            <table border="1">
+                <tbody>
+                    <tr>
+                        <td colspan="2">Registration No. : @Model.CUSRegistrationNo</td>
+                        <th colspan="3" class="">Form No. : @ViewBag.StudentExamFormNumber</th>
+                    </tr>
+                    <tr>
+                        <td>Board Reg. No.:</td>
+                        <td colspan="2" style="width:105mm">@Model.BoardRegistrationNo</td>
+                        <td rowspan="5" colspan="2" class="center">
+                            <img class="img-responsive" src="@Url.Content(Model.Photograph)" width="150" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Name</td>
+                        <td colspan="2">@Model.FullName</td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td colspan="2">@(string.IsNullOrEmpty(Model.StudentAddress.PermanentAddress) ? "" : Model.StudentAddress.PermanentAddress)</td>
+                    </tr>
+                    <tr>
+                        <td>Mobile</td>
+                        <td colspan="2">@(string.IsNullOrEmpty(Model.StudentAddress.Mobile) ? "" : Model.StudentAddress.Mobile)</td>
+                    </tr>
+                    <tr>
+                        <td>Course</td>
+                        <td colspan="2">@Model.SelectedCombinations.FirstOrDefault().CourseID</td>
+                    </tr>
+                    @*<tr>
+                            <td>Subjects</td>
+                            <td colspan="4">@ViewBag.StudentSubjects @(ViewBag.StudentAdditionalSubjects==null?"":", "+ ViewBag.StudentAdditionalSubjects)</td>
+                        </tr>*@
+                </tbody>
+            </table>
+            <br />
+            <div>
+                <br />
+                <br />
+                <h3 class="no-margin-bottom"> <u> Student Declaration</u></h3>
+                <ol class="list-item">
+                    <li>I have thoroughly checked all the above filled in details and I hereby declare that my particulars are correct to the best of my knowledge.</li>
+                    <li>I have also appeared in the Internal Assessments/Practical/Tutorials conducted by the college and have passed the same including the attendance component.</li>
+                    <li>I shall be liable to be debarred from participating in this or any future examination to be conducted by the University if at any time its is found that I have concealed any information or project the same incorrectly.</li>
+                </ol>
+                <br />
+                <p class="pull-text-right">
+                    <b>
+                        Signiture of the student
+                    </b>
+                </p>
+                <br />
+                <p>
+                    <b>@Model.FullName</b> has been found eligible for End-Term Examination for which this application is submitted.
+                </p>
+                <br />
+                <p class="pull-text-right">
+                    <b>
+                        Principal
+                    </b>
+                </p>
+            </div>
+        </section>
+
+        <div class="noneOnPrint print-download-strip">
+            <button href="#" class="btn btn-default" onclick="window.print();"><b>Download / Print Examination Form </b></button>
+        </div>
+    }
+    else
+    {
+        <section class="sheet padding-5mm">
+            <p>Form Not Found .... </p>
+        </section>
+    }
+
+</body>
+</html>

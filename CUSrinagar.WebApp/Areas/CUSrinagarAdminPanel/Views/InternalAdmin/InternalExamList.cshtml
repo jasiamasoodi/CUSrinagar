@@ -1,0 +1,41 @@
+﻿@model  List<CUSrinagar.Models.InternalExam>
+@{
+    Layout = null;
+    var ISChecked = "";
+}
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th data-property="ExamName">Exam Name</th>
+            <th data-property="ExamDate">Exam Date</th>
+            <th data-property="TimeLimit">Time Limit</th>
+            <th data-property="NoOfQuestions">No Of Questions</th>
+            <th data-property="Batch">Batch</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var row in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink(row.ExamName, "Edit", new { Exam_Id = @row.Exam_Id, area = "CUSrinagarAdminPanel" })
+                    </td>
+                    <td>@row.ExamDate</td>
+                    <td>@row.TimeLimit</td>
+                    <td>@row.NoOfQuestions</td>
+                    <td>@row.Batch</td>
+                    <td>
+                        @Html.ActionLink("View Questions", "ViewQuestions", new { Exam_Id = @row.Exam_Id })
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+

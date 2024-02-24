@@ -1,0 +1,301 @@
+﻿
+@using CUSrinagar.Extensions;
+@using GeneralModels;
+@using System.Globalization;
+
+@model  List<CUSrinagar.Models.PaymentStatistics>
+
+@{
+    ViewBag.Title = "Payment Statistics";
+}
+
+@section CUSSitemap
+{
+
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index", "Dashboard", new { area = "CUCollegeAdminPanel" })">Home</a>
+            </li>
+            <li class="active">Payment Statistics</li>
+        </ul>
+    </div>
+}
+
+@{
+    CultureInfo hindi = new CultureInfo("hi-IN");
+}
+
+<div class="row">
+    <div class="col-md-12 jsTableContent">
+        <div class="row container-fluid hidden-print">
+            <div class="panel-body">
+                <div class="search-box">
+                    <form action="@Url.Action("PaymentStatistics", "Statistics")" method="post" class="form-inline" id="psfrm">
+                        <div class="form-group">
+                            <label>Date From</label><br />
+                            <div class="jsDDLContainer">
+                                <input type="date" id="DateFrom" name="DateFrom" value="@ViewBag.DateFrom" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Date To</label><br />
+                            <div class="jsDDLContainer">
+                                <input type="date" id="DateTo" name="DateTo" value="@ViewBag.DateTo" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Payment Type</label><br />
+                            <div class="jsDDLContainer">
+                                @Html.DropDownList("paymentType", new SelectList((IEnumerable<SelectListItem>)ViewBag.PaymentType, "Value", "Text", ViewBag.paymentTypeVal), "--All--", new { })
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="jsDDLContainer">
+                                <br />
+                                <button type="submit" class="btn  btn-inverse" id="searchs">Search</button>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label></label><br />
+                            <div class="btn-group btn-sm">
+                                <button data-toggle="dropdown" class="btn btn-purple dropdown-toggle" aria-expanded="false">
+                                    Download Details As Excel
+                                    <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-default dropdown-info">
+                                    <li id="pc">
+                                        <button type="submit" style="font-weight:bold"><i class="fa fa-file-excel-o"></i>&nbsp;Programme &amp; College wise Semester Admission Payment Details</button>
+                                    </li>
+                                    <li id="cc">
+                                        <button type="submit" style="font-weight:bold"><i class="fa fa-file-excel-o"></i>&nbsp;Course &amp; College wise Semester Admission Payment Details</button>
+                                    </li>
+                                    <li id="ipd">
+                                        <button type="submit" style="font-weight:bold"><i class="fa fa-file-excel-o"></i>&nbsp;Individual Course &amp; College wise Semester Admission Payment Details</button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row container-fluid">
+            @{
+                if (Model.IsNullOrEmpty())
+                {
+                    <hr />
+                    <hr />
+                    <h1 class="center"><i>No Data Found for the specified filters. Please try again with different date Ranges.</i></h1>
+                    <hr />
+                    <hr />
+
+                }
+                else
+                {
+                    <h3 style="background-color:lightblue;padding:10px" class="center">
+                        @{
+                            string headerText = string.Empty;
+                            DateTime? dateFrom = @ViewBag.DateFrom;
+                            DateTime? dateTo = @ViewBag.DateTo;
+
+                            if (dateFrom == null)
+                                dateFrom = new DateTime(2018, 05, 12);
+
+                            if (dateTo == null)
+                                dateTo = DateTime.Now;
+                        }
+
+                        @if (dateFrom == null && dateTo == null)
+                        {
+                            headerText = "Showing Data for all Dates";
+                        }
+                        else
+                        {
+                            headerText = $"Showing Amount for Period from <strong><i>{dateFrom?.ToLongDateString()}</i></strong> to <strong><i>{dateTo?.ToLongDateString()}</i> Payment Type ({ViewBag.paymentTypeDesc})</strong>";
+                        }
+                        @Html.Raw(headerText)
+                    </h3>
+
+                    <div class="col-lg-4 col-md-6">
+                        @{
+                            var admissionGroup = Model.Where(i => i.ModuleType == CUSrinagar.Enums.PaymentModuleType.Admission || i.ModuleType == CUSrinagar.Enums.PaymentModuleType.AddMoreAdmCourses)?.ToList() ?? new List<CUSrinagar.Models.PaymentStatistics>();
+                            <h2 class="btn btn-block btn-success">Entrance Fee (All courses) </h2>
+
+                            <table class="table table-striped ">
+                                <tbody>
+                                    @foreach (var item in admissionGroup)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong> Total Amount </strong><br />
+                                                Total Forms= @(admissionGroup.FirstOrDefault()?.TotalForms ?? 0)
+                                            </td>
+                                            <td>
+                                                <strong> @string.Format(hindi, "{0:c}", item.AmountReceived)</strong>
+                                                @{
+                                                    @*if (item.ModuleType.GetEnumDescription().Equals("Registration Fee(Admission)"))
+                                                        {
+                                                            if (ViewBag.AdmissionPaymentStatistics != null)
+                                                            {
+                                                                <table style="margin-top:30px;margin-bottom:30px;color:blue;" border="1">
+                                                                    <tbody>
+                                                                        @foreach (var admissionDetail in (List<CUSrinagar.Models.AdmissionPaymentStatistics>)ViewBag.AdmissionPaymentStatistics)
+                                                                        {
+                                                                            <tr style="border-top:1px solid Black ">
+                                                                                <td colspan="2">
+                                                                                    <a href="#" class="btn btn-primary btn-block">@admissionDetail.Programme.GetEnumDescription() = @string.Format(hindi, "{0:c}", admissionDetail.AmountReceived)</a>
+                                                                                </td>
+                                                                            </tr>
+                                                                        }
+                                                                    </tbody>
+                                                                </table>
+
+                                                            }
+                                                        }*@
+                                                }
+
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+
+                    </div>
+
+
+                    <div class="col-lg-4 col-md-6">
+                        @{
+                            admissionGroup = Model.Where(i => i.ModuleType == CUSrinagar.Enums.PaymentModuleType.SemesterAdmission)?.ToList() ?? new List<CUSrinagar.Models.PaymentStatistics>();
+                            <h2 class="btn btn-block btn-success">Sem Admission Fee (All courses (Open/SF)) </h2>
+
+                            <table class="table table-striped ">
+                                <tbody>
+                                    @foreach (var item in admissionGroup)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong> Total Amount </strong><br />
+                                                Total Forms= @(admissionGroup.FirstOrDefault()?.TotalForms ?? 0)
+                                            </td>
+                                            <td>
+                                                <strong> @string.Format(hindi, "{0:c}", item.AmountReceived)</strong>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+
+                    </div>
+
+
+                    <div class="col-lg-4 col-md-6">
+                        @{
+                            admissionGroup = Model.Where(i => i.ModuleType == CUSrinagar.Enums.PaymentModuleType.SelfFinanced)?.ToList() ?? new List<CUSrinagar.Models.PaymentStatistics>();
+                            <h2 class="btn btn-block btn-success">Self-Finance Counselling Fee (All courses) </h2>
+
+                            <table class="table table-striped ">
+                                <tbody>
+                                    @foreach (var item in admissionGroup)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong> Total Amount </strong><br />
+                                                Total Forms = @(admissionGroup.FirstOrDefault()?.TotalForms ?? 0)
+                                            </td>
+                                            <td>
+                                                <strong> @string.Format(hindi, "{0:c}", item.AmountReceived)</strong>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+
+                    </div>
+
+                    <div class="col-lg-4 col-md-6">
+
+                        @{
+                            var ExaminationGroup = Model.Where(i => i.ModuleType == CUSrinagar.Enums.PaymentModuleType.Examination ||
+                            i.ModuleType == CUSrinagar.Enums.PaymentModuleType.ReEvaluation || i.ModuleType == CUSrinagar.Enums.PaymentModuleType.Xerox
+                            );
+                            <h2 class="btn btn-block btn-primary">Examinations  (All courses) </h2>
+                            <table class="table table-striped ">
+                                <tbody>
+                                    @foreach (var item in ExaminationGroup)
+                                    {
+                                        <tr>
+                                            <td style="width:250px">
+                                                <strong> @item.ModuleType.GetEnumDescription() <br />  </strong>
+                                                Total Forms=@(item.TotalForms)
+                                            </td>
+                                            <td style="width:250px">
+                                                <strong> @string.Format(hindi, "{0:c}", item.AmountReceived)</strong>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    </div>
+
+                    <div class="col-lg-4 col-md-6">
+
+                        <h2 class="btn btn-block btn-danger">Others</h2>
+                        @{
+                            var othersGroup = Model.Where(i => i.ModuleType == CUSrinagar.Enums.PaymentModuleType.CancelRegistration 
+                            || i.ModuleType == CUSrinagar.Enums.PaymentModuleType.IssuingOfDegreeCertificate ||
+                            i.ModuleType == CUSrinagar.Enums.PaymentModuleType.Migration 
+                            || i.ModuleType == CUSrinagar.Enums.PaymentModuleType.CertificateCoursesAdmission 
+                            || i.ModuleType == CUSrinagar.Enums.PaymentModuleType.AttemptCertificate 
+                            || i.ModuleType == CUSrinagar.Enums.PaymentModuleType.CertificateVerification);
+                            <table class="table table-striped ">
+                                <tbody>
+                                    @foreach (var item in othersGroup)
+                                    {
+                                        <tr>
+                                            <td style="width:250px">
+                                                <strong> @item.ModuleType.GetEnumDescription()</strong>
+                                                <br /> Total Forms=@(item.TotalForms)
+                                            </td>
+                                            <td style="width:250px">
+                                                <strong> @string.Format(hindi, "{0:c}", item.AmountReceived)</strong>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    </div>
+                    <div class="col-lg-12 col-md-12">
+                        <div class="col-md-12 btn-app">
+                            <hr />
+                            <h3 class="center">
+                                Grand Total Amount for this Period =
+                                <strong>
+                                    @string.Format(hindi, "{0:c}", @Model.Where(i => i.ModuleType != CUSrinagar.Enums.PaymentModuleType.None).Sum(i => i.AmountReceived))
+                                </strong>
+                            </h3>
+                            <div class="center"><strong>Subjected to verification of refund amount done offline with the Bank</strong></div>
+                            <hr />
+                        </div>
+                    </div>
+
+                }
+            }
+        </div>
+    </div>
+</div>
+@section PageSpecificJSFiles{
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSPayments/JSPaymentStatistics.js")"></script>
+}

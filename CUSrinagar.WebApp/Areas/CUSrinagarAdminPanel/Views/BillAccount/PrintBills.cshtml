@@ -1,0 +1,394 @@
+﻿@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@using CUSrinagar.Models
+@using Nut
+
+@model IEnumerable<CUSrinagar.Models.BIL_BillDetails>
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Bills - Cluster University Srinagar</title>
+    <style type="text/css">
+        @@media print {
+            .noneOnPrint {
+                display: none;
+            }
+
+            .pbreak {
+                page-break-after: always !important;
+            }
+        }
+
+        p {
+            padding: 0mm;
+            margin: 0mm;
+        }
+
+        .tbl {
+            border-collapse: collapse;
+        }
+
+            .tbl tr, .tbl tr td, .tbl tr th {
+                border: 1px solid black;
+            }
+    </style>
+</head>
+<body style="background: #e0e0e0;margin: auto;display: table;" oncontextmenu="return false;">
+    @if (Model.IsNullOrEmpty())
+    {
+        <p style="text-align:center !important"> <strong style="font-size:18px;">No bills found or under process</strong></p>
+    }
+    else if (Model.All(x => x.BillStatus == BillStatus.Rejected || x.BillStatus == BillStatus.ErrorInBill))
+    {
+        <p style="text-align:center !important"> <strong style="font-size:18px;">Status for Bill(s) is @Model.First().BillStatus.GetEnumDescription() . Hence cannot be printed. </strong></p>
+    }
+    else
+    {
+        foreach (IEnumerable<BIL_BillDetails> billsGroup in Model?.GroupBy(x => x.BillNo))
+        {
+            if (Model.All(x => x.BillStatus == BillStatus.Rejected || x.BillStatus == BillStatus.ErrorInBill))
+            {
+                continue;
+            }
+            <section style="background: white;padding:0;margin: 0;overflow: hidden;box-sizing: border-box;width: 210mm;position:relative;page-break-after: always;">
+                <div style="margin:0mm;margin-right: 4mm;margin-left: 4mm;margin-top:4mm;font-family:'Roboto';font-size:smaller">
+                    <center>
+                        <table style="">
+                            <tbody>
+                                <tr>
+                                    <td style="text-align:left;">
+                                        <img src="~/Content/ThemePublic/PrintImages/MarksSheetLogo.png" style="width:64px;" />
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <div style="margin-right:16px;">
+                                            <div style="font-family: Arial, sans-serif;font-size: 6mm;font-weight: bold;position: relative;z-index: 1;display: inline-block;  -webkit-font-smoothing: antialiased;  -moz-osx-font-smoothing: grayscale;            transform: scale(1, 1.5); -webkit-transform: scale(1, 1.5); -moz-transform: scale(1, 1.5);  -o-transform: scale(1, 1.5);  -ms-transform: scale(1, 1.5);">
+                                                <span style="letter-spacing:0.8mm;font-family: Algerian,Times, 'Times New Roman', serif;font-weight: normal;color: #2F5485;                text-shadow: 0.03em 0.03em 0px #b3b3b3;">
+                                                    &nbsp;&nbsp;Cluster University Srinagar
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <p style="font-size:15px;padding-top:6px;padding-bottom:6px;"> <b>Gogji-Bagh Campus Sriangar, 190008</b></p>
+                                        <span>www.cusrinagar.edu.in  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; email: controller@cusrinagar.edu.in &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Developed by IT Cell</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </center>
+                    <hr style="margin:0mm;margin-top:0.3mm;margin-bottom: 2mm;" />
+                    <p style="text-align:center !important;margin-bottom:5px;">
+                        <strong style="font-size:18px;">
+                            @(Model?.FirstOrDefault()?.BillType.GetEnumDescription())
+                            @if (billsGroup.First().BillStatus != BillStatus.DispatchedToAccountsSection)
+                            {
+                                <span>(@billsGroup.First().BillStatus.GetEnumDescription())</span>
+                            }
+                        </strong>
+                    </p>
+                    <div style="padding-top:2px;padding-bottom:3px;"></div>
+
+                    <table style="font-size:15px;width:100%" border="0">
+                        <tr>
+                            <td>Bill No. </td>
+                            <th style="color: palevioletred; text-align: start !important;">@billsGroup.First().BillNo</th>
+                            <td>Contact No.</td>
+                            <th style=" text-align: start !important;" colspan="20">@billsGroup.First().PhoneNumber</th>
+                        </tr>
+                        <tr>
+                            <td style="width:108px;">@(billsGroup.First().BillType==BillType.PaperSetterBill?"Paper Setter : ":"Evaluator : ") </td>
+                            <td style="text-align: start !important;">@billsGroup.First().FullName.ToUpper()</td>
+                            <td style="width:80px;">Institute : </td>
+                            <td colspan="3" style="text-align: start !important;">@billsGroup.First().Institute.ToUpper()</td>
+                        </tr>
+                        <tr>
+                            <td>Semester : </td>
+                            <td style="text-align: start !important; ">@string.Join(" , ", billsGroup.Select(x => x.Semester).DistinctBy(x => x))</td>
+                            <td>Batch : </td>
+                            <td style="text-align: start !important; ">@string.Join(" , ", billsGroup.Select(x => x.Batch).DistinctBy(x => x))</td>
+                            <td>Session : </td>
+                            <td style="margin-bottom: 10px; text-align: start !important; " colspan="3">@string.Join(" , ", billsGroup.Select(x => x.Session).DistinctBy(x => x))</td>
+                        </tr>
+                    </table>
+
+
+                    <p style="text-align:center !important;margin-top:13px;">
+                        <strong style="font-size:18px;">
+                            Bank Details
+                        </strong>
+                    </p>
+                    <table style="font-size:17px;width:100%" border="0">
+                        <tr><td colspan="30" style="padding-top:4px;padding-bottom:4px;border-bottom:1px solid grey"></td></tr>
+                        <tr>
+                            <td>Name of the Bank : </td>
+                            <th style=" text-align: start !important;">@billsGroup.First().PaymentBank</th>
+                            <td>Branch : </td>
+                            <th style=" text-align: start !important;" colspan="20">@billsGroup.First().PaymentBranch</th>
+                        </tr>
+                        <tr>
+                            <td>Sixteen Digit Account No. : </td>
+                            <th style="text-align: start !important;">@billsGroup.First().PaymentAccount</th>
+                            <td>IFS Code : </td>
+                            <th style=" text-align: start !important;" colspan="20">@billsGroup.First().PaymentIFSCode</th>
+                        </tr>
+                    </table>
+
+
+                    <p style="margin-top:18px;"></p>
+                    <table style="font-size:17px;width:100%;text-align:center;" class="tbl">
+                        <thead>
+                            <tr>
+                                <th>SNo.</th>
+                                @if (billsGroup.First().BillType == BillType.EvaluatorBill)
+                                {
+                                    <th>Programme</th>
+                                }
+                                @if (billsGroup.First().BillType == BillType.PaperSetterBill)
+                                {
+                                    <th>Examination</th>
+                                }
+                                <th>Paper Dept.</th>
+                                <th>PaperTitle</th>
+                                @if (billsGroup.First().BillType == BillType.EvaluatorBill)
+                                {
+                                    <th>Number of Answer Scripts Evaluated</th>
+                                    <th>Rate (per paper) ₹</th>
+                                }
+                                else
+                                {
+                                    <th>No. of Sets</th>
+                                    <th>Rate (per set) ₹</th>
+                                }
+
+                                @if (billsGroup.First().BillType == BillType.EvaluatorBill)
+                                {
+                                    <th>Conveyance Charges (if any)</th>
+                                }
+                                <th>Gross Amount (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ short sno = 1;}
+                            @foreach (BIL_BillDetails bill in billsGroup)
+                            {
+                                <tr>
+                                    <td>@sno .</td>
+                                    @if (billsGroup.First().BillType == BillType.EvaluatorBill)
+                                    {
+                                        <td>@bill.Programme.GetEnumDescription()</td>
+                                    }
+                                    @if (bill.BillType == BillType.PaperSetterBill)
+                                    {
+                                        <td>@bill.Examination</td>
+                                    }
+                                    <td>@bill.DepartmentFullName</td>
+                                    <td>@bill.SubjectFullName</td>
+                                    <td>@bill.NoOfSets</td>
+                                    <td>@bill.AmountPerSet</td>
+
+                                    @if (billsGroup.First().BillType == BillType.EvaluatorBill)
+                                    {
+                                        <th style="font-size:17px">@(billsGroup.First().ConveyanceCharges??0)</th>
+                                    }
+                                    <td>@bill.TotalAmount</td>
+                                </tr>
+                                sno++;
+                            }
+                            <tr style="border:0 !important">
+                                <th colspan="@(billsGroup.First().BillType == BillType.EvaluatorBill?"6":"5")" style="border:0 !important"></th>
+                                <td>Revenue Stamp</td>
+                                <th>@(billsGroup.First().RevenueStampAmount>0?"-":"")@billsGroup.First().RevenueStampAmount</th>
+                            </tr>
+                            <tr style="border:0 !important">
+                                <th colspan="@(billsGroup.First().BillType == BillType.EvaluatorBill?"6":"5")" style="border:0 !important"></th>
+                                <th style="font-size:17px">Grand Total</th>
+                                <th style="font-size:17px">₹ @(billsGroup.Sum(x=>x.TotalAmount) - billsGroup.First().RevenueStampAmount)</th>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                    <p style="text-align:center !important;margin-top:10px;"> </p>
+                    <table style="font-size:17px;width:100%" border="0">
+                        <tr>
+                            <td>
+                                Amount in Words
+                                <strong style="text-transform:capitalize; text-decoration:underline;">@((billsGroup.Sum(x=>x.TotalAmount)- billsGroup.First().RevenueStampAmount).ToText()) Rupees</strong>
+                                <br />Received the amount of <strong style="text-decoration:underline;">₹ @(billsGroup.Sum(x=>x.TotalAmount)- billsGroup.First().RevenueStampAmount)</strong>
+                                with a pledge to disclose the same while filling the ITrs.
+                            </td>
+                        </tr>
+                    </table>
+
+
+                    <p style="text-align:center !important;margin-top:10px;"></p>
+                    <table style="font-size:17px;width:100%" border="0">
+                        <tr>
+                            <th style="text-align:end">
+                                <span>
+                                    Sd/-<br />
+                                    Signature of the @(billsGroup.First().BillType == BillType.PaperSetterBill ? "Paper Setter " : "Evaluator")
+                                    <br />Dated <u>@(billsGroup.First().CreatedOn.AddDays(6).ToLongDateString())</u>
+                                </span>
+                            </th>
+                        </tr>
+                    </table>
+
+                    @if (billsGroup.First().BillType == BillType.PaperSetterBill)
+                    {
+                        <p style="text-align:center !important;margin-top:15px;font-size:18px">
+                            <i><strong>(Report of the Secrecy Section)</strong></i>
+                        </p>
+                        <ol style="font-size:16px;">
+                            <li>
+                                The @(billsGroup.First().BillType == BillType.PaperSetterBill ? "Paper Setter has set " : "Evaluator has evaluated ")
+                                <u><strong> @(billsGroup.Sum(x => x.NoOfSets))</strong> </u> number of papers for the conduct of
+                                <u><strong>@string.Join(" , ", billsGroup.Select(x => x.Examination).DistinctBy(x => x))</strong></u>
+                                examinations of Semester(s)
+                                <strong>@string.Join(" , ", billsGroup.Select(x => x.Semester).DistinctBy(x => x)).</strong>
+                            </li>
+                            <li style="margin-top:7px;">
+                                @(billsGroup.First().BillType == BillType.PaperSetterBill ? "Paper Setter " : "Evaluator ")
+                                is entitled to full/half remuneration <u>  <strong>₹ @(billsGroup.Sum(x => x.TotalAmount) - billsGroup.First().RevenueStampAmount) </strong></u>.
+                            </li>
+                        </ol>
+                    }
+                    else
+                    {
+                        <ol style="font-size:16px;">
+                            <li>
+                                Name of the Evaluator
+                                <u><strong> @(billsGroup.First().FullName)</strong> </u>
+                            </li>
+                            <li style="margin-top:7px;">
+                                The Evaluator has evaluated/re-evaluated:
+                                <u><strong> _______@(billsGroup.Sum(x=>x.NoOfSets))_________</strong> </u>
+                            </li>
+                            <li style="margin-top:7px;">
+                                Report of the Transit Section:
+                                <u><strong> __________________________________</strong> </u>
+                            </li>
+                        </ol>
+                    }
+
+
+                    <p style="text-align:center !important;margin-top:40px;"> </p>
+                    <table style="font-size:15px;width:100%" border="0">
+                        <tr>
+                            <th>
+                                @if (billsGroup.First().BillStatus == BillStatus.Paid)
+                                {
+                                    <span> Sd/-<br /></span>
+                                }
+                                Dealing<br />Assistant
+                            </th>
+                            <th>
+
+                                @if (billsGroup.First().BillStatus == BillStatus.Paid)
+                                {
+                                    <span> Sd/-<br /></span>
+                                }
+                                Head<br />Assistant
+                            </th>
+                            <th>
+                                @if (billsGroup.First().BillStatus == BillStatus.Paid)
+                                {
+                                    <span> Sd/-<br /></span>
+                                }
+                                Section<br />Officer
+                            </th>
+                            <th>
+
+                                @if (billsGroup.First().BillStatus == BillStatus.Paid)
+                                {
+                                    <span> Sd/-<br /></span>
+                                }
+                                Assistant / Dy.<br />Controller of Examination
+                            </th>
+                        </tr>
+                    </table>
+
+                    <p style="text-align:center !important;margin-top:10px;"> </p>
+
+
+                    <table style="font-size:17px;width:100%" border="0">
+                        <tr>
+                            <td>
+                                Bill passed for <u><strong>__₹ @(billsGroup.Sum(x=>x.TotalAmount)- billsGroup.First().RevenueStampAmount)__</strong></u>
+                                (In words) Rupees <u style="text-transform:capitalize;"><strong>__@((billsGroup.Sum(x=>x.TotalAmount)- billsGroup.First().RevenueStampAmount).ToText().ToUpper())__</strong></u>
+                                by the debit to the Examination Account <b>(47775)</b> for the purpose of
+                                @(billsGroup.First().BillType == BillType.PaperSetterBill ? " Paper Setting " : "Paper Evaluation ").
+                                <br />Net Payable <u><strong>__₹ @(billsGroup.Sum(x=>x.TotalAmount)- billsGroup.First().RevenueStampAmount)__</strong></u> .
+                            </td>
+                        </tr>
+                    </table>
+
+                    <p style="text-align:center !important;margin-top:20px;"> </p>
+                    <table style="font-size:15px;width:100%" border="0">
+                        <tr>
+                            <th>
+                                @if (billsGroup.First().BillStatus == BillStatus.Paid)
+                                {
+                                    <span> Sd/-<br /></span>
+                                }
+                                Accountant
+                            </th>
+                            <th>
+                                @if (billsGroup.First().BillStatus == BillStatus.Paid)
+                                {
+                                    <span> Sd/-<br /></span>
+                                }
+                                Assistant / Dy. Controller (Acctts)
+                            </th>
+                            <th>
+                                @if (billsGroup.First().BillStatus == BillStatus.Paid)
+                                {
+                                    <span> Sd/-<br /></span>
+                                }
+                                Controller of Examination
+                            </th>
+                        </tr>
+                    </table>
+                    <p style="text-align:center !important;margin-top:10px;"> </p>
+                    <table style="font-size:15px;width:100%" border="0">
+                        <tr>
+                            <td>
+                                Payment made vide <u>
+                                    <strong>
+                                        &nbsp;&nbsp;&nbsp;LOANo/CUS/Acctts/20&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </strong>
+                                </u>
+                                @if (billsGroup.First().BillStatus != BillStatus.Paid)
+                                {
+                                    <span>
+                                        Dated _____/_____/20___
+                                    </span>
+                                }
+                                else
+                                {
+                                    <u>Dated <strong>@(billsGroup.First().PaymentDate?.ToLongDateString())</strong></u>
+                                }
+                                for <u><strong>__₹ @(billsGroup.Sum(x=>x.TotalAmount)- billsGroup.First().RevenueStampAmount)</strong>&nbsp;&nbsp;&nbsp;</u>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+            <p style="background-color:#e0e0e0;height:10px;"></p>
+        }
+    }
+    <br />
+    <br />
+    <br />
+
+    <div class="noneOnPrint" style="height:40px;background-color:lightslategrey;width:794px;position:fixed;bottom:0;z-index:100;text-align:center;padding-top:10px">
+        <button style="height: 32px;" href="#" class="btn btn-theme" onclick="window.print();"><b>Download or Print</b></button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:white">Developed &amp; Maintained by I.T Cell</span>
+    </div>
+</body>
+</html>
+
+

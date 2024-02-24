@@ -1,0 +1,97 @@
+﻿@using CUSrinagar.Models
+@using CUSrinagar.Extensions
+
+@model Alomini
+
+@{
+    ViewBag.Title = $"Alumni - CUSrinagar";
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area="CUStudentZone"})">Home</a>
+        </li>
+        <li>
+            <a href="#" class="active">Add Current Employment Status</a>
+        </li>
+    </ul>
+}
+<div class="page-wrapper pager-table-text">
+    <div class="page-content">
+
+        <div>
+            @if (TempData["response"] != null)
+            {
+                @Html.Raw(TempData["response"])
+            }
+        </div>
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Add Current Employment Status
+                        </h3>
+                    </div>
+                    @using (Html.BeginForm("AddAlumni", "Grievance", FormMethod.Post, new { @class = "JSAlomini form-horizontal" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.EmploymentStatus)
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(x => x.EmploymentStatus, (IEnumerable<SelectListItem>)ViewBag.EmployementStatus, string.Empty)
+
+                                    @Html.ValidationMessageFor(x => x.EmploymentStatus)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">
+                                    <span class="red bigger-110"></span> @Html.LabelFor(model => model.OtherDetails)
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.TextAreaFor(x => x.OtherDetails, new { cols = "50", rows = "6" })
+                                    @Html.ValidationMessageFor(x => x.OtherDetails)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-1 ">
+                                    <div class="col-sm-1" style="padding-top: 17px;">
+                                        <button type="button" class="btn btn-primary" onclick="window.print();"><i class="fa fa-print"></i>&nbsp; Print</button>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1">
+                                    <div class="col-sm-1" style="padding-top: 17px;">
+                                        <button type="submit" class="btn btn-success jsSave"><i class="fa fa-save"></i>&nbsp; Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJSFiles{
+    @Scripts.Render("~/bundles/Libraries/jqueryval")
+    <script type="text/javascript">
+        $("#alomini").addClass("active");
+    </script>
+}
+
+@section PageSpecificStyle{
+    <style>
+        .field-validation-error {
+            color: red !important;
+        }
+    </style>
+}

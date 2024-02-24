@@ -1,0 +1,324 @@
+﻿@model  CUSrinagar.Models.ExaminationSetting
+@{
+    var routeValues = HttpContext.Current.Request.RequestContext.RouteData.Values;
+    string actionName = "";
+    if (routeValues != null)
+    {
+        if (routeValues.ContainsKey("controller"))
+        {
+            actionName = routeValues["action"].ToString();
+        }
+    }
+}
+@Html.AntiForgeryToken()
+<style>
+    .disableDDL {
+        pointer-events: none;
+    }
+</style>
+@if (!ViewData.ModelState.IsValidField("ErrorMessage"))
+{
+    <div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong>@Html.ValidationMessage("ErrorMessage", "", new { @class = "red " })</strong></div>
+}
+
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.CourseCategory)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.DropDownListFor(model => model.CourseCategory, new SelectList(ViewBag.CourseCategoryList, "Value", "Text"), "--Select--", new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.CourseCategory, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+
+
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.PrintProgramme)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.DropDownListFor(model => model.PrintProgramme, new SelectList(ViewBag.PrintProgrammeList, "Value", "Text"), "--Select--", new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.PrintProgramme, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+
+
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Semester)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.DropDownListFor(model => model.Semester, new SelectList(ViewBag.SemesterList, "Value", "Text"), "--Select--", new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.Semester, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+
+
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.AllowDownloadAdmitCards)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.CheckBoxFor(model => model.AllowDownloadAdmitCards, new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.AllowDownloadAdmitCards, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+
+
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Year)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.TextBoxFor(model => model.Year, new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.Year, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+
+
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.LateFee1)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.TextBoxFor(model => model.LateFee1, new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.LateFee1, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+
+
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.LateFee2)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.TextBoxFor(model => model.LateFee2, new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.LateFee2, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+
+
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Remark)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.TextBoxFor(model => model.Remark, new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+
+
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.GracePeriodDays1)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.TextBoxFor(model => model.GracePeriodDays1, new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.GracePeriodDays1, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+
+
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.GracePeriodDays2)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.TextBoxFor(model => model.GracePeriodDays2, new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.GracePeriodDays2, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+
+
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.HardCodeFeeAmount)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.TextBoxFor(model => model.HardCodeFeeAmount, new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.HardCodeFeeAmount, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+
+
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.IsHardCodeFeeSet)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.CheckBoxFor(model => model.IsHardCodeFeeSet, new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.IsHardCodeFeeSet, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.FormNumberPrefix)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.TextBoxFor(model => model.FormNumberPrefix, new
+                                      {
+                                          @class = "width-100",
+                                          })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.FormNumberPrefix, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.FormNumberCount)
+
+    </label>
+    <div class="col-sm-6 ">
+
+        @Html.TextBoxFor(model => model.FormNumberCount, new { @class = "width-100" })
+
+    </div>
+    <div class="col-sm-2">
+        @Html.ValidationMessageFor(model => model.FormNumberCount, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.StartDate)
+    </label>
+    <div class="col-sm-9">
+        <div class="width-50">
+
+            @Html.TextBoxFor(model => model.StartDate, "{0:MM/dd/yyyy}", new { @class = "date-picker width-50" })
+            <i class="fa fa-calendar bigger-110">MM/DD/YYYY</i>
+            @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.EndDate)
+    </label>
+    <div class="col-sm-9">
+        <div class="width-50">
+            @Html.TextBoxFor(model => model.EndDate, "{0:MM/dd/yyyy}", new { @class = "date-picker width-50" })
+            <i class="fa fa-calendar bigger-110">MM/DD/YYYY</i>
+            @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">
+        <span class="red bigger-110">*</span> @Html.LabelFor(model => model.AllowDownloadForm)
+    </label>
+    <div class="col-sm-9">
+        <div class="width-50" style="padding-top:10px">
+            @Html.CheckBoxFor(model => model.AllowDownloadForm, new { @class = "width-100" })
+            @Html.ValidationMessageFor(model => model.AllowDownloadForm, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+        </div>
+    </div>
+</div>
+
+
+<div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right"></label>
+    <div class="col-sm-8">
+        <button type="submit" class="btn btn-sm btn-primary save-button" id="sub">
+            <i class="ace-icon fa fa-check"></i>
+            Save
+        </button>
+        @Html.ActionLink("Cancel", "ExaminationSetting", "Notification", new { area = "CUSrinagarAdminPanel", @class = "fm-button ui-state-default ui-corner-all fm-button-icon-left btn btn-sm btn-danger" })
+    </div>
+</div>
+
+<script src="~/Content/ThemeAdmin/Content/Scripts/Libraries/bootstrap-datepicker.min.js"></script>
+
+<script>
+    $('.date-picker').datepicker({
+        autoclose: true,
+        todayHighlight: true,
+        dateFormat: 'dd-mm-yyyy',
+        format: 'mm-dd-yy'
+    })
+        //show datepicker when clicking on the icon
+        .next().on(ace.click_event, function () {
+            $(this).prev().focus();
+        });
+</script>
+

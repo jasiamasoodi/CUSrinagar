@@ -1,0 +1,201 @@
+﻿@model  CUSrinagar.Models.BIL_PaperSetterSettings
+@using CUSrinagar.Models
+@using CUSrinagar.Extensions
+
+@{
+    ViewBag.Title = "CUS :: Paper Setter";
+    var ISChecked = "";
+}
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUSrinagarAdminPanel"})">Home</a>
+            </li>
+            <li class="active">Paper Setting List</li>
+        </ul><!-- /.breadcrumb -->
+    </div>
+}
+
+<div class="page-wrapper pager-table-text">
+    <div class="page-header">
+        <div style="padding-bottom: 30px;">
+            <div class="col-sm-12">
+                <div class="col-sm-3">
+                    <h1 class="heading-title pull-left">
+                        Paper setting
+                        <small>
+                            <i class="ace-icon fa fa-angle-double-right"></i>
+                            List
+                        </small>
+                    </h1>
+                </div>
+                <div class="col-sm-9 align-right">
+                    <div class="btn-group btn-sm">
+                        <a type="button" class="btn btn-primary" href="#ModalPaperSetterDetails" data-toggle="modal">Add Setting</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+@*--------- Paper Setter Modal Popup -----------------------*@
+<div id="ModalPaperSetterDetails" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter no-margin"><i class="fa fa-file-excel-o"></i>&nbsp;Paper Setter setting</h3>
+            </div>
+
+            <div class="modal-body JSCreateContent">
+                <div class="msg101"></div>
+                @using (Html.BeginForm("CreatePaperSetterSettings", "Bill", FormMethod.Post, new { id = "frmCreatePaperSetter", @enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken();
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <label class="control-label no-padding-right">
+                                @Html.LabelFor(ps => ps.Type) <span class="red">*</span>
+                            </label>
+                            <span class="red">@Html.ValidationMessageFor(ps => ps.Type)</span>
+                            @Html.DropDownListFor(ps => ps.Type, (IEnumerable<SelectListItem>)ViewBag.PaperSetter, "Select", new { @class = "form-control", required = "required" })
+                        </div>
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <div class="col-sm-12">
+                            <label class="control-label no-padding-right">
+                                @Html.LabelFor(ps => ps.Title) <span class="red">*</span>
+                            </label>
+                            <span class="red">@Html.ValidationMessageFor(ps => ps.Title)</span>
+                            @Html.TextBoxFor(ps => ps.Title, new { @class = "form-control jsfilterelement", required = "required" })
+                        </div>
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <div class="col-sm-12">
+                            <label class="control-label no-padding-right">
+                                @Html.LabelFor(ps => ps.FileToUpload) <span class="red">*</span>
+                            </label>
+                            <span class="red">@Html.ValidationMessageFor(ps => ps.FileToUpload)</span>
+                            @Html.TextBoxFor(ps => ps.FileToUpload, new { @type = "file", @class = "form-control", required = "required" })
+                        </div>
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-sm btn-success pull-center" style="margin-bottom:-4em;">
+                                <i class="fa fa-file-excel-o"></i>&nbsp;Submit
+                            </button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button class="btn btn-sm btn-danger" data-dismiss="modal" style="margin-bottom:-4em;">
+                                <i class="ace-icon fa fa-times"></i>
+                                Close
+                            </button>
+                        </div>
+                        <br />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    @if (TempData["Err"] != null)
+    {
+        @Html.Raw(TempData["Err"])
+    }
+    <div class="col-md-12 jsTableContent">
+        <div class="panel panel-primary js-pager-table">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Paper Setting
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        List
+                    </small>
+                    <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                        <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                    </span>
+                </h3>
+            </div>
+
+
+            <table class="table table-hover table-bordered js-table">
+                <thead>
+                    <tr>
+
+                        <th data-property="Type">Type</th>
+                        <th data-property="Title">Title</th>
+                        <th data-property="IsActive">Status</th>
+                        <th data-property="FilePath">Attachment</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (BIL_PaperSetterSettings row in ViewBag.data ?? new List<BIL_PaperSetterSettings>())
+                    {
+                        <tr>
+                            @Html.Hidden("PaperSetter", (Guid)row.Setting_ID, new { @class = "jsRow_ID" })
+                            <td>@row.Type.GetEnumDescription()</td>
+                            <td>@row.Title</td>
+                            <td>
+                                @if (row.IsActive)
+                                {
+                                    ISChecked = "checked = 'checked'";
+                                }
+                                else
+                                {
+                                    ISChecked = "";
+                                }
+                                <label class='pull-center inline'>
+                                    <input class='ace ace-switch ace-switch-5 JSIsActive' id='@row.Setting_ID' type='checkbox' @ISChecked />
+                                    <span class='lbl middle'></span>
+                                </label>
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(row.FilePath))
+                                {
+                                    var href = (row.FilePath);
+                                    <a target="_blank" title='Download' href='@href'> View File </a>
+                                }
+                            </td>
+                            <td>
+                                <a href="#">
+                                    <i class="ace-icon fa fa-trash-o red bigger-130 js-delete-row"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+            @{Html.RenderPartial("_JSPagerTableFooter");}
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJS{
+    @Scripts.Render("~/bundles/Libraries/jqueryval")
+    <script src="@Url.Content("~/Scripts/JSBilling/Billing.js")"></script>
+}
+@section PageSpecificStyle
+{
+    <style type="text/css">
+
+        table tbody tr td, table tbody tr th {
+            vertical-align: inherit !important;
+        }
+    </style>
+}
+
+

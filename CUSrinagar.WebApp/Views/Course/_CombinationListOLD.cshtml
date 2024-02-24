@@ -1,0 +1,49 @@
+﻿@model      CUSrinagar.Models.ADMCourseMas>
+@{ Layout = null;}
+<table id="simple-table" class="table  table-bordered table-hover">
+    <thead>
+        <tr>
+
+            <th data-property="CombinationCode">Combination</th>
+            <th data-property="Subject1Name">Subject 1</th>
+            <th data-property="Subject2Name">Subject 2</th>
+            <th data-property="Subject3Name">Subject 3</th>
+            <th data-property="Subject4Name">Subject 4</th>
+            <th data-property="Subject5Name">Subject 5</th>
+            <th data-property="Subject6Name">Subject 6</th>
+            <th data-property="Subject7Name">Subject 7</th>
+
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+
+
+                    <td>@item.CombinationCode</td>
+
+                    <td>@item.Subject1Name</td>
+
+                    <td>@item.Subject2Name</td>
+                    <td>@item.Subject3Name</td>
+
+                    <td>@item.Subject4Name</td>
+                    <td>@item.Subject5Name</td>
+
+                    <td>@item.Subject6Name</td>
+                    <td>@item.Subject7Name</td>
+
+
+                </tr>
+            }
+        }
+
+
+    </tbody>
+</table>
+
+

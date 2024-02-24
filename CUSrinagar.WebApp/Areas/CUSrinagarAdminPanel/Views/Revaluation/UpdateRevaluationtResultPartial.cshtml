@@ -1,0 +1,96 @@
+﻿
+@model IEnumerable<CUSrinagar.Models.ResultList>
+@using CUSrinagar.Enums
+<table class="table table-hover table-bordered ">
+    <thead>
+        <tr>
+            <th title="Serial Number">No</th>
+            <th data-property="CourseFullName">Course</th>
+            <th title="Examination Roll Number" data-property="ExamRollNumber">E Roll No</th>
+            <th class="wd-140" data-property="CUSRegistrationNo">Registration No</th>
+            <th data-property="FullName">Full Name</th>
+            <th data-property="SubjectFullName">Subject</th>
+
+            <th title="Internal Marks" data-property="InternalMarks">Int</th>
+            <th title="Internal Attedance/Assessment Marks" data-property="InternalAttendance_AssessmentMarks">Int.A</th>
+            <th title="External Attendance/Assessment Marks" data-property="ExternalAttendance_AssessmentMarks">Ext.A</th>
+
+            <th title="External Marks" data-property="ExternalMarks">Ext</th>
+            <th title="Result Notification_ID" data-property="Result Notification_ID" colspan="3">Result Notification_ID</th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr class="jsRowAction">
+                    <td>
+                        <span class="js-sno"></span>
+                        <input type="hidden" value="@item.Programme" name="Programme" />
+                        <input type="hidden" value="@(item._ID == Guid.Empty ? RecordState.New : RecordState.Old)" name="RecordState" />
+                        <input type="hidden" value="@item.Semester.ToString()" name="Semester" />
+                        <input type="hidden" value="@item.Student_ID.ToString()" name="Student_ID" />
+                        <input type="hidden" value="@item.Subject_ID.ToString()" name="Subject_ID" />
+                        <input type="hidden" value="@item._ID" name="_ID" />
+                        <input type="hidden" value="@item.InternalSubmitted.ToString()" name="InternalSubmitted" />
+                        <input type="hidden" value="@item.ExternalSubmitted.ToString()" name="ExternalSubmitted" />
+
+                    <td>@item.CourseFullName</td>
+                    <td>@item.ExamRollNumber</td>
+                    <td>@item.CUSRegistrationNo</td>
+                    <td>@item.FullName</td>
+                    <td>@item.SubjectFullName</td>
+                    <td title="Internal marks obtained">
+
+                        <input type="number" name="InternalMarks" value="@item.InternalMarks" class="form-control" readonly />
+
+
+                    </td>
+                    <td title="Internal attend/assessment marks">
+
+                        <input type="number" name="InternalAttendance_AssessmentMarks" value="@item.InternalAttendance_AssessmentMarks" class="form-control " readonly />
+
+                    </td>
+                    <td title="External attend/assessment marks">
+
+                        <input type="number" name="ExternalAttendance_AssessmentMarks" value="@item.ExternalAttendance_AssessmentMarks" class="form-control" readonly />
+
+                    </td>
+                    <td title="External marks">
+
+                        <input type="number" name="ExternalMarks" value="@item.ExternalMarks" class="form-control" />
+
+                    </td>
+                    <td>
+                        <input type="text" name="ResultNotificationID" value="@item.ResultNotification_ID" class="form-control jsfocus" />
+                    </td>
+                    <td class="center">
+                        <input type="hidden" value="@item.ResultNotification_ID.ToString()" name="ResultNotification_ID" />
+                        <input type="hidden" value="@item.ResultNotification_ID.ToString()" class="jsResultNotification_ID" />
+                        <input type="hidden" value="@item.ExamForm_ID.ToString()" name="ExamForm_ID" />
+                        <input type="hidden" value="@item.ExamForm_ID.ToString()" class="jsExamForm_ID" />
+                    </td>
+
+                    <td>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <p style="display:inline-flex;">
+                                    <button type="button" class="btn btn-white warning js-save-row" title="@(item.ResultNotification_ID.HasValue && item.ResultNotification_ID!=Guid.Empty? "Save(Result already declared)":"Save")">
+                                        <i class='ace-icon fa fa-floppy-o blue js-save-row' style="@(item.ResultNotification_ID.HasValue && item.ResultNotification_ID!=Guid.Empty? "color:brown !important":"")"></i>
+                                    </button>
+
+                                    <button title="Cancel changes" type="button" class="btn btn-white js-cancel-row">
+                                        <i class="ace-icon fa fa-times red2 js-cancel-row"></i>
+                                    </button>
+                                </p>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

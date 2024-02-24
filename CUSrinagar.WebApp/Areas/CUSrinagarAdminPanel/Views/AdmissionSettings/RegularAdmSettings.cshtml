@@ -1,0 +1,74 @@
+﻿@model IEnumerable<CUSrinagar.Models.ARGFormNoMaster>
+@using CUSrinagar.Extensions;
+
+@{
+    /**/
+
+    ViewBag.Title = "Regular Admission Settings";
+}
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUSrinagarAdminPanel"})">Home</a>
+            </li>
+            <li class="active">Regular Admission Settings</li>
+        </ul>
+    </div>
+    <div class="col-md-4">
+    </div>
+}
+@*307AE1DB-9BB5-4E9C-87D6-608579142401 temp Integrated B.Ed-M.Ed *@
+
+<div class="row">
+    <div class="col-md-12 jsTableContent">
+        <div class="panel panel-primary js-pager-table" data-otherparam1="">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Regular Admission Setting
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        List
+                    </small>
+                </h3>
+            </div>
+            <div class="panel-body" style="overflow:auto;">
+                <table class="table table-bordered">
+                    @if (Model != null)
+                    {
+                        <thead>
+                            <tr>
+                                <td>
+                                    Programme
+                                </td>
+                                <td>FormPrefix</td>
+                                <td>BatchToSet</td>
+                                <td>Action</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.PrintProgramme.GetEnumDescription()
+                                    </td>
+                                    <td class="center">@Html.DisplayFor(modelItem => item.FormPrefix)</td>
+                                    <td class="center">@Html.DisplayFor(modelItem => item.BatchToSet)</td>
+                                    <th class="center">
+                                        <a href="@Url.Action("EditRegularAdmSettings",new { @id=(short)item.PrintProgramme})"><i class="fa fa-edit"></i></a>
+                                    </th>
+                                </tr>
+                            }
+                        </tbody>
+                    }
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJS{}

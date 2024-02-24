@@ -1,0 +1,360 @@
+﻿
+@{bool newAdmission = (CUSrinagar.Models.AppUserHelper.College_ID != null && CUSrinagar.Models.AppUserHelper.College_ID != Guid.Empty);}
+<ul class="nav nav-list">
+    <li class="" id="StudentSection">
+        <a href='@Url.Action("GetInfo", "StudentInfo", new { area = "CUStudentZone" })'>
+            <i class="menu-icon fa fa-user"></i>
+            <span class="menu-text"> Profile </span>
+        </a>
+        <b class="arrow"></b>
+    </li>
+    @if (newAdmission)
+    {
+        @*<li class="" id="ExaminationSection">
+                <a href='@Url.Action("Download", "Download", new { area = "CUStudentZone" })'>
+                    <i class="menu-icon fa fa-download"></i>
+                    <span class="menu-text"> Downloads </span>
+                </a>
+                <b class="arrow"></b>
+            </li>*@
+        <li class="" id="ExaminationSection">
+            <a href='@Url.Action("PrintAdmitCard", "Examination", new { area = "CUStudentZone" })'>
+                <i class="menu-icon fa fa-download"></i>
+                <span class="menu-text"> Admit Card </span>
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="" id="ExaminationFormSection">
+            <a href='@Url.Action("Examination", "Examination", new { area = "CUStudentZone" })'>
+                <i class="menu-icon fa fa-download"></i>
+                <span class="menu-text"> Exam Form </span>
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li id="">
+            <a href='@Url.Action("ReEvaluation", "ReEvaluation", new { area = "CUStudentZone" })'>
+                <i class="menu-icon fa fa-download"></i>
+                <span class="menu-text">Re-Evaluation</span>
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li id="">
+            <a href='@Url.Action("Xerox", "ReEvaluation", new { area = "CUStudentZone" })'>
+                <i class="menu-icon fa fa-download"></i>
+                <span class="menu-text">Xerox Copy</span>
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="" id="ApplySemesterAdmSection">
+            <a href='@Url.Action("ApplySemesterAdm", "Student", new { area = "CUStudentZone" })' style="height:50px">
+                <i class="menu-icon fa fa-graduation-cap"></i>
+                <span class="menu-text">Semester </span>
+                <span class="menu-text" style="margin-left: 17px;padding-left: 22px;">Admission Form</span>
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="" id="ApplySemesterAdmSection">
+            <a href="/Result/ResultNotification?program=@CUSrinagar.Models.AppUserHelper.OrgPrintProgramme.ToString()" target="_blank">
+                <i class="menu-icon fa fa-list-alt"></i>
+                <span class="menu-text">Results</span>
+            </a>
+            <b class="arrow"></b>
+        </li>
+    }
+
+    @if (!newAdmission)
+    {
+        if ((CUSrinagar.Models.AppUserHelper.OrgPrintProgramme == CUSrinagar.Enums.PrintProgramme.PG || CUSrinagar.Models.AppUserHelper.OrgPrintProgramme == CUSrinagar.Enums.PrintProgramme.IH || CUSrinagar.Models.AppUserHelper.OrgPrintProgramme == CUSrinagar.Enums.PrintProgramme.UG))
+        {
+            if (CUSrinagar.Models.AppUserHelper.OrgPrintProgramme == CUSrinagar.Enums.PrintProgramme.IH)
+            {
+                @*<li id="RegnCoursesSection" class="hidde">
+                        <a href="@Url.Action("AddIHP", "RegnCourses", new { area = "CUStudentZone" })" style="height:50px">
+                            <i class="menu-icon fa fa-money"></i>
+                            <span class="menu-text">Apply for </span>
+                            <span class="menu-text" style="margin-left: 17px;padding-left: 22px;">More Courses</span>
+                        </a>
+                        <b class="arrow"></b>
+                    </li>*@
+                <li id="AddEditQualification">
+                    <a href="@Url.Action("AddEditQualificationDetails", "RegnCourses", new { area = "CUStudentZone" })" style="height:50px">
+                        <i class="menu-icon fa fa-money"></i>
+                        <span class="menu-text">Add Edit Prev.</span>
+                        <span class="menu-text" style="margin-left: 17px;padding-left: 22px;">Academic Details</span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li id="">
+                    <a href="@Url.Action("UpdateCertificates", "RegnCourses", new { area = "CUStudentZone" })" style="height:50px">
+                        <i class="menu-icon fa fa-money"></i>
+                        @* PG lateral Entry *@
+                        <span class="menu-text">Edit Uploaded</span>
+                        <span class="menu-text" style="margin-left: 17px;padding-left: 22px;">Certificates</span>
+
+                        @* for Betech lateral entry *@
+                        @*<span class="menu-text">Update</span>
+                            <span class="menu-text" style="margin-left: 17px;padding-left: 22px;">Certificates</span>*@
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                @*<li>
+                    <a href="@Url.Action("CollegePreference", "Admission", new { area = "CUStudentZone" })">
+                        <i class="menu-icon"></i>
+                        <span class="menu-text">Apply for UG</span>
+                    </a>
+                    </li>*@
+            }
+            else if (CUSrinagar.Models.AppUserHelper.OrgPrintProgramme == CUSrinagar.Enums.PrintProgramme.PG)
+            {
+                @*<li id="RegnCoursesSection">
+                            <a href="@Url.Action("AddPG", "RegnCourses", new { area = "CUStudentZone" })" style="height:50px">
+                                <i class="menu-icon fa fa-money"></i>
+                                <span class="menu-text">Apply for </span>
+                                <span class="menu-text" style="margin-left: 17px;padding-left: 22px;">More Courses</span>
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                    <li class="">
+                        <a href="@Url.Action("AddEditQualificationDetailsPG", "RegnCourses", new { area = "CUStudentZone" })" style="height:50px">
+                            <i class="menu-icon fa fa-money"></i>
+                            <span class="menu-text">Add Edit Prev.</span>
+                            <span class="menu-text" style="margin-left: 17px;padding-left: 22px;">Academic Details</span>
+                        </a>
+                        <b class="arrow"></b>
+                    </li>*@
+            }
+            else if (CUSrinagar.Models.AppUserHelper.OrgPrintProgramme == CUSrinagar.Enums.PrintProgramme.UG)
+            {
+                @*<li id="RegnCoursesSection">
+                            <a href="@Url.Action("AddUG", "RegnCourses", new { area = "CUStudentZone" })" style="height:50px">
+                                <i class="menu-icon fa fa-money"></i>
+                                <span class="menu-text">Apply for </span>
+                                <span class="menu-text" style="margin-left: 17px;padding-left: 22px;">More Courses</span>
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("AddEditQualificationDetails", "RegnCourses", new { area = "CUStudentZone" })" style="height:50px">
+                                <i class="menu-icon fa fa-money"></i>
+                                <span class="menu-text">Add Edit Prev.</span>
+                                <span class="menu-text" style="margin-left: 17px;padding-left: 22px;">Academic Details</span>
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                    <li>
+                            <a href="@Url.Action("CollegePreference", "Admission", new { area = "CUStudentZone" })">
+                                <i class="menu-icon"></i>
+                                <span class="menu-text">Apply for UG</span>
+                            </a>
+                        </li>*@
+            }
+
+            if (CUSrinagar.Models.AppUserHelper.OrgPrintProgramme != CUSrinagar.Enums.PrintProgramme.UG)
+            {
+                @*<li id="SelfFinancedSection" class="">
+                        <a href="@Url.Action("Apply", "SelfFinanced", new { area = "CUStudentZone" })" style="height:50px">
+                            <i class="menu-icon fa fa-money"></i>
+                            <span class="menu-text">Apply for</span>
+                            <span class="menu-text" style="margin-left: 15px;padding-left: 13px;">Self-Financed Seat</span>
+                        </a>
+                        <b class="arrow"></b>
+                    </li>*@
+            }
+        }
+    }
+
+    @if (!newAdmission)
+    {
+        if (CUSrinagar.Models.AppUserHelper.OrgPrintProgramme != CUSrinagar.Enums.PrintProgramme.PG)
+        {
+            <li class="hidde">
+                <a href="@Url.Action("MakePayment", "Payment", new { area = "CUStudentZone" })" style="height:50px" target="_blank" onclick="javascript: return confirm('Important!\nPlease do not submit FEE if you want to add or change the course(s).\nIf you have already submitted fee and you are still unable to print your admission form visit Cluster University I.T Section')">
+                    <i class="menu-icon fa fa-money"></i>
+                    <span class="menu-text">Make Payment</span>
+                    <span class="menu-text" style="margin-left: 15px;padding-left: 13px;">(Registration Fee)</span>
+                </a>
+                <b class="arrow"></b>
+            </li>
+        }
+        #region Counseliing
+
+        @*<li class="hidden">
+                <a style="height:50px;" href="@Url.Action("ApplyForCounseling", "Admission", new { area = "CUStudentZone",R=CUSrinagar.Extensions.Helper.EncryptCookieAndURLSafe("3") })">
+                    <i class="menu-icon"></i>
+                    <span class="menu-text">IG/Prof/Honor's</span>
+                    <i class="menu-icon"></i>
+                    <span class="menu-text">Counseling</span>
+                </a>
+            </li>*@
+        @*<li>
+                <a href="@Url.Action("AdmitCard", "Registration", new { area = "" })" style="height:80px;">
+                    <i class="menu-icon fa fa-print"></i>
+                    <span class="menu-text">Admit Card</span>
+                    <span class="menu-text" style="margin-left: 17px;padding-left: 13px;">IG/Prof/Honor's</span>
+                    <span class="menu-text" style="margin-left: 17px;padding-left: 13px;">Entrance 2021</span>
+                </a>
+            </li>*@
+        @*<li class="hidden">
+                <a href="@Url.Action("UploadCertificateIH", "Admission", new { area = "CUStudentZone",R=CUSrinagar.Extensions.Helper.EncryptCookieAndURLSafe("3") })" style="height:80px;">
+                    <span class="menu-text">IG/Prof/Honor's</span>
+                    <span class="menu-text">(New Admission)</span>
+                    <span class="menu-text">General</span>
+                    <span class="menu-text"> / SelfFinance</span>
+                </a>
+            </li>*@
+        #endregion
+    }
+
+    @*@if ((CUSrinagar.Models.AppUserHelper.OrgPrintProgramme == CUSrinagar.Enums.PrintProgramme.UG
+                            || CUSrinagar.Models.AppUserHelper.OrgPrintProgramme == CUSrinagar.Enums.PrintProgramme.IH)
+                            && CUSrinagar.Models.AppUserHelper.AppUsercompact.OrgBatch > 2021)
+        {
+            string controllerToGo = CUSrinagar.Models.AppUserHelper.OrgPrintProgramme == CUSrinagar.Enums.PrintProgramme.IH
+                                    ? "NEPIG" : "NEP";
+
+            <li>
+                <a href="@Url.Action("Print", controllerToGo, new { r= CUSrinagar.Extensions.Helper.EncryptCookieAndURLSafe(CUSrinagar.Models.AppUserHelper.User_ID.ToString()), area = string.Empty })" style="height:50px" target="_blank">
+
+
+                    <i class="menu-icon fa fa-print"></i>
+                    <span class="menu-text">Print Regn. Form </span>
+                </a>
+                <b class="arrow"></b>
+            </li>
+        }
+        else
+        {*@
+
+    @if (CUSrinagar.Models.AppUserHelper.AppUsercompact.OrgBatch > 2021)
+    {
+        string controllerToGo = CUSrinagar.Models.AppUserHelper.OrgPrintProgramme == CUSrinagar.Enums.PrintProgramme.IH
+                                    ? "NEPIG" : "NEP";
+        if (CUSrinagar.Models.AppUserHelper.OrgPrintProgramme == CUSrinagar.Enums.PrintProgramme.PG)
+        {
+            controllerToGo = "NEPPG";
+        }
+        if (CUSrinagar.Models.AppUserHelper.OrgPrintProgramme != CUSrinagar.Enums.PrintProgramme.UG)
+        {
+            <li>
+                <a href="@Url.Action("Print", controllerToGo,
+                new { r = CUSrinagar.Extensions.Helper.EncryptCookieAndURLSafe(CUSrinagar.Models.AppUserHelper.User_ID.ToString()), area = string.Empty })" style="height:50px" target="_blank">
+                    <i class="menu-icon fa fa-print"></i>
+                    <span class="menu-text">Print Regn. Form </span>
+                </a>
+                <b class="arrow"></b>
+            </li>
+        }
+    }
+    else
+    {
+        <li>
+            <a href="@Url.Action("Detail", "Registration", new { id = CUSrinagar.Models.AppUserHelper.User_ID + "/", R = CUSrinagar.Extensions.Helper.EncryptCookieAndURLSafe(((int)CUSrinagar.Models.AppUserHelper.TableSuffix).ToString()), area = string.Empty })" style="height:50px" target="_blank">
+                <i class="menu-icon fa fa-print"></i>
+                <span class="menu-text">Print Regn. Form </span>
+            </a>
+            <b class="arrow"></b>
+        </li>
+    }
+    @*}*@
+
+    @if (newAdmission)
+    {
+        <li class="">
+            <a href="#" class="dropdown-toggle" style="height:50px">
+                <i class="menu-icon fa fa-share"></i>
+                <span class="menu-text">Feedbacks</span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="/CUStudentZone/Feedback/" style="height:60px">
+                        <i class="menu-icon fa fa-book"></i>
+                        <span class="menu-text">Daily Lecture Feedback</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="submenu">
+                <li id="">
+                    <a href="/CUStudentZone/Grievance/AddAlumni" style="height:80px">
+                        <i class="menu-icon fa fa-user-plus"></i>
+                        <span class="menu-text">Current Employeement Status</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    }
+    @*<li class="dt">
+            <a href='@Url.Action("StudentProfile", "Student", new { area = "CUStudentZone" })' class="dropdown-toggle">
+                <i class="menu-icon fa fa-bars"></i>
+                <span class="menu-text">
+                    Your Profile
+                </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+        </li>*@
+
+    <li class="" id="GrievanceListItem">
+        <a href=@Url.Action("Grievance", "Grievance", new { area = "CUStudentZone" })>
+            <i class="menu-icon fa fa-caret-right"></i>
+            <span class="menu-text"> HelpDesk </span>
+        </a>
+        <b class="arrow"></b>
+    </li>
+
+    <li class="dts">
+        <a href="#" class="dropdown-toggle" style="height:50px">
+            <i class="menu-icon fa fa-bars"></i>
+            <span class="menu-text">Digital</span>
+            <span class="menu-text">Initiatives</span>
+            <b class="arrow fa fa-angle-down"></b>
+        </a>
+        <ul class="submenu">
+            <li>
+                <a href="/CUStudentZone/Feedback/" style="height:60px">
+                    <i class="menu-icon fa fa-book"></i>
+                    <span class="menu-text">Add / Edit ABC ID</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="submenu">
+            <li>
+                <a href="https://www.antiragging.in/affidavit_registration_disclaimer.html" target="_blank" style="height:60px">
+                    <i class="menu-icon fa fa-book"></i>
+                    <span class="menu-text">Submit Anti-Ragging Affidavit</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="submenu">
+            <li>
+                <a href="https://nad.digilocker.gov.in/" target="_blank" style="height:60px">
+                    <i class="menu-icon fa fa-book"></i>
+                    <span class="menu-text">NAD DigiLocker</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="submenu">
+            <li>
+                <a href="https://ndl.iitkgp.ac.in/" target="_blank" style="height:60px" title="Access more than 8 million digital resources free of cost.">
+                    <i class="menu-icon fa fa-book"></i>
+                    <span class="menu-text">National Digital Library</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="submenu">
+            <li>
+                <a href="https://swayam.gov.in/" target="_blank" style="height:60px" title="Students of UG/IG/PG interested in instrument for self-actualization should register at Swayam Online Courses.">
+                    <i class="menu-icon fa fa-institution"></i>
+                    <span class="menu-text">Swayam Online Courses</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="submenu">
+            <li>
+                <a href="https://ndl.iitkgp.ac.in/" target="_blank" style="height:30px">
+                    <i class="menu-icon fa fa-youtube-play"></i>
+                    <span class="menu-text">Spoken Tutorials</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+</ul>

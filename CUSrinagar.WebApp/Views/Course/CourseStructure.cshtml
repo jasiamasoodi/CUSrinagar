@@ -1,0 +1,68 @@
+﻿@model  CUSrinagar.Models.ADMSubjectMaster
+@{
+
+}
+<style type="text/css">
+    .flexible-container {
+        position: relative;
+        padding-bottom: 56.25%;
+        padding-top: 30px;
+        height: 0;
+        overflow: hidden;
+    }
+
+        .flexible-container iframe,
+        .flexible-container object,
+        .flexible-container embed {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+</style>
+
+
+
+<div class="panel">
+    @*<div class="panel-heading" data-toggle="collapse" data-target="#collapsible-Summary" data-parent="#myAccordionMesg">
+            Course Structure Summary
+        </div>*@
+    <div id="collapsible-Summary" class="collapse in">
+        <h4 class="font-medium nospace">
+            <i class="fa fa-envelope" aria-hidden="true"></i> <a href="~/FolderManager/Help/Course Structure for B.A, B.Com General Degree.pdf" download="~/FolderManager/Help/CourseCurricullum09oct2018.pdf">Click here to download Course-Structure for B.A/B.Com</a>
+            @*</h4>
+                <h4 class="font-medium nospace">*@
+            <i class="fa fa-envelope" aria-hidden="true" style="margin-left:150px;"></i> <a href="~/FolderManager/Help/Course Structure for B.Sc.pdf" download="~/FolderManager/Help/CourseCurricullum09oct2018.pdf">Click here to download Course-Structure for B.Sc</a>
+        </h4>
+        <h4 class="font-medium nospace" style="margin-left:150px;">
+            <i class="fa fa-envelope" aria-hidden="true"></i> <a href="~/FolderManager/Help/Course Structure for 5 Year Integrated and Honors Students.pdf" download="~/FolderManager/Help/CourseCurricullum09oct2018.pdf">Click here to download Course-Structure for Integrated/Honors Programmes</a>
+        </h4>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-heading" data-toggle="collapse" data-target="#collapsible-Detailed" data-parent="#myAccordionMesg">
+        Course Structure Detailed
+    </div>
+    <div id="collapsible-Detailed" class="collapse in">
+        <div class="flexible-container">
+            <iframe src="../FolderManager/Help/CourseCurricullum09oct2018.pdf"></iframe>
+        </div>
+        <div class="tab-pane" id="tab2">
+            <h4 class="font-medium nospace">
+                <i class="fa fa-envelope" aria-hidden="true"></i> <a href="~/FolderManager/Help/CourseCurricullum09oct2018.pdf" download="~/FolderManager/Help/CourseCurricullum09oct2018.pdf">Click here to download Course-Structure document</a>
+            </h4>
+        </div>
+
+    </div>
+</div>
+
+
+<br /><br />
+
+@section PageSpecificJS{
+    <script>
+        var _CurrentSection = "Academics";
+    </script>
+}

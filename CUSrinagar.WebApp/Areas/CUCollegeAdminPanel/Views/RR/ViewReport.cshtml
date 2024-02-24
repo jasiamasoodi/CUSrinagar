@@ -1,0 +1,292 @@
+﻿@model List<CUSrinagar.Models.LibraryForm>
+@using Nut
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>RR Preview - CU Srinagar</title>
+    <style type="text/css">
+        .btn-theme {
+            background: #011c27;
+            border: 1px solid #84aac9;
+            color: #fff;
+        }
+
+            .btn-theme:hover {
+                background: #545677;
+                border: 1px solid #84aac9;
+                color: #fff;
+            }
+
+        @@media print {
+            .IsPrintbody {
+                display: none;
+            }
+
+            table,
+            tfoot, tfoot tr, tfoot tr td {
+                border: 0 !important;
+            }
+
+            @@page {
+                size: landscape
+            }
+
+            .noneOnPrint {
+                display: none;
+            }
+
+            .parentdiv {
+                margin: 0 auto;
+                padding: 0px;
+            }
+
+            tbody {
+                font-size: 11px !important;
+                page-break-inside: avoid !important;
+            }
+
+            thead, .thead2 {
+                font-size: 11px !important;
+                display: table-header-group !important;
+            }
+        }
+
+        .parentdiv {
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        table tr td {
+            padding: 1px 5px 0px 5px;
+        }
+
+        .ctable tr td {
+            padding: 19px;
+        }
+
+        table tr td, table tr th {
+            max-width: 150px;
+            word-wrap: break-word !important;
+        }
+
+        table, table tr, table tr td, table tr th {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        div {
+            background-color: #fff;
+        }
+
+        .center {
+            text-align: center !important;
+        }
+
+        .pull-right {
+            float: right !important;
+        }
+
+        .pull-left {
+            float: left !important;
+        }
+    </style>
+</head>
+<body style="background-color:grey" class="IsPrintbody">
+    <div id="Jspleasewait" style="position:fixed;background-color:rgba(0, 0, 0, 0.20);left:0;top:0;z-index:200;width:100%;height:100%">
+        <p style="font-size:30px;font-weight:bold;color:red;margin-top:20%;margin-left:41%">
+            Please wait...
+        </p>
+    </div>
+    @if (Model != null)
+    {
+        int Sno = 0;
+        string HTMLSubjects = "";
+        short index = 0;
+        string semesterInWords = Model[0].Semester.ToText();
+        var collegeLogoPath = "~/Content/ThemePublic/Libraries/images/banners/" + ViewBag.CollegeCode + ".jpg";
+        string imgSrc = null;
+
+        string PermanentAddress = string.Empty;
+        string District = string.Empty;
+        string AssemblyConstituency = string.Empty;
+        string Email = string.Empty;
+        string formNo = string.Empty;
+
+        <div class="parentdiv">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="border:0 !important"> <img class="img-responsive" src="@Url.Content(collegeLogoPath)" style="width:60px;margin-left:5px" alt="@ViewBag.CollegeCode Logo not available" /></th>
+                        <th style="border-left:0 !important" colspan="8">
+                            <div class="center">
+                                <div>
+                                    <h1 style="margin:0;font-size:2em">Cluster University Srinagar</h1>
+                                    <h3 style="margin:0;">
+                                        @ViewBag.College<br />
+                                        <strong><i>Registration Details</i></strong>
+                                    </h3>
+                                </div>
+                                <span class="pull-right">Developed by CUS I.T Cell</span>
+                                <div class="pull-left">
+                                    Course:&nbsp;&nbsp;<strong>
+                                        @ViewBag.CourseFullName
+                                        @if (Model.All(x => x.IsLateralEntry))
+                                        {
+                                            <strong>(Lateral Entry Only)</strong>
+                                        }
+                                    </strong>&nbsp;&nbsp;
+                                    Batch:&nbsp;&nbsp;<strong>@Model[0].SemesterBatch</strong>&nbsp;&nbsp;
+                                    Semester:&nbsp;&nbsp;<strong>@Model[0].Semester (@semesterInWords)</strong>&nbsp;&nbsp;
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+
+
+                    <tr>
+                        <th style="padding:5px;">Sno.</th>
+                        <th style="padding:2px;">
+                            @if (Model[0].Semester == 1)
+                            {
+                                <text>CUS Form No.<br /></text>
+                            }
+                            CUS Regn. No.<br />
+                            Board Regn. No<br />
+                            Class RollNo.
+                        </th>
+                        <th style="padding:5px;">
+                            Name <br />
+                            Parentage
+                        </th>
+                        <th style="padding:5px;">
+                            DOB<br />
+                            Gender <br />
+                            Category
+                        </th>
+                        <th style="padding:5px;">
+                            Address<br />
+                            District<br />
+                            Assembly Constituency<br />
+                        </th>
+                        <th style="padding:5px;">
+                            Mobile<br />
+                            Email<br />
+                            ABC ID<br />
+                        </th>
+                        <th style="padding:5px;">
+                            Board/University<br />
+                            from which Qualifying<br />
+                            Exam Passed
+                        </th>
+                        <th style="padding:5px;">Subject Combination</th>
+                        <th style="padding:5px;">Photograph</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var student in Model)
+                    {
+                        index = 0;
+                        PermanentAddress = student.StudentAddress?.PermanentAddress + "";
+                        District = student.StudentAddress?.District + "";
+                        AssemblyConstituency = student.StudentAddress?.AssemblyConstituency + "";
+                        Email = student.StudentAddress?.Email + "";
+                        HTMLSubjects = "";
+                        student.StudentSubjects
+                                        .Replace(") , ", "|")
+                                        .Split('|').ToList().ForEach(x =>
+                                        {
+                                            index++;
+                                            HTMLSubjects += index.ToString() + ") " + x + ")<br/>";
+                                        });
+
+                        Sno++;
+                        imgSrc = student.Photograph;
+
+                        <tr class="dontbreakInside">
+                            <th style="padding:5px;">@Sno</th>
+                            <td style="padding:5px;">
+                                @if (Model[0].Semester == 1)
+                                {
+                                    formNo = Convert.ToString(student.StudentFormNo).ToUpper();
+                                    @formNo<br />
+                                }
+                                @Convert.ToString(student.CUSRegistrationNo + "").ToUpper()<br />
+                                @Convert.ToString(student.BoardRegistrationNo + "").ToUpper()<br />
+                                @student.ClassRollNo
+                            </td>
+                            <td style="padding:5px;">
+                                <strong>@student.FullName</strong> <br />
+                                @student.FathersName
+                            </td>
+                            <td style="padding:5px;">
+                                @student.DOB.ToLongDateString()<br />
+                                @student.Gender <br />
+                                @student.Category
+                            </td>
+                            <td style="padding:5px;text-transform:capitalize !important">
+                                @Convert.ToString(PermanentAddress + "").ToLower()<br />
+                                @Convert.ToString(District + "").ToLower()<br />
+                                @Convert.ToString(AssemblyConstituency + "").ToLower()<br />
+                            </td>
+                            <td style="padding:5px;">
+                                @if (student.StudentAddress != null)
+                                {
+                                    <text>
+                                        @student.StudentAddress.Mobile <br />
+                                    </text>
+                                }
+                                @Email.ToLower()<br /><br />
+                                @(string.IsNullOrWhiteSpace(student.ABCID)?"": string.Join("-", Enumerable.Range(0, student.ABCID.Length / 3).Select(i => student.ABCID.Substring(i * 3, 3))))
+                            </td>
+                            <td style="padding:5px;">@student.QualifyingExam</td>
+                            <td style="padding:5px; min-width:300px">@Html.Raw(HTMLSubjects.Replace("))", ")"))</td>
+                            <td style="padding:5px;" class="center"><img class="img-responsive" src="@imgSrc" style="width:70px;height:55px;" alt="Photo not Uploaded" /></td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot style="margin:0 !important">
+                    <tr style="margin:0 !important">
+                        <td colspan="9" style="margin:0 !important">
+                            <div style="font-size: 14px; padding: 10px; border: 0 !important;margin:0 !important">
+                                Certified that credentials of above students and their eligibility for admission to concern programme
+                                has been verified with their original certificates.
+                                Further, Original Migration Certificates (If any) have been collected and are attached herewith.
+                                <p style="text-align:right"><b>Seal &amp; Sign of Principal</b></p>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <br />
+        <br />
+        <br />
+    }
+    else
+    { <div class="parentdiv">
+            No Record Found
+        </div>
+    }
+    <div class="noneOnPrint" style="margin-left:-14px;height:40px;background-color:lightslategrey;width:100%;position:fixed;bottom:0;z-index:100;text-align:center;padding-top:10px">
+        <a style="height: 32px;color:white" href="https://www.wikihow.com/Save-a-Web-Page-as-a-PDF-in-Google-Chrome" target="_blank"><b>See How to Save as PDF</b></a>&nbsp;&nbsp;&nbsp;
+        <button style="height: 32px;" href="#" class="btn btn-theme" onclick="window.print();"><b>Download or Print</b></button>
+    </div>
+
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/Libraries/jquery-2.1.4.min.js")"></script>
+    <script src="@Url.Content("~/Content/ThemePublic/Libraries/disableBack.js")"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#Jspleasewait").css("display", "none");
+            $("body").removeClass("IsPrintbody");
+        });
+    </script>
+</body>
+</html>

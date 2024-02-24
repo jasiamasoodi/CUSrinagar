@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - CUCollege Admin Panel</title>
+
+    <meta name="description" content="overview &amp; stats" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <noscript><meta http-equiv="REFRESH" content="0; url=@Url.Content("~/Content/JSdisabled.html")" /></noscript>
+    @{Html.RenderPartial("~/Areas/CUSrinagarAdminPanel/Views/Shared/_CUWebAppFavicon.cshtml");}
+    @Styles.Render("~/Content/ThemeAdmin/Content/Libraries/css/gencsscollege")
+    <link rel="stylesheet" href="@Url.Content("~/Content/ThemeAdmin/Content/Libraries/font-awesome/4.7.0/css/font-awesome.min.css")" />
+    @*page specific plugin styles files *@
+    @*@RenderSection("PageSpecificStyleFiles", required: false)*@
+
+    @*inline styles related to this page*@
+    @RenderSection("PageSpecificStyle", required: false)
+</head>
+
+<body class="no-skin">
+    @Html.Hidden("collegebaseurl", Url.Action("action", "controller", new { area = "CUCollegeAdminPanel" }))
+    @Html.Hidden("ErrorMessage", (string)ViewBag.ErrorMessage)
+    @Html.Hidden("SuccessMessage", (string)ViewBag.SuccessMessage)
+    <input type="hidden" class="jsCollegeDDL" value="@CUSrinagar.Models.AppUserHelper.College_ID" data-scope="row1" />
+    <div id="navbar" class="navbar navbar-default ace-save-state navbar-fixed-top">
+        <div class="navbar-container ace-save-state" id="navbar-container">
+            <button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+                <span class="sr-only">Toggle sidebar</span>
+
+                <span class="icon-bar"></span>
+
+                <span class="icon-bar"></span>
+
+                <span class="icon-bar"></span>
+            </button>
+            <div class="navbar-header pull-left">
+                <a href="/" class="navbar-brand">
+                    <small>
+                        Cluster University Srinagar
+                    </small>
+                </a>
+            </div>
+            <div class="navbar-buttons navbar-header pull-right" role="navigation">
+
+                @{Html.RenderPartial("_CUCollegeAdminPanelUserAccountMenu");}
+
+            </div>
+        </div> @*navbar-container*@
+    </div>
+    <div class="main-container ace-save-state" id="main-container">
+        <script type="text/javascript">
+            try { ace.settings.loadState('main-container') } catch (e) { }
+        </script>
+
+        <div id="sidebar" class="sidebar responsive ace-save-state sidebar-fixed sidebar-scroll" data-sidebar="true" data-sidebar-scroll="true" data-sidebar-hover="true">
+            <script type="text/javascript">
+                try { ace.settings.loadState('sidebar') } catch (e) { }
+            </script>
+            @* Shortcuts *@
+            @{ Html.RenderPartial("_CUCollegeAdminPanelShortCuts");}
+
+            @*nav-list*@
+            @{Html.RenderPartial("_CUCollegeAdminPanelLeftMenu");}
+
+            <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+                <i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="breadcrumbs ace-save-state breadcrumbs-fixed" id="breadcrumbs">
+
+                    @RenderSection("CUSSitemap", required: false)
+
+
+                    @{Html.RenderPartial("_CUCollegeAdminPanelSearch");}
+                </div>
+
+                <div class="page-content">
+                    @*MESSAGE SECTION BEGINS*@
+                    @*<div class="alert alert-success" id="successMessage" style="display:none;">
+                            <a href="#" class="close">&times;</a>
+                            <strong>Success!&nbsp;</strong><span> Record saved successfully.</span>
+                        </div>
+                        <div class="alert alert-danger" id="errorMessage" style="display: none;">
+                            <a href="#" class="close">&times;</a>
+                            <strong>Error!&nbsp;</strong><span> Something went wrong.</span>
+                        </div>*@
+                    @*MESSAGE SECTION ENDS*@
+
+                    @*PAGE CONTENT BEGINS*@
+                    @RenderBody()
+                    @*PAGE CONTENT ENDS*@
+                </div> @*page-content*@
+            </div>
+        </div> @*main-content*@
+
+        @{Html.RenderPartial("~/Areas/CUSrinagarAdminPanel/Views/Shared/_CUWebAppFooter.cshtml");}
+
+        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+            <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+        </a>
+    </div> @*main-container*@
+
+    @*<div class="loader" style="display:none;"></div>*@
+    @*MODAL DIALOG START*@
+    <!-- Modal -->
+    @*MODAL DIALOG END*@
+
+
+
+
+
+    @*basic scripts*@
+    @*@{Html.RenderPartial("~/Areas/CUSrinagarAdminPanel/Views/Shared/_CUWebAppGeneralJS.cshtml");}*@
+    @Scripts.Render("~/Content/ThemeAdmin/Content/Scripts/Libraries/jsmainsbasiccollege")
+    @Scripts.Render("~/Content/ThemeAdmin/Content/Scripts/Libraries/jsmainscollege")
+    @Scripts.Render("~/bundles/Libraries/jqueryvalidation")
+    @Scripts.Render("~/Scripts/General/js-custom")
+    @*page specific plugin scripts*@
+    @RenderSection("PageSpecificJSFiles", required: false)
+
+    @*inline scripts related to this page*@
+    @RenderSection("PageSpecificJS", required: false)
+</body>
+</html>

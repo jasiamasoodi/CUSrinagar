@@ -1,0 +1,83 @@
+﻿@model  List<CUSrinagar.Models.Syllabus>
+@{
+    Layout = null;
+    var ISChecked = "";
+}
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th data-property="Session">Batch</th>
+            <th data-property="CourseFullName">Course</th>
+            <th data-property="Syllabus.Semester">Semester</th>
+            <th data-property="SubjectFullName">Department&nbsp;[<b>subject title</b>]</th>
+            <th data-property="Status">Active</th>
+            <th>Remark</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var row in Model)
+            {
+                <tr>
+                    <td>
+                        @row.Session
+                    </td>
+                    <td>@row.CourseFullName</td>
+                    <td>@row.Semester</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(row.DepartmentFullName + ""))
+                        {
+                            @row.DepartmentFullName
+                        }
+                        @if (!string.IsNullOrEmpty(row.SubjectFullName + ""))
+                        {
+                            <span>&nbsp;[<b>@row.SubjectFullName.Trim()</b>]</span>
+                        }
+                    </td>
+                    <td>
+                        @if (!HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Dean.ToString()))
+                        {
+
+                            if (row.Status)
+                            {
+                                ISChecked = "checked = 'checked'";
+                            }
+                            else
+                            { ISChecked = ""; }
+                            <label class='pull-center inline'>
+                                <input class='ace ace-switch ace-switch-5' id='@row.Syllabus_ID' type='checkbox' @ISChecked onclick='return IsActive(this)' />
+                                <span class='lbl middle'></span>
+                            </label>
+                        }
+                        else
+                        {
+                            if (row.Status)
+                            {
+                                ISChecked = "checked = 'checked'";
+                            }
+                            else
+                            { ISChecked = ""; }
+                            <label class='pull-center inline'>
+                                <input class='ace ace-switch ace-switch-5' type='checkbox' @ISChecked />
+                                <span class='lbl middle'></span>
+                            </label>
+                        }
+                    </td>
+                    <td>@row.Remark</td>
+                    <td>
+                        <a href='@row.SyllabusUrl' target="_blank" title="view syllabus"> <i class="fa fa-file-pdf-o"></i> </a>|
+                        @if (!HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Dean.ToString()))
+                        {
+                            <a href="javascript:void(0);" id='@row.Syllabus_ID' class="JSDelete ace-icon fa fa-trash-o red bigger-130" title="Delete this Syllabus"></a>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+

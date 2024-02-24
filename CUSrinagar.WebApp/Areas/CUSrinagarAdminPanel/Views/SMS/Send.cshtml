@@ -1,0 +1,167 @@
+﻿@model CUSrinagar.Models.SMS
+
+@{
+    ViewBag.Title = "Compose SMS - CUSrinagar";
+}
+<div class="page-wrapper pager-table-text">
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8"></div>
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    @if (TempData["response"] != null)
+                    {
+                        @Html.Raw(TempData["response"])
+                    }
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <i class="fa fa-send"></i> Compose SMS
+                        </h3>
+                    </div>
+                    @using (Html.BeginForm("Send", "SMS", FormMethod.Post, new { @id = "JSfrmSMS", @class = "form-horizontal" }))
+                    {
+                        @Html.AntiForgeryToken()
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right">
+                                <span class="red bigger-110">*</span> @Html.LabelFor(model => model.SMSRegarding)
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.DropDownListFor(x => x.SMSRegarding, (IEnumerable<SelectListItem>)ViewBag.SMSRegarding, string.Empty, new { @style = "width:60%" })
+                                @Html.ValidationMessageFor(x => x.SMSRegarding)
+                            </div>
+                        </div>
+                        <div id="hideOnOther">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Programme)
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(x => x.Programme, (IEnumerable<SelectListItem>)ViewBag.Programme, string.Empty)
+                                    @Html.ValidationMessageFor(x => x.Programme)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Batch)
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.Batch, new { @type = "number", @maxlength = "4", Value = DateTime.UtcNow.Year })
+                                    @Html.ValidationMessageFor(x => x.Batch)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">
+                                    <span class="red bigger-110"></span> @Html.LabelFor(model => model.College_ID)
+                                </label>
+                                <div class="col-sm-8">
+                                    <span class="CollegeID">
+                                        @Html.DropDownListFor(x => x.College_ID, (IEnumerable<SelectListItem>)ViewBag.Colleges, string.Empty)
+                                    </span>
+                                    @Html.ValidationMessageFor(x => x.College_ID)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">
+                                    <span class="red bigger-110"></span> @Html.LabelFor(model => model.Course_ID)
+                                </label>
+                                <div class="col-sm-8 jsDDLContainer">
+                                    <span class="CourseID">
+                                        @Html.DropDownListFor(x => x.Course_ID, (IEnumerable<SelectListItem>)ViewBag.Courses, new { @class = "multiselect", @multiple = "multiple" })
+                                    </span>
+                                    @Html.ValidationMessageFor(x => x.Course_ID)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group HideRollNos">
+                            <label class="col-sm-4 control-label no-padding-right">
+                                <span class="red bigger-110">*</span> @Html.LabelFor(model => model.RollNos)
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.TextAreaFor(x => x.RollNos, new { @style = "width:80%;height:130px;" })
+                                @Html.ValidationMessageFor(x => x.RollNos)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right">
+                                <span class="red bigger-110"></span> @Html.LabelFor(model => model.OtherPhoneNo)
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.TextAreaFor(x => x.OtherPhoneNo, new { @style = "width:80%;height:130px" })
+                                @Html.ValidationMessageFor(x => x.OtherPhoneNo)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right">
+                                <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Message)
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.TextAreaFor(x => x.Message, new { @maxlength = "300", @style = "width:80%;height:130px" })
+                                @Html.ValidationMessageFor(x => x.Message)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right">
+
+                            </label>
+                            <div class="col-sm-6 ">
+                                <div class="col-sm-1" style="padding-top: 17px;">
+                                    <button type="submit" class="btn btn-primary JSSendSMS"><i class="fa fa-send"></i>&nbsp; Send</button>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificStyle{
+    <style>
+        .filter-btn a {
+            color: white !important
+        }
+
+        .required {
+            color: black;
+        }
+
+        .field-validation-error {
+            color: red !important;
+        }
+
+        input[type='text'] {
+            width: 300px !important;
+        }
+
+        .multiselect-container {
+            max-height: 300px !important;
+        }
+
+        @@media screen and (max-width: 600px) {
+            .multiselect-container {
+                max-width: 200% !important;
+            }
+
+            #SMSRegarding, #OtherPhoneNo, #Message {
+                width: 100% !important;
+            }
+        }
+    </style>
+}
+@section PageSpecificJS
+{
+    @Scripts.Render("~/bundles/Libraries/jqueryval")
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/SMS/JSSMS.js")"></script>
+}

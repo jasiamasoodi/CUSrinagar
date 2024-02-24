@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "NEP-2020 Draft Regulations - ";
+}
+
+<div class="page-wrapper pager-table-text">
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            NEP-2020 Draft Regulations
+                            <a class="pull-right" href="/FolderManager/Downloads/ScehemeRegulationsofCUS2021NEP.pdf" download>
+                                <i class="fa fa-download"></i> Download
+                            </a>
+                        </h3>
+                    </div>
+                    <iframe id="Cframe" style="width:100%;min-height:700px;" frameborder="0" allowtransparency="true" webkitallowfullscreen mozallowfullscreen allowfullscreen
+                            src="/FolderManager/Downloads/ScehemeRegulationsofCUS2021NEP.pdf"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script>
+        var _CurrentSection = "Home";
+        $(document).ready(function () {
+            loadpagertable();
+        });
+    </script>
+}

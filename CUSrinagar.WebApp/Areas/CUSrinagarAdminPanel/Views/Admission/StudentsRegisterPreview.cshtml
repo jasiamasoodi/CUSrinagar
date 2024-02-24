@@ -1,0 +1,347 @@
+﻿@model List<CUSrinagar.Models.StudentRegister>
+@using Nut
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Students Register Preview - CU Srinagar</title>
+    <style type="text/css">
+        .btn-theme {
+            background: #011c27;
+            border: 1px solid #84aac9;
+            color: #fff;
+        }
+
+            .btn-theme:hover {
+                background: #545677;
+                border: 1px solid #84aac9;
+                color: #fff;
+            }
+
+        @@media print {
+            .IsPrintbody {
+                display: none;
+            }
+
+            @@page {
+                size: landscape;
+                margin: 15px 0 0 auto;
+            }
+
+            .noneOnPrint {
+                display: none;
+            }
+
+            .parentdiv {
+                margin: 0 auto;
+                padding: 0px;
+            }
+
+            tbody {
+                font-size: 11px !important;
+                page-break-inside: avoid !important;
+            }
+
+            thead, .thead2 {
+                font-size: 11px !important;
+                display: table-header-group !important;
+            }
+            .parentdiv{
+                margin-left:50px !important;
+            }
+        }
+
+        .parentdiv {
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        table tr td {
+            padding: 4px 5px 4px 5px;
+        }
+
+        .ctable tr td {
+            padding: 19px;
+        }
+
+        table tr td, table tr th {
+            max-width: 150px;
+            word-wrap: break-word !important;
+            text-align: left;
+        }
+
+        table, table tr, table tr td, table tr th {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        div {
+            background-color: #fff;
+        }
+
+        .center {
+            text-align: center !important;
+        }
+
+        .pull-right {
+            float: right !important;
+        }
+
+        .pull-left {
+            float: left !important;
+        }
+
+        .breakpagehere {
+            page-break-after: always !important;
+        }
+    </style>
+</head>
+<body style="background-color:grey" class="IsPrintbody">
+    <div id="Jspleasewait" style="position:fixed;background-color:rgba(0, 0, 0, 0.20);left:0;top:0;z-index:200;width:100%;height:100%">
+        <p style="font-size:30px;font-weight:bold;color:red;margin-top:20%;margin-left:41%">
+            Please wait...
+        </p>
+    </div>
+    @if (Model != null)
+    {
+        string imgSrc = null;
+
+        string PermanentAddress = string.Empty;
+        string District = string.Empty;
+        string AssemblyConstituency = string.Empty;
+        string Email = string.Empty;
+        string formNo = string.Empty;
+
+
+        string isPassout = "";
+        string migrationIssued = "";
+        string admissionCancelled = "";
+
+
+        foreach (var student in Model)
+        {
+            PermanentAddress = student.StudentAddress?.PermanentAddress + "";
+            District = student.StudentAddress?.District + "";
+            AssemblyConstituency = student.StudentAddress?.AssemblyConstituency + "";
+            Email = student.StudentAddress?.Email + "";
+
+            imgSrc = student.Photograph;
+            <div class="parentdiv">
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="10">
+                                <div class="center">
+                                    <h1 style="margin-top:-3px;">Cluster University Srinagar</h1>
+                                    <h3 style="margin-top:-15px;margin-bottom:0px">
+                                        REGISTER OF STUDENT
+                                        <span style="float:right;font-size:10px;color:grey">Developed by I.T Cell</span><br />
+                                    </h3>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="dontbreakInside">
+                            <th style="width:100px">Programme</th>
+                            <td style="width:120px">
+                                @ViewBag.CourseFullName
+                                @if (student.IsLateralEntry)
+                                {
+                                    <span>(Lateral Entry) </span>
+                                }
+                            </td>
+                            <th style="width:110px">Session/Batch</th>
+                            <td style="width:100px">@Model[0].SemesterBatch</td>
+                            <th style="width:120px">College Alloted</th>
+                            <td>@ViewBag.College</td>
+                            <th rowspan="8" style="width:100px" class="center">
+                                <img class="img-responsive" src="@imgSrc" style="width:134px;height:145px;margin:0;padding:0" alt="Photo not Uploaded" />
+                            </th>
+                        </tr>
+                        <tr class="dontbreakInside">
+                            <th style="width:100px">Name</th>
+                            <td colspan="2">@student.FullName.ToUpper()</td>
+                            <th style="width:100px">Fathers Name</th>
+                            <td colspan="2" style="width:100px">@student.FathersName.ToUpper()</td>
+                        </tr>
+                        <tr class="dontbreakInside">
+                            <th style="width:120px">Mothers Name</th>
+                            <td colspan="2">@student.MothersName.ToUpper()</td>
+                            <th style="width:100px">Address</th>
+                            <td colspan="2" style="width:100px">@student.StudentAddress.PermanentAddress</td>
+                        </tr>
+                        <tr class="dontbreakInside">
+                            <th style="width:120px">District</th>
+                            <td>@student.StudentAddress.District.ToUpper()</td>
+                            <th style="width:100px">State/UT</th>
+                            <td style="width:160px">@student.StudentAddress.State</td>
+                            <th style="width:100px">Mobile No.</th>
+                            <td style="width:100px">@student.StudentAddress.Mobile</td>
+                        </tr>
+                        <tr class="dontbreakInside">
+                            <th style="width:120px">Email</th>
+                            <td>@student.StudentAddress.Email</td>
+                            <th style="width:100px">Gender</th>
+                            <td style="width:160px">@student.Gender.ToUpper()</td>
+                            <th style="width:100px">Category</th>
+                            <td style="width:100px">@student.Category.ToUpper()</td>
+                        </tr>
+                        <tr class="dontbreakInside">
+                            <th style="width:120px">DOB (In Words)</th>
+                            <td colspan="2">@student.DOB.Day.ToText().ToUpper() @student.DOB.ToString("MMMM").ToUpper() @student.DOB.Year.ToText().ToUpper()</td>
+                            <th style="width:100px">In Figures (dd-mm-yyyy)</th>
+                            <td colspan="2" style="width:100px">@student.DOB.ToString("dd-MM-yyyy")</td>
+                        </tr>
+                        <tr class="dontbreakInside">
+                            <th style="width:120px">Board Registration No.</th>
+                            <td>@student.BoardRegistrationNo.ToUpper()</td>
+                            <th style="width:100px">CUS Registration No.</th>
+                            <td style="width:160px">@student.CUSRegistrationNo</td>
+                            <th style="width:100px">CUS Form No.</th>
+                            <td style="width:100px">@student.StudentFormNo</td>
+                        </tr>
+                        <tr class="dontbreakInside">
+                            <th style="width:120px">STATUS</th>
+                            <td colspan="5">
+                                @{
+                                    isPassout = student.IsPassout ? "checked=\"checked\"" : "";
+                                    migrationIssued = (student.MigrationIssued!=CUSrinagar.Enums.MigrationIssueStatus.NotIssued) ? "checked=\"checked\"" : "";
+                                    admissionCancelled = (student.FormStatus == CUSrinagar.Enums.FormStatus.CancelRegistration) ? "checked=\"checked\"" : "";
+                                }
+                                Passout<input type="checkbox"  @isPassout />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                Migration Issued<input type="checkbox" @migrationIssued />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                Exit Programme<input type="checkbox" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                Admission Cancelled<input type="checkbox" @admissionCancelled />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                CGPA : @student.CGPA
+                            </td>
+                        </tr>
+                        <tr style="padding:0;border:0">
+                            <td colspan="10" style="padding:0;border:0">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th style="width:50px">
+                                                Semester
+                                            </th>
+                                            <th style="width:90px">
+                                                Date of Admission
+                                            </th>
+                                            <th class="center">
+                                                Subject Combination
+                                            </th>
+                                            <th style="width:50px">
+                                                Year &amp; Session
+                                            </th>
+                                            <th style="width:67px">
+                                                Exam RollNo.
+                                            </th>
+                                            <th style="width:45px">
+                                                SGPA
+                                            </th>
+                                            <th style="max-width:45px" class="center">
+                                                Year of Passing
+                                            </th>
+                                            <th style="width:140px">
+                                                Signature of DEO
+                                            </th>
+                                            <th style="width:140px">
+                                                Signature of the Attesting Officer
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in student?.SubjectsExams ?? new List<CUSrinagar.Models.SemesterCombination>())
+                                        {
+                                            <tr>
+                                                <th class="center">@item.Semester</th>
+                                                <td>@item.AdmissionDate.ToLongDateString()</td>
+                                                <td>
+                                                    @item.StudentSubjects
+                                                    @if (item.IsVerifiedByCollege)
+                                                    {
+                                                        <strong style="color:green"> (Verified by College) </strong>
+                                                    }
+                                                    else
+                                                    {
+                                                        <strong style="color:red"> (Not Verified by College) </strong>
+                                                    }
+                                                </td>
+                                                <td>@item.ExamYear</td>
+                                                <td>@item.ExamRollNo</td>
+                                                <td class="center">@item.SGPA</td>
+                                                <td class="center">@(item.DateOfPassing?.Year)</td>
+                                                <td>&nbsp;&nbsp;</td>
+                                                <td>&nbsp;&nbsp;</td>
+                                            </tr>
+                                        }
+                                        @*@{int blankRowsCount = student.SubjectsExams?.Count() ?? 0;
+                                            if (ViewBag.Programme == CUSrinagar.Enums.Programme.Engineering)
+                                            {
+
+                                                blankRowsCount = Math.Abs(9 - blankRowsCount);
+                                            }
+                                            else
+                                            {
+                                                blankRowsCount = Math.Abs(11 - blankRowsCount);
+                                            }
+                                        }
+                                        @for (int i = 0; i < blankRowsCount; i++)
+                                        {
+                                            <tr>
+                                                <td>&nbsp;&nbsp;</td>
+                                                <td style="height:30px"></td>
+                                                <td>&nbsp;&nbsp;</td>
+                                                <td>&nbsp;&nbsp;</td>
+                                                <td>&nbsp;&nbsp;</td>
+                                                <td>&nbsp;&nbsp;</td>
+                                                <td>&nbsp;&nbsp;</td>
+                                                <td>&nbsp;&nbsp;</td>
+                                                <td>&nbsp;&nbsp;</td>
+                                            </tr>
+                                        }*@
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="class=" noneOnPrint">
+                <p class="breakpagehere"></p>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="parentdiv">
+            No Record Found
+        </div>
+    }
+    <div class="class=" noneOnPrint">
+        <br />
+        <br />
+    </div>
+
+    <div class="noneOnPrint" style="margin-left:-14px;height:40px;background-color:lightslategrey;width:100%;position:fixed;bottom:0;z-index:100;text-align:center;padding-top:10px">
+        <a style="height: 32px;color:white" href="https://www.wikihow.com/Save-a-Web-Page-as-a-PDF-in-Google-Chrome" target="_blank"><b>See How to Save as PDF</b></a>&nbsp;&nbsp;&nbsp;
+        <button style="height: 32px;" href="#" class="btn btn-theme" onclick="window.print();"><b>Download or Print</b></button>
+    </div>
+
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/Libraries/jquery-2.1.4.min.js")"></script>
+    <script src="@Url.Content("~/Content/ThemePublic/Libraries/disableBack.js")"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#Jspleasewait").css("display", "none");
+            $("body").removeClass("IsPrintbody");
+        });
+    </script>
+</body>
+</html>

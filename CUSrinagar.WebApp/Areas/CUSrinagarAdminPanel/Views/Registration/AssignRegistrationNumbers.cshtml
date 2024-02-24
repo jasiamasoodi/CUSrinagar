@@ -1,0 +1,133 @@
+﻿@using CUSrinagar.Extensions;
+@using System.Globalization
+
+@{
+
+    var response = (GeneralModels.ResponseData)ViewBag.Response;
+    ViewBag.Title = "AssignRegistrationNumbers";
+}
+<div class="row">
+    <h4 class="center"><i>Assign Registration Numbers to Batch @ViewBag.Batch and Programme = @ViewBag.SelectedProgramme </i></h4>
+</div>
+<hr />
+<div class="row">
+    <div>
+        <div>
+            @if (response != null && (response.ErrorMessage != null || response.SuccessMessage != null))
+            {
+                if (response.ErrorMessage != null)
+                {
+                    <h3 class="alert alert-block alert-danger center"><i><strong>@Html.Raw(response.ErrorMessage)</strong> </i></h3>
+                }
+
+
+                var collegeCourses = (List<string>)ViewBag.Response.SecondaryResponseObject;
+                if (collegeCourses != null)
+                {
+                    if (response.SuccessMessage != null)
+                    {
+                        <div class="alert alert-block alert-success ">
+                            <h3 class="alert alert-block alert-success center"><i>@Html.Raw(response.SuccessMessage) </i></h3>
+                            <strong>Registration Numbers assigned to Courses</strong>
+                            <ol>
+                                @foreach (var course in collegeCourses)
+                                {
+                                    <li>
+                                        <strong><i> @course</i></strong>
+                                    </li>
+                                }
+                            </ol>
+                        </div>
+                    }
+                }
+            }
+        </div>
+        <div class="search-box">
+            <div class="col-sm-12">
+                <div class="form-inline col-sm-12">
+                    <strong>Filters </strong>
+                    <form action="@Url.Action("AssignRegistrationNumbers", new { @College_ID = Guid.Empty })" method="post">
+                        <div class="form-group">
+                            <div class="form-group">
+                                @Html.DropDownList("ProgrammeDropDownList", new SelectList(ViewBag.Programmes, "Value", "Text", ((int)ViewBag.SelectedProgramme).ToString()), null, new { @class = "" })
+                            </div>
+                            <div class="form-group">
+                                Gap Between Courses
+                                @Html.TextBox("GapBetweenCourses", 10, new { @type = "number", @min = "0" })
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-sm-12">
+        <div id="accordion" class="accordion-style1 panel-group">
+            @if (ViewBag.Colleges != null)
+            {
+                foreach (var CollegeListItem in (List<SelectListItem>)ViewBag.Colleges)
+                {
+                    <div class="panel panel-default margin-bottom-10">
+                        <div class="panel-heading">
+                            <h2 class="heading-title">
+                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#" aria-expanded="false" data-value="@CollegeListItem.Value.Split('$')[1].Trim()">
+                                    <i class="bigger-110 ace-icon fa fa-angle-right" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                    <strong>@CollegeListItem.Text || New Registrations = @CollegeListItem.Value.Split('$')[0].Trim() </strong> <span class="red">Click here to assign</span>
+                                </a>
+                            </h2>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <hr />
+                <h4 class="center"><i>All the Colleges for this Batch seem to have been assigned the Registration Numbers.</i></h4>
+                <hr />
+            }
+            <form action="" id="frmAssignRegistrationNumbers" method="post"></form>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script>
+
+        $(document).on('change', '#ProgrammeDropDownList', function () {
+            $(this).closest('form').submit();
+        });
+        $(document).on('click', '.accordion-toggle',
+            function () {
+
+                var college_ID = $(this).data('value');
+                var printProgramme = $('#ProgrammeDropDownList').find(":selected").val();
+                var GapBetweenCourses = $('#GapBetweenCourses').val();
+                var _url = getBaseUrlAdmin() + "Registration/AssignRegistrationNumbers?college_ID=" + college_ID + "&ProgrammeDropDownList=" + printProgramme + "&GapBetweenCourses=" + GapBetweenCourses;
+                ConfirmDialog('Are you sure you want to have ' + GapBetweenCourses + ' as the Gap between Courses', _url);
+            });
+
+        function ConfirmDialog(message, _url) {
+            $('<div></div>').appendTo('body')
+                .html('<div><h6>' + message + '?</h6></div>')
+                .dialog({
+                    modal: true, title: 'Confirmation', zIndex: 10000, autoOpen: true,
+                    width: 'auto', resizable: false,
+                    buttons: {
+                        Yes: function () {
+                            $("#frmAssignRegistrationNumbers").attr("action", _url).submit();
+                            $(this).dialog("close");
+                        },
+                        No: function () {
+                            $(this).dialog("close");
+                        }
+                    },
+                    close: function (event, ui) {
+                        $(this).remove();
+                    }
+                });
+        };
+    </script>
+}

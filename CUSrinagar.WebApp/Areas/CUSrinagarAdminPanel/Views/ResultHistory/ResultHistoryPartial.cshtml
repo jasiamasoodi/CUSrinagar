@@ -1,0 +1,108 @@
+﻿@model IEnumerable<CUSrinagar.Models.ResultList>
+@using CUSrinagar.Enums
+<table class="table table-hover table-bordered ">
+    <thead>
+        <tr>
+            <th title="Serial Number">No</th>
+            <th data-property="CourseFullName">Course</th>
+            <th title="Examination Roll Number" data-property="ExamRollNumber">E Roll No</th>
+            <th class="wd-140" data-property="CUSRegistrationNo">Registration No</th>
+            <th data-property="ClassRollNo" title="Class roll number">Roll No</th>
+            <th data-property="FullName">Full Name</th>
+            <th data-property="SubjectFullName">Subject</th>
+            <th title="Updated on" data-property="InternalUpdatedOn">Int Updated On</th>
+            <th>UpdatedBy</th>
+            <th title="Internal Marks" data-property="InternalMarks">Int Marks</th>
+            <th title="Internal Attedance/Assessment Marks" data-property="InternalAttendance_AssessmentMarks">Int.A</th>
+            <th title="External Attendance/Assessment Marks" data-property="ExternalAttendance_AssessmentMarks">Ext.A</th>
+            <th title="Updated on" data-property="ExternalUpdatedOn">Ext Updated On</th>
+            <th title="UserName" data-property="ExternalUpdatedBy">UpdatedBy</th>
+
+            <th title="External Marks" data-property="ExternalMarks">Ext Marks</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr class="jsRowAction">
+                    <td>
+                        <span class="js-sno"></span>
+                        <input type="hidden" value="@item.Programme" name="Programme" />
+                        <input type="hidden" value="@(item._ID == Guid.Empty ? RecordState.New : RecordState.Old)" name="RecordState" />
+                        <input type="hidden" value="@item.Semester.ToString()" name="Semester" />
+                        <input type="hidden" value="@item.Student_ID.ToString()" name="Student_ID" />
+                        <input type="hidden" value="@item.Subject_ID.ToString()" name="Subject_ID" />
+                        <input type="hidden" value="@item._ID" name="_ID" />
+                        <input type="hidden" value="@item.InternalSubmitted.ToString()" name="InternalSubmitted" />
+                        <input type="hidden" value="@item.ExternalSubmitted.ToString()" name="ExternalSubmitted" />
+                    <td>@item.CourseFullName</td>
+                    <td>@item.ExamRollNumber</td>
+                    <td>@item.CUSRegistrationNo</td>
+                    <td>@item.ClassRollNo</td>
+                    <td>@item.FullName</td>
+                    <td>@item.SubjectFullName</td>
+                    <td>@item.InternalUpdatedOn</td>
+                    <td>@item.InternalUserName</td>
+
+                    <td title="Internal marks obtained">
+                        @if (item.IsInternalMarksApplicable)
+                        {
+                            <input type="number" max="@item.InternalMaxMarks" name="InternalMarks" value="@item.InternalMarks" class="form-control jsfocus" readonly />
+                        }
+                        else
+                        {
+                            <input type="hidden" value="@item.InternalMarks" name="InternalMarks" readonly />
+                        }
+                    </td>
+                    <td title="Internal attend/assessment marks">
+                        @if (item.IsInternalAttendance_AssessmentMarksApplicable)
+                        {
+                            <input type="number" max="@item.InternalAttendance_AssessmentMaxMarks" name="InternalAttendance_AssessmentMarks" value="@item.InternalAttendance_AssessmentMarks" class="form-control " readonly />
+                        }
+                        else
+                        {
+                            <input type="hidden" value="@item.InternalAttendance_AssessmentMarks" name="InternalAttendance_AssessmentMarks" readonly />
+                        }
+                    </td>
+                    <td title="External attend/assessment marks">
+                        @if (item.IsExternalAttendance_AssessmentMarksApplicable)
+                        {
+                            <input type="number" max="@item.ExternalAttendance_AssessmentMaxMarks" name="ExternalAttendance_AssessmentMarks" value="@item.ExternalAttendance_AssessmentMarks" class="form-control" readonly />
+                        }
+                        else
+                        {
+                            <input type="hidden" value="@item.ExternalAttendance_AssessmentMarks" name="ExternalAttendance_AssessmentMarks" readonly />
+                        }
+                    </td>
+
+                    <td>@item.ExternalUpdatedOn</td>
+                    <td>@item.ExternalUserName</td>
+                    <td title="External marks">
+                        @if (item.IsExternalMarksApplicable)
+                        {
+                            <input type="number" max="@item.ExternalMaxMarks" name="ExternalMarks" value="@item.ExternalMarks" class="form-control" readonly />
+                        }
+                        else
+                        {
+                            <input type="hidden" value="@item.ExternalMarks" name="ExternalMarks" readonly />
+                        }
+                    </td>
+                    <td class="center">
+                        <input type="hidden" value="@item.ResultNotification_ID.ToString()" name="ResultNotification_ID" />
+                        <input type="hidden" value="@item.ResultNotification_ID.ToString()" class="jsResultNotification_ID" />
+                        <input type="hidden" value="@item.ExamForm_ID.ToString()" name="ExamForm_ID" />
+                        <input type="hidden" value="@item.ExamForm_ID.ToString()" class="jsExamForm_ID" />
+                        <div class="form-group" title="Set New notification">
+
+                        </div>
+                    </td>
+
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+

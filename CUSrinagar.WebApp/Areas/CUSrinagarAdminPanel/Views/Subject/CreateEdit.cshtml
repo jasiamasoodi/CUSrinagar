@@ -1,0 +1,325 @@
+﻿@model CUSrinagar.Models.ADMSubjectMaster
+
+@{
+    ViewBag.Title = "Subject Master";
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action(" Index","Dashboard",new { area="CUSrinagarAdminPanel" })">Home</a>
+        </li>
+        <li>
+            <a href="@Url.Action("Subjects","Subject",new { area="CUSrinagarAdminPanel"})" class="">Subject List</a>
+        </li>
+        <li>
+            <a href="#" class="active">Edit</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+
+@section PageSpecificStyle{
+
+}
+<div class="row">
+    <div class="col-md-12">
+        <h4 class="">@(Model.Subject_ID == Guid.Empty ? "Create" : "Edit") Subject</h4>
+        <hr class="no-margin-top" />
+        @using (Html.BeginForm("CreateEdit", "Subject", FormMethod.Post, new { @class = "jsMainForm form-horizontal", @id = "SubjectFormCreate" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.Subject_ID)
+            @Html.HiddenFor(model => model.CreatedOn)
+            @Html.HiddenFor(model => model.CreatedBy)
+            @Html.HiddenFor(model => model.PrintProgramme)
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3">Program</label>
+                        <div class="col-sm-8">
+                            @Html.DropDownList("Programme", new SelectList(ViewBag.Programmes, "Value", "Text", (short)Model.Programme),
+                        "Choose Program", new
+                        {
+                            @class = "form-control chosen-select",
+                            @required = "required",
+                            @id = "ProgrammeDDL"
+                        })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3">Semester</label>
+                        <div class="col-sm-8">
+                            @Html.DropDownListFor(model => model.Semester, new SelectList(ViewBag.Semesters, "Value", "Text"),
+                            "choose semester", new
+                            {
+                                @class = "form-control chosen-select",
+                                @required = "required",
+                                @data_defaulttextvalue = "choose semester,"
+                            })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3">Batch</label>
+                        <div class="col-sm-2">
+                            @Html.EditorFor(model => model.FromBatch, new { htmlAttributes = new { @class = "form-control", @required = "required", @placeholder = "From", @min = "2017" } })
+                        </div>
+                        <div class="col-sm-1">
+                            <small> up to </small>
+                        </div>
+                        <div class="col-sm-2">
+                            @Html.EditorFor(model => model.ToBatch, new { htmlAttributes = new { @class = "form-control", @required = "required", @placeholder = "To", @min = "2017" } })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3">Subject Type</label>
+                        <div class="col-sm-8">
+                            @Html.DropDownListFor(model => model.SubjectType, new SelectList(ViewBag.SubjectTypes, "Value", "Text", Model.SubjectType),
+                                null, new
+                                {
+                                    @class = "form-control chosen-select",
+                                    required = "required"
+                                })
+                        </div>
+                    </div>
+                    <div class="form-group" id="jsCourseField">
+                        <label for="name" class="col-sm-3">Courses</label>
+                        <div class="col-sm-8 jsDDLContainer">
+                            @Html.DropDownListFor(model => model.Course_ID, new SelectList(ViewBag.Courses, "Value", "Text"),
+                                "choose course", new
+                                {
+                                    @class = "form-control chosen-select",
+                                    @data_defaulttextvalue = "choose course,",
+                                    @id = "CourseDDL"
+                                })
+                        </div>
+                        @Html.HiddenFor(model => model.CourseFullName)
+                    </div>
+
+                    @*<div class="form-group">
+                            <label for="name" class="col-sm-3">Subject title</label>
+                            <div class="col-sm-8">
+                                @Html.EditorFor(model => model.SubjectFullName, new { htmlAttributes = new { @class = "form-control", @required = "required", @placeholder = "enter subject title" } })
+                            </div>
+                        </div>*@
+
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3">Subject title</label>
+                        <div class="col-sm-8">
+                            <input autocomplete="off" list="SubjectFullNameDataList" name="SubjectFullName" id="SubjectFullName" value="@Model.SubjectFullName" class="form-control" required placeholder="Enter title (please check title if exists)">
+                            <datalist id="SubjectFullNameDataList">
+                                @if (ViewBag.Subjects != null)
+                                {
+                                    foreach (var item in (List<SelectListItem>)ViewBag.Subjects)
+                                    {
+                                        <option value="@item.Text"></option>
+                                    }
+                                }
+                            </datalist>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3">Subject/Department</label>
+                        <div class="col-sm-8 jsDDLContainer">
+                            @Html.DropDownListFor(model => model.Department_ID, new SelectList(ViewBag.Departments, "Value", "Text"),
+                            "choose subject/department correctly", new
+                            {
+                                @class = "form-control chosen-select",
+                                @required = "required",
+                                @data_defaulttextvalue = "choose subject/department correctly,"
+                            })
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2">Subject Number</label>
+                        <div class="col-sm-8">
+                            @Html.EditorFor(model => model.SubjectNumber, new { htmlAttributes = new { @class = "form-control", @required = "required", @placeholder = "Enter subject number", @min = "0" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2">Subject Code</label>
+                        <div class="col-sm-8">
+                            @Html.EditorFor(model => model.SubjectCode, new { htmlAttributes = new { @class = "form-control", @required = "required", @placeholder = "Enter subject unique code" } })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2">Capacity</label>
+                        <div class="col-sm-2">
+                            @Html.EditorFor(model => model.SubjectCapacity, new { htmlAttributes = new { @class = "form-control", @min = "0" } })
+                        </div>
+                        <div class="col-sm-5  no-padding-left">
+                            <div class="checkbox">
+                                <label class="block">
+                                    <input type="checkbox" class="ace input-lg" @(Model.SubjectCapacitySet ? "Checked=checked" : "" ) />
+                                    <span class="lbl  bigger-12000" title="total number of students to opt this subject"> Set Subject Capacity</span>
+                                    @Html.HiddenFor(model => model.SubjectCapacitySet)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2"></label>
+                        <div class="col-sm-2">
+
+                        </div>
+                        <div class="col-sm-5   no-padding-left">
+                            <div class="checkbox">
+                                <label class="block">
+                                    <input type="checkbox" class="ace input-lg " @(Model.IsCompulsory ? "Checked=checked" : "" ) />
+                                    <span class="lbl bigger-12000"> Is Compulsory</span>
+                                    @Html.HiddenFor(model => model.IsCompulsory)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2">Status</label>
+                        <div class="col-sm-5">
+                            <div class="checkbox">
+                                <label class="block">
+                                    <input type="checkbox" class="ace input-lg " @(Model.Status ? "Checked=checked" : "" ) />
+                                    <span class="lbl bigger-12000"> Is Active</span>
+                                    @Html.HiddenFor(model => model.Status)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="jsCollegeField">
+                        <label for="name" class="col-sm-2">College</label>
+                        <div class="col-sm-8">
+                            @Html.DropDownListFor(model => model.College_ID, new SelectList(ViewBag.College, "Value", "Text"),
+                            "Choose College", new
+                            {
+                                @class = "form-control chosen-select"
+                            })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="clearfix"></div>
+
+            <!--External section-->
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3>Subject Marks Structure</h3>
+                    <hr class="no-margin-top" />
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2">Marks Structure</label>
+                        <div class="col-sm-8">
+                            <div class="no-padding-right">
+                                @Html.DropDownListFor(model => model.SubjectMarksStructure_ID, new SelectList(ViewBag.SubjectMarksStructures, "Value", "Text", Model.SubjectMarksStructure_ID), "-- choose marks structure --", new { @class = "form-control chosen-select", @placeholder = "Label" })
+                            </div>
+                        </div>
+                        <div class="col-sm-1">
+                            <a href="@Url.Action("CreateEdit","SubjectMarksStructure",new { @id=Model.SubjectMarksStructure_ID})" target="_blank"><i class="fa fa-edit"></i></a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+            <div class="clearfix"></div>
+
+
+
+            <!--Other components-->
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3>Other Components</h3>
+                    <hr class="no-margin-top" />
+                </div>
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3"></label>
+                        <div class="col-sm-5">
+                            <div class="checkbox">
+                                <label class="block">
+                                    <input type="checkbox" class="ace input-lg " @(Model.HasResult ? "Checked=checked" : "" ) />
+                                    <span class="lbl bigger-12000"> Has Result</span>
+                                    @Html.HiddenFor(model => model.HasResult)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-5 ">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3"></label>
+                        <div class="col-sm-5">
+                            <div class="checkbox">
+                                <label class="block">
+                                    <input type="checkbox" class="ace input-lg " @(Model.HasExaminationFee ? "Checked=checked" : "" ) />
+                                    <span class="lbl bigger-12000"> Has ExaminationFee</span>
+                                    @Html.HiddenFor(model => model.HasExaminationFee)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-5 ">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3"></label>
+                        <div class="col-sm-5">
+                            <div class="checkbox">
+                                <label class="block">
+                                    <input type="checkbox" class="ace input-lg " @(Model.IsLocked ? "Checked=checked" : "" ) />
+                                    <span class="lbl bigger-12000"> Is Locked</span>
+                                    @Html.HiddenFor(model => model.IsLocked)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-sm-11">
+                <div class=" pull-text-right pull-right">
+                    @if (Model.Marks_ID == null || CUSrinagar.Models.AppUserHelper.User_ID == Guid.Parse("8F8B1732-CFF9-493E-9A50-DB5AFA5321F2"))
+                    {
+                        <button type="submit" class="btn btn-success" value="True" name="SaveAndCreateNew">Save & Create New</button>
+                        <button type="submit" class="btn btn-success ">Save</button>
+                    }
+                </div>
+            </div>
+
+
+        }
+    </div>
+</div>
+
+
+@section PageSpecificJS{
+    <script src="~/Scripts/Pages/subject-master.js"></script>
+}
+
+
+

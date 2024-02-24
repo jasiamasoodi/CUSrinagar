@@ -1,0 +1,36 @@
+﻿
+
+
+@model List<GeneralModels.CoursesDashboard>
+@using CUSrinagar.Extensions
+@{
+    Layout = null;
+}
+
+@if (Model != null)
+{
+    <table class="table table-bordered table-striped">
+        <thead class="thin-border-bottom">
+            <tr>
+                <th>
+                    Course Name
+                </th>
+            </tr>
+        </thead>
+
+        @foreach (var item in Model)
+        {
+            <tbody>
+                <tr>
+                    <td class="green">@item.CourseFullName</td>
+                </tr>
+            </tbody>
+        }
+    </table>
+}
+else
+{
+    <h4>No Records Found</h4>
+}
+
+

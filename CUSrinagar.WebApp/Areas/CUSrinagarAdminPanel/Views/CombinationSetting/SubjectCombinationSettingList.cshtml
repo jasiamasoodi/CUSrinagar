@@ -1,0 +1,55 @@
+﻿@model IEnumerable<CUSrinagar.Models.SubjectCombinationSetting>
+@{
+    Layout = null;
+}
+<table class="table table-bordered">
+    @if (Model != null)
+    {
+        <thead>
+            <tr>
+                <th>S.No.</th>
+                <th data-property="CourseFullName">Course</th>
+                @*<th data-property="Batch">Batch</th>*@
+                <th data-property="BaseSemester">Base Sem</th>
+                <th data-property="BaseSubjectFullName" title="">Base Subject</th>
+                <th data-property="ForSemester" title="">For Sem</th>
+
+
+                <th data-property="DependentSubjectFullName">Dependent Subjects</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                if (item.DependentSubjectFullName == null)
+                {
+            <tr>
+                <td class="js-sno"></td>
+                @*<td data-property="Batch"></td>*@
+                <td data-property="CourseFullName">@item.CourseFullName</td>
+                <td data-property="Semester">
+                    @item.BaseSemester
+                    @*@item.Batch*@
+                    @Html.HiddenFor(model => item._ID, new { @class = "jsRow_ID" })
+                    @*@Html.HiddenFor(model => item.Batch)*@
+                    @Html.HiddenFor(model => item.ForSemester)
+                </td>
+                <td data-property="BaseSubjectFullName" title="">@item.BaseSubjectFullName</td>
+                <td data-property="Semester">@item.ForSemester</td>
+
+
+                <td data-property="DependentSubjectFullName" title="">
+                    @(string.Join(",", Model.Where(x => x.BaseSubject_ID == item.BaseSubject_ID && x.ForSemester == item.ForSemester && x.DependentSubjectFullName != null)?.Select(x => x.DependentSubjectFullName)))
+                </td>
+                <td>
+                    <a title="edit" class="" href="@Url.Action("CreateEditSubjectCombinationSetting", "CombinationSetting", new { @id = item._ID})" target="_blank"><i class="fa fa-edit"></i></a>
+                    |
+                    <a title="delete" href="#" class="jsDeleteMainItem"><i class="fa fa-trash "></i></a>
+                </td>
+            </tr>
+                }
+            }
+        </tbody>
+    }
+</table>

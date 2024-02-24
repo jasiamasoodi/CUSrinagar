@@ -1,0 +1,26 @@
+﻿@*sidebar-shortcuts*@
+
+<div class="sidebar-shortcuts" id="sidebar-shortcuts" style="padding: 8px; background-color: #e6f3e8">
+    @{
+        string collegeCode = string.Empty;
+        try
+        {
+            collegeCode = CUSrinagar.Models.AppUserHelper.CollegeCode;
+        }
+        catch (InvalidCastException)
+        {
+            Response.Redirect(Url.Action("SignOut", "Account", new { area = "" }), true);
+        }
+    }
+    @*sidebar-shortcuts*@
+    <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+        <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" style="width:40px;">
+        <strong>@collegeCode College</strong>
+    </div>
+
+    <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+        <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" style="width:40px;">
+        <strong>@collegeCode College</strong>
+    </div>
+</div>
+

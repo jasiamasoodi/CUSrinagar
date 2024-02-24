@@ -1,0 +1,156 @@
+﻿
+@{
+    ViewBag.Title = "CUS :: Student List";
+    var ProgrammeID = ViewBag.Programme_Id ?? "";
+    var CourseID = ViewBag.Course_Id ?? "";
+    var Semester = ViewBag.Semester ?? "";
+
+}
+
+
+<div class="page-wrapper pager-table-text">
+    <div class="page-header hidden-print">
+        <div style="padding-bottom: 30px;">
+            <div class="col-sm-12 ">
+                <div class="col-sm-6">
+                    <h1 class="heading-title pull-left hidden-print">
+                        Students
+                        <small>
+                            <i class="ace-icon fa fa-angle-double-right"></i>
+                            List of Studentss
+                        </small>
+                    </h1>
+                </div>
+
+                <div class="col-sm-6">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            <p class="labelhead center no-margins no-padding visible-print" style='margin:0 !important;padding:0 !important;display:none'>Selection List</p>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        @Html.Hidden("PrintProgramme", (int)CUSrinagar.Enums.PrintProgramme.IH)
+                        <div class="col-sm-12 search-box hidden-print">
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span>Programme<span id="ProgrammeIdValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div>
+                                    @Html.DropDownList("Programme", new SelectList(ViewBag.ProgrammeDDLList, "Value", "Text", ProgrammeID),
+                                      "--Select--", new { @class = "required chosen-select tag-input-style SearchDDL form-control jsfilterelement", @data_column = "Programme", @data_operator = "EqualTo", data_ddltype = "Course", @data_ddlchildtype = "Semester", @data_ddlsubchildtype = "" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span>Course<span id="Course_IDValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div id="Course">
+                                    @Html.DropDownList("Course_ID", new SelectList(ViewBag.CourseDDLList, "Value", "Text", CourseID),
+                                           "--Select--", new { @class = "required chosen-select tag-input-style form-control jsfilterelement", @data_column = "Course_ID", @data_operator = "EqualTo", data_ddltype = "Semester", @data_ddlchildtype = "", @data_ddlsubchildtype = "" })
+                                </div>
+                            </div>
+                            @*<div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                    College
+                                    <div id="College">
+                                        @Html.DropDownList("College_ID", new SelectList(ViewBag.CollegeDDLList, "Value", "Text"),
+                                               "--Select--", new { @class = " chosen-select tag-input-style form-control jsfilterelement", @data_column = "College_ID", @data_operator = "EqualTo", data_ddltype = "Semester", @data_ddlchildtype = "", @data_ddlsubchildtype = "" })
+                                    </div>
+                                </div>*@
+
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                @Html.Hidden("Batch", DateTime.Now.Year.ToString(), new { @class = "required form-control jsfilterelement", @data_column = "Batch", @data_operator = "EqualTo" })
+                            </div>
+                            <div class="col-sm-4" style="padding-top: 17px;">
+                                <button type="button" class="btn btn-primary fa-search-btn"><i class="fa fa-search"></i>&nbsp;Generate List</button>
+                                <div class="btn-group">
+                                    <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle">
+                                        Action
+                                        <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-default dropdown-info">
+                                        <li>
+                                            <a href="javascript:void(0)" id="PrintList">
+                                                Print
+                                            </a>
+                                        </li>
+                                        @*<li>
+                                                <a href="javascript:void(0)" class="js-exportToCSV " data-url="@Url.Action("AllocationListCSV","SeatAllocation",new { area="CUSrinagarAdminPanel"})">
+                                                    Download Excel(CSV)
+                                                </a>
+                                            </li>*@
+                                        <li>
+                                            <a href="javascript:void(0)" id="viewmatrix">
+                                                View Matrix
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)" id="viewselection" class="hidden">
+                                                View Selection List
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 hidden" id="showicon">
+                                <i class="fa fa-check-square-o btn-yellow"></i><b>Result Awaited</b>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="js-table-content" data-url=@Url.Action("FetchList", "SeatAllocation", new { area = "CUSrinagarAdminPanel" }) data-DefaultOrderByColumn="TotalPoints" data-afterappendingrows="ShowMatrixButton">
+
+                    </div>
+                    @*@{Html.RenderPartial("_JSPagerTableFooter");}*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section PageSpecificJSFiles
+{
+    <script src="~/Scripts/Pages/admin-selectionlist.js"></script>
+
+
+    <script>
+        var $pagertable = $(".js-pager-table");
+
+          var chilDDLPath = '@Url.Action("_GetChildDDL", "SeatAllocation", new { area = "CUSrinagarAdminPanel" })';
+
+
+
+        function ShowMatrixButton() {
+            $("#viewselection").trigger("click");
+            $("#showicon").removeClass("hidden");
+        }
+    </script>
+
+    <script src="@Url.Content("~/Scripts/JSChosen.js")"></script>
+}
+<style>
+    .filter-btn a {
+        color: white !important
+    }
+
+    @@media print {
+        .jsTableContent {
+            margin-top: -80px;
+        }
+
+        .table > tbody > tr > td {
+            padding: 2px;
+        }
+    }
+</style>
+
+
+
+
+
+

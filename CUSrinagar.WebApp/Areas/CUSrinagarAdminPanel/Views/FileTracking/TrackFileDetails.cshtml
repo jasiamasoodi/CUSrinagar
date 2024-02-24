@@ -1,0 +1,104 @@
+﻿@using CUSrinagar.Models
+@model FTFileTracking
+
+<div class="modal-body allow-print">
+
+    @if (Model != null)
+    {
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3 class="smaller lighter no-margin center">
+                <i class="fa fa-pdf"></i>&nbsp;File No: @Model.FileNo created on @Model.FileTrackingHistoryDetails.First(x => x.FileStatus == CUSrinagar.Enums.FTFileStatus.Created).Dated.ToString("dd MMMM, yyyy hh:mm tt") is currently in
+                @Model.UserID.Substring(Model.UserID.LastIndexOf("(")).Replace("(", "").Replace(")", "")
+
+                <a href="/CUSrinagarAdminPanel/FileTracking/PrintHistory/@Model.File_ID" target="_blank" class="white pull-right printButton">
+                    <i class="fa fa-print"></i>
+                    Print&nbsp;&nbsp;
+                </a>
+            </h3>
+        </div>
+        <div class="dialogs">
+            @{ string prevUserID = ""; }
+
+            @foreach (FTFileTrackingHistory item in Model.FileTrackingHistoryDetails ?? new List<FTFileTrackingHistory>())
+            {
+                <div class="itemdiv dialogdiv">
+                    <div class="user">
+                        <span class="label label-info arrowed arrowed-in-left">
+                            @item.FileStatus.ToString()
+                            @if (item.FileStatus == CUSrinagar.Enums.FTFileStatus.Forwarded)
+                            {
+                                <text> from </text>
+                            }
+                            else
+                            {
+                                <text> in </text>
+                            }
+                            @item.Section
+                            @if (item.FileStatus == CUSrinagar.Enums.FTFileStatus.Forwarded)
+                            {
+                                <text> to </text>
+                            }
+                            else
+                            {
+                                <text> by </text>
+                            }
+                            @item.UserID
+                        </span>
+                    </div>
+
+                    <div class="body">
+                        @*<div class="time">
+                                <i class="ace-icon fa fa-clock-o"></i>
+                                <span class="green" style="font-size:14px;">on @item.Dated.ToString("dd MMMM, yyyy hh:mm tt")</span>
+                            </div>*@
+
+                        @*<div class="name">
+                                <br /> by
+
+                                @if (item.FileStatus == CUSrinagar.Enums.FTFileStatus.Forwarded)
+                                {
+                                    <a href="#"> @prevUserID to</a>
+                                }
+
+                                <a href="#"> @item.UserID</a>
+                            </div>*@
+                        <div class="text" style="font-size:15px;">
+                            <br />
+                            <div class="time">
+                                <span class="green" style="font-size:14px;">on @item.Dated.ToString("dd MMMM, yyyy hh:mm tt")</span>
+                            </div>
+                            @if (item.FileStatus == CUSrinagar.Enums.FTFileStatus.Created)
+                            {
+                                <b>Subject: </b>@Model.Subject <br />
+                                @Model.Description
+                            }
+                            else
+                            {
+                                if (!string.IsNullOrWhiteSpace(item.Remarks))
+                                {
+                                    <text>Remarks : </text>@item.Remarks
+                                }
+                                else
+                                {
+                                    <span style="color:#9a9999">No remarks</span>
+                                }
+
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                prevUserID = item.UserID;
+            }
+        </div>
+    }
+    else
+    {
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3 class="smaller lighter no-margin"><i class="fa fa-pdf"></i>&nbsp;Track Details</h3>
+        </div>
+        <b> No details found</b>
+    }
+</div>

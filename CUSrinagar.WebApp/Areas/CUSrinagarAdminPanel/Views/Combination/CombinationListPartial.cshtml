@@ -1,0 +1,72 @@
+﻿@{
+    Layout = null;
+}
+
+@using CUSrinagar.Models;
+@using CUSrinagar.Enums;
+@using CUSrinagar.Extensions
+@model IEnumerable<CUSrinagar.Models.ADMCombinationMaster>
+<table class="table table-hover table-bordered ">
+    <thead>
+        <tr>
+            <th><input class="ace checkbox checkbox-inline jsSelectAllChk" type="checkbox"><span class="lbl padding-right-10"></span>SNo</th>
+            <th data-property="CourseFullName">Course</th>
+            <th data-property="CombinationCode" title="">Code</th>
+            <th data-property="Semester" title="Semester">Sem</th>
+            <th class="">Subjects</th>
+            <th data-property="Status"></th>
+            @if (!HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Dean.ToString()))
+            {
+                <th class="wd-150">Action</th>
+            }
+            </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr class="">
+                    <td>
+                        <input name="Combination_ID" value="@item.Combination_ID" class="ace checkbox checkbox-inline jsSelectChk" type="checkbox"><span class="lbl padding-right-10"></span><span class="js-sno"></span>
+                    </td>
+                    <td>
+                        @item.CourseFullName
+                        @Html.HiddenFor(model => item.Combination_ID, new { @class = "jsRow_ID jsEntity_ID" })
+                        @Html.HiddenFor(model => item.Course_ID)
+                        @Html.HiddenFor(model => item.Semester)
+                        @Html.HiddenFor(model => item.College_ID)
+                        @Html.Hidden("IDs", item.SubjectsDetails == null ? "" : string.Join("|", item.SubjectsDetails.Select(x => x.Subject_ID)), new { @class = "jsSubjectGuids" })
+                        @Html.Hidden("Programme", item.SubjectsDetails.IsNullOrEmpty() ? "" : Convert.ToString((short)item.SubjectsDetails.First().Programme), new { @class = "jsCombPrintProgramme" })
+                    </td>
+                    <td>@item.CombinationCode</td>
+                    <td>@item.Semester </td>
+                    <td class="jsCombText">@(item.SubjectsDetails == null ? "" : string.Join("|", item.SubjectsDetails.Select(x => x.SubjectFullName + $" ({x.SubjectType.ToString()})")))</td>
+                    <td>
+                        @if (item.Status)
+                        {
+                            <input class="check-box" checked="checked" type="checkbox" title="Active">
+                        }
+                        else
+                        {
+                            <input class="check-box" type="checkbox" title="InActive">
+                        }
+                    </td>
+                    <td>
+                        @if (!HttpContext.Current.User.IsInRole(CUSrinagar.Enums.AppRoles.University_Dean.ToString()))
+                        {
+                            <a target="_blank" title="Edit combination" href="@Url.Action("Edit","Combination",new {@area="CUSrinagarAdminPanel", @Combination_ID=item.Combination_ID})" class=""><i class="fa fa-edit"></i> </a>
+                            <span>|</span>
+                            <a title = "Edit combination" href = "#" class="jsShowReplaceSubjectDDL"><i class="fa fa-map-marker"></i> </a>
+                            <span>|</span>     
+                            <a title = "Edit combination by Guids" href="#" class="jsShowUpdateCombinationByIDsDialog"><i class="fa fa-map-marker"></i> </a>
+                            <span>|</span>
+                            <a title = "delete" href="#" class="jsDeleteMainItem"><i class="fa fa-trash "></i></a>
+                        }
+
+                    </td>
+                </tr>
+}
+                                    }
+    </tbody>
+</table>

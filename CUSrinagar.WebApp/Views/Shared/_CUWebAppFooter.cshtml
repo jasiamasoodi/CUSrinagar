@@ -1,0 +1,102 @@
+﻿@* Footer *@
+@* ******FOOTER****** *@
+<footer class="footer hidden-print">
+    <div class="footer-content">
+        <div class="container">
+            <div class="row">
+                <div class="footer-col col-md-3 col-sm-12 newsletter">
+                    <div class="footer-col-inner">
+                        <h3>Downloads</h3>
+                        <ul>
+                            <li><a href='@Url.Action("AboutCUS", "Home", new { area = string.Empty })'><i class="fa fa-arrow-down"></i>About us</a></li>
+                            <li><a tabindex="1" href='@Url.Action( "Form","Migration", new { area = string.Empty })' title="Click here to apply"><i class="fa fa-arrow-down"></i>Migration Certificate</a></li>
+                            @*<li><a href="@Url.Action("Form","Migration")"><i class="fa fa-arrow-down"></i>Apply For Migration</a></li>*@
+                            <li><a href="~/Home/Contacts"><i class="fa fa-arrow-down"></i>Directory</a></li>
+                            <li><a href="javascript:void(0);" onclick="alert('For hostel facilities contact or visit your respective College websites.')"><i class="fa fa-arrow-down"></i>Hostel</a></li>
+                            <li><a href="@Url.Action("Downloads", "Home")"><i class="fa fa-arrow-down"></i>More</a></li>
+                        </ul>
+                    </div>@*//footer-col-inner*@
+                </div> @*//foooter-col*@
+
+                <div class="footer-col col-md-5 col-sm-12 about">
+                    @*col1*@
+                    <div class="footer-col-inner">
+                        <h3>Important Links</h3>
+                        <ul>
+                            <li><a href="https://www.education.gov.in/" target="_blank"><i class="fa fa-caret-right"></i>Ministry of Education</a></li>
+                            <li><a href="https://www.ugc.gov.in/" target="_blank"><i class="fa fa-caret-right"></i>UGC Portal</a></li>
+                            <li><a href="https://scholarships.gov.in/" target="_blank"><i class="fa fa-caret-right"></i>National Scholarship Portal</a></li>
+                            <li><a href="https://ndl.iitkgp.ac.in/" target="_blank"><i class="fa fa-caret-right"></i>National Digital Library</a></li>
+                            <li><a href="https://nad.digilocker.gov.in/" target="_blank"><i class="fa fa-caret-right"></i>NAD DigiLocker</a></li>
+                        </ul>
+                    </div>@*//footer-col-inner*@
+                </div>@*//foooter-col1*@
+
+                <div class="footer-col col-md-4 col-sm-12 contact">
+                    @*col4*@
+                    <div class="footer-col-inner">
+                        <h3>Contact us</h3>
+                        <div class="row">
+                            <p class="adr clearfix col-md-12  col-sm-4">
+                                @*<i class="fa fa-map-marker pull-left"></i>*@
+                                <span class="adr-group pull-left">
+                                    <span class="street-address">Cluster University Srinagar</span><br />
+                                    <span class="region">Gogji-Bagh, Srinagar</span><br />
+                                    <span class="region">Jammu & Kashmir, India , 190008</span><br />
+                                    @{ string mapUrl = "https://www.google.com/maps/place/Cluster+University+Srinagar/@34.0608889,74.8059268,206m/data=!3m1!1e3!4m8!1m2!3m1!2sCluster+University+Srinagar!3m4!1s0x38e18f901d2becf1:0xaeb36dbb8e430df2!8m2!3d34.0609745!4d74.8057779";}
+                                    <span class="region"><a href="@mapUrl" target="_blank" style="color:orange">Locate on Map</a> <i class="fa fa-map-marker"></i></span>
+
+                                    @*<span class="region"> Registrar's Office : 0194-2311340 </span><br/>*@
+                                    @*<span class="email"><a href="mailto:info@cusrinagar.edu.in?Subject=ClusterUniversity">info@cusrinagar.edu.in</a></span><br />*@
+                                    @*<span class="postal-code">190001</span>*@
+                                    @*<span class="country-name">India</span>*@
+                                    <br />
+                                    <br />
+                                    <span class="region">
+                                        <a href="tel:18001805522" target="_blank" title="Tab or Click to Call Now">
+                                            National Anti-Ragging Helpline <br />
+                                            1800-180-5522
+                                        </a>
+                                    </span>
+                                </span>
+                            </p>
+                            @*<p class="tel col-md-12 col-sm-4"><i class="fa fa-phone"></i>0800 123 4567</p>*@
+                            @*<p class="email col-md-12 col-sm-4"><i class="fa fa-envelope"></i><a href="#">info@cusrinagar.edu.in</a></p>*@
+                        </div>
+                    </div>@*//footer-col-inner*@
+                </div>@*//foooter-col4*@
+            </div>
+        </div>@*//footer-content*@
+        <div class="bottom-bar">
+            <div class="container">
+                <div class="row">
+                    <small class="copyright col-md-9 col-sm-12 col-xs-12">
+                        Copyright &copy; 2016-@DateTime.UtcNow.Year Cluster University Srinagar
+                        <span style="margin-left:8%">Developed &amp; Maintained by <strong>I.T.Cell, Cluster University Srinagar</strong></span>
+                    </small>
+                    @*<small class="copyright col-md-2 col-sm-12 col-xs-12"><img src="http://hitwebcounter.com/counter/counter.php?page=6886465&style=0006&nbdigits=7&type=page&initCount=150000" title="Hits" Alt="Hits" border="0"></small>*@
+                    <ul class="social pull-right col-md-1 col-sm-12 col-xs-12">
+                        <li><a href="https://twitter.com/cusgrofficial" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="https://www.facebook.com/cusgr" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                    </ul>@*//social*@
+                </div>@*//row*@
+            </div>@*//container*@
+        </div>@*//bottom-bar*@
+    </div>
+</footer>@*//footer*@
+@* *****CONFIGURE STYLE****** *@
+@*<div class="config-wrapper hidden-xs hidden">
+        <div class="config-wrapper-inner">
+            <a id="config-trigger" class="config-trigger" href="#"><i class="fa fa-cog"></i></a>
+            <div id="config-panel" class="config-panel">
+                <p>Choose Colour</p>
+                <ul id="color-options" class="list-unstyled list-inline">
+                    <li class="default active"><a data-style="~/Content/ThemePublic/Libraries/css/styles.css" data-logo="~/Content/ThemePublic/Libraries/images/logo.png" href="#"></a></li>
+                    <li class="green"><a data-style="~/Content/ThemePublic/Libraries/css/styles-green.css" data-logo="~/Content/ThemePublic/Libraries/images/logo-green.png" href="#"></a></li>
+                    <li class="purple"><a data-style="~/Content/ThemePublic/Libraries/css/styles-purple.css" data-logo="~/Content/ThemePublic/Libraries/images/logo-purple.png" href="#"></a></li>
+                    <li class="red"><a data-style="~/Content/ThemePublic/Libraries/css/styles-red.css" data-logo="~/Content/ThemePublic/Libraries/images/logo-red.png" href="#"></a></li>
+                </ul>@*//color-options
+                <a id="config-close" class="close" href="#"><i class="fa fa-times-circle"></i></a>
+            </div>@*//configure-panel
+        </div>@*//config-wrapper-inner
+    </div>@*//config-wrapper*@

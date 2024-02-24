@@ -1,0 +1,135 @@
+﻿@model List<CUSrinagar.Models.StudentCollegePreference>
+@using CUSrinagar.Extensions;
+
+@{
+    ViewBag.Title = "Upload Response";
+    Layout = "~/Areas/CUStudentZone/Views/Shared/_CUStudentZoneLayout.cshtml";
+    ViewBag.Title = "Upload Response";
+    string errorMessage = ViewBag.PaymentFailureMessage;
+    CUSrinagar.Models.ARGPersonalInformation STD = ViewBag.ARGPersonalInformation;
+}
+
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area="CUStudentZone"})">Home</a>
+        </li>
+        <li>
+            <a href="@Url.Action("CollegePreference","Admission",new { area="CUStudentZone"})" class="active">College Preferences</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+
+<div class="page-content ">
+    <div class="row ">
+        <div class="col-xs-10 col-sm-10 col-md-6 col-xs-offset-1 col-sm-offset-1 col-md-offset-3">
+            <div class="row panel panel-body well">
+                <div class="">
+                    <div class="text-center">
+                        <img src="@Url.Content("~/Content/ThemePublic/Libraries/images/cus-logo1.svg")" width="500" height="50" />
+                        <h4 class="text-success"><b>College Preference</b></h4>
+                        <h4 class="hidden-print"><b>Your request for admission has been submitted successfully</b></h4>
+                    </div>
+                    <div class="table-bordered" style="margin:20px">
+                        @if (STD.CoursesApplied.IsNotNullOrEmpty())
+                        {
+                        <table class="table">
+                            <tbody>
+                                @if (STD.PaymentDetail != null && STD.PaymentDetail.Count > 0)
+                                {
+                                    <tr>
+                                        <td>Transaction Reference:<b> @STD.PaymentDetail.First().TxnReferenceNo</b> </td>
+                                        <td>
+                                            Amount:<b> @STD.PaymentDetail.First().TxnAmount</b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>For:<b> @STD.PaymentDetail.First().ModuleType.ToString() </b> </td>
+                                        <td>Date:<b> @STD.PaymentDetail.First().TxnDate.ToString("dd-MMMM-yyyy")</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email:<b> @STD.PaymentDetail.First().Email</b></td>
+                                        <td>PhoneNumber:<b> @STD.PaymentDetail.First().PhoneNumber</b> </td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td>Form No:<b> @STD.StudentFormNo</b> </td>
+                                    @if (STD.CoursesApplied.Any(x => x.StudentSelectionStatus == CUSrinagar.Enums.StudentSelectionStatus.Joined) && Model.Any(x => x.IsAllowed))
+                                    {
+                                        <td>Course:<b> @(Model.First(x => x.IsAllowed).CourseFullName)</b> </td>
+                                    }
+                                    else
+                                    {
+                                        <td>Course:<b> @(STD.CourseFullName)</b>                                    </td>
+                                    }
+
+                                </tr>
+                                <tr>
+                                    <td>Name:<b> @STD.FullName</b> </td>
+                                    <td>Fathers:<b> @STD.FathersName</b></td>
+                                </tr>
+                                <tr>
+                                    <td>Admission Status:<b> @STD.CoursesApplied.First().StudentSelectionStatus</b> </td>
+                                    <td></td>
+                                </tr>
+                                @if (STD.CoursesApplied.Any(x => x.StudentSelectionStatus == CUSrinagar.Enums.StudentSelectionStatus.Joined) && Model.Any(x => x.IsAllowed))
+                                {
+                                    <tr>
+                                        <td>College:<b> @Model.First(x => x.IsAllowed).CollegeFullName</b> </td>
+                                        <td></td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <th class="text-center">Preference Order</th>
+                                        <th>College</th>
+                                    </tr>
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td class="text-center">@item.PreferenceOrder</td>
+                                            <td>@item.CollegeFullName</td>
+                                        </tr>
+                                    }
+                                }
+
+
+                                @if (STD.PaymentDetail != null)
+                                {
+                                    <tr class="hidden-print">
+                                        <td colspan="2">
+                                            <a href="@Url.Action("ProvAdmFormPrint", new { R = ViewBag.R })" class="btn-default" style="padding:5px"> <label><i class="glyphicon glyphicon-print"></i> Print</label></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        }
+                        else {
+                            <strong>Admission cancelled for UG</strong>
+                        }
+                    </div>
+                </div>
+
+                <div>
+                    <h3>Note !</h3>
+                    <ol>
+                        <li style="font-size:18px;color:red;">No vacancy available in Amar Singh College for B.Com</li>
+                        <li>In case of any discrepancy please mail at <a href="mailto:admissions@cusrinagar.edu.in?Subject=ClusterUniversity"><i class="fa fa-envelope"></i>admissions@cusrinagar.edu.in</a>.</li>
+                    </ol>
+                    <hr />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJSFiles{
+
+}
+
+
+
+

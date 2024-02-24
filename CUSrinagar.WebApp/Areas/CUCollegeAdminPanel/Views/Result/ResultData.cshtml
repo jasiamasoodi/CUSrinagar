@@ -1,0 +1,220 @@
+﻿@{
+    ViewBag.Title = "CUS :: ResultData";
+}
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUSrinagarAdminPanel"})">Home</a>
+            </li>
+            <li class="active">ResultData</li>
+        </ul>
+    </div>
+    <div class="col-md-7">
+    </div>
+    <div class="col-md-4">
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12 jsTableContent">
+        <div class="panel panel-primary js-pager-table">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Subject-Wise-Result-Data<span style="color:darkgray;font-size:18px;">(Max-Marks,Min-Marks,marks-Obtained)</span>
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        Result Data Statistics
+                    </small>
+                </h3>
+            </div>
+            <div class="panel-body">
+
+                <form class="form-inline">
+
+                    <div class="form-group">
+                        <label>Batch</label><br />
+                        <div class="jsDDLContainer">
+                            <select class="jsfilterelement form-control" data-column="Batch" data-operator="EqualTo" id="BatchDDL">
+                                <option value="" selected="selected">--All--</option>
+                                @for (int i = 2017; i <= DateTime.Now.Year; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Programme</label><br />
+                        <div class="wd-140 jsDDLContainer">
+                            @Html.DropDownList("ProgrammeDDL", new SelectList(ViewBag.Programmes, "Value", "Text", (short)CUSrinagar.Enums.Programme.PG), null,
+                        new
+                        {
+                            @class = "form-control chosen-select jsProgrammecourseDDL jsfilterelement",
+                            @data_column = "Programme",
+                            @data_operator = "EqualTo",
+                            @data_tablealias = "CM",
+                            @data_scope = "row1"
+                        })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Choose Course</label><br />
+                        <div class="jsDDLContainer  wd-200">
+                            @Html.DropDownList("Course", new SelectList(ViewBag.Courses, "Value", "Text", (short)CUSrinagar.Enums.Programme.PG), " -- All Courses --",
+                      new
+                      {
+                          @class = "form-control chosen-select jsCourseDDL jsfilterelement",
+                          @data_column = "Course_ID",
+                          @data_operator = "EqualTo",
+                          @data_tablealias = "SUB",
+                          @data_defaulttextvalue = " -- All Courses --,",
+                          @data_scope = "row1"
+                      })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Choose Semester</label><br />
+                        <div class="jsDDLContainer">
+                            @Html.DropDownList("Semester", new SelectList(ViewBag.Semesters, "Value", "Text", 1), "--All--",
+               new
+               {
+                   @class = "jsfilterelement",
+                   @data_column = "Semester",
+                   @data_operator = "EqualTo",
+                   @data_tablealias = "Comb"
+               })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="invisible">for styling purpose</label><br />
+                        <div class="btn-group">
+                            <button data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle" type="button">
+                                Action
+                                <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-default dropdown-info">
+                                <li>
+                                    <a href="javascript:void(0)" class="js-exportToCSV" data-url="@Url.Action("ExportToExcel")">
+                                        Export to Excel(CSV)
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+@*---------------------Course-Wise-Result-Data------------------------------*@
+
+<div class="row">
+    <div class="col-md-12 jsTableContent">
+        <div class="panel panel-primary js-pager-table">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Course-Wise-Result-Data<span style="color:darkgray;font-size:18px;">(By CGPA Only)</span>
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        Result Data Statistics
+                    </small>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label>Batch</label><br />
+                        <div class="jsDDLContainer">
+                            <select class="jsfilterelement form-control" data-column="Batch" data-operator="EqualTo" id="BatchDDL">
+                                <option value="" selected="selected">--All--</option>
+                                @for (int i = 2017; i <= DateTime.Now.Year; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Programme</label><br />
+                        <div class="wd-140 jsDDLContainer">
+                            @Html.DropDownList("ProgrammeDDL", new SelectList(ViewBag.Programmes, "Value", "Text", (short)CUSrinagar.Enums.Programme.PG), null,
+                        new
+                        {
+                            @class = "form-control chosen-select jsProgrammeDDL jsfilterelement",
+                            @data_column = "Programme",
+                            @data_operator = "EqualTo",
+                            @data_tablealias = "CM",
+                            @data_scope = "row1"
+                        })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Choose Course</label><br />
+                        <div class="jsDDLContainer  wd-200">
+                            @Html.DropDownList("Course", new SelectList(ViewBag.Courses, "Value", "Text", (short)CUSrinagar.Enums.Programme.PG), " -- All Courses --",
+                      new
+                      {
+                          @class = "form-control chosen-select jsCourseDDL jsfilterelement",
+                          @data_column = "Course_ID",
+                          @data_operator = "EqualTo",
+                          @data_tablealias = "SUB",
+                          @data_defaulttextvalue = " -- All Courses --,",
+                          @data_scope = "row1"
+                      })
+                        </div>
+                    </div>
+                    @*<div class="form-group">
+                        <label>Choose Semester</label><br />
+                        <div class="jsDDLContainer">
+                            @Html.DropDownList("Semester", new SelectList(ViewBag.Semesters, "Value", "Text", 1), "--All--",
+               new
+               {
+                   @class = "jsfilterelement",
+                   @data_column = "Semester",
+                   @data_operator = "EqualTo",
+                   @data_tablealias = "Comb"
+               })
+                        </div>
+                    </div>*@
+                    <div class="form-group">
+                        <label class="invisible">for styling purpose</label><br />
+                        <div class="btn-group">
+                            <button data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle" type="button">
+                                Action
+                                <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-default dropdown-info">
+                                <li>
+                                    <a href="javascript:void(0)" class="js-exportToCSV" data-url="@Url.Action("ExportToExcelCourseWise")">
+                                        Export to Excel(CSV)
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+
+    .filter-btn a {
+        color: white !important
+    }
+</style>

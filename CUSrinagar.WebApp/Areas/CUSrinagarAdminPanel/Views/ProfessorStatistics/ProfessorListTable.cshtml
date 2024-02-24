@@ -1,0 +1,49 @@
+﻿
+@model  List<CUSrinagar.Models.ProfessorCRClasses>
+@using CUSrinagar.Extensions
+@{
+    Layout = null;
+    var ISChecked = "";
+}
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th>Professor</th>
+            <th>CR</th>
+            <th>Batch</th>
+            <th>Semester</th>
+            <th>Subject</th>
+            <th>No of Classes</th>
+            <th>No of Objections</th>
+            <th>Classes Engaged</th>
+            <th>View Detail</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+        @if (Model != null)
+        {
+            string classis = "";
+            foreach (var row in Model)
+            {
+                if (row.ObjectionCount>0)
+                { classis = "alert-danger"; }
+                else { classis = ""; }
+        <tr class="@classis">
+            <td>@row.Professor</td>
+            <td>@row.CR</td>
+            <td>@row.Batch</td>
+            <td>@row.Semester</td>
+            <td>@row.SubjectFullName</td>
+            <td>@row.ClassCount</td>
+            <td>@row.ObjectionCount</td>
+            <td>@row.ClassesEngaged</td>
+            <td><a href='@Url.Action("SubjectClassDetailList","ProfessorStatistics",new { area = "CUSrinagarAdminPanel", @ProfessorCRClasses_ID= row.ProfessorCRClasses_ID })'><i class="fa fa-edit"></i></a></td>
+
+        </tr>
+            }
+        }
+    </tbody>
+</table>

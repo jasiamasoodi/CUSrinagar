@@ -1,0 +1,157 @@
+﻿
+@model  CUSrinagar.Models.ADMCourseMaster
+@{ string hideen = "";
+
+    int track;
+    int trackint = ViewBag.track != null ? ViewBag.track + 1 : 0;
+    int count = (Model != null && Model.CourseMappingList != null && Model.CourseMappingList.Count() > 0) ? Model.CourseMappingList.Count : (trackint + 1);
+ }
+@for (track = trackint; track < count; track++)
+{
+    string display = "display:none;";
+    string Ischecked = "checked";
+    if (Model != null && Model.CourseMappingList != null && Model.CourseMappingList.Count() == 0)
+    { Model.CourseMappingList = null; }
+    
+    var sno = track + 1;
+
+   
+
+
+<div id="Div_@track" class="col-sm-12 jssubjectcontainer no-padding-right no-padding-left">
+    <div class="col-sm-2 lbl bigger-120 no-padding-right ">
+        <span class="bigger-120"><b>@sno .</b>&nbsp;</span>
+        <span style="color:red"> *</span> College <span id="Course_IDValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+        <div>
+            @Html.DropDownListFor(model => model.CourseMappingList[track].College_ID, new SelectList(ViewBag.CollegeDDL, "Value", "Text", Model.CourseMappingList[track].College_ID),
+"--Select--", new { @class = "chosen-select tag-input-style " })
+        </div>
+
+        <div class="col-sm-2">
+            @Html.ValidationMessageFor(model => model.CourseMappingList[track].College_ID, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+        </div>
+    </div>
+    <div class="col-sm-1 lbl bigger-120 no-js no-padding-right">
+
+        <span style="color:red;"> *</span>InTake Capacity<span id="MeritBasislInTackCapacityValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+        <div id="MeritBasislInTackCapacity_@track">
+            @Html.TextBoxFor(model => model.CourseMappingList[track].MeritBasislInTackCapacity, new { @class = "width-100" })
+        </div>
+
+        <div class="col-sm-2">
+            @Html.ValidationMessageFor(model => model.CourseMappingList[track].MeritBasislInTackCapacity, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+        </div>
+
+    </div>
+
+    <div class="col-sm-2 lbl bigger-120 no-padding-right">
+
+        <span style="color:red"> *</span> Self Finance InTake Capacity <span id="SelfFinancedInTackCapacityValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+
+
+        <div id="SelfFinancedInTackCapacity_@track">
+            @Html.TextBoxFor(model => model.CourseMappingList[track].SelfFinancedInTackCapacity, new { @data_id = track })
+
+        </div>
+
+        <div class="col-sm-2">
+            @Html.ValidationMessageFor(model => model.CourseMappingList[track].SelfFinancedInTackCapacity, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+        </div>
+
+    </div>
+
+    <div class="col-sm-2 lbl bigger-120 no-padding-right">
+
+        <span style="color:red"> *</span> BOPEE Registration <span id="BOPEERegistration" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+
+
+        <div id="BOPEERegistration_@track">
+            @Html.CheckBoxFor(model => model.CourseMappingList[track].AllowBOPEERegistration, new { @data_id = track })
+
+        </div>
+
+        <div class="col-sm-2">
+            @Html.ValidationMessageFor(model => model.CourseMappingList[track].AllowBOPEERegistration, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+        </div>
+
+    </div>
+    <div class="col-sm-2 lbl bigger-120 no-padding-right">
+
+        <span style="color:red"> *</span> Allowed Gender <span id="SelfFinancedInTackCapacityValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+
+
+        <div id="AllowedGender_@track">
+            @Html.RadioButtonFor(model => model.CourseMappingList[track].AllowedGender,"Male", new { @data_id = track }) Male
+            @Html.RadioButtonFor(model => model.CourseMappingList[track].AllowedGender,"FeMale", new { @data_id = track }) FeMale
+        </div>
+
+        <div class="col-sm-2">
+            @Html.ValidationMessageFor(model => model.CourseMappingList[track].AllowedGender, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+        </div>
+
+    </div>
+
+
+
+
+
+    @if (Model != null && Model.CourseMappingList != null && Model.CourseMappingList[track] != null && count > 1)
+    {
+        hideen = "hidden";
+        <div class="col-sm-1 align-right" style="margin-top:26px;">
+            @*<a href="@Url.Action("Delete", "UserProfile", new { area = "CUCollegeAdminPanel",user_id=Model.User_ID, id = Model.ProfessorSubjects[track].ProfessorSubject_ID})" class="jsDeleteItem fa  fa-trash-o red bigger-240"></a>*@
+
+            <a title="delete" href="#" class="jsDeleteItem red bigger-240" data-url="@Url.Action("Delete", "UserProfile", new { area = "CUCollegeAdminPanel",user_id=Model.College_ID, id = Model.CourseMappingList[track].Course_ID})"><i class="fa fa-trash "></i></a>
+
+        </div>
+    }
+
+
+
+
+</div>
+
+}
+
+
+@*<script>$("#DeleteNew_@(track-1)").remove();</script>*@
+
+
+@if (Model == null)
+{
+    hideen = "hidden";
+    <div class="  align-right" style="margin-top:26px;" id="DeleteNew_@track">
+        <a href="#ab" id="DeleteNew" data-id="@(track)" class=" fa  fa-trash-o red bigger-240">
+        </a>
+    </div>
+}
+
+@if ((Model == null && track == 1) || (Model != null))
+{<div class="col-sm-1 lbl bigger-120 no-js" style="margin-top:18px;margin-bottom:10px">
+        <button type="button" id="addNew" data-id="@(track - 1)" class="btn btn-success btn-sm"> Add New</button>
+
+    </div>
+}
+
+
+
+@section PageSpecificJS{
+    <script type="text/javascript">
+    var trackap=@track;
+        $(document).ready(function () {
+            if($("#DeleteNew_@(track-1)").length>0){
+                $("#DeleteNew_@(track-1)").remove();
+            }
+        });
+    </script>
+}
+
+
+
+
+

@@ -1,0 +1,35 @@
+﻿
+@*@Html.DropDownList("Course_ID", new SelectList(ViewBag.ChildValues, "Value", "Text"),
+                                           "--Select--", new { @class = "form-control   jsfilterelement required", @data_column = "Course_ID", @data_operator = "EqualTo" })*@
+
+
+
+
+@{
+    string Type = ViewBag.Type;
+    string childType = ViewBag.ChildType;
+    string childSubType = ViewBag.ChildSubType;
+    string typeName = Type == "Semester" ? (Type + "Name") : (Type + "_ID");
+    string key = (Type == "Semester") ? "Value" : "Key";
+    var ValuesDDL = ViewBag.ChildValues != null ? ViewBag.ChildValues : new List<SelectListItem>();
+}
+@Html.DropDownList(typeName, new SelectList(ValuesDDL, "Value", "Text"),
+                                     "--Select--", new { @class = "SearchDDL ParentDDL form-control jsfilterelement required", @data_column = @typeName, @data_operator = "EqualTo", @data_ddltype = @childType, @data_ddlchildtype = @childSubType, @data_ddlsubchildtype = "" })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

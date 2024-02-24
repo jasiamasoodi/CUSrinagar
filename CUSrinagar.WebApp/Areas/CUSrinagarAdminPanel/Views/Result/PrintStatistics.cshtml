@@ -1,0 +1,169 @@
+﻿@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@using CUSrinagar.Models
+@model List<ResultCompact>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Transcript</title>
+    <style type="text/css">
+
+        @@media print {
+            .noneOnPrint {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body style="background: #e0e0e0;margin: auto;vertical-align: middle;display: table;">
+    @if (Model.IsNotNullOrEmpty())
+    {
+        List<ResultCompact> _list = null;
+        List<ResultCompact> _sublist = null;
+        List<ResultCompact> _subsublist = null;
+        var batches = Model.Select(x => x.SemesterBatch).Distinct().OrderBy(x => x).ToList();
+        var listOfCourses = Model.Select(x => new { x.Programme, x.CourseFullName }).OrderBy(x => x.CourseFullName).OrderBy(x => x.Programme).Select(x => x.CourseFullName).Distinct().ToList();
+        var listOfColleges = Model.Select(x => x.AcceptCollege_ID).Distinct();
+        var maxSemesters = Model.Max(x => x.Semester);
+        var count = 1;
+
+        <section style="size:A4;background: white;padding:0;margin: 0;overflow: hidden;box-sizing: border-box;width: 210mm;height: 297mm;position:relative;page-break-after: always;font-family: monospace;">
+            <div style="margin:0mm;margin-right: 3.5mm;margin-left: 3.5mm;margin-top:2.5mm;">
+                <br />
+                <center>
+                    <p style="margin:0mm;font-size:x-large;">Statistics</p>
+                </center>
+                <hr style="margin-top:0mm;" />
+                <table  border="1" style="line-height:7mm;">
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th data-property="CourseFullName">Course</th>
+                            <th title="Total" class="center text-center">Total</th>
+                            <th title="Overall result status" class="center text-center">Passed</th>
+                            <th title="Overall result status" class="center text-center">Failed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (string course in listOfCourses)
+                        {
+                            var _std = Model.Where(x => x.CourseFullName == course);
+                            var _passedStudents = _std.Where(x => x.SubjectResults.All(y => y.OverallResultStatus == ResultStatus.P) && x.SubjectResults.Max(y => y.Semester) == maxSemesters).ToList();
+                            var _failedStudents = _std.Where(x => x.SubjectResults.Any(y => y.OverallResultStatus != ResultStatus.P) || x.SubjectResults.Max(y => y.Semester) != maxSemesters).ToList();
+
+
+                            <tr>
+                                <td>@(count++)</td>
+                                <td>@_std.First().CourseFullName</td>
+                                <td>
+                                    <center>
+                                        <b><u>@_std.Count()</u> </b>
+                                        <br />
+                                        [<span title="Male">@_std.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                        |
+                                        <span title="Female">@_std.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                    </center>
+                                </td>
+                                <td>
+                                    <center>
+                                        <b><u>@_passedStudents.Count()</u></b>
+                                        <br />
+                                        [<span title="Male">@_passedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                        |
+                                        <span title="Female">@_passedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                    </center>
+                                </td>
+                                <td>
+                                    <center>
+                                        <b><u>@_failedStudents.Count()</u></b>
+                                        <br />
+                                        [<span title="Male">@_failedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                        |
+                                        <span title="Female">@_failedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                    </center>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section style="size:A4;background: white;padding:0;margin: 0;overflow: hidden;box-sizing: border-box;width: 210mm;height: 297mm;position:relative;page-break-after: always;font-family: monospace;">
+            <div style="margin:0mm;margin-right: 3.5mm;margin-left: 3.5mm;margin-top:2.5mm;">
+                <br />
+                <center>
+                    <p style="margin:0mm;font-size:x-large;">Statistics</p>
+                </center>
+                <hr style="margin-top:0mm;" />
+                <table border="1" style="line-height:7mm;">
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Batch</th>
+                            <th title="Total" class="center text-center">Total</th>
+                            <th title="Overall result status" class="center text-center">Passed</th>
+                            <th title="Overall result status" class="center text-center">Failed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            count = 1;
+                            foreach (var batch in batches)
+                            {
+                                var _std = Model.Where(x => x.SemesterBatch == batch);
+                                var _passedStudents = _std.Where(x => x.SubjectResults.All(y => y.OverallResultStatus == ResultStatus.P) && x.SubjectResults.Max(y => y.Semester) == maxSemesters).ToList();
+                                var _failedStudents = _std.Where(x => x.SubjectResults.Any(y => y.OverallResultStatus != ResultStatus.P) || x.SubjectResults.Max(y => y.Semester) != maxSemesters).ToList();
+                                <tr>
+                                    <td>@(count++)</td>
+                                    <td>@_std.First().SemesterBatch</td>
+                                    <td>
+                                        <center>
+                                            <b><u>@_std.Count()</u> </b>
+                                            <br />
+                                            [<span title="Male">@_std.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                            |
+                                            <span title="Female">@_std.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                        </center>
+                                    </td>
+                                    <td>
+                                        <center>
+                                            <b><u>@_passedStudents.Count()</u></b>
+                                            <br />
+                                            [<span title="Male">@_passedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                            |
+                                            <span title="Female">@_passedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                        </center>
+                                    </td>
+                                    <td>
+                                        <center>
+                                            <b><u>@_failedStudents.Count()</u></b>
+                                            <br />
+                                            [<span title="Male">@_failedStudents.Where(x => x.Gender.ToLower() == "male").Count()</span><sup>M</sup>
+                                            |
+                                            <span title="Female">@_failedStudents.Where(x => x.Gender.ToLower() == "female").Count()</span><sup>F</sup>]
+                                        </center>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    }
+    else
+    {
+        <section class="sheet padding-5mm">
+            <p>Result Not Found .... </p>
+        </section>
+    }
+    <script src="~/Content/ThemeAdmin/Content/Scripts/Libraries/jquery-3.2.1.min.js"></script>
+    <script src="~/Scripts/General/general.js"></script>
+    <script src="~/Scripts/Pages/admin-transcript.js"></script>
+</body>
+</html>

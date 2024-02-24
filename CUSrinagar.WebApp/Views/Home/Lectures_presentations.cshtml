@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "Lectures,Presentations - ";
+}
+
+<div class="page-wrapper pager-table-text">
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                           Lectures
+                        </h3>
+                    </div>
+                    <table class="table table-hover table-bordered js-table">
+                        <thead style="white-space: nowrap;">
+                            <tr>
+                                <th>Title</th>
+                                <th style="text-align:center">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="text-align:left;"><b><a href="https://www.greaterkashmir.com/news/opinion/empirical-nature-of-science/" )' target="_blank">1- Empirical nature of Science </a></b><i>(Prof. Sheikh Javid Ahmed, Vice Chancellor)</i></td>
+                                <td style="text-align:center">30-05-2020</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:left;"><b><a href='@Url.Content("~/FolderManager/LecturesPresentations/Innovation_Higher_Education.pdf")' target="_blank">2- Innovation in Higher Education </a></b><i>(Prof. Sheikh Javid Ahmed, Vice Chancellor)</i></td>
+                                <td style="text-align:center">28-09-2018</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script>
+        var _CurrentSection = "Academics";
+        $(document).ready(function () {
+            loadpagertable();
+        });
+    </script>
+}

@@ -1,0 +1,69 @@
+﻿@model List<CUSrinagar.Models.ReEvaluationSetting>
+@{
+    Layout = null;
+}
+<table class="table table-bordered">
+    @if (Model != null)
+    {
+        <thead>
+            <tr>
+                <th>S.No.</th>
+                <th data-property="SubmittedYear">SubmittedYear</th>
+                <th data-property="CourseCategory">Programme</th>
+                <th data-property="Semester">Semester</th>
+                <th data-property="IsReEvaluation" title="ReEvalation/Xerox">Type</th>
+                <th data-property="AllowDownloadForm">IsActive</th>
+                <th data-property="StartDate">StartDate</th>
+                <th data-property="EndDate">EndDate</th>
+                <th data-property="FeePerSubject" title="Fee Per Subject">Fee</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="js-sno"></td>
+                    <td>
+                        @item.SubmittedYear
+                        @Html.HiddenFor(model => item.ReEvaluationSetting_ID, new { @class = "jsRow_ID" })
+                    </td>
+                    <td>@item.CourseCategory</td>
+                    <td>@item.Semester</td>
+                    <td>
+                        @if (item.IsReEvaluation)
+                        {
+                            <spa>Revaluation</spa>
+                        }
+                        else
+                        {
+                            <span>Xerox</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.AllowDownloadForm)
+                        {
+                            <label class='pull-center inline'>
+                                <input class='ace ace-switch ace-switch-5' type='checkbox' checked="checked" onclick='ChangeStatus(this)' />
+                                <span class='lbl middle'></span>
+                            </label>
+                        }
+                        else
+                        {
+                            <label class='pull-center inline'>
+                                <input class='ace ace-switch ace-switch-5' type='checkbox' onclick='ChangeStatus(this)' />
+                                <span class='lbl middle'></span>
+                            </label>
+                        }
+                    </td>
+                    <td>@item.StartDate.ToString("dd-MMM hh tt")</td>
+                    <td>@item.EndDate.ToString("dd-MMM hh tt")</td>
+                    <td title="Fee Per Subject">@item.FeePerSubject</td>
+                    <td>
+                        <a href="@Url.Action("CreateEdit",new { @id=item.ReEvaluationSetting_ID})" target="_blank"><i class="fa fa-edit"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    }
+</table>

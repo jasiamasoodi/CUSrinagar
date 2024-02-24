@@ -1,0 +1,305 @@
+﻿@using CUSrinagar.Models
+@using CUSrinagar.Extensions
+@model IEnumerable<ADMCourseMaster>
+
+
+@{
+    ViewBag.Title = "Courses - ";
+    string SchemeToDisplay = string.Empty, PrevCollege = string.Empty;
+    IEnumerable<ADMCourseMaster> _model = null;
+    bool IsNewTable = true;
+    int TotalSeats = 0, rows = 0, row = 0;
+}
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <header class="page-heading clearfix">
+            <h1 class="heading-title pull-left">
+                Courses
+                <small>
+                    <i class="ace-icon fa fa-angle-double-right"></i>
+                    List of Courses Offered
+                </small>
+            </h1>
+        </header>
+        <div class="col-md-12 col-sm-12 col-xs-12" style="overflow:auto !important">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center" rowspan="2">College</th>
+                            <th class="text-center" rowspan="2">Course</th>
+                            <th class="text-center" rowspan="2">Duration</th>
+                            <th class="text-center" colspan="3">Seats</th>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Merit basis</th>
+                            <th class="text-center">Self-Financed</th>
+                            <th class="text-center">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.GroupBy(_ => _.CourseCode))
+                        {
+                            IsNewTable = true;
+
+                            @*---------5-Year Intg. Courses----------------*@
+                            {
+                                _model = Model.Where(x => x.Programme == CUSrinagar.Enums.Programme.IG && x.CourseCode == item.Key);
+                                rows = Model.Where(x => x.CourseCode == item.Key).Count() + Model.Where(x => x.CourseCode == item.Key).GroupBy(x => x.Programme).Count() - 1;
+                            }
+                            if (_model.IsNotNullOrEmpty())
+                            {
+                                <tr>
+                                    @if (IsNewTable)
+                                    {
+                                        <th style="border-bottom-color:white !important;"></th>
+                                    }
+                                    <th class="text-center" colspan="5" style="font-size:16px">Integrated Courses</th>
+                                </tr>
+                                foreach (ADMCourseMaster _Course in _model)
+                                {
+                                    SchemeToDisplay = _Course.Scheme.ToString() + "s";
+                                    <tr>
+                                        @if (IsNewTable)
+                                        {
+                                            IsNewTable = false;
+                                            <th rowspan="@rows">
+                                                @*CourseCode used for CollegeFullname for display only here*@
+                                                @_Course.CourseCode
+                                                <br />
+                                                ( @_Course.SchoolFullName )
+                                            </th>
+                                        }
+
+                                        <td>@_Course.CourseFullName.Replace("Integrated ", "").Replace(" Honor's", "")</td>
+                                        <td>
+                                            @_Course.Duration @SchemeToDisplay
+                                        </td>
+                                        @*MinCombinationSubjects taken here as Merit basis IntackCapacity for display only*@
+                                        <td class="text-center">@_Course.MinCombinationSubjects</td>
+                                        @*MinCombinationSubjects taken here as SF IntackCapacity for display only*@
+                                        <td class="text-center">@_Course.MaxCombinationSubjects</td>
+                                        @{TotalSeats = _Course.MaxCombinationSubjects + _Course.MinCombinationSubjects;}
+                                        <td class="text-center">@TotalSeats</td>
+                                    </tr>
+                                }
+                            }
+
+                            @*---------Professional Courses----------------*@
+                            { _model = Model.Where(x => x.Programme == CUSrinagar.Enums.Programme.Professional && x.CourseCode == item.Key); }
+                            if (_model.IsNotNullOrEmpty())
+                            {
+                                <tr>
+                                    @if (IsNewTable)
+                                    {
+                                        <th style="border-bottom-color:white !important;"></th>
+                                    }
+                                    <th class="text-center" colspan="5" style="font-size:16px">Professional Courses</th>
+                                </tr>
+                                foreach (ADMCourseMaster _Course in _model)
+                                {
+                                    SchemeToDisplay = _Course.Scheme.ToString() + "s";
+                                    <tr>
+                                        @if (IsNewTable)
+                                        {
+                                            rows = rows - 1;
+                                            IsNewTable = false;
+                                            <th rowspan="@rows">
+                                                @*CourseCode used for CollegeFullname for display only here*@
+                                                @_Course.CourseCode
+                                                <br />
+                                                ( @_Course.SchoolFullName )
+                                            </th>
+                                        }
+
+                                        <td>@_Course.CourseFullName</td>
+                                        <td>
+                                            @_Course.Duration @SchemeToDisplay
+                                        </td>
+                                        @*MinCombinationSubjects taken here as Merit basis IntackCapacity for display only*@
+                                        <td class="text-center">@_Course.MinCombinationSubjects</td>
+                                        @*MinCombinationSubjects taken here as SF IntackCapacity for display only*@
+                                        <td class="text-center">@_Course.MaxCombinationSubjects</td>
+                                        @{TotalSeats = _Course.MaxCombinationSubjects + _Course.MinCombinationSubjects;}
+                                        <td class="text-center">@TotalSeats</td>
+                                    </tr>
+                                }
+                            }
+
+                            @*---------3-Year Honor's Courses----------------*@
+                            { _model = Model.Where(x => x.Programme == CUSrinagar.Enums.Programme.HS && x.CourseCode == item.Key); }
+                            if (_model.IsNotNullOrEmpty())
+                            {
+                                <tr>
+                                    @if (IsNewTable)
+                                    {
+                                        <th style="border-bottom-color:white !important;"></th>
+                                    }
+                                    <th class="text-center" colspan="5" style="font-size:16px">Honor's Courses</th>
+                                </tr>
+                                foreach (ADMCourseMaster _Course in _model)
+                                {
+                                    SchemeToDisplay = _Course.Scheme.ToString() + "s";
+                                    <tr>
+                                        @if (IsNewTable)
+                                        {
+                                            rows = rows - 1;
+                                            IsNewTable = false;
+                                            <th rowspan="@rows">
+                                                @*CourseCode used for CollegeFullname for display only here*@
+                                                @_Course.CourseCode
+                                                <br />
+                                                ( @_Course.SchoolFullName )
+                                            </th>
+                                        }
+
+                                        <td>@_Course.CourseFullName.Replace("Integrated ", "").Replace(" Honor's", "")</td>
+                                        <td>
+                                            @_Course.Duration @SchemeToDisplay
+                                        </td>
+                                        @*MinCombinationSubjects taken here as Merit basis IntackCapacity for display only*@
+                                        <td class="text-center">@_Course.MinCombinationSubjects</td>
+                                        @*MinCombinationSubjects taken here as SF IntackCapacity for display only*@
+                                        <td class="text-center">@_Course.MaxCombinationSubjects</td>
+                                        @{TotalSeats = _Course.MaxCombinationSubjects + _Course.MinCombinationSubjects;}
+                                        <td class="text-center">@TotalSeats</td>
+                                    </tr>
+                                }
+                            }
+
+
+
+
+                            @*---------3-Year Professional Courses----------------*@
+                            { _model = Model.Where(x => x.Programme == CUSrinagar.Enums.Programme.UG && x.PrintProgramme != CUSrinagar.Enums.PrintProgramme.BED && x.CourseCode == item.Key); }
+                            if (_model.IsNotNullOrEmpty())
+                            {
+                                <tr>
+                                    @if (IsNewTable)
+                                    {
+                                        <th style="border-bottom-color:white !important;"></th>
+                                    }
+                                    <th class="text-center" colspan="5" style="font-size:16px">Professional Courses</th>
+                                </tr>
+                                foreach (ADMCourseMaster _Course in _model)
+                                {
+                                    SchemeToDisplay = _Course.Scheme.ToString() + "s";
+                                    <tr>
+                                        @if (IsNewTable)
+                                        {
+                                            rows = rows - 1;
+                                            IsNewTable = false;
+                                            <th rowspan="@rows">
+                                                @*CourseCode used for CollegeFullname for display only here*@
+                                                @_Course.CourseCode
+                                                <br />
+                                                ( @_Course.SchoolFullName )
+                                            </th>
+                                        }
+                                        <td>@_Course.CourseFullName</td>
+                                        <td>
+                                            @_Course.Duration @SchemeToDisplay
+                                        </td>
+                                        @*MinCombinationSubjects taken here as Merit basis IntackCapacity for display only*@
+                                        <td class="text-center">@_Course.MinCombinationSubjects</td>
+                                        @*MinCombinationSubjects taken here as SF IntackCapacity for display only*@
+                                        <td class="text-center">@_Course.MaxCombinationSubjects</td>
+                                        @{TotalSeats = _Course.MaxCombinationSubjects + _Course.MinCombinationSubjects;}
+                                        <td class="text-center">@TotalSeats</td>
+                                    </tr>
+                                }
+                            }
+
+
+                            @*---------B.Ed & M.Ed Courses----------------*@
+                            { _model = Model.Where(x => (x.Course_ID == Guid.Parse("c23dd7f4-a933-4deb-ba8e-f933830bccf8") || x.PrintProgramme == CUSrinagar.Enums.PrintProgramme.BED) && x.CourseCode == item.Key); }
+                            if (_model.IsNotNullOrEmpty())
+                            {
+                                <tr>
+                                    @if (IsNewTable)
+                                    {
+                                        <th style="border-bottom-color:white !important;"></th>
+                                    }
+                                    <th class="text-center" colspan="5" style="font-size:16px">B.Ed & M.Ed Courses</th>
+                                </tr>
+                                foreach (ADMCourseMaster _Course in _model)
+                                {
+                                    SchemeToDisplay = _Course.Scheme.ToString() + "s";
+                                    <tr>
+                                        @if (IsNewTable)
+                                        {
+                                            rows = rows - 1;
+                                            IsNewTable = false;
+                                            <th rowspan="@rows">
+                                                @*CourseCode used for CollegeFullname for display only here*@
+                                                @_Course.CourseCode
+                                                <br />
+                                                ( @_Course.SchoolFullName )
+                                            </th>
+                                        }
+                                        <td>@_Course.CourseFullName</td>
+                                        <td>
+                                            @_Course.Duration @SchemeToDisplay
+                                        </td>
+                                        @*MinCombinationSubjects taken here as Merit basis IntackCapacity for display only*@
+                                        <td class="text-center">@_Course.MinCombinationSubjects</td>
+                                        @*MinCombinationSubjects taken here as SF IntackCapacity for display only*@
+                                        <td class="text-center">@_Course.MaxCombinationSubjects</td>
+                                        @{TotalSeats = _Course.MaxCombinationSubjects + _Course.MinCombinationSubjects;}
+                                        <td class="text-center">@TotalSeats</td>
+                                    </tr>
+                                }
+                            }
+
+
+                            @*---------engineering Courses----------------*@
+                            if (item.Key.ToLower() == "govt. college for engineering and technology")
+                            {
+                                { _model = Model.Where(x => (x.CourseCode.ToLower() == "govt. college for engineering and technology")); }
+                                <tr>
+                                    @if (IsNewTable)
+                                    {
+                                        <th style="border-bottom-color:white !important;"></th>
+                                    }
+                                    <th class="text-center" colspan="5" style="font-size:16px">B.Tech Courses</th>
+                                </tr>
+                                foreach (ADMCourseMaster _Course in _model)
+                                {
+                                    SchemeToDisplay = _Course.Scheme.ToString() + "s";
+                                    <tr>
+                                        @if (IsNewTable)
+                                        {
+                                            //rows = rows - 1;
+                                            IsNewTable = false;
+                                            <th rowspan="@rows">
+                                                @*CourseCode used for CollegeFullname for display only here*@
+                                                @_Course.CourseCode
+                                                <br />
+                                                ( @_Course.SchoolFullName )
+                                            </th>
+                                        }
+                                        <td>@_Course.CourseFullName</td>
+                                        <td>
+                                            @_Course.Duration @SchemeToDisplay
+                                        </td>
+                                        @*MinCombinationSubjects taken here as Merit basis IntackCapacity for display only*@
+                                        <td class="text-center">@_Course.MinCombinationSubjects</td>
+                                        @*MinCombinationSubjects taken here as SF IntackCapacity for display only*@
+                                        <td class="text-center">@_Course.MaxCombinationSubjects</td>
+                                        @{TotalSeats = _Course.MaxCombinationSubjects + _Course.MinCombinationSubjects;}
+                                        <td class="text-center">@TotalSeats</td>
+                                    </tr>
+                                }
+                            }
+                        }
+
+                    </tbody>
+                </table>
+        </div>
+    </div>
+</div>
+@section PageSpecificJS{
+    <script>
+        var _CurrentSection = "Academics";
+    </script>
+}

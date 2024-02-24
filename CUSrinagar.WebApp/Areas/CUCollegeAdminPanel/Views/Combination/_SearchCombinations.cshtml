@@ -1,0 +1,125 @@
+﻿@model CUSrinagar.Models.ADMCourseMaster
+<div class="col-md-12" style="margin-bottom:10px;margin-top:15px;">
+    <button id="JSMakeActive" class="btn btn-sm btn-success">
+        <i class="ace-icon fa fa-check"></i>
+        Make Active
+    </button>
+    &nbsp;&nbsp;&nbsp;
+    <button id="JSMakeInActive" class="btn btn-sm btn-warning">
+        <i class="ace-icon fa fa-bolt"></i>
+        Make In-Active
+    </button>
+</div>
+
+<table id="simple-table" class="table  table-bordered table-hover">
+    <thead>
+        <tr>
+            <th class="center" style="width:20px">
+                <label class="pos-rel">
+                    <input type="checkbox" id="cbSelectAll" class="ace" onclick="checkAll('#cbSelectAll','Combination_ID')" />
+                    <span class="lbl"></span>
+                </label>
+            </th>
+            <th class="detail-col">SNo.</th>
+            <th style="width:140px">Combination Code</th>
+            <th class="center">Subjects</th>
+            <th class="hidden-480" style="width:110px">Semester</th>
+            <th class="hidden-480" style="width:80px">Status</th>
+            <th style="width:100px">WorkFlow</th>
+        </tr>
+    </thead>
+    @if (Model == null || Model.CombinationDetails == null || !(Model.CombinationDetails.Any()))
+    {
+        <tbody>
+            <tr>
+                <th colspan="7" class="center">No Combinations found</th>
+            </tr>
+        </tbody>
+    }
+    else
+    {
+        int sno = 0;
+        <tbody>
+            @for (int index = 0; index < Model.CombinationDetails.Count(); index++)
+            {
+                <tr>
+                    <td class="center">
+                        <label class="pos-rel">
+                            <input type="checkbox" onclick="unCheckTop('#cbSelectAll', 'Combination_ID');" class="ace jsRow_ID" name="Combination_ID" value="@Model.CombinationDetails[index].Combination_ID" />
+                            <span class="lbl"></span>
+                        </label>
+                    </td>
+                    @{ sno = index + 1;}
+                    <td class="center">@sno</td>
+                    <th class="center">
+
+                       @* <a href='@Url.Action("Edit","Combination",new { area = "CUSrinagarAdminPanel", @Combination_ID =  Model.CombinationDetails[index].Combination_ID})'>*@
+                            @Model.CombinationDetails[index].CombinationCode
+                       @* </a>*@
+                    </th>
+                    <td>
+                        @{ int ssno = 1;}
+                        <table>
+                            <tbody>
+                                <tr>
+                                    @foreach (var subject in Model.CombinationDetails[index].SubjectsDetails)
+                                    {
+                                        <td style="width:150px;border-right:1px solid #000000;padding-left:7px;">
+                                            <span>@subject.SubjectFullName @* todo <br /> @subject.SubjectCode*@&nbsp;&nbsp;&nbsp;</span>
+                                        </td>
+                                        ssno = ssno + 1;
+                                    }
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </td>
+                    @*<td>
+                            <span>
+                            @string.Join(" - ", Model.CombinationDetails[index].SubjectsDetails.Select(x => x.SubjectCode).ToList())
+                            </span>
+                        </td>*@
+                    <td>@Model.CombinationDetails[index].Semester</td>
+                    <td class="hidden-480" id="@Model.CombinationDetails[index].Combination_ID">
+                        @if (Model.CombinationDetails[index].Status)
+                        {
+                            <span class="label label-sm label-success">Active</span>
+                        }
+                        else
+                        {
+                            <span class="label label-sm label-warning">In-Active</span>
+                        }
+                    </td>
+
+                    <td>
+                        <a title="delete" href="#" class="jsDeleteMainItem"><i class="fa fa-trash "></i></a>|
+                        <span href="#my_modal_@index" data-combination_id="@Model.CombinationDetails[index].Combination_ID" data-toggle="modal" class="label label-info arrowed-in-right arrowed jsmodel" style="cursor:pointer;">Show</span>
+
+
+                        <div id="my_modal_@index" class="modal fade" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h3 class="smaller lighter blue no-margin">User Activities</h3>
+                                    </div>
+
+                                    <div class="modal-body">
+                                       Working...
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
+                                            <i class="ace-icon fa fa-times"></i>
+                                            Close
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    }
+</table>

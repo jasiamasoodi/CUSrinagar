@@ -1,0 +1,55 @@
+﻿@model CUSrinagar.Models.FormsToDownload
+@{ViewBag.Title = "MigrationForm";}
+<div class="row">  
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header">
+                <h4 class="widget-title"><i class='fa fa-search'></i> Search Migration Form</h4>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="alert alert-warning text-center" style="display:none;" id="jsstatus"><i class="ace-icon fa fa-spinner fa-spin orange bigger-125"></i> Working...</div>
+                    @using (Html.BeginForm("Migration", "Migration", FormMethod.Post, new { @id = "SearchMigrationForm", @class = "form-horizontal" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                Student Name<span id="SemesterValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div>
+                                    @Html.TextBox("StudentName") OR
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                Registration Number<span id="SemesterValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div>
+                                    @Html.TextBox("RegistrationNumber")
+                                </div>
+                            </div>
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right" style="margin-top:26px">
+                                <input type="hidden" name="btnclicked" id="btnclicked" />
+                                <input id="JSSearch" type="submit" value="Search" name="command" class="btn btn-sm btn-success" />
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+          
+            </div>
+    </div>
+</div>
+@Html.Partial("~/Areas/CUCollegeAdminPanel/Views/Migration/_SearchMigrationForms.cshtml", Model)
+@*@section PageSpecificJSFiles
+{
+    @Scripts.Render("~/bundles/Libraries/jqueryval", "~/bundles/Libraries/SCForm")
+}
+@section PageSpecificJS{
+    <script>
+        $(document).ready(function () {
+            $(".ac").addClass("active");
+            $(".dt").addClass("active open");
+        });
+    </script>
+}*@

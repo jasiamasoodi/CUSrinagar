@@ -1,0 +1,277 @@
+﻿
+@using CUSrinagar.Extensions;
+@using System.Globalization
+
+@model  List<CUSrinagar.Models.GrievanceWidgetSummary>
+
+@{
+    ViewBag.Title = "Grievance Statistics";
+}
+
+<style>
+
+    .divbtn {
+        border: 2px solid black;
+        background-color: white;
+        color: black;
+        padding: 14px 28px;
+        font-size: 16px;
+        cursor: pointer;
+        margin: 2px
+    }
+
+        .divbtn h3 {
+            border-bottom: 1px solid #337ab7;
+        }
+
+    /* Green */
+    .success {
+        border-color: #555555;
+        color: black;
+    }
+
+    .divbtn img {
+        width: 25px;
+        height: 15px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+</style>
+
+@section CUSSitemap
+{
+
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index", "Dashboard", new { area = "CUCollegeAdminPanel" })">Home</a>
+            </li>
+            <li class="active">Grievance Statistics</li>
+        </ul><!-- /.breadcrumb -->
+    </div>
+}
+
+
+
+<div class="row">
+    <div class="col-md-12 jsTableContent">
+        <div class="panel panel-primary js-pager-table" data-otherparam1="@CUSrinagar.Enums.PrintProgramme.UG">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Statistics
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        Grievance Statistics
+                    </small>
+                    <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                        <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                    </span>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="search-box">
+                    @using (Html.BeginForm("GrievanceWidgets", "Statistics", FormMethod.Post))
+                    {
+                        <div class="col-sm-10">
+                            <div class="form-inline col-sm-12">
+
+                                <label> College </label>
+
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        @Html.DropDownList("college_ID", new SelectList(ViewBag.Colleges, "Value", "Text", ViewBag.Colleges), null, new { @class = ""  ,@style = "width:100%!important" })
+                                    </div>
+                                </div>
+
+                                <label> Category </label>
+
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        @Html.DropDownList("grievanceCategory", new SelectList(ViewBag.GrievanceCategory, "Value", "Text", ViewBag.GrievanceCategory), null, new { @class = "" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-search"></i>&nbsp;Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            @{
+                <hr />
+                <a href="#" class="btn btn-lg btn-success">Total Grievances =  @(Model?.Sum(widget => widget.NoOfQueries) ?? 0 )</a>
+
+                foreach (CUSrinagar.Enums.GrievanceCategory widget in Enum.GetValues(typeof(CUSrinagar.Enums.GrievanceCategory)))
+                {
+                    @Html.Hidden(widget.GetEnumDescription(), Model?.FirstOrDefault(i => i.Category == widget)?.NoOfQueries ?? 0, new { @class = "jsChartData" });
+                    <a href="#" class="btn btn-lg btn-inverse"> @widget.GetEnumDescription() = @(Model?.FirstOrDefault(i => i.Category == widget)?.NoOfQueries ?? 0 )</a>
+                }
+                <hr />
+            }
+        </div>
+
+        <div class="row">
+            <div class="col-md-7" style="border-right:1px solid gray">
+                <div class="row">
+                    
+                    <div class="col-md-6 ">
+                        <div class="row divbtn success">
+                            <h3> Grievances Resolved     </h3> <h3 id="getResolvedGrievances1"><img src="~/Content/ThemeAdmin/Content/Libraries/images/loading.gif" /></h3>
+                            <h3> Grievances Not Resolved  </h3> <h3 id="getResolvedGrievances2"><img src="~/Content/ThemeAdmin/Content/Libraries/images/loading.gif" /></h3>
+                        </div>
+                    </div>                      
+                    <div class="col-md-6 ">
+                        <div class="row divbtn success">
+                            <h3> Verified Grievances   </h3> <h3 id="getVerifiedGrievances1"><img src="~/Content/ThemeAdmin/Content/Libraries/images/loading.gif" /></h3>
+                            <h3> Unverified Grievances  </h3><h3 id="getVerifiedGrievances2"><img src="~/Content/ThemeAdmin/Content/Libraries/images/loading.gif" /></h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <hr />
+                    <div class="col-md-6 ">
+                        <div class="row divbtn success">
+                            <h3> Grievances UnAssigned  </h3>  <h3 id="getAssignedGrievances1"><img src="~/Content/ThemeAdmin/Content/Libraries/images/loading.gif" /></h3>
+                            <h3> Grievances Assigned    </h3>  <h3 id="getAssignedGrievances2"><img src="~/Content/ThemeAdmin/Content/Libraries/images/loading.gif" /></h3>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 ">
+                        <div class="row divbtn success">
+                            <h3> Allowed for Public   </h3>     <h3 id="getPublicGrievances1"><img src="~/Content/ThemeAdmin/Content/Libraries/images/loading.gif" /></h3>
+                            <h3> Not Allowed for Public  </h3>  <h3 id="getPublicGrievances2"><img src="~/Content/ThemeAdmin/Content/Libraries/images/loading.gif" /></h3>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-5">
+                <div class="row">
+                    <div id="piechart">
+                        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+                        <script type="text/javascript">
+                            // Load google charts
+                            google.charts.load('current', { 'packages': ['corechart'] });
+                            google.charts.setOnLoadCallback(drawChart);
+
+                            var mainArray = [];
+                            var subArray = ['Task', 'Hours per Day'];
+                            mainArray.push(subArray);
+                            $(".jsChartData").each(function () {
+                                var $element = $(this);
+                                var name = $element.attr('name');
+                                var value = parseInt($element.val()) || 0;
+                                var subArray = [name, value];
+                                mainArray.push(subArray);
+                            });
+
+                            // Draw the chart and set the chart values
+                            function drawChart() {
+                                var data = google.visualization.arrayToDataTable(mainArray);
+
+                                // Optional; add a title and set the width and height of the chart
+                                var options = {
+                                    'height': 600,'width':600,
+                                    chartArea: { width: 500, height: 500 }
+                                };
+
+                                // Display the chart inside the <div> element with id="piechart"
+                                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                                chart.draw(data, options);
+                            }
+                        </script>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            GetResolvedGrievances();
+            GetGrievanceWidgetsVerified();
+            GetGrievanceWidgetsAssigned();
+            GetGrievanceWidgetsGeneral();
+
+            function GetResolvedGrievances() {
+                var _url = getBaseUrlAdmin() + "Statistics/GrievanceWidgetsResolved?college_ID=" + $("#college_ID").find('option:selected').val() + "&grievanceCategory=" + $("#grievanceCategory").find('option:selected').val();
+                $.ajax({
+                    async: true,
+                    url: _url,
+                    type: "POST",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data != null) {
+                            $("#getResolvedGrievances1").html(data.Resolved);
+                            $("#getResolvedGrievances2").html(data.UnResolved);
+                        }
+                    }
+                });
+            }
+
+            function GetGrievanceWidgetsVerified() {
+                var _url = getBaseUrlAdmin() + "Statistics/GrievanceWidgetsVerified?college_ID=" + $("#college_ID").find('option:selected').val() + "&grievanceCategory=" + $("#grievanceCategory").find('option:selected').val();
+                $.ajax({
+                    async: true,
+                    url: _url,
+                    type: "POST",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data != null) {
+                            $("#getVerifiedGrievances1").html(data.Verified);
+                            $("#getVerifiedGrievances2").html(data.UnVerified);
+                        }
+                    }
+                });
+            }
+
+            function GetGrievanceWidgetsAssigned() {
+                var _url = getBaseUrlAdmin() + "Statistics/GrievanceWidgetsAssigned?college_ID=" + $("#college_ID").find('option:selected').val() + "&grievanceCategory=" + $("#grievanceCategory").find('option:selected').val();
+                $.ajax({
+                    async: true,
+                    url: _url,
+                    type: "POST",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data != null) {
+                            $("#getAssignedGrievances1").html(data.Assigned);
+                            $("#getAssignedGrievances2").html(data.UnAssigned);
+                        }
+                    }
+                });
+            }
+
+            function GetGrievanceWidgetsGeneral() {
+                var _url = getBaseUrlAdmin() + "Statistics/GrievanceWidgetsGeneral?college_ID=" + $("#college_ID").find('option:selected').val() + "&grievanceCategory=" + $("#grievanceCategory").find('option:selected').val();
+                $.ajax({
+                    async: true,
+                    url: _url,
+                    type: "POST",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data != null) {
+                            $("#getPublicGrievances1").html(data.AllowedForPublic);
+                            $("#getPublicGrievances2").html(data.NotAllowedForPublic);
+                        }
+                    }
+                });
+            }
+
+            return;
+
+
+        });
+    </script>
+}
+

@@ -1,0 +1,252 @@
+﻿@using CUSrinagar.Models
+@model ARGPersonalInformation
+
+@{
+    Layout = null;
+    var MessageForAlert = TempData["alert"] ?? "";
+    string AppliedFor = "";//$"({((string)ViewBag.AppliedFor).Replace(@" / Honor//'s / Professional / Engineering", "")})";
+    bool batchHasEntrance = (AppUserHelper.AppUsercompact?.OrgBatch ?? 0) != 2022;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@Model.StudentFormNo SFS Receipt - CUSrinagar</title>
+    <style type="text/css">
+        .btn-theme {
+            background: #011c27;
+            border: 1px solid #84aac9;
+            color: #fff;
+        }
+
+            .btn-theme:hover {
+                background: #545677;
+                border: 1px solid #84aac9;
+                color: #fff;
+            }
+
+        .QRCode {
+            width: 95px;
+            position: absolute;
+            margin-top: -60px;
+            margin-left: 0
+        }
+
+        @@media print {
+            .QRCode {
+                width: 95px;
+                position: absolute;
+                margin-top: -60px;
+                margin-left: 0
+            }
+
+            .noneOnPrint {
+                display: none;
+            }
+
+            .dontbreakInside {
+                page-break-inside: avoid;
+            }
+
+
+            .blankspace {
+                height: 350px !important;
+            }
+        }
+
+        .breakpagehere {
+            page-break-after: always !important;
+            height: 10px;
+            background-color: grey !important;
+        }
+
+        table tr td {
+            padding: 5px 10px;
+        }
+
+        table tr td, table tr th {
+            max-width: 150px;
+            word-wrap: break-word !important;
+        }
+
+        table, table tr, table tr td, table tr th {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        div {
+            background-color: #fff;
+        }
+
+        .center {
+            text-align: center !important;
+        }
+
+        .pull-right {
+            float: right !important;
+        }
+
+        .pull-left {
+            float: left !important;
+        }
+    </style>
+</head>
+<body style="background-color:grey">
+    <div style="margin:0 auto;width:909px;padding:10px 10px">
+        @foreach (var item in Model.CoursesApplied.Where(x => x.SelfFinancedPayment_ID != null) ?? new List<ARGCoursesApplied>())
+        {
+            <div class="center">
+                <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" style="width:90px;height:68px;" />
+                <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                <br />
+                @{
+                    var base64 = Convert.ToBase64String(Model.QRCode);
+                    var QRImgSrc = String.Format($"data:image/png" + ";base64,{0}", base64);
+                }
+                <strong style="font-size:20px;">
+                    Application for Self Financed Seat - @DateTime.Now.Year &nbsp;&nbsp;&nbsp;@AppliedFor
+                    <img src="@QRImgSrc" style="margin-left:50px" class="QRCode" />
+                </strong>
+            </div>
+            <br />
+            <br />
+            <table>
+                <tr>
+                    <td>
+                        <strong style="float:left !important;">Form No. : @Model.StudentFormNo</strong>
+                    </td>
+                    <td>
+                        @if (batchHasEntrance)
+                        {
+                            <strong style="float:right !important;font-size:17px;">Entrance Roll No. : @Model.EntranceRollNo</strong>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>Name</td>
+                    <td>@Model.FullName</td>
+                </tr>
+                <tr>
+                    <td>Mobile</td>
+                    <td>@Model.StudentAddress.Mobile</td>
+                </tr>
+                <tr>
+                    <td>TxnReference No.</td>
+                    <td>@item.PaymentDetail.TxnReferenceNo</td>
+                </tr>
+                <tr>
+                    <td>Amount (Rs.)</td>
+                    <td>@item.PaymentDetail.TxnAmount</td>
+                </tr>
+                <tr>
+                    <td>Dated</td>
+                    <td>@item.PaymentDetail.TxnDate.ToString("dd-MMMM-yyyy")</td>
+                </tr>
+            </table><br /><h3>
+                Course Applied @if (batchHasEntrance)
+                {
+                    <text>/ Appeared in Entrance</text>
+                }
+            </h3><table>
+                <thead>
+                    <tr>
+                        <th style="width:70%">Course Name</th>
+                        <th>
+                            @if (batchHasEntrance)
+                            {
+                                <text>Entrance Points</text>
+                            }
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (batchHasEntrance && ((string)ViewBag.AppliedFor).Contains("Integrated") && !Model.CoursesApplied.Any(x => x.Course_ID == new Guid("FC32E138-4EE2-4DA2-9453-5C8368180BC3"))) //Int b.ed-m.ed
+                    {
+                        <tr>
+                            <td>
+                                Common Aptitude Test
+                            </td>
+                            <th>
+                                @Model.CATEntrancePoints
+                            </th>
+                        </tr>
+                    }
+                    @if (((string)ViewBag.AppliedFor).Contains("Integrated") && !Model.CoursesApplied.Any(x => x.Course_ID == new Guid("FC32E138-4EE2-4DA2-9453-5C8368180BC3"))) //Int b.ed-m.ed
+                    {
+                        if (!batchHasEntrance)
+                        {
+                            <tr>
+                                <td>
+                                    12th Percentage
+                                </td>
+                                <th>
+                                    @Model.CATEntrancePoints
+                                </th>
+                            </tr>
+                        }
+
+                        <tr>
+                            <td>
+                                @item.CourseName
+                            </td>
+                            @if (batchHasEntrance)
+                            {
+                                <th>
+                                    @item.SubjectEntrancePoints
+                                </th>
+                            }
+                        </tr>
+
+                        <tr>
+                            <th>
+                                Total Points
+                            </th>
+                            <th>
+                                @{ decimal totalPoints = item.SubjectEntrancePoints + (Model.CATEntrancePoints ?? 0); }
+                                @totalPoints
+                            </th>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>
+                                @item.CourseName
+                            </td>
+                            <th>
+                                @item.SubjectEntrancePoints
+                            </th>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <br />
+            <text>Printed On : </text> <strong>@DateTime.Now.ToString("dd MMM, yyyy h:m tt")</strong>
+            <div class="breakpagehere"></div>
+        }
+    </div>
+    <div class="noneOnPrint" style="margin-left:-14px;height:40px;background-color:lightslategrey;width:100%;position:fixed;bottom:0;z-index:100;text-align:center;padding-top:10px">
+        @Html.ActionLink("Go Back", "Apply", "SelfFinanced", null, new { area = "CUStudentZone", style = "color:white;" })
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <button style="height: 32px;" href="#" class="btn btn-theme" onclick="window.print();"><b>Print Receipt</b></button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a style="height: 32px;color:white" href="https://www.wikihow.com/Save-a-Web-Page-as-a-PDF-in-Google-Chrome" target="_blank"><b>See How to Save as PDF</b></a>
+    </div>
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/Libraries/jquery-2.1.4.min.js")"></script>
+    <script src="@Url.Content("~/Content/ThemePublic/Libraries/disableBack.js")"></script>
+    <script type="text/javascript">
+        $(document).ready(function ($) {
+            setTimeout(function () {
+                if ('@MessageForAlert' !== '') {
+                    alert('@MessageForAlert');
+                }
+            }, 2000);
+        });
+        window.oncontextmenu = function () { return false; }
+    </script>
+</body>
+</html>

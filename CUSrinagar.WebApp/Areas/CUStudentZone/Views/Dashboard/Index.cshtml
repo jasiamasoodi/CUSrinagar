@@ -1,0 +1,147 @@
+@{
+    ViewBag.Title = "Dashboard ";
+}
+
+@model CUSrinagar.Models.ARGPersonalInformation
+
+@section CUSSitemap{
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUStudentZone"})">Home</a>
+            </li>
+            <li>
+                <a href="#" class="active">Student  Profile</a>
+            </li>
+        </ul><!-- /.breadcrumb -->
+}
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            Student
+            <small>
+                <i class="ace-icon fa fa-angle-double-right"></i>
+                Profile
+            </small>
+ 
+        </h1>
+    </div><!-- /.page-header -->
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- PAGE CONTENT BEGINS -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="">
+                        <div style="margin:0 auto;width:909px;padding:10px 10px;font-family:'Times New Roman'">
+
+                            <div class="center">
+                                <img src="/Content/ThemePublic/PrintImages/CUSLogo.png" style="width:90px;height:68px;" />
+                                <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+
+                            </div>
+                            <br />
+
+                            <div style="margin-left:10px;color:darkblue;font-size: 15px;text-align: center !important;font-weight:bold;">
+                                In-case your Profile Information is Incorrect,Contact IT-Section Cluster University Srinagar<br />
+                                Camp Office- Zoology Block SP College, MA Road,Srinagar
+                            </div>
+
+
+                            <table class="table table-bordered" >
+                                <tr>
+                                    <td colspan="3">
+                                        <b style="float:left !important;">CUS Registration No.: @Model.CUSRegistrationNo </b>
+                                    </td>
+                                    <td colspan="3">
+                                        <b style="float:left !important;">Board Registration No.: @Model.BoardRegistrationNo</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="5" class="center">
+                                        <img class="img-responsive" src="@Url.Content(Model.Photograph)" width="150" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>@Model.FullName</td>
+                                    <td>Gender</td>
+                                    <td>@Model.Gender</td>
+                                </tr>
+                                <tr>
+                                    <td>Father's Name</td>
+                                    <td>@Model.FathersName</td>
+                                    <td>Religion</td>
+                                    <td>@Model.Religion</td>
+
+                                </tr>
+                                <tr>
+                                    <td>Mother's Name</td>
+                                    <td>@Model.MothersName</td>
+                                    <td>Mobile</td>
+                                    <td>@Model.StudentAddress.Mobile</td>
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
+                                    <td>@Model.StudentAddress.Email</td>
+
+                                    <td>Category</td>
+                                    <td>@Model.Category</td>
+                                </tr>
+                                <tr>
+                                    <td>Address</td>
+                                    <td colspan="4">@Model.StudentAddress.PermanentAddress</td>
+
+                                </tr>
+                                <tr>
+                                    <td>Pincode</td>
+                                    <td colspan="2">@Model.StudentAddress.PinCode</td>
+                                    <td>Block</td>
+                                    <td>@Model.StudentAddress.Block</td>
+                                </tr>
+                                <tr>
+                                    <td>Tehsil</td>
+                                    <td colspan="2">@Model.StudentAddress.Tehsil</td>
+                                    <td>District</td>
+                                    <td>@Model.StudentAddress.District</td>
+                                </tr>
+                                <tr>
+                                    <td>Assembly Constituency</td>
+                                    <td colspan="2">@Model.StudentAddress.AssemblyConstituency</td>
+                                    <td>Parliamentary Constituency</td>
+                                    <td>@Model.StudentAddress.ParliamentaryConstituency</td>
+                                </tr>
+                                <tr>
+
+                                    <td>State</td>
+                                    <td colspan="2">@Model.StudentAddress.State</td>
+                                    <td>DOB</td>
+                                    <td><b>@Model.DOB.ToString("dd-MM-yyyy")</b> </td>
+
+                                </tr>
+                            </table>
+                            <br />
+                          <table class="table table-bordered" >
+                                <tr>
+                                    <td style="width:10px;">CourseName</td>
+                                    <td style="width:115px;"><b>@ViewBag.CourseName</b></td>
+                                    <td style="width:218px;">Course Combination</td>
+                                    <td>@ViewBag.StudentSubjects</td>
+
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <a class="btn btn-lg" target="_blank" href='@Url.Action("EntranceExamination", "Student", new { area = "CUStudentZone"})' >Download Examination Form</a>
+                </div>
+            </div><!-- /.row -->
+        </div>
+        <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+</div>
+
+
+@section PageSpecificJSFiles{
+   
+}

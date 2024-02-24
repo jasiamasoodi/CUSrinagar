@@ -1,0 +1,89 @@
+﻿@model IEnumerable<CUSrinagar.Models.StudentsCourseWiseStatistics>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Program Statistics : CUS</title>
+    <link href="~/Content/ThemePublic/Libraries/css/printer-frndly.css" rel="stylesheet" type="text/css" />
+    <style type="text/css" media="print">
+        @@page {
+            size: landscape;
+        }
+    </style>
+</head>
+<body class="A4 middle landscape">
+    @if (Model != null)
+    {
+        <section class="sheet padding-5mm compact">
+            <hr />
+            <div class="center">
+                <img src="/Content/ThemePublic/Libraries/images/cus-logo1.svg" width="500" height="50" />
+                <h2><u> Student Enrollments of the University </u></h2>
+            </div>
+            <hr />
+            @if (@ViewBag.Filters != null)
+            {
+                <h2 class="center"> @ViewBag.Filters</h2>
+            }
+            else
+            {
+
+            }
+            <hr />
+            <h2 class="center">Total Number of students  = @Model.Sum(i => i.NoOfStudents) </h2>
+            
+            <table height="10%" border="1">
+                <tbody style="font-size:larger;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-style:italic">
+                    @{
+                        var printProgrammes = Model.GroupBy(i => i.PrintProgramme);
+
+                        foreach (var item in printProgrammes)
+                        {
+                            <tr>
+                                <td> @item.Key</td>
+                                <td> @item.Sum(i => i.NoOfStudents)</td>
+                            </tr>
+
+                        }
+                    }
+
+                </tbody>
+            </table>
+            <p></p>
+
+            <table height="10%" border="1">
+                <tbody style="font-size:larger;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-style:italic">
+                    @{
+                        var programmes = Model.GroupBy(i => i.Programme);
+
+                        foreach (var item in programmes)
+                        {
+                            <tr>
+                                <td> @item.Key</td>
+                                <td> @item.Sum(i => i.NoOfStudents)</td>
+                            </tr>
+
+                        }
+                    }
+
+                </tbody>
+            </table>
+          
+
+        </section>
+        <div class="noneOnPrint print-download-strip">
+            <button href="#" class="btn btn-default" onclick="window.print();"><b>Download / Print Statistics</b></button>
+        </div>
+    }
+    else
+    {
+        <section class="sheet padding-5mm">
+            <p>No Record Found. </p>
+        </section>
+    }
+
+</body>
+</html>

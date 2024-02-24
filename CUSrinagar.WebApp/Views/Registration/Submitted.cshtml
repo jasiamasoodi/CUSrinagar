@@ -1,0 +1,120 @@
+﻿@using CUSrinagar.Models
+
+@model ARGPersonalInformation
+
+@{
+    ViewBag.Title = $"Form Submitted Successfully - ";
+}
+
+<div class="page-header">
+    <h1 style="color:#60b254">
+        <i class="fa fa-check-circle"></i> Your online application form has been received successfully
+    </h1>
+</div>
+<div id="response">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+</div>
+
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8" style="border:2px solid #cacaca;border-radius:6px;;">
+        <br />
+        <div class="col-lg-2">    </div>
+        <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+            <div class="content-wrapper quadraText text-center" style="padding:5px;font-size:20px">
+                Please note your Form No. and DOB and make Online Payment to complete your Registration
+            </div>
+        </div>
+        <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+            <div class="content-wrapper" style="font-size:20px">
+                <table>
+                    <tr>
+                        <td>Form No. </td>
+                        <td> : </td>
+                        <td> &nbsp;&nbsp;@Model.StudentFormNo</td>
+                    </tr>
+                    <tr>
+                        <td>Date of Birth(dd-mm-yyyy) </td>
+                        <td> : </td>
+                        <td> &nbsp;&nbsp;@Model.DOB.ToString("dd-MM-yyyy")</td>
+                    </tr>
+                    <tr>
+                        <td>Applied for </td>
+                        <td> : </td>
+                        @if (Model.IsLateralEntry)
+                        {
+                            <td> &nbsp;&nbsp;Lateral Entry Programmes</td>
+                        }
+                        else
+                        {
+                            <td> &nbsp;&nbsp;@ViewBag.AppliedFor.Replace(" / Engineering", "")</td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>Batch</td>
+                        <td> : </td>
+                        <td> &nbsp;&nbsp;@Model.Batch</td>
+                    </tr>
+                    <tr>
+                        <td>Total Fee</td>
+                        <td> : </td>
+                        <td> &nbsp;&nbsp;<i class="fa fa-rupee"></i> @Model.TotalFee</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+            <div class="content-wrapper" style="padding:5px;font-size:18px">
+                Note :
+                <ol>
+                    <li><strong style="color:#ff6a00;font-size:20px">It is mandatory to have printout of the form for future reference or submission.</strong></li>
+                    <li style="font-weight:bold">
+                        If you have already submitted Fee and you are still unable to print your Admission Form visit Cluster University I.T Section
+                        by or before last date
+                    </li>
+                    <li>You can also make payment online later by Signing-In to StudentZone using aforesaid details.</li>
+                    <li>After payment is successfull then you will be able to Print your form.</li>
+                    <li style="font-weight:bold">Please do not submit FEE if you want to add or change the course(s).</li>
+                </ol>
+            </div>
+        </div>
+        <br />
+        <p class="text-center">
+            <span id="hideButtons6" class="text-center">
+                <a href="@Url.Action("Index", "Payment", new { id = Model.Student_ID+"/", R = Convert.ToString(ViewBag.EncryptedAppliedFor) })" id="jsMakePayment" class="btn btn-success"><i class="fa fa-money"></i> Make Payment Online</a>
+            </span>
+        </p>
+    </div>
+    <div class="col-md-2"></div>
+
+    <div class="col-lg-12"><br /><br /></div>
+</div>
+
+@section PageSpecificCSS{
+    <style type="text/css">
+        table {
+            width: 100%;
+        }
+
+            table tr td {
+                border: 1px solid #cacaca;
+                border-collapse: collapse;
+                padding: 5px;
+                font-weight: bold;
+            }
+    </style>
+}
+@section PageSpecificJS{
+    <script src="@Url.Content("~/Content/ThemePublic/Libraries/disableBack.js")"></script>
+    <script type="text/javascript">
+        $(document).ready(function ($) {
+            $("#jsMakePayment").click(function () {
+                $(this).attr("disabled", "disabled").html('<i class="fa fa- money"></i> Working on it... Do not refresh');
+                $(this).addClass("quadraText");
+            });
+        });
+    </script>
+}

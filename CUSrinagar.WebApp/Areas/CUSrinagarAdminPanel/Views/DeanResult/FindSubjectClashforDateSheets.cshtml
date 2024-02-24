@@ -1,0 +1,135 @@
+﻿@using CUSrinagar.Models;
+@using CUSrinagar.Extensions;
+@model List<ADMCombinationMaster>
+@{
+    ViewBag.Title = "Find Subject Clash for DateSheets - CUSrinagar";
+}
+
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUSrinagarAdminPanel"})">Home</a>
+            </li>
+            <li class="active">Find Subject Clash for DateSheets</li>
+        </ul>
+    </div>
+    <div class="col-md-7">
+    </div>
+    <div class="col-md-4">
+    </div>
+}
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Find Subject Clash for DateSheets
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="search-box">
+                    @using (Html.BeginForm("FindSubjectClashforDateSheets", "DeanResult", FormMethod.Post, new { id = "frmclash" }))
+                    {
+                        @Html.AntiForgeryToken()
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label>Exam Year</label><br />
+                            <div class="jsDDLContainer">
+                                <select name="examYear">
+                                    @for (int i = DateTime.Now.Year; i > 2016; i--)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Programme</label><br />
+                            <div class="jsDDLContainer">
+                                @Html.DropDownList("programme", new SelectList(ViewBag.ProgrammeList, "Value", "Text", ((short)ViewBag.Programme)),
+                                null, new
+                                {
+                                    @class = "form-control"
+                                })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Semester</label><br />
+                            <div>
+                                @Html.DropDownList("Semester", new SelectList(ViewBag.Semesters, "Value", "Text", ViewBag.Semester), null, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Subject Types</label><br />
+                            <div class="col-sm-2">
+                                @Html.DropDownList("subjectTypes", (IEnumerable<SelectListItem>)ViewBag.SubjTypes, new { @class = "form-control multiselect", @multiple = "", @style = "display: none;" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Subjects separated by |</label><br />
+                            <textarea class="form-control txa" rows="3" cols="40" placeholder="Subjects separated by |" name="Subjects">@ViewBag.SubjectsEntered</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="invisible">for styling purpose</label><br />
+                            <button type="submit" class="btn btn-sm btn-success fa-search-btn js-search"><i class="fa fa-search"></i>&nbsp;Check Clash</button>
+                        </div>
+                    </div>
+                    }
+                </div>
+
+                @if (Model != null && Model.Count == 0)
+                {
+                    <h2 style="color:green;text-align:center;"> No Clash found</h2>
+                }
+                else if (Model.IsNotNullOrEmpty())
+                {
+                    <h4 style="color:red;text-align:center" class="quadraText"> Found below Clashes In @Model.Count Combinations</h4>
+                    <div class="col-sm-12" style="overflow:auto;">
+                        <table class="table table-hover table-bordered">
+                            <tr>
+                                <th style="width:10%">College</th>
+                                <th style="width:10%">Course</th>
+                                <th style="width:80%">Combination</th>
+                            </tr>
+                            @foreach (ADMCombinationMaster item in Model)
+                            {
+                                <tr>
+                                    <td>@item.CombinationCode</td>
+                                    <td>@item.CourseFullName</td>
+                                    <td class="tdText" style="text-transform:capitalize;">@item.CombinationSubjects.Replace("|", "<br/>")</td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script src="/Scripts/Pages/combinationsetting.js"></script>
+    <script>
+        $(document).ready(function () {
+            var subjectsEntered = $(".txa").val() + "";
+            $(".js-search").click(function () {
+                $("#frmclash").submit();
+                $(this).text('Please wait...').prop("disabled", true);
+            });
+            $(".multiselect-selected-text").empty().text("ALL");
+            $(".tdText").each(function (i, tdElement) {
+                var tdTxt = $(tdElement).text().toLowerCase();
+                subjectsEntered.split("|").forEach(function (item, index) {
+                    tdTxt = tdTxt.replace($.trim(item.toLowerCase()), "<span style='background-color:#f1eac5;color:black;'>" + item + "</span>");
+                });
+                $(tdElement).text('').html(tdTxt);
+            });
+        });
+    </script>
+}

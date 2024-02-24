@@ -1,0 +1,117 @@
+﻿@model List<CUSrinagar.Models.Semesters>
+@{
+    ViewBag.Title = "Student Info ";
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index", "Dashboard", new { area = "CUStudentZone" })">Home</a>
+        </li>
+        <li>
+            <a href="#" class="active">Admission Forms</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+<div class="page-content">
+    <div class="row panel panel-success ">
+        <div class="page-header no-margin-bottom">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6">
+                    <h1>
+                        <i class="fa fa-users"></i> Examination Forms
+                    </h1>
+                </div>
+
+            </div>
+
+        </div><!-- /.page-header -->
+        <div class="col-lg-12 col-md-12">
+            <div id="accordion" class="accordion-style1 panel-group">
+                @{ var sem = 1;
+                    var active = " in ";}
+                @foreach (var semester in Model??new List<CUSrinagar.Models.Semesters>())
+                {
+                    // var i = 1;
+                    var length = semester.ExamForms.Count();
+                    active = (sem == 1) ? " in " : "";
+                    var arrow = (sem == 1) ? "fa-angle-down" : "fa-angle-right";
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse_@sem" aria-expanded="true">
+                                    <i class="bigger-110 ace-icon fa @arrow" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                    &nbsp;   @semester.PSemester
+
+                                </a>
+                            </h4>
+                        </div>
+
+                        <div class="panel-collapse collapse @active" id="collapse_@sem" aria-expanded="true" style="">
+                            <div class="panel-body">
+                                <div class="table-responsive panel table-bordered">
+                                    <table class="table">
+                                        <tbody>
+
+                                            @foreach (var examform in semester.ExamForms)
+                                            {
+                                                <tr style="font-size: larger ;border:2px solid #478FCA  !important">
+                                                    <th class="text-success ">  Exam Form No</th>
+                                                    <th class="text-success"> Form Number</th>
+                                                    <th class="text-success"> Year</th>
+                                                    <th class="text-success"> Submitted On</th>
+                                                    <th class="text-success">  Amount Paid</th>
+                                                </tr>
+                                                <tr>
+                                                    <td> @examform.ExamFormNo</td>
+                                                    <td> @examform.FormNumber</td>
+                                                    <td> @examform.Year</td>
+                                                    <td> @examform.SubmittedOn.ToShortDateString()</td>
+                                                    <td> @examform.AmountPaid</td>
+                                                </tr>
+                                                if (examform.StudentResult != null)
+                                                {
+                                                    <tr><th colspan="5" class="align-center blue"><h4>Result</h4></th></tr>
+                                                    <tr>
+                                                        <th>Subject Name</th>
+                                                        <th>Practical Attendance</th>
+                                                        <th>Practical Marks</th>
+                                                        <th>Theory Attendance</th>
+                                                        <th>Theory Marks</th>
+                                                    </tr>
+                                                    foreach (var result in examform.StudentResult ?? new List<CUSrinagar.Models.StudentResult>())
+                                                    {
+                                                        <tr>
+                                                            <td> @result.SubjectFullName</td>
+                                                            <td> @result.PracticalAttendance</td>
+                                                            <td> @result.PracticalMarks</td>
+                                                            <td> @result.TheoryAttendance</td>
+                                                            <td> @result.TheoryMarks</td>
+                                                        </tr>}
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    sem++;
+                }
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+
+

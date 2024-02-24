@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = $"Form Preview Errors";
+}
+
+<div class="page-header">
+    <h1>
+        Form Preview
+    </h1>
+</div>
+<div id="response">
+    <br />
+    <strong class="quadraText" style="font-size:20px;">Please return to the previous browser tab and make corrections, form errors are shown below.</strong>
+    <br /><br />
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+</div>

@@ -1,0 +1,76 @@
+﻿@model  List<CUSrinagar.Models.StudentProfile>
+@{
+    Layout = null;
+    string semester = (ViewBag.SemesterName).ToString();
+}
+
+@Html.Hidden("semesterName", semester, new { id = "semesterName" })
+@Html.Hidden("subjectId", "", new { id = "defaultSubjectId" })
+<table class="table table-hover table-bordered js-table" data-afterappendingrows="setFocus">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th>Update</th>
+            <th data-property="Name">Name</th>
+            <th data-property="FathersName">Father Name</th>
+            <th data-property="RegistrationNumber">Registration No.</th>
+            <th data-property="RollNumber">Roll No.</th>
+            <th style="display:none"></th>
+            <th data-property="UpdatedBy">Last Updated By</th>
+            <th class="setwidth1" data-property="TheoryAttendance">Theory Attendance</th>
+            <th class="setwidth1" data-property="PracticalMarks">Pratical Marks</th>
+            <th class="setwidth1" data-property="PracticalAttendance">Practical Attendance</th>
+            <th class="setwidth1" data-property="TheoryMarks">Theory Marks</th>
+            <th class="setwidth1">Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null)
+            {
+                int i = ViewBag.OFFSET;
+                foreach (var row in Model)
+                {
+                <tr>
+
+                    <td><input class="ÏsUpdated ace" data-loop="@i" id="ÏsUpdated_@i" name="ÏsUpdated" type="checkbox" value="true"><span class="lbl"></span></td>
+                    <td>@row.Name</td>
+                    <td>@row.FathersName</td>
+                    <td>
+                        <span style="display:none">@Html.TextBox("semesterModelList[" + @i + "].RegistrationNo", row.RegistrationNumber)</span>
+                        @row.RegistrationNumber
+                    </td>
+                    <td>@row.RollNumber</td>
+                    @Html.Partial("_ResultListSubPartial", row.Subjects.FirstOrDefault(), new ViewDataDictionary { { "id", i } })
+
+                </tr>
+                i++;
+            }
+            if (Model.Count > 0)
+            {
+                <tr><td colspan="11"><button id="submit" type="submit" class="btn btn-primary col-center-block">Save</button></td></tr>
+            }
+
+        }
+        else
+        {
+            <tr><td colspan="10">No Record Found</td></tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    .col-center-block {
+        float: none;
+        display: block;
+        margin: 0 auto;
+        /* margin-left: auto; margin-right: auto; */
+    }
+
+    .setwidth {
+        width: 100% !important;
+    }
+
+    .setwidth1 {
+        width: 3% !important;
+    }
+</style>

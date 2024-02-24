@@ -1,0 +1,182 @@
+﻿@model IEnumerable<CUSrinagar.Models.ARGPersonalInformation>
+@using CUSrinagar.Models
+@using CUSrinagar.Extensions
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Examination Form</title>
+    <link href="~/Content/ThemePublic/Libraries/plugins/news-ticker/assets/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/ThemePublic/Libraries/css/printer-frndly.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        ol li {
+            line-height: 31px;
+        }
+    </style>
+</head>
+<body class="A4 middle">
+    @if (Model != null)
+    {
+        foreach (CUSrinagar.Models.ARGPersonalInformation item in Model)
+        {
+            <section class="sheet padding-5mm">
+                <div class="page-content ">
+                    <div class="">
+                        <div class="col-sm-12">
+                            <div class="row panel panel-body well">
+                                <div class="">
+                                    <div class="text-center">
+                                        <img src="@Url.Content("~/Content/ThemePublic/Libraries/images/cus-logo1.svg")" width="400" height="40" />
+                                        <center><b><u class="text-success">Examination Form Sem-III</u></b>- Class Roll No.<b>@item.ClassRollNo</b></center>
+                                    </div>
+                                    <div class="table-bordered" style="">
+                                        <table class="table no-margin-bottom">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Course:<b> @(item.SelectedCombinations.First().CourseID )</b> </td>
+                                                    <td>College: <b>@item.AcceptCollegeID</b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Registration Number:<b> @item.CUSRegistrationNo</td>
+                                                    <td>Mobile No (Working) : ....................................... </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Name:<b> @item.FullName </b> </td>
+                                                    <td>Parentage:<b> @item.FathersName </b></td>
+                                                </tr>
+                                                @if (item.SelectedCombinations.IsNotNullOrEmpty())
+                                                {
+                                                    List<ADMSubjectMaster> listOfSubjects = item.SelectedCombinations.First().Subjects.OrderBy(x => x.SubjectType).ToList();
+                                                    <tr>
+                                                        <td style="line-height:28px;">
+                                                            <b>Tick the appropriate subjects</b><br />
+                                                            <input type="checkbox" class="checkbox checkbox-inline" style="width:15px;height:15px;margin-top:0px;" />&nbsp;&nbsp;@listOfSubjects[0].SubjectFullName<span>(</span>@(listOfSubjects[0].SubjectType.ToString())<span>)</span><br />
+                                                            <input type="checkbox" class="checkbox checkbox-inline" style="width:15px;height:15px;margin-top:0px;" />&nbsp;&nbsp;@listOfSubjects[1].SubjectFullName<span>(</span>@(listOfSubjects[1].SubjectType.ToString())<span>)</span><br />
+                                                            <input type="checkbox" class="checkbox checkbox-inline" style="width:15px;height:15px;margin-top:0px;" />&nbsp;&nbsp;@listOfSubjects[2].SubjectFullName<span>(</span>@(listOfSubjects[2].SubjectType.ToString())<span>)</span><br />
+                                                            <input type="checkbox" class="checkbox checkbox-inline" style="width:15px;height:15px;margin-top:0px;" />&nbsp;&nbsp;@listOfSubjects[3].SubjectFullName<span>(</span>@(listOfSubjects[3].SubjectType.ToString())<span>)</span>
+                                                        </td>
+                                                        <td style="line-height:28px;">
+                                                            <br />
+                                                            <input type="checkbox" class="checkbox checkbox-inline" style="width:15px;height:15px;margin-top:0px;" />&nbsp;&nbsp;@(listOfSubjects.Count >= 5 ? listOfSubjects[4].SubjectFullName : ".........................................................")<span>(</span>@(listOfSubjects.Count >= 5 ? listOfSubjects[4].SubjectType.ToString() : ".......")<span>)</span><br />
+                                                            <input type="checkbox" class="checkbox checkbox-inline" style="width:15px;height:15px;margin-top:0px;" />&nbsp;&nbsp;@(listOfSubjects.Count >= 6 ? listOfSubjects[5].SubjectFullName : ".........................................................")<span>(</span>@(listOfSubjects.Count >= 6 ? listOfSubjects[5].SubjectType.ToString() : ".......")<span>)</span><br />
+                                                            <input type="checkbox" class="checkbox checkbox-inline" style="width:15px;height:15px;margin-top:0px;" />&nbsp;&nbsp;@(listOfSubjects.Count >= 7 ? listOfSubjects[6].SubjectFullName : ".........................................................")<span>(</span>@(listOfSubjects.Count >= 7 ? listOfSubjects[6].SubjectType.ToString() : ".......")<span>)</span><br />
+                                                            <input type="checkbox" class="checkbox checkbox-inline" style="width:15px;height:15px;margin-top:0px;" />&nbsp;&nbsp;@(listOfSubjects.Count >= 8 ? listOfSubjects[7].SubjectFullName : ".........................................................")<span>(</span>@(listOfSubjects.Count >= 8 ? listOfSubjects[7].SubjectType.ToString() : "........")<span>)</span><br />
+                                                            <input type="checkbox" class="checkbox checkbox-inline" style="width:15px;height:15px;margin-top:0px;" />&nbsp;&nbsp;@(listOfSubjects.Count >= 9 ? listOfSubjects[8].SubjectFullName : ".........................................................")<span>(</span>@(listOfSubjects.Count >= 9 ? listOfSubjects[8].SubjectType.ToString() : "........")<span>)</span>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                <tr>
+                                                    <td>
+                                                        <center>
+                                                            <b><small>Verified by college coordinator</small> </b><br /><br />
+                                                            ______________________________________
+                                                        </center>
+                                                    </td>
+                                                    <td>
+                                                        <br />
+                                                        <span style="float:right;">
+                                                            Amount to be paid : <strong>Rs.1500/-</strong>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="col-md-12">
+                                    <p><b>Important: </b><span>This form should be submitted in your respective college for verification of selected subjects & fee.</span> </p>
+                                    <b>WARNING!</b><span>Candidates who have not appeared in internal/continous assesment shall not be allowed to appear in examination and their forms will be cancelled. <small style="font-size:10px;">Dated:<b>@(DateTime.Now.ToString("dd-MMM-yyyy"))</b></small>  </span>
+                                </div>
+                                <p><small>............................................................................................... cut here .......................................................................................</small></p>
+                                <div class="text-center">
+                                    <img src="~/Content/ThemePublic/PrintImages/CUSLogo.png" height="35" />
+                                    <img src="@Url.Content("~/Content/ThemePublic/Libraries/images/cus-logo1.svg")" width="300" height="35" />
+                                    <center><b>Student Copy</b></center>
+                                </div>
+                                <div class="table-bordered" style="">
+                                    <table class="table no-margin-bottom">
+                                        <tbody>
+                                            <tr>
+                                                <td>Registration No: @item.CUSRegistrationNo</td>
+                                                <td>Course: @(item.SelectedCombinations.First().CourseID )</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Name: @item.FullName</td>
+                                                <td>Father's Name: @item.FathersName</td>
+                                            </tr>
+                                            <tr>
+                                                <td><b>Account No: 0005040500047778</b></td>
+                                                <td>Amount Paid: <b>__________/-</b></td>
+
+                                            </tr>
+                                            <tr>
+                                                <td><br />Dated:..........................</td>
+                                                <td>
+                                                    Signature of dealing Officer<br /><br />
+                                                    __________________________________
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <p><small>............................................................................................... cut here .......................................................................................</small></p>
+                                <div class="text-center">
+                                    <img src="~/Content/ThemePublic/PrintImages/CUSLogo.png" height="35" />
+                                    <img src="@Url.Content("~/Content/ThemePublic/Libraries/images/cus-logo1.svg")" width="300" height="35" />
+                                    <center><b>Bank Copy</b></center>
+                                </div>
+                                <div class="table-bordered" style="">
+                                    <table class="table no-margin-bottom">
+                                        <tbody>
+                                            <tr>
+                                                <td>Registration No: @item.CUSRegistrationNo</td>
+                                                <td>Course: @(item.SelectedCombinations.First().CourseID )</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Name: @item.FullName</td>
+                                                <td>Father's Name: @item.FathersName</td>
+                                            </tr>
+                                            <tr>
+                                                <td><b>Account No: 0005040500047778</b></td>
+                                                <td>Amount Paid: <b>___________/-</b></td>
+                                            </tr>
+                                            <tr>
+                                                <td><br /> Dated:..........................</td>
+                                                <td>
+                                                    Signature of dealing Officer<br /><br /><br />
+                                                    __________________________________
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        }
+        <div class="noneOnPrint print-download-strip">
+            <a style="color: #ffffff;background-color: #080808;border-color: #59f908;" href="@Url.Action("BulkExamaminationForm", "Examination")" class="btn btn-default">Back</a>
+            <button style="color: #ffffff;background-color: #080808;border-color: #59f908;" href="#" class="btn btn-default" onclick="window.print();"><b>Download / Print Examination Form </b></button>
+        </div>
+    }
+    else
+    {
+        <section class="sheet padding-5mm">
+            <hr />
+            <hr />
+            <h1 class="center">No Form Found.</h1>
+            <hr />
+            <hr />
+        </section>
+    }
+
+</body>
+</html>

@@ -1,0 +1,116 @@
+﻿@model CUSrinagar.Models.SalaryBillFilter
+@using CUSrinagar.Extensions;
+@{
+    ViewBag.Title = "Employees";
+}
+
+<div class="page-wrapper pager-table-text">
+
+    <div class="page-header" style="display:none">
+        <div>
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <h4 class="heading-title pull-left">
+                        Salary Bill
+                        <small>
+                            <i class="ace-icon fa fa-angle-double-right"></i>
+                            All Employees
+                        </small>
+                    </h4>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Employees List
+                            <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                <a href="#"><i class="fa fa-search" aria-hidden="true"></i>Search</a>
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        @using (Html.BeginForm("ArchiveSalary", "Salary", FormMethod.Post, new { enctype = "multipart/form-data", @name = "validation-form", @id = "validation-form", @class = "form-horizontal", @role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="col-sm-12 search-box">
+                                <div class="col-sm-12 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span>Year<span id="YearValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                    <div id="Year">
+                                        @Html.Hidden("SalaryBill_ID", "NotNull", new { @class = "form-control jsfilterelement required", @data_column = "SalaryBill_ID", @data_operator = "ISNotNULL" })
+                                        @Html.TextBoxFor(model => model.Year, "", new { @class = "form-control jsfilterelement required", @data_column = "Year", @data_operator = "EqualTo" })
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span> Month<span id="MonthValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                    <div>
+                                        @{ var monthList = new List<SelectListItem>()  {new SelectListItem() { Text = "Jan", Value = "1" },
+                                                                                                                                                                                                                                                                                                                                                      new SelectListItem() { Text = "Feb", Value = "2" },
+                                                                                                                                                                                                                                                                                                                                                      new SelectListItem() { Text = "Mar", Value = "3" },
+                                                                                                                                                                                                                                                                                                                                                      new SelectListItem() { Text = "Apr", Value = "4" },
+                                                                                                                                                                                                                                                                                                                                                      new SelectListItem() { Text = "May", Value = "5" },
+                                                                                                                                                                                                                                                                                                                                                      new SelectListItem() { Text = "Jun", Value = "6" },
+                                                                                                                                                                                                                                                                                                                                                      new SelectListItem() { Text = "Jul", Value = "7" },
+                                                                                                                                                                                                                                                                                                                                                      new SelectListItem() { Text = "Aug", Value = "8" },
+                                                                                                                                                                                                                                                                                                                                                      new SelectListItem() { Text = "Sep", Value = "9" },
+                                                                                                                                                                                                                                                                                                                                                      new SelectListItem() { Text = "Oct", Value = "10" },
+                                                                                                                                                                                                                                                                                                                                                      new SelectListItem() { Text = "Nov", Value = "11" },
+                                                                                                                                                                                                                                                                                                                                                      new SelectListItem() { Text = "Dec", Value = "12" }
+                                                                                                                                                                                                                                                                                                                                                      };
+                                        }
+                                        @Html.DropDownListFor(model => model.Month, new SelectList(monthList, "Value", "Text"), new { @class = "form-control jsfilterelement required", @data_column = "Month", @data_operator = "EqualTo" })
+
+                                    </div>
+                                </div>
+
+
+                                <div class="col-sm-2" style="padding-top:27px;">
+                                    <button type="button" class="btn btn-primary btn-sm fa-search-btn js-search"><i class="fa fa-search"></i>&nbsp;Generate Salary</button>
+
+                                </div>
+                                <div class="col-sm-2" style="padding-top:27px;">
+                                    <button type="submit" class="btn btn-primary btn-sm archive"><i class="fa "></i>&nbsp;Finalize Salary</button>
+
+                                </div>
+
+                            </div>}
+                    </div>
+
+                    <div class="js-table-content" data-url="@Url.Action("EmployeeCurrentSalaryList", "Salary", new { area = "CUSrinagarAdminPanel" })" data-DefaultOrderByColumn="BasicPay desc">
+
+                    </div>
+                    @{Html.RenderPartial("_JSPagerTableFooter");}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script>
+        $(document).ready(function () {
+            $("#breadcrumbs").html($(".page-header").html());
+            var $pagertable = $(".js-pager-table");
+              loadpagertable();
+        });
+    </script>
+    <style>
+        .filter-btn a {
+            color: white !important
+        }
+    </style>
+}
+
+
+
+
+
+

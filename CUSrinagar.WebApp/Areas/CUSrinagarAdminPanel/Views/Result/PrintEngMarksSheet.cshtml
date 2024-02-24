@@ -1,0 +1,408 @@
+﻿@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@using CUSrinagar.Models
+@model List<CUSrinagar.Models.ResultCompact>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Marks Card</title>
+    <link href="~/Content/ThemePublic/Libraries/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/Content/ThemePublic/Libraries/css/Engstyle.css" rel="stylesheet" type="text/css" />
+    <style>
+        @@page {
+            size: A4;
+        }
+
+        .background {
+            position: absolute;
+            top: 0%;
+            left: 3%;
+            z-index: 0;
+            background: white;
+            display: block;
+            opacity: 0.35;
+        }
+
+        .bg-text {
+            color: lightgray;
+            font-size: 40px;
+        }
+    </style>
+</head>
+<body class="A4 middle portrait">
+
+    @*<div style="margin:0 auto;background-color:white;width:999px !important;">*@
+    @if (Model.IsNotNullOrEmpty())
+    {
+        var maxNumberOfSemesters = Model.SelectMany(x => x.SubjectResults).Max(x => x.Semester);
+        foreach (ResultCompact STDINFO in Model)
+        {
+            if (STDINFO.SubjectResults.IsNotNullOrEmpty())
+            {
+                <section class="sheet" style="height:2200px;">
+                    <br />
+                    <div class="allmarkscard09" style="margin-top:0mm;margin-bottom:2mm;margin-right:5mm;margin-left:5mm;">
+
+                        <div id="" style="position:absolute;top:25%;left:33%;z-index:99;opacity:0.1;">
+                            <p style="color: lightgrey; font-size: 65px; transform: rotate(300deg); -webkit-transform: rotate(300deg);">Provisional<br /> Marks Sheet</p>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="row" style="margin-top: 40px;">
+                                    <div class="center col-sm-12" style="margin-top:20px">
+                                        <table class="margin-top-0">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="text-align:left;">
+                                                        <img src="~/Content/ThemePublic/PrintImages/MarksSheetLogo.png" style="width:60px;margin-top:-25px;" />
+                                                    </td>
+                                                    <td>
+                                                        <div style="margin-right:16px;">
+                                                            <div class="wordart slate">
+                                                                <span class="text">
+                                                                    Cluster University Srinagar
+                                                                </span>
+                                                            </div>
+                                                            <h4 class="text-success no-margin-bottom">Provisional Marks Sheet <small class="text-success no-margin-bottom">(Draft)</small></h4>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <h3>
+                                                            @*<i> @STDINFO.SerialNumber</i>*@
+                                                        </h3>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <hr class="margin-top-0 margin-bottom-1" />
+                                <div class="row form-horizontal">
+                                    <div class="col-sm-12 ">
+                                        <table border="0">
+                                            <tbody>
+                                                <tr class="no-border">
+                                                    <th style="line-height:0.8mm">Name</th>
+                                                    <td style="line-height:0.8mm">@STDINFO.FullName.ToUpper()</td>
+                                                    <th style="line-height:0.8mm">Parentage</th>
+                                                    <td style="line-height:0.8mm">@STDINFO.FathersName.ToUpper()</td>
+                                                </tr>
+                                                <tr class="no-border">
+                                                    <th style="line-height:0.8mm">Course</th>
+                                                    <td style="line-height:0.8mm">@STDINFO.CourseFullName.ToUpper()</td>
+                                                    <th style="line-height:0.8mm">Batch</th>
+                                                    <td style="line-height:0.8mm">@STDINFO.Batch</td>
+                                                </tr>
+                                                <tr class="no-border">
+                                                    <th style="line-height:0.8mm">RegNo</th>
+                                                    <td style="line-height:0.8mm">@STDINFO.CUSRegistrationNo.ToUpper()</td>
+                                                    <th style="line-height:0.8mm">Roll No</th>
+                                                    <td style="line-height:0.8mm">@STDINFO.ExamRollNumber</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                @if (STDINFO.TranscriptPrinted)
+                                {
+                                    <center>
+                                        <h3 class="text-danger">Transcript has been already printed or handed over to the student.</h3>
+                                    </center>
+                                }
+                                <div class="row center" style="opacity:1;">
+                                    <div class="col-sm-12">
+                                        <table border="1" class="center-text table table-bordered" style="margin-bottom:7px;font-size:11px;">
+                                            <tbody>
+                                                <tr>
+                                                    <th></th>
+                                                    <th title="Semester" style="padding-left:241px !important">@(CUSrinagar.Extensions.Helper.GetEnumDescription((Semester)1))</th>
+                                                    <th title="Maximum internal marks">MM</th>
+                                                    <th title="Internal marks obtained">MO</th>
+                                                    <th title="Maximum external marks">MM</th>
+                                                    <th title="External marks obtained">MO</th>
+                                                    <th title="Total marks">MM</th>
+                                                    <th title="Total marks obtained">MO</th>
+                                                    <th></th>
+                                                </tr>
+
+                                                @{
+                                                    var _Semesters = STDINFO.SubjectResults.Select(x => x.Semester).Distinct().OrderBy(x => x).ToList();
+                                                    foreach (var _Semester in _Semesters)
+                                                    {
+                                                        //List<SubjectResult> _SemesterSubjects = STDINFO.SubjectResults.Where(x => x.Semester == _Semester && x.HasResult).OrderBy(x => x.SubjectFullName).ThenBy(x => CUSrinagar.DataManagers.GeneralFunctions.GetSubjectTypeCode(x.SubjectType))?.ToList();
+                                                        List<SubjectResult> _SemesterSubjects = STDINFO.SubjectResults.Where(x => x.Semester == _Semester)?.ToList();
+                                                        var SNO = 1;
+                                                        if (_SemesterSubjects.IsNotNullOrEmpty() && _SemesterSubjects.Any(x => x.ShowPublic))
+                                                        {
+                                                            foreach (SubjectResult item in _SemesterSubjects)
+                                                            {
+                                                                string code = CUSrinagar.DataManagers.GeneralFunctions.GetSubjectTypeCode(item.SubjectType);
+                                                                <tr>
+                                                                    <td>@(SNO++)</td>
+                                                                    <td class="text-align-left" style="text-align:left;">
+                                                                        <span class="">@item.SubjectFullName.ToUpper()</span>
+                                                                        @*@(string.IsNullOrEmpty(code) ? "" : "(" + code + ")")*@
+                                                                    </td>
+                                                                    @*<th>
+                                                                            @item.TotalCredit
+                                                                        </th>*@
+                                                                    <td title="Internal max marks">
+                                                                        @if (item.HasInternalComponent)
+                                                                        {
+                                                                            <span>@(item.TotalInternalMaxMarks?.ToString("f0"))</span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span>-</span>
+                                                                        }
+                                                                    </td>
+                                                                    <td title="Internal marks obtained">
+                                                                        @if (item.HasInternalComponent && item.ShowPublic)
+                                                                        {
+                                                                            if (item.TotalInternalMarksObtained.HasValue && (item.InternalStatus == ResultStatus.P || item.InternalStatus == ResultStatus.F))
+                                                                            {
+                                                                                <span>@item.TotalInternalMarksObtained.Value.ToString("f0")</span>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <span>NA</span>
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span>-</span>
+                                                                        }
+                                                                    </td>
+                                                                    <td title="External max marks">
+                                                                        @if (item.HasExternalComponent)
+                                                                        {
+                                                                            <span>@(item.TotalExternalMaxMarks?.ToString("f0"))</span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span>-</span>
+                                                                        }
+                                                                    </td>
+                                                                    <td title="External marks obtained">
+                                                                        @if (item.HasExternalComponent && item.ShowPublic)
+                                                                        {
+                                                                            if (item.HasInternalComponent)
+                                                                            {
+                                                                                if (item.InternalStatus == ResultStatus.P)
+                                                                                {
+                                                                                    if (item.TotalExternalMarksObtained.HasValue && (item.ExternalStatus == ResultStatus.P || item.ExternalStatus == ResultStatus.F))
+                                                                                    {
+                                                                                        <span>@item.TotalExternalMarksObtained.Value.ToString("f0")</span>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <span>@item.ExternalStatus.ToString()</span>
+                                                                                    }
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <span>F</span>
+                                                                                }
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                if (item.TotalExternalMarksObtained.HasValue && (item.ExternalStatus == ResultStatus.P || item.ExternalStatus == ResultStatus.F))
+                                                                                {
+                                                                                    <span>@item.TotalExternalMarksObtained.Value.ToString("f0")</span>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <span>@item.ExternalStatus.ToString()</span>
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span>-</span>
+                                                                        }
+                                                                    </td>
+                                                                    <td title="total max marks">@item.TotalMaxMarks.ToString("f0") </td>
+                                                                    <td title="total marks obtained">
+                                                                        @if (item.TotalMarksObtained.HasValue && item.OverallResultStatus == ResultStatus.P && item.ShowPublic)
+                                                                        {
+                                                                            <span>@item.TotalMarksObtained.Value.ToString("f0")</span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span>-</span>
+                                                                        }
+                                                                    </td>
+                                                                    <td title="result status">
+                                                                        @if (item.OverallResultStatus == ResultStatus.P && item.ShowPublic)
+                                                                        {
+                                                                            <span>P</span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span title="@(Helper.GetEnumDescription<ResultStatus>(item.OverallResultStatus))">F</span>
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                        <tr>
+                                                            <th colspan="6"></th>
+                                                            <th>
+                                                                @_SemesterSubjects.Sum(x => x.TotalMaxMarks).ToString("f0")
+                                                            </th>
+                                                            <th>
+                                                                @if (_SemesterSubjects.Where(x => x.HasResult).All(x => x.OverallResultStatus == ResultStatus.P && x.ShowPublic))
+                                                                {
+                                                                    <b>@_SemesterSubjects.Where(x => x.HasResult).Sum(x => x.TotalMarksObtained).Value.ToString("f0")</b>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>-</span>
+                                                                }
+                                                            </th>
+                                                            <th>
+                                                                @if (_SemesterSubjects.All(x => x.OverallResultStatus == ResultStatus.P && x.ShowPublic))
+                                                                {<span>P</span> }
+                                                                else
+                                                                {<span>F</span>}
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th colspan="9">
+
+                                                                @if (_Semester + 1 == 5)
+                                                                {
+                                                                    <h3 style="visibility: hidden;">This is a computer generatedThis is a computer generated This is a computer generated This is a computer generated  This is a  computer generated  </h3>
+                                                                }
+                                                                @if (_Semesters.Any(x => x == (_Semester + 1)))
+                                                                {
+                                                                    @(CUSrinagar.Extensions.Helper.GetEnumDescription((Semester)((short)(_Semester + 1))))
+                                                                }
+                                                            </th>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    @*<td style="width:33%;">Date of Passing: <b>@DateTime.Now.Date.ToString("dd-MMM-yyyy")</b></td>*@
+                                                    <td width="30%">
+                                                        Date of passing: <b><span>@STDINFO.SubjectResults.Max(x => x.NotificationDate).Value.ToString("dd-MMM-yyyy")</span></b>
+                                                    </td>
+                                                    <td  width="10%">
+                                                        Notification No.: <b><span>@STDINFO.NotificationNo</span></b>
+                                                    </td>
+                                                    <td colspan="2" width="40%" style="text-align:right;">
+                                                        @*<span>Total Credits:<b>@STDINFO.SubjectResults.Where(x => x.HasResult).Sum(x => x.TotalCredit).ToString("f0")</b></span>*@
+                                                        @if (maxNumberOfSemesters == STDINFO.SubjectResults.Max(x => x.Semester) && STDINFO.SubjectResults.All(x => x.ShowPublic && x.OverallResultStatus == ResultStatus.P))
+                                                        {
+                                                            var AllSemesterMarksObtained = STDINFO.SubjectResults.Sum(x => x.TotalMarksObtained ?? 0).ToString("f0");
+                                                            var AllSemesterMaxMarks = STDINFO.SubjectResults.Sum(x => x.TotalMaxMarks).ToString("f0");
+                                                            <span>Total Marks:</span> <b>(<span>@(AllSemesterMarksObtained + "/" + AllSemesterMaxMarks)</span>)</b>
+                                                            <span>Result:P</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>&emsp;&emsp;Total Marks:</span> <b>(<span>@("00" + "/" + STDINFO.SubjectResults.Sum(x => x.TotalMaxMarks).ToString("f0"))</span>)</b>
+                                                            <span>Result:F</span>
+                                                        }
+                                                    </td>
+                                                </tr>
+
+
+
+                                                <tr>
+                                                    <td style="width:30%;text-align:center;">
+                                                        <img style="height:15mm;width:30mm;" src="~/FolderManager/Transcript/Prog.png" /><br />
+                                                        Dealing Assistant                                                       
+                                                    </td>
+                                                    <td style="width:30%;">
+                                                        <img style="height:15mm;width:30mm;" src="~/FolderManager/Transcript/gulzar_ar.png" /><br />
+                                                        Assistant Controller
+                                                    </td>
+                                                    <td style="width:30%;">
+                                                        <img style="height:15mm;width:30mm;" src="~/FolderManager/Transcript/Controller.png" /><br />
+                                                        Controller Of Examination
+                                                    </td>
+                                                </tr>
+
+
+
+
+
+
+                                             
+
+                                                <tr>
+                                                    <td colspan="4">
+                                                        <br/>
+                                                        <div class="well no-padding no-margin-bottom" style="width:110px;display:inline-block;"><span>MM – Max Marks</span></div>
+                                                        <div class="well no-padding no-margin-bottom" style="width:133px;display:inline-block;"><span>MO – Marks Obtained</span></div>
+                                                        <div class="well no-padding no-margin-bottom" style="width:55px;display:inline-block;"><span>P – Pass</span></div>
+                                                        <div class="well no-padding no-margin-bottom" style="width:55px;display:inline-block;"><span>F - Fail</span></div>
+                                                        <div class="well no-padding no-margin-bottom" style="width:87px;display:inline-block;"><span>LO - Later On</span></div>
+                                                        <div class="well no-padding no-margin-bottom" style="width:118px;display:inline-block;"><span>NA – Not Available</span></div>
+                                                        <div class="well no-padding no-margin-bottom" style="width:60px;display:inline-block;"><span>E. & O.E</span></div>
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+
+
+
+
+                                        <!---Footer Sign Section Begins-->
+                                        <!---Footer Sign Section Ends-->
+
+
+
+
+
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            }
+        }
+    }
+    else
+    {
+        <section class="sheet padding-5mm">
+            <p>Result Not Found .... </p>
+        </section>
+    }
+    @*</div>*@
+
+
+
+    <br /><br />
+    <div class="noneOnPrint" style="height:40px;background-color:lightslategrey;width:42% !important;position:fixed;bottom:0;z-index:100;text-align:center;padding-top:10px">
+        <button style="height: 32px;margin-left:2em;" href="#" class="btn btn-theme" onclick="window.print();"><b>Download or Print</b></button>
+    </div>
+    <script src="~/Content/ThemeAdmin/Content/Scripts/Libraries/jquery-3.2.1.min.js"></script>
+    <script src="~/Scripts/General/general.js"></script>
+    <script src="~/Scripts/Pages/admin-transcript.js"></script>
+</body>
+</html>

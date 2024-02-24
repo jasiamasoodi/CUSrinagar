@@ -1,0 +1,131 @@
+﻿@model CUSrinagar.Models.FormsToDownload
+<div class="col-md-12" style="margin-bottom:10px;margin-top:15px;">
+    <button id="JSMakeActive" class="btn btn-sm btn-success">
+        <i class="ace-icon fa fa-check"></i>
+        Make Active
+    </button>
+    &nbsp;&nbsp;&nbsp;
+    <button id="JSMakeInActive" class="btn btn-sm btn-warning">
+        <i class="ace-icon fa fa-bolt"></i>
+        Make In-Active
+    </button>
+</div>
+
+<table id="simple-table" class="table  table-bordered table-hover">
+    <thead>
+        <tr>
+            <th class="center" style="width:20px">
+                <label class="pos-rel">
+                    <input type="checkbox" id="cbSelectAll" class="ace" />@*onclick="checkAll('#cbSelectAll','Combination_ID')"*@ 
+                    <span class="lbl"></span>
+                </label>
+            </th>
+            <th class="detail-col">SNo.</th>
+            <th style="width:140px">Programme</th>
+            <th style="width:140px">Student Name</th>
+            <th style="width:140px">Form Type</th>
+            <th style="width:140px">Is Accepted</th>
+            <th class="hidden-480" style="width:80px">Status</th>
+        </tr>
+    </thead>
+    @if (Model == null || Model.MigrationDetails == null || !(Model.MigrationDetails.Any()))
+    {
+        <tbody>
+            <tr>
+                <th colspan="8" class="center">No Migration Forms Found</th>
+            </tr>
+        </tbody>
+    }
+    else
+    {
+        int sno = 0;
+        @*<tbody>
+            @for (int index = 0; index < Model.MigrationDetails.Count(); index++)
+            {
+                <tr>
+                    <td class="center">
+                        <label class="pos-rel">
+                            <input type="checkbox" onclick="unCheckTop('#cbSelectAll', 'Combination_ID');" class="ace" name="Combination_ID" value="@Model.MigrationDetails[index].Combination_ID" />
+                            <span class="lbl"></span>
+                        </label>
+                    </td>
+                    @{ sno = index + 1;}
+                    <td class="center">@sno</td>
+                    <th class="center">@Model.MigrationDetails[index].CombinationCode</th>
+                    <td>
+                        @{ int ssno = 1;}
+                        <table>
+                            <tbody>
+                                <tr>
+                                    @foreach (var subject in Model.MigrationDetails[index].SubjectsDetails)
+                                    {
+                                        <td style="width:150px;border-right:1px solid #000000;padding-left:7px;">
+                                            <span>@subject.SubjectFullName&nbsp;&nbsp;&nbsp;</span>
+                                        </td>
+                                        ssno = ssno + 1;
+                                    }
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </td>
+                  
+
+                    <td class="hidden-480" id="@Model.MigrationDetails[index].Combination_ID">
+                        @if (Model.MigrationDetails[index].Status)
+                        {
+                            <span class="label label-sm label-success">Active</span>
+                        }
+                        else
+                        {
+                            <span class="label label-sm label-warning">In-Active</span>
+                        }
+                    </td>
+
+                    <td>
+                        <span href="#my_modal_@index" data-toggle="modal" class="label label-info arrowed-in-right arrowed" style="cursor:pointer;">Show</span>
+
+
+                        <div id="my_modal_@index" class="modal fade" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h3 class="smaller lighter blue no-margin">User Activities</h3>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        UserName :
+                                        <br />
+
+                                        Created By : @Model.MigrationDetails[index].CreatedBy
+                                        <br />
+
+                                        Created Date : @Model.MigrationDetails[index].CreatedOn.ToString("dd-MM-yyyy hh:mm tt")
+                                        <br />
+
+                                        Updated By : @Model.MigrationDetails[index].UpdatedBy
+                                        <br />
+
+                                        Updated Date :
+                                        @if (Model.MigrationDetails[index].UpdatedOn != null)
+                                        {
+                                            @Convert.ToDateTime(Model.MigrationDetails[index].UpdatedOn).ToString("dd-MM-yyyy hh:mm tt")
+                                        }
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
+                                            <i class="ace-icon fa fa-times"></i>
+                                            Close
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                            }
+        </tbody>*@
+                            }
+</table>

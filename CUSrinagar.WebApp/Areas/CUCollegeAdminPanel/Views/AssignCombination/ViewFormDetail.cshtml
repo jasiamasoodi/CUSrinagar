@@ -1,0 +1,444 @@
+﻿@model CUSrinagar.Models.ARGPersonalInformation
+@using CUSrinagar.Extensions
+@{
+    ViewBag.Title = "Student Detail";
+}
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index", "Dashboard", new { area = "CUCollegeAdminPanel" })">Home</a>
+            </li>
+            <li class="active">Student Combination Info</li>
+        </ul>
+    </div>
+}
+<div class="panel panel-primary">
+    <div class="panel-heading lead no-margin-bottom">
+        <div class="row">
+
+            <div class="text-center">
+                <div class="col-sm-12">
+                    <form method="post" id="StudentSearchCombinationInfoForm" action='@Url.Action("AssignCombination")' role="form" class="form-inline">
+                        @Html.Hidden("sdfds", (short)ViewBag.PrintProgramme)
+                        @Html.Hidden("fromAcceptExamFormScreen", (object)ViewBag.fromAcceptExamFormScreen)
+                        @*@Html.DropDownList("Batch", new SelectList(ViewBag.Batches, "Value", "Text", ViewBag.Batch),
+                            null, new
+                            {
+                                @class = " form-control jsBatch",
+                                @required = "required"
+                            })*@
+
+                        <select id="printProg" name="printProg" class="form-control" required>
+                            @foreach (SelectListItem item in ViewBag.PrintProgrammeList)
+                            {
+                                <option value="@item.Value" @(item.Value == ((short)ViewBag.PrintProgramme).ToString() ? "selected='selected'" : "")>@item.Text</option>
+                            }
+                        </select>
+                        @*@Html.DropDownList("printProg", new SelectList(ViewBag.PrintProgrammeList, "Value", "Text",ViewBag.PrintProgramme),
+                            null, new
+                            {
+                                @class = " form-control",
+                                @required = "required"
+                            })*@
+                        @Html.DropDownList("sem", new SelectList(ViewBag.Semesters, "Value", "Text", ViewBag.Semester),
+                                    null, new
+                                    {
+                                        @class = " form-control jsSemesterDDL",
+                                        @required = "required",
+                                        @data_scope = "row1"
+                                    })
+
+                        <input type="text" class="form-control" id="Form_RegistrationNumber" name="Form_RegistrationNumber" placeholder="Form Number/CUS Registration No" value="@ViewBag.Form_RegistrationNumber" required autofocus />
+                        <button type="submit" class="btn btn-default btn-lg jssearchbtn">
+                            <i class="ace-icon fa fa-search icon-on-right bigger-110"></i> Search
+                        </button>
+                        @*------------ Import function -------------------*@
+                        @*<button type="button" class="btn btn-purple jsimport">
+                                <i class="fa fa-exchange"></i> Import to UG
+                            </button>*@
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        @if (Model != null)
+        {
+            @Html.Hidden("Batch", Model.Batch)
+            <div class="col-sm-12">
+                <div class="col-sm-8">
+                    @using (Html.BeginForm("InsertUpdateCombination", "AssignCombination", FormMethod.Post, new { @class = "jsMainForm form-horizontal", @id = "Sem_I_CombinationForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("fromAcceptExamFormScreen", (object)ViewBag.fromAcceptExamFormScreen)
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3 control-label text-primary">Form Number :</label>
+                            <div class="col-sm-9">@Model.StudentFormNo</div>
+                        </div>
+                        <hr class="no-margin-top margin-bottom-10" />
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3 control-label text-primary">Status :</label>
+                            <div class="col-sm-9">@Model.FormStatus</div>
+                        </div>
+                        <hr class="no-margin-top margin-bottom-10" />
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3 control-label text-primary">Semester:</label>
+                            <div class="col-sm-9 text-success">@ViewBag.Semester</div>
+                        </div>
+                        <hr class="no-margin-top margin-bottom-10" />
+
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3 control-label text-primary"> Select Course :</label>
+                            <div class="col-sm-9">
+                                @Html.DropDownList("model.Course_ID", new SelectList(ViewBag.Courses, "Value", "Text", Model.SelectedCombinations.First().Course_ID),
+                                   null, new
+                                   {
+                                       @class = "form-control chosen-select jsCourseDDL",
+                                       required = "required",
+                                       @data_scope = "row1"
+                                   })
+
+                                @Html.Hidden("model.College_ID", Model.SelectedCombinations.First().College_ID)
+                                @Html.Hidden("model.CollegeID", Model.SelectedCombinations.First().CollegeID)
+                                @Html.Hidden("model.SelectedCombination_ID", Model.SelectedCombinations.First().SelectedCombination_ID)
+                                @Html.Hidden("model.Student_ID", Model.SelectedCombinations.First().Student_ID)
+                                @Html.Hidden("model.CreatedBy", Model.SelectedCombinations.First().CreatedBy)
+                                @Html.Hidden("model.CreatedOn", Model.SelectedCombinations.First().CreatedOn)
+                                @Html.Hidden("model.UpdatedBy", Model.SelectedCombinations.First().UpdatedBy)
+                                @Html.Hidden("model.UpdatedOn", Model.SelectedCombinations.First().UpdatedOn)
+                                @Html.Hidden("model.Semester", Model.SelectedCombinations.First().Semester)
+                                @Html.Hidden("model.SemesterBatch", Model.SelectedCombinations.First().SemesterBatch)
+                                @Html.Hidden("model.IsVerified", Model.SelectedCombinations.First().IsVerified)
+                                @Html.Hidden("model.PrintProgramme", Model.SelectedCombinations.First().PrintProgramme)
+                                @Html.Hidden("jsStatusDDL", "1", new { @class = "jsStatusDDL", @data_scope = "row1", @data_column = "status", @data_tablealias = "" })
+                            </div>
+                        </div>
+                        <hr class="no-margin-top margin-bottom-10" />
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3 control-label text-primary"> Select Combination :</label>
+                            <div class="col-sm-9 jsDDLContainer">
+                                @Html.DropDownList("model.Combination_ID",
+                                   new SelectList((IEnumerable<SelectListItem>)ViewBag.CourseSemesterCombinations, "Value", "Text", Model.SelectedCombinations.First().Combination_ID),
+                                   "--select--", new { @class = "form-control chosen-select jsCombinationDDL", @data_defaulttextvalue = "--select--", @required = "required", @data_scope = "row1" })
+                            </div>
+                        </div>
+                        <hr class="no-margin-top margin-bottom-10" />
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3 control-label text-primary">Class Roll Number :</label>
+                            <div class="col-sm-2">
+                                <input type="text" id="ClassRollNo" name="ClassRollNo" value="@Model.ClassRollNo" maxlength="20">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="checkbox">
+                                    <label class="block">
+                                        <input type="checkbox" class="ace input-lg" />
+                                        <span class="lbl bigger"> Override existing class Roll Number</span>
+                                        <input type="hidden" name="OverrideClassRollNumber" value="False">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="no-margin-top margin-bottom-10" />
+                        //if (ViewBag.PrintProgramme != CUSrinagar.Enums.PrintProgramme.UG)
+                        {
+                            var payment = Model?.PaymentDetail?.First()?.TxnAmount.ToString("f0");
+                            var paymentDate = Model?.PaymentDetail?.First()?.TxnDate ?? DateTime.MinValue;
+                            string parsedDate = "";
+                            if (paymentDate != DateTime.MinValue)
+                            {
+                                parsedDate = (paymentDate.Year + "-" + (paymentDate.Month.ToString().Length == 1 ? "0" + paymentDate.Month : paymentDate.Month.ToString()) + "-" + (paymentDate.Day.ToString().Length == 1 ? "0" + paymentDate.Day : paymentDate.Day.ToString())).Trim();
+                            }
+
+                            <div class="form-group">
+                                <label for="name" class="col-sm-3 control-label text-primary">University Bank Payment Amount:</label>
+                                <div class="col-sm-3">
+                                    <input type="number" min="100" max="999999" id="OfflinePaymentAmount" name="OfflinePaymentAmount" class="form-control" required value="@payment">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="name" class="col-sm-3 control-label text-primary">Bank Payment Date:</label>
+                                <div class="col-sm-3">
+                                    <input type="date" id="BankPaymentDate" name="BankPaymentDate" class="form-control" required value="@parsedDate">
+                                </div>
+                            </div>
+                            <hr class="no-margin-top margin-bottom-10" />
+                        }
+
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3 control-label text-primary"> Total :</label>
+                            <div class="col-sm-9">
+                                <span class="badge badge-success" id="js-subject-comb-count">00</span>
+                            </div>
+                        </div>
+                        <hr class="no-margin-top margin-bottom-10" />
+                        <div class="form-group">
+
+                            <div class="col-md-2 col-sm-12 pull-right">
+                                <button id="jsSaveUpdateCombination" type="submit" class="btn btn-success pull-right"><i class="glyphicon glyphicon-ok"></i><b>&nbsp;Save/Update Combinations</b> </button>
+                            </div>
+
+                        </div>
+
+                        <hr class="no-margin-top margin-bottom-10" />
+                        <div class="form-group">
+                            @if (Model.AcceptCollege_ID.HasValue && Model.CurrentSemesterOrYear >= 1)
+                            {
+                                <div class="col-md-3 col-sm-12" id="js-release-student">
+                                    <button type="button" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-ok"></i><b>&nbsp;Delete Student</b> </button>
+                                </div>
+                                <div class="col-md-3 col-sm-12" id="jsEditLinkContainer" style='@(ViewBag.PrintProgramme != CUSrinagar.Enums.PrintProgramme.UG ? "display:block;" : "display:none;")'>
+                                    <a href="@Url.Action("CombinationRollNumber", "AssignCombination", new { @area = "CUCollegeAdminPanel", @Form_RegistrationNumber = Model.StudentFormNo, @RedirectedFromViewDetail = true, @printProg = ViewBag.PrintProgramme, @sem = 1 })" target="_blank" class="btn btn-default  btn-sm"><i class="glyphicon glyphicon-ok"></i><b>&nbsp;Edit Combination</b> </a>
+                                </div>
+                                <div class="col-md-3 col-sm-12" id="jsEditLinkContainer">
+                                    <a href="@Url.Action("Edit", "Student", new { @area = "CUCollegeAdminPanel", @id = Model.Student_ID, R = ((short)ViewBag.PrintProgramme).ToString().EncryptCookieAndURLSafe() })" target="_blank" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-ok"></i><b>&nbsp;Edit Student Info</b> </a>
+                                </div>
+                                <div class="col-md-3 col-sm-12" id="jsEditLinkContainer">
+                                    <a target="_blank" href="@Url.Action("SemesterAdmForm", "Student", new { @area = "CUCollegeAdminPanel", AdmSemester = Model.SelectedCombinations.First().Semester, printProgramme = (short)Model.SelectedCombinations.First().PrintProgramme, Student_ID = Model.Student_ID })" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-ok"></i><b>&nbsp;Print Admission Form</b> </a>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+                <div class="col-sm-12 col-sm-4">
+                    <center>
+                        <div class="thumbnail no-margin-bottom">
+                            @if (Model.Photograph != null)
+                            {
+                                <img src="@Url.Content(Model.Photograph)" class="img-responsive max-height-200" />
+                            }
+                        </div>
+                    </center>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="text-primary">@(string.IsNullOrEmpty(Model.CUSRegistrationNo) ? "Board Regt No" : "CUSRegistrationNo")</td>
+                                <td>@(string.IsNullOrEmpty(Model.CUSRegistrationNo) ? Model.BoardRegistrationNo : Model.CUSRegistrationNo)</td>
+                            </tr>
+                            <tr>
+                                <td class="text-primary">Class Roll No.</td>
+                                <td>@Model.ClassRollNo</td>
+                            </tr>
+                            @if (ViewBag.Semester == 1)
+                            {
+                                <tr>
+                                    <td class="text-primary">Entrance Roll Number</td>
+                                    <td>@(Model.EntranceRollNo)</td>
+                                </tr>
+                                if (Model.AcademicDetails.IsNotNullOrEmpty())
+                                {
+                                    <tr>
+                                        <td class="text-primary">12th Marks</td>
+                                        <td>@(Model.AcademicDetails.First().MarksObt + " / " + Model.AcademicDetails.First().MaxMarks)</td>
+                                    </tr>
+                                }
+
+                                if (Model.CoursesApplied.IsNotNullOrEmpty() && Model.SelectedCombinations.IsNotNullOrEmpty() && Model.CoursesApplied.Where(x => x.Course_ID == Model.SelectedCombinations.First().Course_ID).IsNotNullOrEmpty())
+                                {
+                                    <tr>
+                                        <td class="text-primary" id="CourseText">@(Model.CoursesApplied.IsNullOrEmpty() || Model.SelectedCombinations.IsNullOrEmpty() || Model.CoursesApplied.Where(x => x.Course_ID == Model.SelectedCombinations.First().Course_ID).IsNullOrEmpty() ? "" : Model.CoursesApplied.First(x => x.Course_ID == Model.SelectedCombinations.First().Course_ID).CourseName)</td>
+                                        <td id="CourseValue">@(Model.CoursesApplied.IsNullOrEmpty() || Model.SelectedCombinations.IsNullOrEmpty() || Model.CoursesApplied.Where(x => x.Course_ID == Model.SelectedCombinations.First().Course_ID).IsNullOrEmpty() ? "" : Model.CoursesApplied.First(x => x.Course_ID == Model.SelectedCombinations.First().Course_ID).SubjectEntrancePoints.ToString())</td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td class="text-primary">CAT Points</td>
+                                    <td>@(Model.CATEntrancePoints)</td>
+                                </tr>
+                            }
+                            <tr>
+                                <td class="text-primary">Name</td>
+                                <td>@Model.FullName</td>
+                            </tr>
+                            <tr>
+                                <td class="text-primary">Current Semster</td>
+                                <td>@Model.CurrentSemesterOrYear</td>
+                            </tr>
+                            <tr>
+                                <td class="text-primary">College</td>
+                                <td>@Model.AcceptCollegeID</td>
+                            </tr>
+                            <tr>
+                                <td class="text-primary">Course</td>
+                                <td>@(Model.SelectedCombinations == null ? "" : Model.SelectedCombinations.First().CourseID)</td>
+                            </tr>
+                            <tr>
+                                <td class="text-primary">Joining Batch</td>
+                                <td>@Model.Batch</td>
+                            </tr>
+                            <tr>
+                                <td class="text-primary">Current Batch</td>
+                                <td>@(Model.SelectedCombinations == null ? 0 : Model.SelectedCombinations.First().SemesterBatch)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <div class="col-sm-12 center center-block">
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class='alert alert-danger alert-dismissable'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>×</button> <a href='#' class='alert-link'>@TempData["ErrorMessage"]</a></div>
+                }
+                else
+                {
+                    <p class="center">
+                        <h1 class="text-danger">Student not found.</h1>
+                        <h3 id="jssearchHelp">Please check search filters like program, semester (or try to import if it is new admission)...</h3>
+                    </p>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@section PageSpecificJSFiles{
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSImport/Import.js")"></script>
+}
+@section PageSpecificJS{
+    <script>
+        $(document).ready(function () {
+            getCombinationCount();
+            getDefaultParams();
+
+            //$("#StudentSearchCombinationInfoForm").submit(function () {
+            //    var semester = parseInt($("#sem").find('option:selected').val()) || 0;
+            //    var formno = $("#Form_RegistrationNumber").val();
+            //    if (formno.toLowerCase().indexOf("cus-ug-22") != -1) {
+            //        $("#StudentSearchCombinationInfoForm").attr('action', '/CUCollegeAdminPanel/AssignCombination/ViewFormDetailNEP');
+            //    }
+            //    else if (semester == 1) {
+            //        $("#StudentSearchCombinationInfoForm").attr('action', '/CUCollegeAdminPanel/AssignCombination/ViewFormDetail');
+            //    }
+            //    else if (semester > 1) {
+            //        $("#StudentSearchCombinationInfoForm").attr('action', '/CUCollegeAdminPanel/AssignCombination/CombinationRollNumber');
+            //    }
+            //});
+
+            $("#js-release-student").click(function () {
+                var msg = '<h4>Are you sure you want to delete this student from your college ?</h4>';
+                msg += '<h5>Once deleted this student, corresponding student has to reassign all its subject combination details</h5>';
+                showConfirmationDialog(msg);
+                $('#confirmationDialog').off('click.confirmation', 'button').on('click.confirmation', 'button', function () {
+                    var $btn = $(this);
+                    hideConfirmationDialog();
+                    if ($btn.data('response') == 'yes') {
+                        var _student_id = $("[id$=Student_ID]").val()
+                        var _printProgramme = $("#printProg option:selected").val();
+                        var semester = parseInt($("#sem").find('option:selected').val()) || 0;
+                        DeleteStudentCombinations(_student_id, _printProgramme, semester);
+                    }
+                });
+            });
+
+
+            function DeleteStudentCombinations(_student_id, _printProgramme, semester) {
+                var _url = getBaseUrlCollege() + "AssignCombination/ReleaseStudent";
+                $.ajax({
+                    url: _url,
+                    type: "POST",
+                    datatype: "Json",
+                    async: false,
+                    data: { Student_ID: _student_id, printProgramme: _printProgramme, Semester: semester },
+                    success: function (responseData) {
+                        if (responseData.IsSuccess) {
+                            showSuccessMessage(responseData.NumberOfRecordsEffected + ' deleted successfully.');
+                            $("#js-release-student").hide();
+                            $("#jsEditLinkContainer").hide();
+                            var fieldInput = $('#Form_RegistrationNumber');
+                            var fldLength = fieldInput.val().length;
+                            fieldInput.focus();
+                            fieldInput[0].setSelectionRange(fldLength, fldLength);
+                        } else {
+                            showErrorMessage(responseData.ErrorMessage);
+                        }
+                    },
+                    error: function (xhr, error, msg) {
+                        showErrorMessage(msg);
+                    }
+                });
+            }
+
+
+            $(document).on("change", '.jsCombinationDDL', function () {
+                getCombinationCount();
+            });
+
+            $(document).on("change", '.jsCourseDDL', function () {
+                //if ($("#CourseText").length == 0) return true;
+                getCoursePoints();
+                getDefaultParams();
+            });
+
+            function getDefaultParams() {
+                var _Course_ID = $(".jsCourseDDL option:selected").val();
+                var semester = $("#sem option:selected").val();
+                var batch = $("#Batch").val();
+                var _url = getBaseUrlCollege() + "AssignCombination/Get";
+                $.ajax({
+                    url: _url,
+                    type: "POST",
+                    datatype: "Json",
+                    data: { Course_ID: _Course_ID, Semester: semester, Batch: batch },
+                    success: function (data) {
+                        if (data != null && isNullOrEmpty($("#OfflinePaymentAmount").val())) {
+                            $("#OfflinePaymentAmount").val(data.DefaultPaymentAmount);
+                            $("#BankPaymentDate").val(data.GetDefaultPaymentDate);
+                        } else {
+                            //$("#OfflinePaymentAmount").html('');
+                            //$("#BankPaymentDate").html('');
+                        }
+                    }
+                });
+            }
+            function getCoursePoints() {
+                var _Course_ID = $(".jsCourseDDL option:selected").val();
+                var _Student_ID = $("[name='model.Student_ID']").val();
+                var _url = getBaseUrlCollege() + "AssignCombination/GetCoursePoints";
+                $.ajax({
+                    url: _url,
+                    type: "POST",
+                    datatype: "Json",
+                    data: { Course_ID: _Course_ID, Student_ID: _Student_ID },
+                    success: function (data) {
+                        if (data != null) {
+                            $("#CourseText").html(data.CourseName);
+                            $("#CourseValue").html(data.SubjectEntrancePoints);
+                        } else {
+                            $("#CourseText").html('');
+                            $("#CourseValue").html('');
+                        }
+                    }
+                });
+            }
+            function getCombinationCount() {
+                var Combination_ID = $(".jsCombinationDDL option:selected").val();
+                if (isNullOrEmpty(Combination_ID) || Combination_ID == emptyGuid()) {
+                    $("#js-subject-comb-count").html("00");
+                    return;
+                }
+                var semester = $("#sem option:selected").val();
+                var printProgramme = $("#printProg option:selected").val();
+                var batch = $("#Batch").val();
+                var _url = getBaseUrlCollege() + "AssignCombination/GetSubjectCombinationCount";
+                $.ajax({
+                    url: _url,
+                    type: "POST",
+                    datatype: "Json",
+                    data: { Combination_ID: Combination_ID, Semester: semester, Batch: batch, printProgramme: printProgramme },
+                    success: function (data) {
+                        if (parseInt(data) > 0) {
+                            $("#js-subject-comb-count").html(data);
+                        } else {
+                            $("#js-subject-comb-count").html('00');
+                        }
+                    }
+                });
+            }
+
+        });
+    </script>
+}

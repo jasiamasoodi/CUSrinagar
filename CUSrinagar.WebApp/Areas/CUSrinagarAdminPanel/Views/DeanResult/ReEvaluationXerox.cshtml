@@ -1,0 +1,192 @@
+﻿@model List<CUSrinagar.Models.ReEvaluation>
+
+@{
+    ViewBag.Title = "Details of Reevaluation / Xerox - CUS";
+}
+
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUSrinagarAdminPanel"})">Home</a>
+            </li>
+            <li class="active">ReEvaluation / Xerox</li>
+        </ul>
+    </div>
+    <div class="col-md-7">
+    </div>
+    <div class="col-md-4">
+    </div>
+}
+<div class="row">
+    <div class="col-md-12 jsTableContent">
+        <div class="panel panel-primary js-pager-table" data-otherparam1="@CUSrinagar.Enums.PrintProgramme.UG">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    ReEvaluation / Xerox details
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="search-box">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <input type="hidden" value="@((short)CUSrinagar.Enums.FormStatus.PaymentSuccessful)" class="jsfilterelement" data-column="FormStatus" data-operator="EqualTo" data-tablealias="ReEvaluation" />
+                            <label>Program</label><br />
+                            <div class="jsDDLContainer">
+                                @Html.DropDownList("PrintProgramme", new SelectList(ViewBag.PrintProgrammeList, "Value", "Text", ((short)ViewBag.Programme)),
+                               null, new
+                               {
+                                   @class = "form-control",
+                                   @data_column = "PrintProgramme",
+                                   @data_operator = "EqualTo"
+                               })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Batch</label><br />
+                            <div class="jsDDLContainer">
+                                @Html.DropDownList("Semester", new SelectList(ViewBag.Batches, "Value", "Text", ViewBag.Batch),
+                               "All", new
+                               {
+                                   @class = "form-control jsfilterelement",
+                                   @data_column = "SemesterBatch",
+                                   @data_tablealias = "c",
+                                   @data_operator = "EqualTo"
+                               })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Semester</label><br />
+                            <div class="jsDDLContainer">
+                                @Html.DropDownList("Semester", new SelectList(ViewBag.Semesters, "Value", "Text", ViewBag.Semester),
+                               null, new
+                               {
+                                   @class = "form-control jsfilterelement",
+                                   @data_column = "Semester",
+                                   @data_tablealias = "ReEvaluation",
+                                   @data_operator = "EqualTo"
+                               })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Type</label><br />
+                            <div class="jsDDLContainer">
+                                @Html.DropDownList("Type", new SelectList(ViewBag.FormTypeList, "Value", "Text", ViewBag.FormType),
+                           "Select Form Type", new
+                           {
+                               @class = "form-control jsfilterelement",
+                               @data_column = "FormType",
+                               @data_tablealias = "ReEvaluation",
+                               @data_operator = "EqualTo"
+                           })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Date From</label><br />
+                            <div class="input-group">
+                                <input class="form-control jsfilterelement" type="date" data-column="DateTo" data-operator="GreaterThanEqualTo">
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Date To</label><br />
+                            <div class="input-group">
+                                <input class="form-control jsfilterelement" type="date" data-column="DateTo" data-operator="LessThanEqualTo">
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="invisible">for styling purpose</label><br />
+                            <button type="button" class="btn btn-sm btn-primary fa-search-btn js-search"><i class="fa fa-search"></i>&nbsp;Search</button>
+                            &nbsp;&nbsp;&nbsp;
+                            <button type="button" class="btn btn-primary btn-sm"
+                                    onclick="selectElementContents(document.getElementById('tbltocopy'));">
+                                &nbsp;Select All in Table
+                            </button>&nbsp;&nbsp;
+                        </div>
+                        <div class="form-group">
+                            <label class="invisible">for styling purpose</label><br />
+                            <div class="btn-group">
+                                <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle">
+                                    Action
+                                    <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-default dropdown-info">
+                                    <li>
+                                        <a href="javascript:void(0)" class="js-exportToCSV" data-url="@Url.Action("ReEvaluationXeroxCSV","DeanResult",new { area="CUSrinagarAdminPanel"})" data-otherparam1="printProgramme=@ViewBag.Programme">
+                                            Download Excel(CSV)
+                                        </a>
+                                    </li>
+                                    @*<li class="divider"></li>
+                                             <li>
+                                                 <a href="@Url.Action("ResultDiscrepancyCSV","DeanResult",new { area="CUSrinagarAdminPanel"})">
+                                                     Download Economics List
+                                                 </a>
+                                             </li>
+                                        <li class="divider"></li>*@
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model != null)
+            {
+                { Html.RenderPartial("ReEvaluationXeroxListPartail", Model); }
+            }
+            else
+            {
+                <div class="js-table-content" data-url=@Url.Action("ReEvaluationXeroxListPartail", "DeanResult", new { area = "CUSrinagarAdminPanel" }) data-DefaultOrderByColumn="FormNumber">
+                </div>
+            }
+
+            @{Html.RenderPartial("_JSPagerTableFooter");}
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJS{
+    <script>
+        $(document).ready(function () {
+            $("#ReEvaluationXeroxListItem").addClass("active open");
+            $("#ReEvaluationXeroxListListItem").addClass("active");
+            $('.date-picker').datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                dateFormat: 'mm/dd/yyyy',
+                format: 'mm/dd/yyyy'
+            })
+            //loadpagertableWithDefaultParams();
+            $("#PrintProgramme").change(function () {
+                var $select = $(this);
+                var selectedValue = $select.find('option:selected').val();
+                $select.closest('.js-pager-table').data('otherparam1', selectedValue);
+                $(".js-exportToCSV").data('otherparam1', 'printProgramme=' + selectedValue);
+            });
+        });
+        function selectElementContents(el) {
+            var body = document.body, range, sel;
+            if (document.createRange && window.getSelection) {
+                range = document.createRange();
+                sel = window.getSelection();
+                sel.removeAllRanges();
+                try {
+                    range.selectNodeContents(el);
+                    sel.addRange(range);
+                } catch (e) {
+                    range.selectNode(el);
+                    sel.addRange(range);
+                }
+            } else if (body.createTextRange) {
+                range = body.createTextRange();
+                range.moveToElementText(el);
+                range.select();
+            }
+        }
+    </script>
+}

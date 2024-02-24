@@ -1,0 +1,200 @@
+﻿
+@model  List<CUSrinagar.Models.SalaryBillArchive>
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <title>
+        Salary - CUSrinagar
+    </title>
+    <style type="text/css">
+        .btn-theme {
+            background: #011c27;
+            border: 1px solid #84aac9;
+            color: #fff;
+        }
+
+            .btn-theme:hover {
+                background: #545677;
+                border: 1px solid #84aac9;
+                color: #fff;
+            }
+
+        .QRCode {
+            width: 95px;
+            position: absolute;
+            margin-top: -60px;
+            margin-left: 0
+        }
+
+        table,
+        tfoot, tfoot tr, tfoot tr td {
+            border: 0 !important;
+        }
+
+        @@page:last {
+            @@bottom-center {
+                content: "footer stuff here";
+            }
+        }
+
+        @@media print {
+            body {
+                position: relative;
+            }
+
+            .footer {
+                position: absolute;
+                bottom: 0;
+            }
+
+            .QRCode {
+                width: 95px;
+                position: absolute;
+                margin-top: -60px;
+                margin-left: 0
+            }
+
+            .noneOnPrint {
+                display: none;
+            }
+
+            .dontbreakInside {
+                page-break-inside: avoid;
+            }
+
+            .breakpagehere {
+                page-break-after: always !important;
+            }
+
+            .blankspace {
+                height: 350px !important;
+            }
+        }
+
+        .breakpagehere {
+            height: 10px;
+            background-color: grey !important;
+        }
+
+        table tr td {
+            padding: 10px;
+        }
+
+        table tr td, table tr th {
+            max-width: 150px;
+            word-wrap: break-word !important;
+        }
+
+        table, table tr, table tr td, table tr th {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        div {
+            background-color: #fff;
+        }
+
+        .center {
+            text-align: center !important;
+        }
+
+        .pull-right {
+            float: right !important;
+        }
+
+        .pull-left {
+            float: left !important;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+
+</head>
+
+@if (Model != null)
+{
+
+    if (ViewBag.Month != null&& ViewBag.Month != "")
+    {
+        <h4 class="align-center">
+            @{string month = new DateTime(2019, Convert.ToInt32(ViewBag.Month), 1).ToString("MMM"); }
+            Salary Bill for Month of @month - @ViewBag.Year
+        </h4>
+    }
+
+    <body>
+        <table>
+            <thead>
+                <tr>
+                    <th>Employee Name</th>
+                    <th>Month (Year)</th>
+                    <th>Pay Scale</th>
+                    <th>Basic Pay</th>
+                    <th>D.A</th>
+                    <th>H.R.A</th>
+                    <th>M.A</th>
+                    <th>CCA</th>
+                    <th>SPL.Pay</th>
+                    <th>Charge Allow</th>
+                    <th>Gross Amount</th>
+                    <th>GPF.Sub</th>
+                    <th>GPF.Ref</th>
+                    <th>Group Ins</th>
+                    <th>SLI-I</th>
+                    <th>SLI-II</th>
+                    <th>I.Tax</th>
+                    <th>NPS Share</th>
+                    <th>recovery on a/c of excess</th>
+                    <th>Total Ded.</th>
+                    <th>Net Pay</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (CUSrinagar.Models.SalaryBillArchive bill in Model)
+                {
+                <tr>
+                    @{string month = new DateTime(2019, Convert.ToInt32(bill.Month), 1).ToString("MMM"); }
+                    <td>@bill.EmployeeFullName</td>
+                    <td>@month (@bill.Year)</td>
+                    <td>@bill.PayScale</td>
+                    <td>@bill.BasicPay</td>
+                    <td>@bill.DA</td>
+                    <td>@bill.HRA</td>
+                    <td>@bill.MA</td>
+                    <td>@bill.CCA</td>
+                    <td>@bill.SPL_PAY</td>
+                    <td>@bill.ChargeAllow</td>
+                    <td>@bill.GrossAmount</td>
+                    <td>@bill.GPF_Sub</td>
+                    <td>@bill.GPF_ref</td>
+                    <td>@bill.GroupIns</td>
+                    <td>@bill.SLI_I</td>
+                    <td>@bill.SLI_II</td>
+                    <td>@bill.I_Tax</td>
+                    <td>@bill.NPSShare</td>
+                    <td>@bill.RecoveryExcess</td>
+                    <td>@bill.TotalDeduc</td>
+                    <td>@bill.NetPay</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        <div class="noneOnPrint" style="margin-left:-14px;height:40px;background-color:lightslategrey;width:100%;position:fixed;bottom:0;z-index:100;text-align:center;padding-top:10px">
+            <button style="height: 32px;" href="#" class="btn btn-theme" onclick="window.print();"><b>Download or Print</b></button>
+        </div>
+    </body>
+}
+else
+{
+    <h3 class="align-center">
+       Salary Bill not found
+    </h3>}
+</html>

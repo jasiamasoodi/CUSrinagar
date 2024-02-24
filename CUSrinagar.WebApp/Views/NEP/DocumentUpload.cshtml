@@ -1,0 +1,203 @@
+﻿@model CUSrinagar.Models.NEPDocuments
+
+@using CUSrinagar.Models
+@using CUSrinagar.BusinessManagers
+@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc;
+@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@{
+    ViewBag.Title = $"Graduation Registration Form {DateTime.UtcNow.Year}- ";
+    ARGFormNoMaster formNoMaster = ViewBag.FormNoMater;
+}
+
+<div class="row">
+
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped active" style="width: 16%">
+            <a href="#" style="color:white">Personal Info</a>
+        </div>
+        <div class="progress-bar progress-bar-striped active" style="width: 16%">
+            <a href="#" style="color:white">Academic Qualification</a>
+        </div>
+        <div class="progress-bar progress-bar-striped active " style="width: 16%">
+            <a href="#" style="color:white">Stream Preference</a>
+        </div>
+        <div class="progress-bar progress-bar-striped active" style="width: 16%">
+            <a href="#" style="color:white">College Preference</a>
+        </div>
+        <div class="progress-bar progress-bar-striped active" style="width: 16%">
+            <a href="#" style="color:white">Documents</a>
+        </div>
+        <div class="progress-bar" style="width: 16%;background-color:whitesmoke;">
+            <span class="text-primary">Payment</span>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="col-sm-12">
+                @using (Html.BeginForm("DocumentUpload", "NEP", FormMethod.Post, new { @class = "", @enctype = "multipart/form-data", }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="Student_ID" value="@Model.Student_ID" />
+
+                    <div class="row">
+                        <h3>Document Upload - Step 5 <strong style="float:right;color:purple;font-size:18px">@CUSrinagar.Enums.NEPProgrammesAdmTitle.Year_4_UG_Honors_Programmes.GetEnumDescription() Form</strong></h3>
+                        <div id="response">
+                            @if (ViewBag.ErrorMessage != null)
+                            {
+                                @Html.Raw(ViewBag.ErrorMessage)
+                            }
+                            @if (ViewBag.SuccessMessage != null)
+                            {
+                                <div class="alert alert-success alert-dismissible active" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <strong>Success!</strong> @ViewBag.SuccessMessage
+                                </div>
+                            }
+                        </div>
+                        <hr class="no-margin-top" />
+
+
+
+                        @*---------------------------- select photo ------------------------ *@
+                        <div class="form-group col-sm-6">
+                            <h4 style="">
+                                <i class="fa fa-camera" aria-hidden="true"></i>
+                                <strong>Upload your recent Photograph</strong>
+                                <br />
+                                <br />
+                                <span style=""> Only jpg, png, jpeg, bmp & 20-70KB image file is allowed.</span>
+                            </h4>
+                            <div class="">
+                                <img id="img-preview" src="" style="width:130px;align-content:center;" />
+                                <br />
+                                Photograph
+                                <span class="required">
+                                    *
+                                    @Html.ValidationMessageFor(model => model.PhotographPath)
+                                    <span class="erMsg"></span>
+                                </span>
+                                @Html.TextBoxFor(model => model.PhotographPath, new { @class = "form-control", @style = "padding:2px 0;margin:0 auto;", @type = "file", @id = "theFile", @onchange = "return valFile('#theFile',20,70,'KB','jpg,jpeg,bmp,png','.erMsg');", title = "Only jpg, png, jpeg, bmp & 20-70KB image file is allowed." })
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            @if (Model != null && Model.PhotographUrl != null)
+                            {
+                                <img src="@Url.Content(Model.PhotographUrl)" class="img-thumbnail" />
+                            }
+
+                        </div>
+                        @*----------------------------End photo Section------------------------ *@
+                        <div class="clearfix"></div>
+                        <hr />
+
+                        @if (Model.Documents.IsNotNullOrEmpty())
+                        {
+                            <h3>Upload documents</h3>
+                            <h4>Only jpg, png, jpeg, bmp & 70-200KB image file is allowed.</h4>
+                            <br />
+                            for (int i = 0; i < Model.Documents.Count; i++)
+                            {
+                                CUSrinagar.Models.Certificate item = Model.Documents[i];
+                                <div class="form-group col-sm-4">
+                                    <div class="jsFileContainer">
+                                        <input type="hidden" name="Documents[@i].Certificate_ID" value="@item.Certificate_ID" />
+                                        <input type="hidden" name="Documents[@i].CertificateType" value="@item.CertificateType" />
+                                        <input type="hidden" name="Documents[@i].CertificateUrl" value="@item.CertificateUrl" />
+                                        <input type="hidden" name="Documents[@i].Remark" value="@item.Remark" />
+                                        <input type="hidden" name="Documents[@i].Student_ID" value="@item.Student_ID" />
+                                        <input type="hidden" name="Documents[@i].UploadingDate" value="@item.UploadingDate" />
+                                        <input type="hidden" name="Documents[@i].VerificationStatus" value="@item.VerificationStatus" />
+                                        <input type="hidden" name="Documents[@i].RecordState" value="@(item.Certificate_ID == Guid.Empty ? RecordState.New : RecordState.Old)" />
+
+                                        <label class="">
+                                            <i class="fa fa-camera" aria-hidden="true"></i> @item.CertificateType.ToString() :
+                                            @if (item.CertificateType == CertificateType.MarksCard)
+                                            {
+                                                <span class="required">*</span>
+                                                <br />
+                                                <span style="">
+                                                    <strong>Upload your recent pass out marks card</strong>
+                                                </span>
+                                            }
+                                            else if (item.CertificateType == CertificateType.Provisional)
+                                            {
+                                                <span class="required">*</span>
+                                                <br />
+                                                <span style="">
+
+                                                    <strong>Upload your provisional certificate of your concerned 12th school</strong>
+                                                </span>
+                                            }
+                                            else if (item.CertificateType == CertificateType.Category)
+                                            {
+                                                <br />
+                                                <span style="">
+                                                    <strong>Upload your category certificates, other than open</strong>
+                                                </span>
+                                            }
+                                        </label>
+                                        @if (item.VerificationStatus == VerificationStatus.Pending || item.VerificationStatus == VerificationStatus.Rejected)
+                                        {
+                                            if (item.VerificationStatus == VerificationStatus.Rejected && !string.IsNullOrEmpty(item.Remark))
+                                            {
+                                                <label class="col-sm-12 text-danger">@item.Remark</label><br />
+                                            }
+                                            <div class="">
+                                                <input type="file" name="Documents[@i].File" id="@item.CertificateType.ToString()" accept=".jpg,.jpeg,.bmp,.png" class="form-control"
+                                                       onchange="return valFile('#@item.CertificateType.ToString()',70,200,'KB','jpg,jpeg,bmp,png','.erMsg');"
+                                                       title="Only jpg, png, jpeg, bmp & 70-200KB image file is allowed."
+                                                       @(string.IsNullOrEmpty(item.CertificateUrl) && (item.CertificateType == CertificateType.MarksCard || item.CertificateType == CertificateType.Provisional) ? "required" : "") />
+                                            </div>
+                                        }
+                                        <div class="">
+                                            <div class="@(string.IsNullOrEmpty(item.CertificateUrl) ? "hidden" : Url.Content(item.CertificateUrl)) jsPreviewSection">
+                                                <img id="@item.CertificateType.ToString()-img-preview" src="@(string.IsNullOrEmpty(item.CertificateUrl) ? "" : Url.Content(item.CertificateUrl))" class="no-margin-bottom thumbnail img-responsive max-height-200" />
+                                            </div>
+                                        </div>
+                                        <div class="hidden error text-danger" id="@item.CertificateType.ToString()-error">
+                                            Invalid file uploaded
+                                        </div>
+                                    </div>
+                                    <hr class="no-margin-top margin-bottom-10" />
+                                </div>
+                            }
+                        }
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <br />
+                            @if (Model != null && Model.Documents.IsNotNullOrEmpty() && ViewBag.HasDocuments)
+                            {
+                                if (ViewBag.HasCategory)
+                                {
+                                    if (Model.Documents.Any(x => x.CertificateType == CertificateType.Category && !string.IsNullOrWhiteSpace(x.CertificateUrl)))
+                                    {
+                                        <a href="@Url.Action("MakePayment", new { r = Model.Student_ID.ToString().EncryptCookieAndURLSafe() })" class="btn btn-lg btn-theme pull-right">Next</a>
+                                    }
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("MakePayment", new { r = Model.Student_ID.ToString().EncryptCookieAndURLSafe() })" class="btn btn-lg btn-theme pull-right">Next</a>
+                                }
+                            }
+                            <button type="submit" class="btn btn-lg btn-success pull-right" style="margin-right:10px;margin-left:10px;">Save & Next</button>
+                            <a href="@Url.Action("CollegePreference", new {r = Model.Student_ID.ToString().EncryptCookieAndURLSafe()})" class="btn btn-lg btn-theme pull-right">Previous</a>
+                        </div>
+                    </div>
+                    <br />
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJS{
+    @Scripts.Render("~/bundles/Libraries/jqueryval", "~/bundles/Libraries/jqueryregNEP")
+}
+

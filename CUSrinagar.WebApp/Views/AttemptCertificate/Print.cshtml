@@ -1,0 +1,250 @@
+﻿@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@model CUSrinagar.Models.AttemptCertificate
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Attempt Certificate</title>
+    <style type="text/css">
+        @@media print {
+            .noneOnPrint {
+                display: none;
+            }
+        }
+
+        p {
+            padding: 0mm;
+            margin: 0mm;
+        }
+    </style>
+</head>
+<body style="background: #e0e0e0;margin: auto;display: table;">
+    <section style="background: white;padding:0;margin: 0;overflow: hidden;box-sizing: border-box;width: 210mm;height: 297mm;position:relative;page-break-after: always;">
+        <div style="margin:0mm;margin-right: 4mm;margin-left: 4mm;margin-top:4mm;font-family:'Roboto';font-size:smaller">
+
+            <center>
+                <table style="">
+                    <tbody>
+                        <tr>
+                            <td style="text-align:left;">
+                                <img src="~/Content/ThemePublic/PrintImages/MarksSheetLogo.png" style="width:50px;" />
+                            </td>
+                            <td style="text-align:center;">
+                                <div style="margin-right:16px;">
+                                    <div style="font-family: Arial, sans-serif;font-size: 7mm;font-weight: bold;            position: relative;   z-index: 1;display: inline-block;  -webkit-font-smoothing: antialiased;  -moz-osx-font-smoothing: grayscale;            transform: scale(1, 1.5); -webkit-transform: scale(1, 1.5); -moz-transform: scale(1, 1.5);  -o-transform: scale(1, 1.5);  -ms-transform: scale(1, 1.5);">
+                                        <span style="letter-spacing:0.8mm;font-family: Algerian,Times, 'Times New Roman', serif;                font-weight: normal;                color: #2F5485;                text-shadow: 0.03em 0.03em 0px #b3b3b3;">
+                                            &nbsp;&nbsp;Cluster University Srinagar
+                                        </span>
+                                    </div>
+                                </div>
+                                <p> <b>APPLICATION FOR ISSUE OF ATTEMPT CERTIFICATE</b></p>
+                                <p> <b>(Incomplete application form shall be rejected)</b></p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </center>
+
+
+
+
+            <hr style="margin:0mm;margin-top:0.3mm;margin-bottom: 2mm;" />
+
+            <table width="95%">
+                <tbody>
+                    <tr>
+                        <td style="width:2mm;"><b>A</b>.</td>
+                        <td>Name : <b><u>@Model.personalInformationCompact.FullName.ToUpper() </u></b> &nbsp;<span style="float:right">Gender :  <b><u>@Model.personalInformationCompact.Gender.ToUpper()</u></b></span> </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            Father's Name : <b><u>@Model.personalInformationCompact.FathersName.ToUpper()</u></b> &nbsp;<span style="float:right">
+                                Mother's Name : <b>
+                                    <u>
+                                        @if (!string.IsNullOrEmpty(Model.personalInformationCompact.MothersName))
+                                        {@Model.personalInformationCompact.MothersName.ToUpper()}
+                                    else
+                                    {<span>____________________</span>}
+                                    </u>
+                                </b>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Class RollNo:  <b><u>@Model.personalInformationCompact.ClassRollNo</u></b>&nbsp;<span style="float:right">University Registration No. :  <b><u>@Model.personalInformationCompact.CUSRegistrationNo.ToUpper()</u></b></span> </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td> Stream in which Certificate Course/Diploma/Degree obtained : <b><u>@Model.personalInformationCompact.CourseFullName</u></b></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Name of the College Last attended : <b><u>@{var @cname = Model.personalInformationCompact.CollegeFullName == null ? "" : Model.personalInformationCompact.CollegeFullName.ToUpper();} @cname</u></b>
+                    </tr>
+
+
+                    <tr>
+                        <td></td>
+                        <td>Reason for issuance of Attempt Certificate : <b><u>@Model.ReasonforIssuance </u></b></td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            <br />
+            <p style=""><b>B.&nbsp;Backlog Summary record.</b></p>
+            <table border="1" style="text-align:center;" cellpadding="10px">
+                <tbody>
+                    <tr>
+                        <th>Sem</th>
+                        <th>Expected Year of Passing</th>
+                        <th>Actual Year of Passing</th>
+                        <th>No. of Re-appears Subjects</th>
+                        <th>Re-appears subject</th>
+                        <th>No. of Attempts to Clear Re-appears</th>
+                        <th width="30%">Remarks</th>
+                        <th width="30%">Verification Report By Result Section(office use)</th>
+                    </tr>
+                    @{ var track = 0;}
+                    @foreach (var item in Model.AttemptCertificateDetailsList)
+                    {
+                <tr>
+                    <td>
+                        @item.Semester
+                        @Html.HiddenFor(model => model.AttemptCertificateDetailsList[track].Semester)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.AttemptCertificateDetailsList[track].ExpectedYearPassing, new { @class = "form-control width100 ", @onkeypress = "return numbersOnly(event);" })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.AttemptCertificateDetailsList[track].ActualYearPassing, new { @class = "form-control width100 ", @onkeypress = "return numbersOnly(event);" })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.AttemptCertificateDetailsList[track].NoOfReappearSubjects, new { @class = "form-control width100 ", @onkeypress = "return numbersOnly(event);" })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.AttemptCertificateDetailsList[track].ReapperSubjects, new { @class = "form-control width100 " })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.AttemptCertificateDetailsList[track].NoOfAttemptsToClear, new { @class = "form-control width100 ", @onkeypress = "return numbersOnly(event);" })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.AttemptCertificateDetailsList[track].Remarks, new { @class = "form-control width100 " })
+                    </td>
+                    <td>
+                        @Html.Display("VerificationReport", new { @class = "form-control width100 " })
+                    </td>
+                </tr>
+                        track++;
+                    }
+
+                </tbody>
+            </table>
+
+            <ul>
+                <li>
+                    <p style="text-align:justify;">
+                        Fee of Rs. @Model.TotalFee/-(Non-Refundable) in the shape of
+                        Online Payment Transaction No.:-<u><small><b>@Html.DisplayFor(model => model.TransactionNo)</b></small></u>,&nbsp;
+                        Dated:-<u><small><b>@Model.TransactionDate.ToString("dd-MMM-yyy")</b></small></u> &nbsp;stands
+                        stands paid by the applicant.
+                    </p>
+                </li>
+                <li>Enclosed self -attested copies of all Transcripts</li>
+                <li>I the undersigned hereby declare that all information given above is correct to the best of my knowledge and records.</li>
+            </ul>
+            <table border="0">
+                <tbody>
+                    <tr>
+                        <td style="width:114mm;text-align:left;">
+                            @if (Model.personalInformationCompact.Duration <= 6)
+                            {<br />}
+                            <br />
+                            <br />
+                            Date:-___________________
+                        </td>
+                        <td style="text-align:right;">
+
+                            <br />
+                            <br />
+                            &emsp; &emsp; &emsp; &emsp;  &emsp; &emsp; Signature of  Student
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            @if (Model.personalInformationCompact.Duration <=6)
+            {<br />}
+            <hr style="margin:0mm;margin-top:0.3mm;margin-bottom: 0mm;" />
+            <table>
+                <tbody>
+                    <tr>
+                        <td style="width:110mm;padding-left:1mm;vertical-align:top;">
+                            <center><b>FOR OFFICE USE ONLY</b></center>
+                            <p style="text-align:justify;">Particulars of the Student mentioned above verified and found correct, requisite documents recieved, hence submitted for issuance of Attempt Certificate.</p>
+                            <br /><br /><br />
+                            <center> <b> Dealing Assistant<br />(Result Section-IT)</b></center>
+                        </td>
+                        <td style="border-left:1px solid black;padding-left:1mm;vertical-align:top;">
+                            Order of the Competent Authority<br /><br />
+                            <p style=""> Sanctioned&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; _______</p><br />
+                            <p style="">Not Sanctioned &nbsp; _______</p>
+                            <br /><br />
+                            <p style="text-align:left;"><b>&emsp; Deputy/Assistant Registrar</b><br />&emsp; (Registration)</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br />
+            <p style="margin:0mm;margin-right: 4mm;margin-left: 4mm;margin-top:4mm;font-family:'Roboto';font-size:smaller"> <b>Note : Duly filled application form is to be submitted at office of Assistant Controller Exams.</b></p>
+        </div>
+    </section>
+
+    <div class="noneOnPrint" style="height:40px;background-color:lightslategrey;width:794px;position:fixed;bottom:0;z-index:100;text-align:center;padding-top:10px">
+        <button style="height: 32px;" href="#" class="btn btn-theme" onclick="window.print();"><b>Download or Print</b></button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:white">Developed &amp; Maintained by I.T Cell</span>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

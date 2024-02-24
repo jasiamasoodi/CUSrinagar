@@ -1,0 +1,303 @@
+﻿@using CUSrinagar.Extensions
+@model CUSrinagar.Models.ARGPersonalInformation
+
+@{
+    ViewBag.Title = "Student Detail";
+}
+<div class="row panel panel-success">
+    <div class="panel-heading lead">
+        <div class="row">
+            <div class="col-lg-8 col-md-8"><i class="fa fa-users"></i> View Student Details</div>
+            <div class="col-lg-4 col-md-4 text-right">
+                <div class="btn-group text-center">
+                    <a href="" class="btn btn-success btn-sm btn-default"><i class="fa fa-eye fa-1x"></i></a>
+                    <a href="" class="btn btn-success btn-sm btn-default"><i class="fa fa-edit fa-1x"></i></a>
+                    <a href="" class="btn btn-success btn-sm btn-default"><i class="fa fa-print fa-1x"></i></a>
+                    <a href="" class="btn btn-success btn-sm btn-default"><i class="fa fa-trash-o fa-1x"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <div class="row">
+                    <div class="col-lg-2 col-md-2 col-sm-12">
+                        <center>
+                            <div class="thumbnail">
+                                @if (Model.Photograph != null)
+                                {
+                                    <img src="@Url.Content(Model.Photograph)" class="img-responsive img-thumbnail" />
+                                }
+                                <!-- Modal -->
+                                <div class="modal fade" id="PhotoOption" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                    <div class="modal-dialog" style="width:30%;height:30%;">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                <h4 class="modal-title text-success" id="myModalLabel"><i class="fa fa-gear"></i> <span class="text-right">Viddhyut Mall</span></h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <center><img src="" class="img-responsive img-thumbnail"></center>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a href="upload/upload-view.php?id=68" class="btn btn-success"><i class="fa fa-photo"></i> Upload</a>
+                                                <a href="upload/upload-view.php?id=68&amp;name=Viddhyut Mall&amp;src=view" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
+                                            </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                    </div>
+                                    <!-- /.modal-dialog -->
+                                </div>
+                                <!-- /.modal -->
+                            </div>
+                            <span class="btn btn-danger text-success btn-block"><i class="fa fa-rupee"></i> Unpaid</span>
+                            <a href="#" class="btn btn-success btn-block" data-toggle="modal" data-target="#PhotoOption"><i class="fa fa-photo"></i> Change</a>
+                        </center>
+                    </div>
+                    <div class="col-lg-9 col-md-9">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a data-toggle="tab" href="#Summery" class="text-success"><i class="fa fa-indent"></i> Summery</a></li>
+                            <li><a data-toggle="tab" href="#Contact" class="text-success"><i class="fa fa-bookmark-o"></i> Contact Info</a></li>
+                            <li><a data-toggle="tab" href="#General" class="text-success"><i class="fa fa-info"></i> General Info</a></li>
+                            <li><a data-toggle="tab" href="#academic" class="text-success"><i class="fa fa-info"></i> Academic Details</a></li>
+                            <li><a data-toggle="tab" href="#courses" class="text-success"><i class="fa fa-info"></i> Course Info</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div id="Summery" class="tab-pane fade in active">
+
+                                <div class="table-responsive panel">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-user"></i> Full Name</td>
+                                                <td>@Model.FullName</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success">Father's Name</td>
+                                                <td>@Model.FathersName</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success">Form Number</td>
+                                                <td>@Model.StudentFormNo</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success">Form Status</td>
+                                                <td>@Model.FormStatus</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success">Accepted By</td>
+                                                <td>@Model.AcceptedByID</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="text-success">Accepted By College</td>
+                                                <td>@Model.AcceptCollegeID</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div id="Contact" class="tab-pane fade">
+                                <div class="table-responsive panel">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-envelope-o"></i> Email ID</td>
+                                                <td><a href="mailto:****pawanmall.net?subject=Email from &amp;body=Hello, Viddhyut Mall">@(Model.StudentAddress == null ? "" : Model.StudentAddress.Email)</a></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="glyphicon glyphicon-phone"></i> Mobile Number</td>
+                                                <td>@(Model.StudentAddress == null ? "" : Model.StudentAddress.Mobile)</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success" colspan="2">Address</td>
+                                            </tr>
+                                            @if (Model.StudentAddress != null)
+                                            {
+                                                <tr>
+                                                    <td>Permanent Address</td>
+                                                    <td>@Model.StudentAddress.PermanentAddress</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Block</td>
+                                                    <td>@Model.StudentAddress.Block</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Tehsil</td>
+                                                    <td>@Model.StudentAddress.Tehsil</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Parliamentary Constituency</td>
+                                                    <td>@Model.StudentAddress.ParliamentaryConstituency</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Assembly Constituency</td>
+                                                    <td>@Model.StudentAddress.AssemblyConstituency</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>District</td>
+                                                    <td>@Model.StudentAddress.District</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Pincode</td>
+                                                    <td>@Model.StudentAddress.PinCode</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>State</td>
+                                                    <td>@Model.StudentAddress.State</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Assembly Constituency</td>
+                                                    <td>@Model.StudentAddress.AssemblyConstituency</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-home"></i> Address</td>
+                                                    <td>
+                                                        <address>
+                                                            <strong> @Model.StudentAddress.PermanentAddress</strong><br />
+                                                            @(Model.StudentAddress.District + ", " + Model.StudentAddress.PinCode)<br />
+                                                            @(Model.StudentAddress.State)
+                                                        </address>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div id="General" class="tab-pane fade">
+                                <div class="table-responsive panel">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-user"></i> Full Name</td>
+                                                <td>@Model.FullName</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success">Father's Name</td>
+                                                <td>@Model.FathersName</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success">Mother's Name</td>
+                                                <td>@Model.MothersName</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-calendar"></i> Date of birth</td>
+                                                <td>@Model.DOB.ToShortDateString()</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success"><i class="fa fa-calendar"></i> Date of Admission</td>
+                                                <td>@Model.CreatedOn.ToShortDateString()</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div id="academic" class="tab-pane fade">
+                                <div class="table-responsive panel">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Exam Name</th>
+                                                <th>Subjects</th>
+                                                <th>Max Marks</th>
+                                                <th>Min Marks</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model.AcademicDetails != null)
+                                            {
+                                                foreach (var item in Model.AcademicDetails)
+                                                {
+                                                    <tr>
+                                                        <td class="text-success">@item.ExamName</td>
+                                                        <td>@item.Subjects</td>
+                                                        <td>@item.MaxMarks</td>
+                                                        <td>@item.MarksObt</td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div id="courses" class="tab-pane fade">
+                                <div class="table-responsive panel">
+                                    <h3>Courses Applied</h3>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Program</th>
+                                                <th>Course Code</th>
+                                                <th>Course Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model.CoursesApplied != null)
+                                            {
+                                                foreach (var item in Model.CoursesApplied)
+                                                {
+                                                    <tr>
+                                                        <td>@(item.Programme)</td>
+                                                        <td class="text-success">@item.CourseCode</td>
+                                                        <td>@item.CourseName</td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                    <hr />
+                                    <h3>Combinations Set</h3>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <label>
+                                                        <input name="form-field-checkbox" type="checkbox" class="ace">
+                                                        <span class="lbl"></span>
+                                                    </label>                                                    
+                                                </th>
+                                                <th>Combination Code</th>
+                                                <th>Combination Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                           <tr>
+                                               <td>
+                                                   <label>
+                                                       <input name="form-field-checkbox" type="checkbox" class="ace">
+                                                       <span class="lbl"></span>
+                                                   </label>   
+                                               </td>
+                                               <td>
+                                                   <input list="browsers" name="browser">
+                                                   <datalist id="browsers">
+                                                       <option value="Internet Explorer">
+                                                       <option value="Firefox">
+                                                       <option value="Chrome">
+                                                       <option value="Opera">
+                                                       <option value="Safari">
+                                                   </datalist>
+                                               </td>
+                                               <td>
+                                                   Description of combination here
+                                               </td>
+                                           </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

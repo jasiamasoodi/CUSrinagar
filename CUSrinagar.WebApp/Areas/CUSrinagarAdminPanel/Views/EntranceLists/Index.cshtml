@@ -1,0 +1,121 @@
+﻿@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@using CUSrinagar.Models
+
+@model  IEnumerable<ADMEntranceLists>
+
+@{
+    ViewBag.Title = "Entrance Lists";
+    IEnumerable<SelectListItem> EntranceListTypeColumns = Helper.GetSelectList<EntranceListType>().OrderBy(x => Convert.ToInt16(x.Value));
+    ADMEntranceLists entranceList = null;
+    string filePath = "";
+}
+
+<div class="page-wrapper pager-table-text">
+
+    <div class="page-header">
+        <div style="padding-bottom: 30px;">
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <h1 class="heading-title pull-left">
+                        Entrance @DateTime.UtcNow.Year
+                    </h1>
+                </div>
+                <div class="col-sm-6 align-right">
+                    <form action="@Url.Action("DeleteAll", "EntranceLists", new { area = "CUSrinagarAdminPanel" })" method="post">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete?')">Delete all lists</button>
+                        <a href="@Url.Action("AddEditList", "EntranceLists", new { area = "CUSrinagarAdminPanel" })" class="btn btn-sm btn-primary white">Add or Edit List</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary">
+                    <div id="msg"></div>
+                    @if (TempData["response"] != null)
+                    {
+                        @Html.Raw(TempData["response"])
+                    }
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Answer Keys / Points / Lists
+                        </h3>
+                    </div>
+                    <div class="panel-body" style="overflow:auto">
+                        <table class="table table-hover table-bordered js-table">
+                            <thead style="white-space: nowrap;">
+                                <tr>
+                                    <th>Subject</th>
+                                    @foreach (SelectListItem item in EntranceListTypeColumns)
+                                    {
+                                        <th>@item.Text</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.IsNotNullOrEmpty())
+                                {
+                                    foreach (IEnumerable<ADMEntranceLists> Group in Model.GroupBy(x => x.Course_ID))
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Group.First().CourseFullName.Replace("Integrated", "").Replace("Honor's", "")
+                                                <a href="javascript:void(0);" class="JSListTypeColumn red pull-right" data-id="@Group.First().Course_ID" data-fileName="nofile" title="Delete entire row">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                            </td>
+                                            @foreach (SelectListItem item in EntranceListTypeColumns)
+                                            {
+                                                entranceList = Group.FirstOrDefault(x => ((short)x.ListType).ToString() == item.Value);
+                                                if (entranceList != null)
+                                                {
+                                                    filePath = ADMEntranceLists.DirectoryPath + "/" + entranceList.ListURL;
+                                                    <td>
+                                                        <a href="@Url.Content(filePath)">View @item.Text</a>
+                                                        <a href="javascript:void(0);" class="JSListTypeColumn red pull-right" data-id="@entranceList.EntranceList_ID" data-fileName="@entranceList.ListURL" title="Delete @item.Text">
+                                                            <i class="fa fa-trash"></i>
+                                                        </a>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td></td>
+                                                }
+                                            }
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSEntranceLists/JSEntranceLists.js")"></script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

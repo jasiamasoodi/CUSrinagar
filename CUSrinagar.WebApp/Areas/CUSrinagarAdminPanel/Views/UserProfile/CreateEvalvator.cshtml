@@ -1,0 +1,40 @@
+﻿@model  CUSrinagar.Models.AppUsers
+@{
+    ViewBag.Title = "CUS :: Add Evalvator";
+
+}
+@{
+    ViewBag.Title = "CreateEvalvator";
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header">
+
+                <h4 class="widget-title"><i class='menu-icon fa fa-pencil-square-o'></i>Add Evalvator</h4>
+
+
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    @using (Html.BeginForm("CreateEvalvator", "UserProfile", FormMethod.Post, new { enctype = "multipart/form-data", @name = "validation-form", @id = "validation-form", @class = "form-horizontal ", @role = "form" }))
+                    {
+                        @Html.Partial("_CreateOrEditEvalvator", Model)
+
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var childpath = '@Url.Action("_GetChildDDLEvalvator", "UserProfile", new { area = "CUSrinagarAdminPanel" })';
+    var subjectpath=  '@Url.Action("SubjectSectionEvalvator", "UserProfile", new { area = "CUSrinagarAdminPanel" })';
+</script>
+@section PageSpecificJSFiles{
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSGeneral/GeneralJS.js")"></script>
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSUsers/CreateOREdit.js")"></script>
+    <script src="/Scripts/Pages/combinationsetting.js"></script>
+}

@@ -1,0 +1,218 @@
+﻿@using CUSrinagar.Models
+@using CUSrinagar.Extensions
+
+@model List<CUSrinagar.Models.PaymentDetails>
+
+@{
+    ViewBag.Title = "Payment Response";
+    Layout = null;
+    string errorMessage = ViewBag.PaymentFailureMessage;
+    var _StudentExamFormDetail = (ARGStudentExamFormSubjects)ViewBag.StudentExamFormDetail;
+    var _StudentInfo = (ARGPersonalInformation)ViewBag.StudentInfo;
+    var _choosenSemester = (short)(ViewBag.SemesterChoosen ?? 0);
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Examination Form</title>
+    <link href="~/Content/ThemePublic/Libraries/plugins/news-ticker/assets/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/ThemePublic/Libraries/css/printer-frndly.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="A4 middle">
+    @if (Model != null)
+    {
+        <section class="sheet padding-5mm">
+            <div class="page-content ">
+                <div class="">
+                    @*<div class="col-sm-10 col-md-8 col-sm-offset-1">*@
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <div class="row panel panel-body well">
+                            <div class="">
+                                <div class="text-center">
+                                    <img src="@Url.Content("~/Content/ThemePublic/Libraries/images/cus-logo1.svg")" width="500" height="50" />
+                                    <h4 class="text-success"><b>Regular Exam Form (@_StudentInfo.CourseFullName Semester-@_StudentExamFormDetail.Semester)</b></h4>
+                                    <b>Printed on @DateTime.Now.ToLongDateString()</b>
+                                </div>
+
+                                <div class="table-bordered" style="margin:20px">
+                                    <table class="table no-margin-bottom">
+                                        <tbody>
+                                            <tr>
+                                                <td class="col-md-9">@(string.IsNullOrWhiteSpace(_StudentInfo.CUSRegistrationNo) ? "Form No." : "CUSRegistrationNo") : <b> @(string.IsNullOrWhiteSpace(_StudentInfo.CUSRegistrationNo) ? _StudentInfo.StudentFormNo : _StudentInfo.CUSRegistrationNo) </b></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="col-md-9">Name:<b> @_StudentInfo.FullName </b></td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="col-md-9">Parentage:<b> @_StudentInfo.FathersName </b></td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="col-md-9">Transaction Reference Number:<b> @string.Join(",", @Model.Select(t => t.TxnReferenceNo))</b></td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="col-md-9">Transaction Date:<b>@string.Join(",", @Model.Select(t => t.TxnDate))</b></td>
+                                            </tr>
+
+
+                                            <tr>
+                                                <td class="col-md-9">Form Number :<b> @_StudentExamFormDetail.FormNumber</b></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Mobile No :<b> @string.Join(",", @Model.Select(t => t.PhoneNumber))</b></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Email: <b>@string.Join(",", @Model.Select(t => t.Email))</b></td>
+                                            </tr>
+                                            @if (_StudentInfo != null && _StudentInfo.SelectedCombinations != null)
+                                            {
+                                                var currentSemesterComb = _StudentInfo.SelectedCombinations.FirstOrDefault(x => x.Semester == _choosenSemester);
+                                                if (currentSemesterComb != null && currentSemesterComb.Subjects != null)
+                                                {
+
+                                                    List<ADMSubjectMaster> currentSemSubjects = null;
+                                                    if (currentSemesterComb.Semester == 1)
+                                                    {
+                                                        currentSemSubjects = currentSemesterComb.Subjects.Where(x => x.HasResult).OrderBy(x => x.SubjectType).ToList();
+                                                    }
+                                                    else
+                                                    {
+                                                        currentSemSubjects = currentSemesterComb.Subjects.OrderBy(x => x.SubjectType).ToList();
+                                                    }
+                                                    <tr>
+                                                        <td>Subjects Verified by College: <b>@(currentSemesterComb.IsVerified ? "Yes" : "Not verified by college yet")</b></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td>
+                                                            <strong><span>Subjects Assigned by College: </span></strong>
+                                                            <ol class="list-inline">
+                                                                @{ int count = 1;}
+                                                                @for (int i = 0; i < currentSemSubjects.Count; i++)
+                                                                {
+                                                                    if (currentSemSubjects[i].Subject_ID == Guid.Parse("8AB62794-0B0B-4427-9DBF-46B9D431CE49") || currentSemSubjects[i].Subject_ID == Guid.Parse("0454F20D-B0C6-4DB0-8E62-D6DF1A814D76") || currentSemSubjects[i].Subject_ID == Guid.Parse("428F7600-7EAB-4437-9360-1F524BC3C38D"))
+                                                                    {
+
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <li class="">
+                                                                            <label class="">@(count)</label>. @currentSemSubjects[i].SubjectFullName (@currentSemSubjects[i].SubjectType.GetEnumDescription())<br />
+                                                                        </li>
+                                                                        count++;
+                                                                    }
+                                                                }
+                                                            </ol>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                            @if (_StudentExamFormDetail != null && _StudentExamFormDetail.ReAppearSubjects != null)
+                                            {
+                                                var listOfAppliedSubjects = _StudentExamFormDetail.ReAppearSubjects.Where(x => x.IsApplied)?.ToList();
+                                                if (listOfAppliedSubjects != null && listOfAppliedSubjects.Count() > 0)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <span> Subjects in which to Re-appear :</span>
+                                                            <ol class="list-inline">
+                                                                @for (int i = 0; i < listOfAppliedSubjects.Count; i++)
+                                                                {
+                                                                    <li class="">
+                                                                        <label class="">@(i + 1). </label>
+                                                                        <b> @listOfAppliedSubjects[i].SubjectFullName (@listOfAppliedSubjects[i].SubjectType.GetEnumDescription())</b> <br />
+                                                                    </li>
+                                                                }
+                                                            </ol>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                            @if (_StudentExamFormDetail != null && _StudentExamFormDetail.AdditionalSubjects != null)
+                                            {
+                                                var listofAdditionalSubjects = _StudentExamFormDetail.AdditionalSubjects;
+                                                if (listofAdditionalSubjects != null)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <b> Additional subjects :</b>
+                                                            <ol class="list-inline">
+                                                                @for (int i = 0; i < listofAdditionalSubjects.Count; i++)
+                                                                {
+                                                                    <li class=""><label class="">@(i + 1). </label>@listofAdditionalSubjects[i].Subject.SubjectFullName <br/></li>
+                                                                }
+                                                            </ol>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                            <tr>
+                                                <td class="text-right float-right right">
+                                                    Amount Paid : <strong>Rs.@Model.Sum(t => t.TxnAmount)</strong>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="clearfix hidden-print"></div>
+                            <div>
+                                <b>Important: </b>
+                                @*<h5><strong>This form should be submitted in your respective college for verification of selected subject combination.</strong> </h5>*@
+                                <h5>
+                                    <strong>
+                                        Students who are submitting their exam forms are advised to keep the downloaded copy with them
+                                        and contact college for further formalities (if required).
+                                    </strong>
+                                </h5>
+
+                                <hr />
+                                <h5>WARNING!</h5>
+                                <ol>
+                                    <li>
+                                        Those candidates who have not appeared in internal/continous assesment are not eligible to appear in exam and their
+                                        form will be cancelled. (Also the subject(s) in which internal/continous assesment is not
+                                        cleared will not appear on Admit Card).
+                                    </li>
+                                    <li><strong>In case of any discrepancy please visit / contact College</strong></li>
+                                </ol>
+                                <hr />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="noneOnPrint print-download-strip">
+            <a style="color: #ffffff;background-color: #080808;border-color: #59f908;" href="@Url.Action("Examination", "Examination")" class="btn btn-default">Back</a>
+            <button style="color: #ffffff;background-color: #080808;border-color: #59f908;" href="#" class="btn btn-default" onclick="window.print();"><b>Download / Print Examination Form </b></button>
+        </div>
+    }
+    else
+    {
+        <section class="sheet padding-5mm">
+            <hr />
+            <hr />
+            <h1 class="center">No Form Found.</h1>
+            <hr />
+            <hr />
+        </section>
+    }
+    @if (ViewBag.RedirectFromPaymentGateWay == true)
+    {
+        <script src="@Url.Content("~/Content/ThemePublic/Libraries/disableBack.js")"></script>
+        <script>
+            $(document).ready(function () {
+                $("[id*=Section]").removeClass("active");
+                $("#ExaminationFormSection").addClass("active");
+            });
+        </script>
+    }
+</body>
+</html>

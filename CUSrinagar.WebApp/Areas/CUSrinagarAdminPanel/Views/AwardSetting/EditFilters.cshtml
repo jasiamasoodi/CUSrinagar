@@ -1,0 +1,179 @@
+﻿@model CUSrinagar.Models.AwardFilterSettings
+
+@{
+    ViewBag.Title = "Subject Master";
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action(" Index","Dashboard",new { area="CUSrinagarAdminPanel" })">Home</a>
+        </li>
+        <li>
+            <a href="@Url.Action("AwardFilters","AwardSetting",new { area="CUSrinagarAdminPanel"})" class="">Award Filter List</a>
+        </li>
+        <li>
+            <a href="#" class="active">Edit</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+
+@section PageSpecificStyle{
+
+}
+<div class="row">
+    <div class="col-md-12">
+        <h4 class="">Edit filter</h4>
+        <hr class="no-margin-top" />
+        @using (Html.BeginForm("EditFilters", "AwardSetting", FormMethod.Post, new { @class = "jsMainForm form-horizontal", @id = "AwardFilter" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.AwardFilterSettingsID)
+            @Html.HiddenFor(model => model.AwardType)
+            @Html.HiddenFor(model => model.FilterColumn)
+            @Html.HiddenFor(model => model.Programme)
+            @Html.HiddenFor(model => model.Semester)
+            @Html.Hidden("RecieverMail", "khrshdmir@gmail.com")
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3">Award Type</label>
+                        <div class="col-sm-8">
+                            @Html.DisplayFor(model => model.AwardType)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3">Program</label>
+                        <div class="col-sm-8">
+                            @Html.DisplayFor(model => model.Programme)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3">Semester</label>
+                        <div class="col-sm-8">
+                            @Html.DisplayFor(model => model.Semester)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3">Filter Column</label>
+                        <div class="col-sm-8">
+                            @Html.DisplayFor(model => model.FilterColumn)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3">  @Html.DisplayFor(model => model.FilterColumn)</label>
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.FilterValue)
+                        </div>
+                    </div>
+                    <div class="form-group" id="jsCourseField">
+                        <label for="name" class="col-sm-3">Courses</label>
+                        <div class="col-sm-8 jsDDLContainer">
+                            @Html.DropDownListFor(model => model.CourseList, new SelectList(ViewBag.Courses, "Value", "Text", Model.CourseList),
+                                "choose course", new
+                                {
+                                    @class = "form-control chosen-select multiselect",
+                                    @multiple = "",
+                                    @data_defaulttextvalue = "choose course,",
+                                    @id = "CourseDDL"
+                                })
+                        </div>
+                        @Html.HiddenFor(model => model.Courses)
+                    </div>
+
+
+                    <div class="form-group" id="jsCollegeField">
+                        <label for="name" class="col-sm-3">College</label>
+                        <div class="col-sm-8">
+                            @Html.DropDownListFor(model => model.CollegeList, new SelectList(ViewBag.College, "Value", "Text", Model.CollegeList),
+                            "Choose College", new
+                            {
+                                @class = "form-control chosen-select multiselect",
+                                @multiple = "",
+                                @data_defaulttextvalue = "choose course,",
+                                @id = "CollegeDDL"
+                            })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3">Start Date</label>
+                        <div class="col-sm-2">
+                            @{
+                                if(Model.StartDate==null)
+                                {
+                                    Model.StartDate = DateTime.Now;
+                                }
+
+                                string StartDate = (Model?.StartDate?.Year + "-" + (Model?.StartDate?.Month.ToString().Length == 1 ? "0" + Model?.StartDate?.Month : Model?.StartDate?.Month.ToString()) + "-" + (Model?.StartDate?.Day.ToString().Length == 1 ? "0" + Model?.StartDate?.Day : Model?.StartDate?.Day.ToString()) + "T" + (Model?.StartDate?.Hour.ToString().Length == 1 ? "0" + Model?.StartDate?.Hour : Model?.StartDate?.Hour.ToString()) + ":" + (Model?.StartDate?.Minute.ToString().Length == 1 ? "0" + Model?.StartDate?.Minute : Model?.StartDate?.Minute.ToString())).Trim();
+
+                                }
+                            <input type="datetime-local" id="StartDate" name="StartDate" value="@StartDate" class="form-control"/>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3">End Date</label>
+                        <div class="col-sm-2">
+                            @{
+                                if (Model.EndDate == null)
+                                {
+                                    Model.EndDate = DateTime.Now.AddDays(3);
+                                }
+
+                                string parsedDate = (Model.EndDate.Year + "-" + (Model.EndDate.Month.ToString().Length == 1 ? "0" + Model.EndDate.Month : Model.EndDate.Month.ToString()) + "-" + (Model.EndDate.Day.ToString().Length == 1 ? "0" + Model.EndDate.Day : Model.EndDate.Day.ToString()) + "T" + (Model.EndDate.Hour.ToString().Length == 1 ? "0" + Model.EndDate.Hour : Model.EndDate.Hour.ToString()) + ":" + (Model.EndDate.Minute.ToString().Length == 1 ? "0" + Model.EndDate.Minute : Model.EndDate.Minute.ToString())).Trim();
+                            }
+                            <input type="datetime-local" id="EndDate" name="EndDate" value="@parsedDate" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3">Award Open</label>
+                        <div class="col-sm-8">
+                            @Html.CheckBoxFor(model => model.IsActive)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10"></div>
+                        <div class="col-sm-1">  <button type="submit" class="btn btn-success ">Save</button></div>
+                        <div class="col-sm-1">
+                            <a href="@Url.Action("AwardFilters","AwardSetting",new { area = "CUSrinagarAdminPanel" })" class="btn btn-danger">Close</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+
+        
+
+       @if (Model.CollegeList != null)
+            {
+                foreach (var d in Model.CollegeList)
+                {
+                     @:var val = "@d".toUpperCase();
+                        @:$("#CollegeDDL option[value='" + val + "']").prop("selected", true);
+                }
+            }
+
+
+
+
+       @if (Model.CourseList != null)
+            {
+                foreach (var c in Model.CourseList)
+                {
+                     @:var val = "@c".toUpperCase();
+                        @:$("#CourseDDL option[value='" + val + "']").prop("selected", true);
+                }
+            }
+      });
+</script>

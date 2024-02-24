@@ -1,0 +1,244 @@
+﻿@model GeneralModels.ResponseData
+
+@{
+    ViewBag.Title = "Exam Form";
+    var examFormSemester = (List<SelectListItem>)ViewBag.ExamForSemester;
+    int currentSemester = ViewBag.CurrentSemester;
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area="CUStudentZone"})">Home</a>
+        </li>
+        <li>
+            <a href="#" class="active">Examination Form</a>
+        </li>
+    </ul>
+}
+<div class="page-header">
+    <h1>
+        &nbsp;&nbsp;
+        <i class="fa fa-credit-card"></i> Examination Form
+    </h1>
+</div>
+<div class="page-content">
+    <div class="row">
+        @if (TempData["response"] != null)
+        {
+            @Html.Raw(TempData["response"])
+        }
+        <div class="col-sm-6">
+            <div class="well well-sm">
+                <div class="row">
+                    <div class="col-sm-12">
+                        @using (Html.BeginForm("Questionaire", "Questionaire", FormMethod.Get, new { @class = "jsMainForm", @area = "CUStudentZone", @id = "frmExamForm" }))
+                        {
+                            @Html.Hidden("CurrentSemester", (object)ViewBag.CurrentSemester)<div class="form-group col-sm-12">
+                                <h5><b>Fill examination form</b> </h5>
+                                <hr class="no-padding no-margin" />
+                            </div>
+                            if (ViewBag.IsEligibleForDivisionImprovement)
+                            {
+                                <div class="form-group col-sm-12 center">
+                                    <a href="/Home/DivisionImprovement" target="_blank">Read Terms and Conditions about Division Improvement here</a>
+                                    <br />
+                                </div>
+                                <div class="form-group col-sm-12">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-1">Examination Type </label>
+                                    <label>
+                                        <input name="FormType" type="radio" class="ace divImprove" value="backlog" data-divimp="yes">
+                                        <span class="lbl"> Division Improvement</span>
+                                    </label>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-group col-sm-12">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-1">Examination Type </label>
+                                    <div class="col-sm-8">
+                                        <div class="radio">
+                                            <label>
+                                                <input name="FormType" type="radio" class="ace" checked="checked" value="regular" data-divimp="" />
+                                                <span class="lbl"> Regular</span>
+                                            </label>
+                                        </div>
+
+                                        <div class="radio">
+                                            <label>
+                                                <input name="FormType" type="radio" class="ace" value="backlog" data-divimp="" />
+                                                <span class="lbl"> Backlog</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <hr />
+                            <div class="form-group col-sm-12">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-1"> Your Current Semester </label>
+                                <div class="col-sm-8">
+                                    <label><strong>  @ViewBag.CurrentSemester<sup>th</sup> </strong></label>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-1"> Apply for semester </label>
+                                <div class="col-sm-8">
+                                    <h3 class="text-danger" id="jsNoForm" style='@(examFormSemester!=null && examFormSemester.Count>0?"display:none;":"")'>Process closed or not started yet.</h3>
+                                    <select name="semester" id="semester" class="dropdown-toggle" style='@(examFormSemester==null || examFormSemester.Count==0?"display:none;":"")'>
+                                        @if (examFormSemester != null)
+                                        {
+                                            foreach (var item in examFormSemester)
+                                            {
+                                                if (Convert.ToInt32(item.Value) <= Convert.ToInt32(ViewBag.CurrentSemester))
+                                                {
+                                                    <option value="@item.Value">Semester - @item.Text</option>
+                                                }
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <button type="submit" id="jsExamFormbtn" class="btn btn-primary pull-right"> Proceed</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="well well-sm">
+                <div class="row">
+                    <div class="col-sm-12">
+                        @using (Html.BeginForm("PrintRegularExaminationFormReceipt", "Examination", FormMethod.Get, new { @class = "jsMainForm", @area = "CUStudentZone", @id = "print" }))
+                        {
+                            <div class="form-group">
+                                <h5><b>Print examination form</b> </h5>
+                                <hr class="no-padding no-margin" />
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1">Examination Type </label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" name="ExaminationType" id="ExaminationType" required>
+                                        <option value="1">Regular</option>
+                                        <option value="0">Backlog</option>
+                                        <option value="0">Division Improvement</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Semester </label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" name="semester" required>
+                                        <option value="">choose semester</option>
+
+                                        @for (int i = 1; i <= Convert.ToInt32(ViewBag.CurrentSemester ?? 1); i++)
+                                        {
+                                            <option value="@i">Semester - @i</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-12">
+                                <button type="submit" class="btn btn-primary pull-right">
+                                    <i class="fa fa-download"></i> Print
+                                </button>
+                            </div>
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-sm-12">
+    <ol>
+        <li><strong>After amount is deducted from your account, it is mandatory/Important to take printout of the exam form</strong></li>
+        <li><h6 class="text-primary"><strong>If you have already submitted fee or money has been deducted from your account and you are still unable to print your examination form. Please visit Cluster Univeristy I.T. Cell by or before last date.</strong></h6></li>
+        <li><h6 class="text-primary"><strong>Those candidates who have not appeared in internal/continous assesment are not eligible for appearing in the examination and their Application Forms as such will be cancelled.</strong></h6></li>
+        @*<li><h6 class="text-justify"><i> For suggestions / feedback or in case of an error / discrepancy please mail us at <a target="_blank" href="mailto:examination@cusrinagar.edu.in">Examination Support</a></i></h6></li>*@
+    </ol>
+</div>
+
+@section PageSpecificJSFiles
+{
+    <script>
+        $(document).ready(function () {
+
+            try {
+                $(".divImprove").click();
+                ddlOfOpenSemesters();
+            } catch (e) { }
+
+            $("#printExaminationForm").submit(function () {
+                var $form = $(this);
+                var formtype = $("#ExaminationType option:selected").val();
+                if (formtype == "0") {
+                    $form.attr('action', '/CUStudentZone/Examination/PrintBacklogFormReceipt');
+                }
+            });
+
+            $("[name=FormType]").change(function () { ddlOfOpenSemesters(); });
+
+            function ddlOfOpenSemesters() {
+                var _url = "/CUStudentZone/Examination/GetSemesterOpenForExaminationType";
+                var formtype = $("[name='FormType']:checked").val();
+                var _isRegular = formtype != "backlog";
+                $.ajax({
+                    url: _url,
+                    type: "POST",
+                    datatype: "Json",
+                    data: { isRegular: _isRegular },
+                    success: function (data) {
+                        $("#semester option").remove();
+                        $("#semester").hide();
+                        $("#jsNoForm").hide();
+                        if (data != null && data.length > 0) {
+                            $("#semester").show();
+                            $("#jsNoForm").hide();
+                            for (var i = 0; i < data.length; i++) {
+                                $("#semester").append(`<option value="${data[i].Value}">Semester - ${data[i].Text}</option>`);
+                            }
+                        } else {
+                            $("#semester").hide();
+                            $("#jsNoForm").show();
+                        }
+                    },
+                    error: function (xhr, error, msg) {
+                        fillDDLOptions($targetSelect, null);
+                        showErrorMessage(msg);
+                    }
+                });
+            }
+
+            $("#frmExamForm").submit(function () {
+                var _semester = $("#semester option:selected").val();
+                if (isNullOrEmpty(_semester) || _semester.length == 0 || parseInt(_semester) < 0) {
+                    showErrorMessage('Please choose semester.');
+                    return false;
+                }
+                var $form = $(this);
+                var formtype = $("[name='FormType']:checked").val();
+
+                var divImp = $("[name='FormType']:checked").attr("data-divimp");
+
+                if (divImp == "yes") {
+                    $form.attr('action', '/CUStudentZone/Examination/DivisionImprovement');
+                } else if (formtype == "backlog") {
+                    $form.attr('action', '/CUStudentZone/Examination/BacklogForm');
+                }
+
+            });
+            $("#print").submit(function () {
+                var type = $("#ExaminationType option:selected").val();
+                if (type == '0') {
+                    $("#print").attr('action', '/CUStudentZone/Examination/PrintBacklogFormReceipt');
+                }
+            });
+
+        });
+    </script>
+}

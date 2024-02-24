@@ -1,0 +1,84 @@
+﻿
+
+@{
+    ViewBag.Title = "UserList";
+    string id = (ViewBag.ProfessorCRClasses_ID).ToString();
+}
+
+<div class="page-wrapper pager-table-text">
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="col-md-12 ">
+                <div class="panel panel-primary js-pager-table" data-otherparam1="@id">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Class List
+                            <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                            </span>
+
+                        </h3>
+                    </div>
+
+
+                    <div class="js-table-content" data-url="@Url.Action("SubjectClassDetailTable", "AssignSubject", new { area = "CUCollegeAdminPanel" })" data-DefaultOrderByColumn="ProfessorCRClasses_ID">
+
+                    </div>
+                    @{Html.RenderPartial("_JSPagerTableFooter");}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section PageSpecificJS{
+
+    <script>
+          @*var DeletePath = '@Url.Action("Delete", "UserProfile", new { area = "CUCollegeAdminPanel" })';*@
+        $(document).ready(function () {
+
+            var $pagertable = $(".js-pager-table");
+
+            loadpagertable();
+
+            $(document).on('click', '.jsSaveUpdate', function () {
+                //var $form = $("#class-form");
+                //if (!$form.valid()) {
+
+                //    var $validator = $form.validate({ ignore: $form.find('tr :not(.jsDirtyRow) input'), focusInvalid: true }); // performance issue
+                //    $($validator.errorList[0].element).select().focus();
+                //    return;
+                //}
+                var $tr = $(this).closest('tr');
+                var item = {};
+                $tr.find(':input').each(function (index, element) {
+                    var $element = $(element);
+                    if ($element.attr('name') != null && $element.attr('name').length > 0) {
+                        var name = $element.attr('name').split('.').length >= 2 ? $element.attr('name') : $element.attr('name').split('.')[1];
+                        var value = $element.val();
+                        if ($element.is('select'))
+                            value = $element.find('option:selected').val();
+                        item[name] = value;
+                    }
+                });
+                var _url = '/CUCollegeAdminPanel/AssignSubject/AddOrEdit';
+                var $customform = createFormFromModel(item, _url);
+                var $token = $('[name*=RequestVerificationToken]');
+                $customform.append($token);
+                $('body').append($customform);
+                $customform.submit();
+                $customform.remove();
+
+            });
+        });
+    </script>
+
+
+
+}
+
+
+
+
+
+
+
+

@@ -1,0 +1,155 @@
+﻿
+@model CUSrinagar.Models.ProfessorCRClasses
+
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action(" Index","Dashboard",new { area="CUSrinagarAdminPanel" })">Home</a>
+        </li>
+
+        <li>
+            <a href="#" class="active">Assign</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+
+@section PageSpecificStyle{
+
+}
+<div class="row">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+    <div class="col-md-12">
+        <h4 class="">Assign Subjects</h4>
+        <hr class="no-margin-top" />
+        @using (Html.BeginForm("AssignProfessorCRClasses", "UserProfile", FormMethod.Post, new { @class = "jsMainForm form-horizontal NotValidate", @id = "AssignProfessorCR" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3"><span class="red bigger-110">*</span>Program</label>
+                        <div class="col-sm-8">
+                            @Html.HiddenFor(model => model.ProfessorCRClasses_ID)
+                            @Html.DropDownListFor(model => model.Programme, new SelectList(ViewBag.ProgrammeDDLList, "Value", "Text", (short)Model.Programme),
+                        "Choose Program", new
+                        {
+                            @class = "form-control chosen-select jsProgrammeDDL",
+                            @required = "required",
+                            @id= "ProgramDDL",
+                            @data_scope = "row1"
+                        })
+                        </div>
+                    </div>
+                    <div class="form-group" id="jsCourseField">
+                        <label for="name" class="col-sm-3"><span class="red bigger-110">*</span>Courses</label>
+                        <div class="col-sm-8 jsDDLContainer">
+                            @Html.DropDownListFor(model => model.Course_ID, new SelectList(ViewBag.CourseDDLList, "Value", "Text"),
+                        "Choose course", new
+                        {
+                            @class = "form-control chosen-select jsCourseDDL",
+                            @data_defaulttextvalue ="Choose course",
+                            @id="CourseDDL",
+                            @data_scope = "row1"
+                        })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3"><span class="red bigger-110">*</span>Semester</label>
+                        <div class="col-sm-8">
+                            @Html.DropDownListFor(model => model.Semester, new SelectList(ViewBag.SemesterDDLList, "Value", "Text"),
+                            "Choose Semester", new
+                            {
+                                @class = "form-control chosen-select jsSemesterDDL",
+                                @required = "required",
+                                @data_defaulttextvalue = "Choose Semester",
+                                @id = "SemesterDDL",
+                                @data_scope = "row1"
+                            })
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="jsSubjectField">
+                        <label for="name" class="col-sm-3"><span class="red bigger-110">*</span>Subject</label>
+                        <div class="col-sm-8 jsDDLContainer">
+                            @Html.DropDownListFor(model => model.Subject_ID, new SelectList(ViewBag.SubjectDDLList, "Value", "Text"),
+                          "Choose Subject", new
+                          {
+                              @class = "form-control chosen-select jsSubjectDDL",
+                              @data_defaulttextvalue ="Choose Subject",
+                              @id="SubjectDDL",
+                              @data_scope="row1"
+                          })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3"><span class="red bigger-110">*</span>Batch</label>
+                        <div class="col-sm-8">
+                            @Html.EditorFor(model => model.Batch, new { htmlAttributes = new { @class = "form-control", @required = "required", @placeholder = "Enter total credit", @min = "0" } })
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3"><span class="red bigger-110">*</span>College</label>
+                        <div class="col-sm-8">
+                            @Html.DropDownListFor(model => model.College_ID, new SelectList(ViewBag.CollegeDDLList, "Value", "Text"),
+                       "Choose College", new
+                       {
+                           @class = "form-control chosen-select",
+                           @data_defaulttextvalue ="Choose College",
+                           @id="CollegeDDL"
+                       })
+                        </div>
+                    </div>
+                    <div class="form-group" id="jsProfessorField">
+                        <label for="name" class="col-sm-3"><span class="red bigger-110">*</span>Professor</label>
+                        <div class="col-sm-8 jsDDLContainer">
+                            @Html.DropDownListFor(model => model.Professor_ID, new SelectList(ViewBag.ProfessorDDLList, "Value", "Text"),
+                       "Choose Professor", new
+                       {
+                           @class = "form-control chosen-select",
+                           @data_defaulttextvalue ="Choose Professor",
+                           @id="ProfessorDDL"
+                       })
+                        </div>
+                    </div>
+                    <div class="form-group" id="jsCRField">
+                        <label for="name" class="col-sm-3"><span class="red bigger-110">*</span>Class Representative</label>
+                        <div class="col-sm-8 jsDDLContainer">
+                            @Html.DropDownListFor(model => model.CR_ID, new SelectList(ViewBag.CRDDLList, "Value", "Text"),
+                          "Choose CR", new
+                          {
+                              @class = "form-control chosen-select",
+                              @data_defaulttextvalue ="Choose CR",
+                              @id="CRDDL"
+                          })
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="clearfix"></div>
+
+
+
+
+                <div class="col-sm-11">
+                    <div class=" pull-text-right pull-right">
+                        <button type="submit" class="btn btn-success ">Save or Update </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script src="~/Scripts/Pages/subject-master.js"></script>
+}
+
+
+
+

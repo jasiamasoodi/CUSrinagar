@@ -1,0 +1,275 @@
+﻿@model CUSrinagar.Models.ARGPersonalInformation
+@using CUSrinagar.Extensions
+@{
+    ViewBag.Title = "New Admission";
+    string removeColleges = "8B585643-CEB5-4C96-8328-862A9911CD51|90AE5E98-3A8F-4B15-A652-7EAE5A203C42|B5E689E6-75FB-44E9-8ED7-3E649C18B659|AAF597C1-B122-4276-B143-38F698B7C18C|FD29BC22-B12A-469C-800D-48CA5379A652|9528D540-F717-4DA9-840A-9813F41C66D0";
+}
+
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("ChooseSemester")">Admission</a>
+        </li>
+        <li>
+            <a href="#" class="active">College Preference</a>
+            @*<a href="@Url.Action("CollegePreference", "Admission", new { area = "CUStudentZone",R=CUSrinagar.Extensions.Helper.EncryptCookieAndURLSafe(Guid.Parse("A3EE7F98-7B82-4D95-A2C0-FABA7A18240E").ToString()) })" class="active">Semester-I Admission</a>*@
+        </li>
+    </ul>
+}
+@section PageSpecificStyle{
+    <style type="text/css">
+        select option[disabled] {
+            background-color: #EEE;
+            color: lightgrey;
+        }
+    </style>
+}
+<div class="row page-content">
+    <div class="col-sm-12 col-md-12">
+        @if (Model != null && Model.CoursesApplied != null && Model.CoursesApplied.Count > 0 && ViewBag.CollegePreference != null)
+        {
+            List<CUSrinagar.Models.StudentCollegePreference> CollegePreferences = ViewBag.CollegePreference;
+            bool ShowSave = !CollegePreferences.Any(x => x.IsAllowed);
+            <div class="col-sm-12 col-md-8">
+                @using (Html.BeginForm("CollegePreference", "Admission", FormMethod.Post, new
+                {
+                    @class = "jsMainForm form-horizontal",
+                    @id = "CollegePreference",
+                    @name = "CollegePreference"
+                }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("R", (string)ViewBag.R)
+                    @Html.Hidden("Gender", Model.Gender)
+                    @Html.Hidden("CRmv", removeColleges);
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4 control-label text-primary">Form Number :</label>
+                        <div class="col-sm-8">
+                            <b><span class="small">@Model.StudentFormNo</span></b>
+                        </div>
+                    </div>
+                    <hr class="no-margin-top margin-bottom-5" />
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4 control-label text-primary">Admission Status :</label>
+                        <div class="col-sm-8">
+                            <b><span class="">@(CUSrinagar.Extensions.Helper.GetEnumDescription(Model.CoursesApplied.First().StudentSelectionStatus))</span></b>
+                        </div>
+                    </div>
+                    <hr class="no-margin-top margin-bottom-5" />
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4 control-label text-primary">Email/Mobile No:</label>
+                        <div class="col-sm-8">
+                            <b><span class=""> @Model.StudentAddress.Email / @Model.StudentAddress.Mobile </span></b>
+                        </div>
+                    </div>
+                    <hr class="no-margin-top margin-bottom-5" />
+                    <div class="form-group">
+                        <label for="name" class="col-sm-4 control-label text-primary">Last saved on :</label>
+                        <div class="col-sm-8">
+                            <b>
+                                <span style="color:red;font-weight:bold">
+                                    @if (CollegePreferences != null && CollegePreferences.First().CreatedOn != null)
+                                    {
+                                        <text>@CollegePreferences.First().CreatedOn.ToLongDateString()</text>
+                                    }
+                                </span>
+                            </b>
+                        </div>
+                    </div>
+                    <hr class="no-margin-top margin-bottom-5" />
+                    if (CollegePreferences.Any(x => x.IsAllowed == true))
+                    {
+                        <div class="form-group">
+                            <label for="name" class="col-sm-4 control-label text-primary">Selected Under Course:</label>
+                            <div class="col-sm-8">
+                                <div class="jsDDLContainer">
+                                    @(CollegePreferences.First(x => x.IsAllowed == true).CourseFullName)
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-group">
+                            <label for="name" class="col-sm-4 control-label text-primary">Applying For Course :</label>
+                            <div class="col-sm-8">
+                                <div class="jsDDLContainer">
+                                    @Html.DropDownList("Course_ID", new SelectList(ViewBag.Courses, "Value", "Text", CollegePreferences.FirstOrDefault(x => x.Preference_ID != Guid.Empty)==null ? Guid.Empty: CollegePreferences.First(x=>x.Preference_ID != Guid.Empty).Course_ID), " -- choose college ---",
+                                                new
+                                                {
+                                                    @class = "form-control",
+                                                    @required = "required"
+                                                })
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+
+                    <hr class="no-margin-top margin-bottom-5" />
+                    if (CollegePreferences != null)
+                    {
+                        if (CollegePreferences.Any(x => x.IsAllowed == true))
+                        {
+                            <div class="form-group">
+                                <label for="name" class="col-sm-4 control-label text-primary">Selected Under College :</label>
+                                <div class="col-sm-8">
+                                    <div class="jsDDLContainer">
+                                        @(CollegePreferences.First(x => x.IsAllowed == true).CollegeFullName)
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            List<SelectListItem> colleges = ((List<SelectListItem>)ViewBag.College).Where(x => !(x.Value.ToLower().Contains(removeColleges)))?.ToList() ?? new List<SelectListItem>();
+                            for (short count = 0; count < CollegePreferences.Count; count++)
+                            {
+                                var item = CollegePreferences[count];
+                                bool hidden = CollegePreferences.Any(x => x.Preference_ID != Guid.Empty) && item.Preference_ID == Guid.Empty;
+                                <div class="form-group ">
+                                    @Html.Hidden("model[" + count + "].Dated", DateTime.Now)
+                                    @Html.Hidden("model[" + count + "].IsActive", true)
+                                    @Html.Hidden("model[" + count + "].Preference_ID", item.Preference_ID)
+                                    @Html.Hidden("model[" + count + "].IsAllowed", item.IsAllowed)
+                                    @Html.Hidden("model[" + count + "].OldStudent_ID", item.OldStudent_ID)
+                                    @Html.Hidden("model[" + count + "].PreferenceOrder", count + 1)
+                                    @Html.Hidden("model[" + count + "].Student_ID", item.Student_ID)
+                                    @Html.Hidden("model[" + count + "].CreatedBy", item.CreatedBy)
+                                    @Html.Hidden("model[" + count + "].CreatedOn", item.CreatedOn)
+                                    <label for="name" class='lbl_@count col-sm-4 control-label text-primary @(hidden?"hidden":"")'>Preference Order @(count + 1) :</label>
+                                    <div class="col-sm-8 jsCollegePreferenceGroup">
+                                        <div class="jsDDLContainer ">
+                                            @Html.DropDownList("model[" + count + "].College_ID", new SelectList(colleges, "Value", "Text", item.College_ID), " -- choose college ---",
+                                                new
+                                                {
+                                                    @class = "form-control jsCollegeCode "+(hidden?"hidden":""),
+                                                    @data_position = (count + 1),
+                                                    @data_defaulttextvalue = " -- choose college ---,",
+                                                    @required = "required"
+                                                })
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="no-margin-top margin-bottom-10" />
+                            }
+                        }
+
+
+                    }
+                    <div class="form-group">
+                        <div class="col-sm-12">
+
+                            @if (ShowSave && ViewBag.ProcessClosed == null)
+                            {
+                                if (CollegePreferences.Any(x => x.Preference_ID != Guid.Empty))
+                                {
+                                    <button name="SavePreference" type="submit" class="btn btn-success btn-sm pull-right ">
+                                        <i class="glyphicon glyphicon-ok"></i><b>&nbsp;Update Preferences</b>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button name="SavePreference" type="submit" class="btn btn-success btn-sm pull-right">
+                                        <i class="glyphicon glyphicon-ok"></i><b>&nbsp;Save Preferences</b>
+                                    </button>
+                                }
+
+                            }
+                            &nbsp;&nbsp;
+                            @if (Model.PaymentDetail != null)
+                            {
+                                <a href="@Url.Action("ProvAdmFormPrint", new { R = CUSrinagar.Extensions.Helper.EncryptCookieAndURLSafe("1") })" class="btn btn-default btn-sm " style="margin-left:10px;margin-right:10px;">View Application Form</a>
+                            }
+                            else if (CollegePreferences.Any(x => x.Preference_ID != Guid.Empty))
+                            {
+                                <a href="@Url.Action("UploadSuccessReponseUG")" class="btn btn-default btn-sm pull-right" style="margin-left:10px;margin-right:10px;">View</a>
+                            }
+
+                            @if (Model.CoursesApplied.First().StudentSelectionStatus == CUSrinagar.Enums.StudentSelectionStatus.Verified_MakePayment && CollegePreferences.Any(x => x.IsAllowed == true) && Model.PaymentDetail.IsNullOrEmpty())
+                            {
+                                @*<a id="btn-make-payment" href="@Url.Action("CreateBillDeskRequestUG",new {Preference_ID=CUSrinagar.Extensions.Helper.EncryptCookieAndURLSafe(CollegePreferences.First().Preference_ID.ToString()) })" class="btn btn-success btn-sm" style="margin-left:10px;margin-right:10px;">Make Payment</a>*@
+                                if (ViewBag.ErrorMessage == null)
+                                {
+                                    <a id="btn-make-payment" href="@Url.Action("CreateBillDeskRequestUG", new { Preference_ID = CollegePreferences.First().Preference_ID })" class="btn btn-success pull-right" style="z-index:20;margin-left:10px;margin-right:10px;">Make Payment</a>
+                                }
+                            }
+
+
+                        </div>
+                        @if (ViewBag.ErrorMessage != null)
+                        {
+                            <div class="col-sm-12">
+                                <h3 class="text-danger pull-right">@ViewBag.ErrorMessage</h3>
+                            </div>
+                        }
+                        <div class="col-sm-12 text-success">
+                            <div><b><b>Procedure</b> </b></div>
+                            <small>
+                                <b>
+                                    <ol>
+                                        @*if (!(Model.CoursesApplied.First().StudentSelectionStatus == CUSrinagar.Enums.StudentSelectionStatus.Verified_MakePayment && CollegePreferences.Any(x => x.IsAllowed == true) && Model.PaymentDetail.IsNullOrEmpty()))
+                                            {
+                                                <li class="quadraText">No vacancy available in Amar Singh College for B.Com</li>
+                                            }*@
+                                        <li>Save your college preferences.</li>
+                                        @*<li>Once the allotment of colleges is finalised(after the last date for admission), only then you will be able to make payment online</li>.*@
+                                        @*<li>Once the notification for the same is published, log into your account again to make payment.</li>*@
+                                        <li>Keep checking univeristy website and official<a href="https://www.facebook.com/cusgr" target="_blank"> Facebook page <i class="fa fa-facebook-official margin-right-10"></i></a>  for furhter information and updates daily.</li>
+                                    </ol>
+                                </b>
+                            </small>
+                        </div>
+                    </div>
+
+                }
+            </div>
+            <div class="col-sm-12 col-sm-4  hidden-xs hidden-sm">
+                <center>
+                    <div class="thumbnail no-margin-bottom">
+                        @if (Model.Photograph != null)
+                        {
+                            <img src="@Url.Content(Model.Photograph)" class="img-responsive max-height-200" />
+                        }
+                    </div>
+                </center>
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <td class="text-primary">Name</td>
+                            <td>@Model.FullName</td>
+                        </tr>
+                        <tr>
+                            <td class="text-primary">Batch</td>
+                            <td>@Model.Batch</td>
+                        </tr>
+                        <tr>
+                            <td class="text-primary">Current Semester</td>
+                            <td>@Model.CurrentSemesterOrYear</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        }
+
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-sm-12 col-md-12">
+        @*<p class="text-danger"> <b>Note : No admission shall be confirmed if payment is not made by of before last date.</b></p>*@
+        <p>
+            <b>
+                Important: In case any query, please mail us on
+                <a href="mailto:admissions@cusrinagar.edu.in?Subject=IH_Admission"><i class="fa fa-envelope"></i>admissions@cusrinagar.edu.in</a>
+            </b>
+        </p>
+    </div>
+</div>
+
+@section PageSpecificJSFiles{
+    <script src="~/Scripts/Pages/std-colg-prefs.js"></script>
+}
+
+
+
+

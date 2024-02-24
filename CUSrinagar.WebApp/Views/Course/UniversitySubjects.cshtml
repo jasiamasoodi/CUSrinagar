@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "University Subjects";
+}
+<style type="text/css">
+    .flexible-container {
+        position: relative;
+        padding-bottom: 56.25%;
+        padding-top: 30px;
+        height: 0;
+        overflow: hidden;
+    }
+
+        .flexible-container iframe,
+        .flexible-container object,
+        .flexible-container embed {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+</style>
+<div class="panel">
+    <div class="panel-heading" style="color:white;" data-toggle="collapse" data-target="#collapsible-Detailed" data-parent="#myAccordionMesg">
+        Format for Subject Combination in Constituent Colleges
+    </div>
+    <div id="collapsible-Detailed" class="collapse in">
+        <div class="flexible-container">
+            <iframe src="~/FolderManager/Downloads/UniversitySubjects.pdf"></iframe>
+        </div>
+        <div class="tab-pane" id="tab2">
+            <h4 class="font-medium nospace">
+                <i class="fa fa-envelope" aria-hidden="true"></i> <a href="~/FolderManager/Downloads/UniversitySubjects.pdf" download="~/FolderManager/Downloads/UniversitySubjects.pdf">Click here to download the document</a>
+            </h4>
+        </div>
+
+    </div>
+</div>
+
+
+<br /><br />
+
+@section PageSpecificJS{
+    <script>
+        var _CurrentSection = "Academics";
+    </script>
+}

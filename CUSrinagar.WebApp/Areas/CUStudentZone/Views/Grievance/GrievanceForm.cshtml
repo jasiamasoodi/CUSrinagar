@@ -1,0 +1,125 @@
+﻿@using CaptchaMvc.HtmlHelpers
+@model CUSrinagar.Models.Grievance
+
+@{
+    ViewBag.Title = "Feedback Form - ";
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area= "CUStudentZone" })">Home</a>
+        </li>
+        <li>
+            <a href="@Url.Action("Grievance","Grievance",new { area= "CUStudentZone" })" class="active">Feedback</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+<div class="page-content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="well well-sm">
+                <div class="row">
+                    @using (Html.BeginForm("GrievanceForm", "Grievance", FormMethod.Post, new { @class = "jsMainForm form-horizontal", @area = "CUStudentZone" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(model => model.Student_ID)
+                        <div class="col-sm-6">
+                            @*<div class="form-group">
+                                <label for="name" class="col-sm-3 control-label" title="Cluster University Registration No/Form Number">Registration No</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(model => model.CUSRegistrationNo, new { @title = "Cluster University Registration No/Form Number", @placeholder = "Cluster University Registration No/Form Number", @class = "form-control", @required = "required" })
+                                </div>
+                            </div>*@
+                            <div class="form-group">
+                                <label for="name" class="col-sm-3 control-label">Name</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(model => model.FullName, new { @placeholder = "Enter name", @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="name" class="col-sm-3 col-md-3 control-label">Email Address</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-envelope"></span>
+                                        </span>
+                                        @Html.TextBoxFor(model => model.Email, new { @type = "email", @placeholder = "Enter email", @class = "form-control", @required = "required" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="name" class="col-sm-3  control-label">Phone Number</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-phone"></span>
+                                        </span>
+                                        @Html.TextBoxFor(model => model.PhoneNumber, new { @placeholder = "Enter phone number", @class = "form-control phone", @required = "required" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="name" class="col-sm-3 col-md-3 control-label">Category</label>
+                                <div class="col-sm-9">
+                                    @Html.DropDownList("Category", new SelectList(ViewBag.GrievanceCategory, "Value", "Text", (short)Model.Category),
+                                   "Select Type", new
+                                   {
+                                       @class = "form-control",
+                                       required = "required"
+                                   })
+                                </div>
+                            </div>
+                            @*<div class="form-group jsCollegeList" style="display:none;">
+                                    <label for="name" class="col-sm-3 col-md-3 control-label">College</label>
+                                    <div class="col-sm-9">
+                                        @Html.DropDownList("College_ID", new SelectList(ViewBag.Colleges, "Value", "Text", Model.College_ID),
+                                       "Select College", new
+                                       {
+                                           @class = "form-control"
+                                       })
+                                    </div>
+                                </div>*@
+
+                            <div class="form-group">
+                                <label for="name" class="col-sm-3  control-label">Subject</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(model => model.Subject, new { @placeholder = "Enter title of query", @class = "form-control", @required = "required", @maxlength = 100 })
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group col-sm-12">
+                                <label for="name">Message</label>
+                                @Html.TextAreaFor(model => model.Message, new { @placeholder = "Enter your query here", @class = "form-control", @required = "required", @rows = "9", @cols = "20", @maxlength = 500 })
+                            </div>
+                            <div class="form-group">
+                                @Html.Captcha("", "Enter Verification Code", 4, "required", true)
+                            </div>
+
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group col-sm-12">
+                                <button type="submit" id="submitForm" class="btn btn-primary pull-right">
+                                    Send OTP
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJSFiles{
+    @Scripts.Render("~/bundles/Libraries/jqueryvalidation")
+    <script src="@Url.Content("~/Scripts/Pages/grievance.js")"></script>
+}

@@ -1,0 +1,135 @@
+﻿@*@model  GeneralModels.SubmitAward
+@{
+    ViewBag.Title = "Award";
+    string programmme = ViewBag.PrintProgramme.ToString();
+    string semester = "";// ViewBag.DefaultSemester;
+    string subject = "";//ViewBag.DefaultSubject;
+    int DefaultMarksForIs = 0;//(int)ViewBag.DefaultMarksFor;
+}
+
+<div class="page-wrapper pager-table-text">
+
+    <div class="page-header">
+        <div style="padding-bottom: 30px;">
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <h1 class="heading-title pull-left">
+                        Award
+
+                    </h1>
+
+                </div>
+
+                <div class="col-sm-6">
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        <div class="row page-row">
+
+            <div class="panel-body">
+                @using (Html.BeginForm("SubmitAward", "Award", FormMethod.Post, new { enctype = "multipart/form-data", @name = "validation-form", @id = "submit-form", @class = "form-horizontal", @role = "form" }))
+                {
+                    <div class="col-sm-12">
+                        @Html.ValidationMessage("Error", "", new { @class = "label label-sm label-danger " })
+
+                    </div>
+                    @Html.HiddenFor(model => model.Programme, programmme)
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label no-padding-right">
+                            <span class="red bigger-110">*</span> @Html.Label("Batch")
+                        </label>
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.Batch,(DateTime.Now.Year).ToString(), new { @class = " required form-control jsfilterelement", @data_column = "Batch", @data_operator = "EqualTo" })
+                            @Html.ValidationMessageFor(x => x.Batch)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label no-padding-right">
+                            <span class="red bigger-110">*</span> @Html.Label("Marks For")
+                        </label>
+                        <div class="col-sm-8">
+                            @Html.DropDownListFor(m => m.MarksFor, new SelectList(ViewBag.MarksForList, "Value", "Text", DefaultMarksForIs), new { @class = "jsfilterelement form-control  required ", @data_column = "MarksFor", @data_operator = "EqualTo" })
+                            @Html.ValidationMessageFor(x => x.MarksFor)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label no-padding-right">
+                            <span class="red bigger-110">*</span> @Html.Label("Semester")
+                        </label>
+                        <div class="col-sm-8">
+                            @Html.DropDownListFor(model => model.Semester, new SelectList(ViewBag.SemesterList, "Value", "Text", subject),
+                                         "--Select--", new { @class = "form-control jsfilterelement required chosen-select ParentDDL", @data_column = "Semester", @data_operator = "EqualTo", })
+                            @Html.ValidationMessageFor(x => x.Semester)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label no-padding-right">
+                            <span class="red bigger-110">*</span> @Html.Label("Subject")
+                        </label>
+                        <div class="col-sm-8">
+                            <div id="Subject">
+                                @Html.DropDownListFor(m => m.CombinationSubjects, new SelectList(ViewBag.SubjectsList, "Value", "Text", subject),
+                                          "--Select--", new { @class = "form-control jsfilterelement required chosen-select", @data_column = "CombinationSubjects", @data_operator = "Like", })
+                            </div>  @Html.ValidationMessageFor(x => x.CombinationSubjects)
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-7 pull-right " style="padding-top: 17px;">
+                        <input type="submit" id="FinalSubmit" value="Final Submit" name="Command" class="btn btn-primary col-center-block" title="Final Submit">
+
+                    </div>
+
+                }
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJS{
+    <script>
+
+    var programmeIS = "@programmme";
+
+        $(document).ready(function () {
+             $(".ad").addClass("active");
+             $("." + (programmeIS).toLowerCase()).addClass("active open");
+        });
+
+    </script>
+    <script src="@Url.Content("~/Scripts/JSChosen.js")"></script>
+    <script src="~/Content/ThemeAdmin/Content/Scripts/JSAward/Award.js"></script>
+    <style>
+        .filter-btn a {
+            color: white !important
+        }
+
+        .field-validation-error {
+            color: red;
+        }
+    </style>
+}*@
+
+
+
+
+
+
+
+
+
+

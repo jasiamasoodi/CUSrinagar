@@ -1,0 +1,146 @@
+﻿@using CUSrinagar.Models
+@using CaptchaMvc.HtmlHelpers
+
+@model ARGReprint
+
+@{
+    //HttpContext.Current.Response.Redirect("/Registration/Instructions");
+    ViewBag.Title = "Registration - ";
+}
+
+<div class="row">
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="col-sm-12">
+            <div id="response">
+                @Html.Raw(TempData["ErrorMessage"])
+            </div>
+        </div>
+    }
+    <div class="col-sm-7">
+        <h3 class="text-center">Important instructions For Online Registration @DateTime.Now.Year</h3>
+        <ul class="list-group">
+            <li class="list-group-item" style="font-size:16px;">
+                All admission related notifications can be found here
+                <a href="/Notification/Notification?TypeIS=ADMISSION" class="quadraText">Admission Notifications</a>
+            </li>
+            <li class="list-group-item" style="font-size:20px;">
+                Candidates are advised to go through the detailed admission notification thoroughly
+                before submitting the online application form for admission and follow the instructions,
+                available on the website, carefully before filling-up the relevant fields/columns of the
+                application form.
+            </li>
+            <li class="list-group-item" style="font-size:18px;font-weight:bold;">
+                There is no need to submit hardcopy, keep hardcopy with you for future reference or submission.
+            </li>
+            <li class="list-group-item">
+                Applicants are required to have a valid email ID and personal/guardian mobile
+                number which should be working during the admission process, to enable
+                University to send alerts, important communications etc.
+            </li>
+            <li class="list-group-item">
+                Keep ready a digital passport size photograph (<strong>Must have font view, full face, both ears visible, simple background</strong>) ".jpg", ".bmp" , ".jpeg" or ".png" format of size between 20-70KB, for uploading in prescribed space in the application form.
+            </li>
+            <li class="list-group-item">
+                Keep ready digital Certificates<br />1. MarksCard<br />2.Provisional<br />3. Category(if any).<br />
+                Format ".jpg", ".bmp" , ".jpeg" or ".png" of size between 70-200KB, for uploading in prescribed space in the application form.
+            </li>
+            <li class="list-group-item">
+                Fields marked with <span style="color:red">*</span> are mandatory.
+            </li>
+        </ul>
+    </div>
+    <div class="col-sm-5">
+        <br />
+        <br />
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">New Registration</h3>
+            </div>
+            <div class="panel-body">
+                @if (ViewBag.PrintProgrammeOption != null)
+                {
+                    <form action="/NEP/Direction" method="post">
+                        <div class="form-group">
+                            <label for="programme">Programme</label>
+                            <span class="required">
+                                *
+                            </span>
+                            @Html.DropDownList("p", (IEnumerable<SelectListItem>)ViewBag.PrintProgrammeOption, "", new { @class = "form-control", required = "required" })
+                        </div>
+                        <button type="submit" class="btn btn-success pull-right">Apply Now</button>
+                    </form>
+                }
+                else
+                {
+                    <text>
+                        <div style="text-align:center">
+                            <strong style="color:red;font-size:17px;">New Registration is not available.</strong>
+                        </div>
+                    </text>
+                }
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Existing Applicant (Edit / Print if already applied)</h3>
+            </div>
+            <div class="panel-body">
+                <form action="/NEP/Index" method="post">
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("R", (string)ViewBag.ReturnUrl)
+                    <div class="form-group">
+                        <label for="programme">
+                            CUS Form No. Or Board Regn No.
+                            <span class="required">
+                                *
+                                @Html.ValidationMessageFor(model => model.FormNo)
+                            </span>
+                        </label>
+                        @Html.TextBoxFor(model => model.FormNo, new { @class = "form-control jsfilterelement", @maxlength = "150", @autocomplete = "off", @onkeypress = "return forAdmissionRollNo(event);" })
+                    </div>
+                    <div class="form-group">
+                        <label for="programme">
+                            DOB(dd-mm-yyyy)
+                            <span class="required">
+                                *
+                                @Html.ValidationMessageFor(model => model.EnteredDOB)
+                            </span>
+                        </label>
+                        @Html.TextBoxFor(model => model.EnteredDOB, new { @class = "form-control dateDDMMYYY", @maxlength = "10", placeholder = "dd-mm-yyyy" })
+                    </div>
+                    <div class="form-group">
+                        <label for="programme">
+                            Programme
+                            <span class="required">
+                                *
+                                @Html.ValidationMessageFor(model => model.PrintProgrammeOption)
+                            </span>
+                        </label>
+                        @Html.DropDownListFor(model => model.PrintProgrammeOption, (IEnumerable<SelectListItem>)ViewBag.AppliedProgrammes, "", new { @class = "form-control", required = "required" })
+
+                        <center>
+                            @Html.Captcha("", "Enter Verification Code", 4, "required", true)
+                        </center>
+                    </div>
+                    <center>
+                        <button type="submit" class="btn btn-success" style="padding:8px 15px;letter-spacing:1px"><strong>Proceed</strong></button>
+                    </center>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    @Scripts.Render("~/bundles/Libraries/jqueryval", "~/bundles/Libraries/jqueryregUG")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.home-page').css({ 'background-color': '' });
+        });
+    </script>
+}
+
+

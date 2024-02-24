@@ -1,0 +1,100 @@
+﻿@model CUSrinagar.Models.ADMCombinationMaster
+@{ViewBag.Title = "Edit Combination";}
+<div class="row">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header">
+
+                <h4 class="widget-title"><i class='menu-icon fa fa-bars'></i> Edit Combination</h4>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="alert alert-warning text-center" style="display:none;" id="jsstatus"><i class="ace-icon fa fa-spinner fa-spin orange bigger-125"></i> Working...</div>
+                    @using (Html.BeginForm("Edit", "Combination", FormMethod.Post, new { @id = "CombinationForm", @class = "form-horizontal" }))
+                    {
+                        @Html.HiddenFor(m => m.Combination_ID)
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">
+                                @Html.LabelFor(m => m.College_ID)
+                                <span class="red">*</span>
+                            </label>
+                            <div class="col-sm-6">
+                                <span class="red"> @Html.ValidationMessageFor(m => m.College_ID)</span>
+                                @Html.DropDownListFor(m => m.College_ID, (IEnumerable<SelectListItem>)ViewBag.Colleges, new { @class = "chosen-select form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">
+                                @Html.LabelFor(m => m.Semester) <span class="red">*</span>
+                            </label>
+                            <div class="col-sm-6">
+                                <span class="red">@Html.ValidationMessageFor(m => m.Semester)</span>
+                                @Html.DropDownListFor(m => m.Semester, (IEnumerable<SelectListItem>)ViewBag.Semesters, string.Empty, new { @class = "chosen-select form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">
+                                @Html.LabelFor(m => m.Course_ID) <span class="red">*</span>
+                            </label>
+                            <div class="col-sm-6">
+                                <span class="red">@Html.ValidationMessageFor(m => m.Course_ID)</span>
+                                <div id="CourseDiv">  @Html.DropDownListFor(m => m.Course_ID, (IEnumerable<SelectListItem>)ViewBag.Courses, string.Empty, new { @class = "chosen-select form-control" })</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">
+                                @Html.LabelFor(m => m.CombinationCode) <span class="red">*</span>
+                            </label>
+                            <div class="col-sm-6">
+                                @Html.TextBoxFor(m => m.CombinationCode, new { @maxlength = "5" })
+                                <span class="red">@Html.ValidationMessageFor(m => m.CombinationCode)</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">
+                                @Html.Label("Subjects")
+                            </label>
+                            <div class="col-sm-6">
+
+                                @if (Model?.SubjectsDetails?.Any() ?? false)
+                                {
+                                    int cnt = 0;
+                                    foreach (CUSrinagar.Models.ADMSubjectMaster subject in Model.SubjectsDetails)
+                                    {
+                                        @Html.DropDownListFor(m => m.SubjectsDetails[cnt].Subject_ID, new SelectList(ViewBag.Subjects, "Value", "Text", Model.SubjectsDetails[cnt].Subject_ID), "--Remove--", new { @class = "chosen-select form-control" })
+                                        <br />
+                                        cnt++;
+
+                                    }
+                                }
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right"></label>
+                            <div class="col-sm-8">
+                                <button type="submit" class="btn btn-sm btn-primary save-button">
+                                    <i class="ace-icon fa fa-check"></i>
+                                    Save
+                                </button>
+
+                                <a id="cData1" href="/CUSrinagarAdminPanel/Combination/Combinations/" class="fm-button ui-state-default ui-corner-all fm-button-icon-left btn btn-sm btn-danger">
+                                    <i class="ace-icon fa fa-times"></i>Cancel
+                                </a>
+
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

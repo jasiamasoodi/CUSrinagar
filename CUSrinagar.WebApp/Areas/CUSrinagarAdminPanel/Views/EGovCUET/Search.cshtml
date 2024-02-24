@@ -1,0 +1,80 @@
+﻿@model CUSrinagar.Models.CUSCUETAPIRequest
+
+@{
+    ViewBag.Title = $"eGov CUET ";
+}
+<div class="page-wrapper pager-table-text">
+
+    <div class="page-header">
+        <div style="padding-bottom: 20px;">
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <h1 class="heading-title pull-left">
+                        eGOV CUET
+                        <small>
+                            <i class="ace-icon fa fa-angle-double-right"></i>
+                        </small>
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            CUET Applicant Details
+                            <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Hide Search</a>
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-sm-12 search-box">
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span><span> CUET Application No</span>
+                                <div>
+                                    <input type="text" placeholder="Enter Application No." name="ApplicationNo" class="form-control jsfilterelement" data-column="ApplicationNo" data-operator="Contains" data-scope="row1" required />
+                                </div>
+                            </div>
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span>
+                                <span>DOB</span>
+                                <div>
+                                    @Html.TextBoxFor(model => model.DOB, new { @type = "date", @class = "form-control jsfilterelement", @data_column = "DOB", @data_operator = "Contains", @data_scope = "row1", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                <span style="color:red">*</span>
+                                Programme<span id="ProgrammeValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                <div>
+                                    @*@Html.DropDownList("Programme", (IEnumerable<SelectListItem>)ViewBag.Programmes, "--ALL--", new { @class = "chosen-select form-control  SearchDDL jsfilterelement", data_ddltype = "Course", @data_column = "Programme", @data_operator = "EqualTo" })*@
+                                    @Html.DropDownList("SelectedPorgramme", new SelectList(ViewBag.Programmes, "Value", "Text", (short)CUSrinagar.Enums.Programme.UG), null,
+                                     new
+                                     {
+                                         @class = "form-control chosen-select jsfilterelement",
+                                         @data_column = "SelectedPorgramme",
+                                         @data_operator = "EqualTo",
+                                         @data_scope = "row1"
+                                     })
+                                </div>
+                            </div>
+                            <div class="col-sm-1 " style="padding-top: 17px;">
+                                <button type="button" class="btn btn-primary fa-search-btn js-search"><i class="fa fa-search"></i>&nbsp;Search CUET</button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="js-table-content" data-url="@Url.Action("SearchList", "EGovCUET", new { area = "CUSrinagarAdminPanel" })" data-DefaultOrderByColumn="Programme">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,313 @@
+﻿@using CUSrinagar.Extensions
+@using CUSrinagar.Enums
+@using CUSrinagar.Models
+@model List<CUSrinagar.Models.MarksSheet>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Marks Card</title>
+    <link href="~/Content/ThemePublic/Libraries/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/ThemePublic/Libraries/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="print" />
+    <link href="~/Content/ThemePublic/Libraries/css/transcript.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/ThemePublic/Libraries/css/transcript.css" rel="stylesheet" type="text/css" media="print" />
+    <style>
+        @@page {
+            size: A4;
+        }
+    </style>
+</head>
+<body class="A4 middle portrait">
+    @if (Model.IsNotNullOrEmpty())
+
+    {
+        foreach (MarksSheet STDINFO in Model)
+        {
+            if (STDINFO.SubjectResults.IsNotNullOrEmpty())
+            {
+                <section class="sheet ">
+                    <br />
+                    @*<div class="allmarkscard" style="border-style: double;border-color:lightgray;margin-top:2mm;margin-bottom:2mm;margin-right:15mm;margin-left:15mm;">*@
+                    <div class="allmarkscard09" style="margin-top:2mm;margin-bottom:2mm;margin-right:15mm;margin-left:15mm;">
+                        <div id="background">
+                            <p id="bg-text">Cluster<br /> University <br>Srinagar</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <div class="center col-sm-12" style="margin-top:10px">
+                                        <table class="margin-top-0">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="text-align:left;">
+                                                        <img src="~/Content/ThemePublic/PrintImages/MarksSheetLogo.png" style="width:60px;margin-top:-25px;" />
+                                                    </td>
+                                                    <td>
+                                                        <div style="margin-right:16px;">
+                                                            <div class="wordart slate">
+                                                                <span class="text">
+                                                                    Cluster University Srinagar
+                                                                </span>
+                                                            </div>
+                                                            <h4 class="text-success no-margin-bottom">Provisional Marks Sheet</h4>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <h3>
+                                                            <i> @STDINFO.SerialNumber</i>
+                                                        </h3>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                                <hr class="margin-top-0 margin-bottom-1" />
+                                <div class="row form-horizontal">
+                                    <div class="col-sm-12 ">
+                                        <table border="0">
+                                            <tbody>
+                                                <tr class="no-border">
+                                                    <th>Name</th>
+                                                    <td>@STDINFO.FullName</td>
+                                                    <th>Parentage</th>
+                                                    <td>@STDINFO.FathersName</td>
+                                                </tr>
+                                                <tr class="no-border">
+                                                    <th>Course</th>
+                                                    <td>@STDINFO.CourseFullName</td>
+                                                    <th>Batch</th>
+                                                    <td>@STDINFO.Batch</td>
+                                                </tr>
+                                                <tr class="no-border">
+                                                    <th>RegNo</th>
+                                                    <td>@STDINFO.CUSRegistrationNo</td>
+                                                    <th>Roll No</th>
+                                                    <td>@STDINFO.ExamRollNumber</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row center">
+                                    <div class="col-sm-12">
+                                        <table border="1" class="center-text table table-bordered" style="margin-bottom:7px;">
+                                            <tbody>
+                                                <tr>
+                                                    <th>S.No</th>
+                                                    <th>Subject</th>
+                                                    <th colspan="2">Internal</th>
+                                                    <th colspan="2">External</th>
+                                                    <th colspan="2">Total</th>
+                                                    <th>Result</th>
+                                                </tr>
+                                                <tr>
+                                                    <th></th>
+                                                    <th title="Semester">@(CUSrinagar.Extensions.Helper.GetEnumDescription((Semester)1))</th>
+                                                    <th title="Maximum internal marks">MM</th>
+                                                    <th title="Internal marks obtained">MO</th>
+                                                    <th title="Maximum external marks">MM</th>
+                                                    <th title="External marks obtained">MO</th>
+                                                    <th title="Total marks">MM</th>
+                                                    <th title="Total marks obtained">MO</th>
+                                                    <th></th>
+                                                </tr>
+                                                @{
+                                                    decimal SemesterMaxMarks = 0;
+                                                    decimal SemesterMarksObtained = 0;
+                                                    decimal AllSemesterMaxMarks = 0;
+                                                    decimal AllSemesterMarksObtained = 0;
+                                                    bool SemesterPass = true;
+                                                    bool AllSemesterPass = true;
+
+                                                    var SemesterSubjects = STDINFO.SubjectResults.GroupBy(x => x.Semester);
+                                                    foreach (var _SemesterSubjects in SemesterSubjects)
+                                                    {
+                                                        var SNO = 1;
+                                                        foreach (SubjectResultCompact item in _SemesterSubjects.OrderBy(x => x.SubjectFullName))
+                                                        {
+                                                            if (!item.HasResult) { continue; }
+                                                            SemesterMaxMarks += item.TotalMaxMarks;
+                                                            SemesterMarksObtained += item.TotalMarksObtained.HasValue ? item.TotalMarksObtained.Value : 0;
+                                                            AllSemesterMaxMarks += item.TotalMaxMarks;
+                                                            AllSemesterMarksObtained += item.TotalMarksObtained.HasValue ? item.TotalMarksObtained.Value : 0;
+
+                                                            <tr>
+                                                                <td>@(SNO++)</td>
+                                                                <th class="text-align-left" style="text-align:left;"><span class="padding-left-10">@item.SubjectFullName</span></th>
+                                                                <td title="Internal max marks">
+                                                                    @if (item.InternalStatus != ResultStatus.NotApplicable)
+                                                                    {<span>@item.TotalInternalMaxMarks</span> }
+                                                                else
+                                                                {<span>-</span>}
+                                                                </td>
+                                                                <td title="@(Helper.GetEnumDescription<ResultStatus>(item.InternalStatus))">
+                                                                    @if (item.InternalStatus == ResultStatus.NotApplicable)
+                                                                    {
+                                                                        <span>-</span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        if (item.TotalInternalMarksObtained.HasValue)
+                                                                        {
+                                                                            <span>@item.TotalInternalMarksObtained.Value.ToString("f0")</span>
+                                                                            @*<span class="bold">:@(((item.TotalInternalMarksObtained / item.TotalInternalMaxMarks) * 100).Value.ToString("f2"))</span>*@
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span title="@(CUSrinagar.Extensions.Helper.GetEnumDescription<ResultStatus>(item.InternalStatus))">NA</span>
+                                                                        }
+                                                                    }
+                                                                </td>
+                                                                <td title="External max marks">
+                                                                    @if (item.ExternalStatus != ResultStatus.NotApplicable)
+                                                                    {<span>@item.TotalExternalMaxMarks</span> }
+                                                                else
+                                                                {<span>-</span>}
+                                                                </td>
+                                                                <td title="@(Helper.GetEnumDescription<ResultStatus>(item.ExternalStatus))">
+                                                                    @if (item.ExternalStatus == ResultStatus.NotApplicable)
+                                                                    {
+                                                                        <span>-</span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        if (item.TotalExternalMarksObtained.HasValue)
+                                                                        {
+                                                                            <span>@item.TotalExternalMarksObtained.Value.ToString("f0")</span>
+                                                                            @*<span class="bold">:@(((item.TotalExternalMarksObtained / item.TotalExternalMaxMarks) * 100).Value.ToString("f2"))</span>*@
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span title="@(Helper.GetEnumDescription<ResultStatus>(item.ExternalStatus))">@item.ExternalStatus.ToString()</span>
+                                                                        }
+                                                                    }
+                                                                </td>
+                                                                <td title="total max marks">@item.TotalMaxMarks.ToString("f0") </td>
+                                                                <td title="total marks obtained">
+                                                                    @if (item.TotalMarksObtained.HasValue)
+                                                                    {
+                                                                        <span>@item.TotalMarksObtained.Value.ToString("f0")</span>
+                                                                        @*<span class="bold">:@(((item.TotalMarksObtained / item.TotalMaxMarks) * 100).Value.ToString("f2"))</span>*@
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span title="@(Helper.GetEnumDescription<ResultStatus>(item.OverallResultStatus))">@item.OverallResultStatus.ToString()</span>
+                                                                    }
+                                                                </td>
+                                                                <td title="result status">
+                                                                    @if (item.OverallResultStatus == ResultStatus.P)
+                                                                    {<span>P</span> }
+                                                                    else
+                                                                    {
+                                                                        if (SemesterPass) { SemesterPass = false; AllSemesterPass = false; }
+                                                                        <span title="@(Helper.GetEnumDescription<ResultStatus>(item.OverallResultStatus))">F</span>}
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                        <tr>
+                                                            <th></th>
+                                                            <th>
+                                                                @if (STDINFO.SubjectResults.Select(x => x.Semester).Any(x => x == (_SemesterSubjects.Key + 1)))
+                                                                {
+                                                                    @(CUSrinagar.Extensions.Helper.GetEnumDescription((Semester)((short)(_SemesterSubjects.Key + 1))))
+                                                                }
+
+                                                            </th>
+                                                            <th colspan="4">Total</th>
+                                                            <th>@SemesterMaxMarks.ToString("f0")</th>
+                                                            <th>
+                                                                @SemesterMarksObtained.ToString("f0")
+                                                                @*<span>
+                                                                        <span>:@(((SemesterMarksObtained / SemesterMaxMarks) * 100).ToString("f2"))</span>
+                                                                    </span>*@
+                                                            </th>
+                                                            <th>
+                                                                @if (SemesterPass)
+                                                                {<span>P</span> }
+                                                                else
+                                                                {<span>F</span>}
+                                                            </th>
+                                                        </tr>
+                                                        if (!AllSemesterPass) { AllSemesterPass = false; }
+                                                        SemesterMaxMarks = 0;
+                                                        SemesterMarksObtained = 0;
+                                                        SemesterPass = true;
+
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    <td style="width:33%;"><br />Date of Declaration: <b>@STDINFO.DateOfDeclaration.ToString("dd-MMMM-yyyy")</b><br /><br /><br /></td>
+                                                    @*<td style="width:33%;">@*Date of Issue: <b>20-Jan-2020</b></td>*@
+                                                    <td style="width:50%;" colspan="2">
+                                                        Total Marks:
+                                                        @if (AllSemesterPass)
+                                                        {
+                                                            <b>(<span>@(AllSemesterMarksObtained.ToString("f0") + "/" + AllSemesterMaxMarks.ToString("f0"))</span>)</b>
+                                                        }
+                                                        else
+                                                        {<b>(<span>NA</span>)</b>}
+                                                        <span>
+                                                            &nbsp;&nbsp; Result:
+                                                            <b>
+                                                                @if (AllSemesterPass)
+                                                                {<span>P</span>}
+                                                                else
+                                                                { <span>F</span>}
+                                                            </b>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                <tr style="height:40px;">
+                                                    <td style="width:33%;">Prepared by</td>
+                                                    <td style="width:33%;">Checked by</td>
+                                                    <td style="width:33%;">Controller Examinations<br /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <div class="well no-padding no-margin-bottom" style="width:110px;display:inline-block;"><span>MM – Max Marks</span></div>
+                                                        <div class="well no-padding no-margin-bottom" style="width:133px;display:inline-block;"><span>MO – Marks Obtained</span></div>
+                                                        <div class="well no-padding no-margin-bottom" style="width:55px;display:inline-block;"><span>P – Pass</span></div>
+                                                        <div class="well no-padding no-margin-bottom" style="width:55px;display:inline-block;"><span>F - Fail</span></div>
+                                                        <div class="well no-padding no-margin-bottom" style="width:87px;display:inline-block;"><span>LO - Later On</span></div>
+                                                        <div class="well no-padding no-margin-bottom" style="width:118px;display:inline-block;"><span>NA – Not Available</span></div>
+                                                        <div class="well no-padding no-margin-bottom" style="width:60px;display:inline-block;"><span>E. & O.E</span></div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            }
+        }
+
+        <div class="noneOnPrint print-download-strip">
+            <button href="#" class="btn btn-default" onclick="window.print();"><b>Download / Print Examination Form </b></button>
+        </div>
+    }
+    else
+    {
+        <section class="sheet padding-5mm">
+            <p>Result Not Found .... </p>
+        </section>
+    }
+
+</body>
+</html>

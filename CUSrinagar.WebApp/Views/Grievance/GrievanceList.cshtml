@@ -1,0 +1,37 @@
+﻿@model List<CUSrinagar.Models.GrievanceList>
+
+<table class="table table-hover table-bordered js-table">
+    <thead style="white-space: nowrap;">
+        <tr>
+            <th data-property="Category">Category</th>
+            <th data-property="Subject">Query</th>
+            <th data-property="Status">Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a href="#">@CUSrinagar.Extensions.Helper.GetEnumDescription(item.Category)</a>
+                    </td>
+                    <td>
+
+                        <h4 class=" no-margins">@item.Subject <small><span class="time"><i class="fa fa-clock-o"></i>&nbsp;@item.Date.ToString("dd-MMMM-yyyy")</span> <span class="location"><i class="fa fa-map-marker"></i><a href="#">@CUSrinagar.Extensions.Helper.GetEnumDescription(item.Category)</a></span></small> </h4>
+                        <p class="desc overflow-hidden-ht  no-margins">@item.Message</p>
+
+                    </td>
+                    <td>
+                        @CUSrinagar.Extensions.Helper.GetEnumDescription(item.Status)
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Detail","Grievance",new { @id=item.Grievance_ID})" class="btn btn-sm btn-primary">View Detail</a>
+                    </td>
+                </tr>
+            }
+        }       
+    </tbody>
+</table>

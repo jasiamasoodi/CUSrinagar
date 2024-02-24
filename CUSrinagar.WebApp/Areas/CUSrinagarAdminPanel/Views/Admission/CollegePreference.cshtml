@@ -1,0 +1,344 @@
+﻿
+@{
+    ViewBag.Title = "UG Admission";
+    Layout = "~/Areas/CUSrinagarAdminPanel/Views/Shared/_CUAdminPanelLayout.cshtml";
+    List<CUSrinagar.Models.StudentCollegeCourseCount> StudentCount = ViewBag.StudentCollegeCourseCount;
+}
+
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUSrinagarAdminPanel"})">Home</a>
+            </li>
+            <li class="active">Student College Preference</li>
+        </ul>
+    </div>
+}
+<div class="row">
+    <div class="col-sm-12 infobox-container">
+        @foreach (var item in StudentCount)
+        {
+            <div class="infobox">
+                @if (!string.IsNullOrEmpty(item.CollegeFullName))
+                {
+                    <div class="infobox-icon">
+                        <span style="font-size:20px !important;color:#337ab7;">@item.CollegeCode</span>
+                    </div>
+                }
+                <div class="infobox-data" title="Total number of students updated college preferences">
+                    <span class="infobox-data-number">@item.Count</span>
+                    <div class="infobox-content"><b>@item.CourseFullName</b></div>
+                </div>
+                <div class="badge badge-success" style="height:25px;line-height:25px;font-size:18px;" title="Total Intake Capacity">
+                    <b>@item.IntakeCapacity</b>
+                    <i class="ace-icon glyphicon glyphicon-signal"></i>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="row" style="margin-top:7px;">
+    <div class="col-md-12 jsTableContent">
+        <div class="panel panel-primary js-pager-table" data-otherparam1="@CUSrinagar.Enums.PrintProgramme.IH">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    UG Admission
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        List of Student
+                    </small>
+                    <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                        <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                    </span>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="search-box">
+                    <form class="form-inline">
+                        @*<input type="hidden" data-tablealias="CP" data-column="IsActive" data-operator="EqualTo" class="jsfilterelement" value="1" />*@
+                        <div class="form-group hidden">
+                            <label>Batch</label><br />
+                            <div class="jsDDLContainer">
+                                <select class="form-control jsfilterelement" data-column="Batch" data-operator="EqualTo" data-scope="row1">
+                                    <option value="2020" selected="selected">2020</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Choose College</label><br />
+                            <div class="jsDDLContainer">
+                                @Html.DropDownList("CollegeDDL", new SelectList(ViewBag.College, "Value", "Text"), "------ All Colleges ------",
+                               new
+                               {
+                                   @class = "chosen-select jsfilterelement",
+                                   @data_column = "College_ID",
+                                   @data_operator = "EqualTo",
+                                   @data_tablealias= "ADMCollegeMaster",
+                                   @data_scope="row1"
+                               })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Programme</label><br />
+                            <div class="wd-140 jsDDLContainer">
+                                <select id="ProgrammeDDL" name="ProgrammeDDL" class="form-control chosen-select jsProgrammeDDL jsfilterelement" data-column="Programme" data-operator="EqualTo" data-scope="row1">
+                                    <option value="3">Graduation</option>
+                                </select>
+                                @*@Html.DropDownList("ProgrammeDDL", new SelectList(ViewBag.Programmes, "Value", "Text", (short)CUSrinagar.Enums.Programme.IG), null,
+                new
+                {
+                    @class = "form-control chosen-select jsProgrammeDDL jsfilterelement",
+                    @data_column = "Programme",
+                    @data_operator = "EqualTo",
+                    @data_scope = "row1"
+                })*@
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Selection Status</label><br />
+                            <div class="jsDDLContainer">
+                                @*@Html.DropDownList("StudentSelectionStatus", new SelectList(ViewBag.SelectionStatus, "Value", "Text"), "-- All --",
+                new { @class = "chosen-select form-control jsfilterelement",
+                    @data_column = "StudentSelectionStatus", @data_operator = "EqualTo",
+                    @data_defaulttextvalue = "--Select--,", @data_tablealias = "", @data_scope = "row1" })*@
+                                <select class="chosen-select form-control jsfilterelement" data-column="StudentSelectionStatus" data-defaulttextvalue="--Select--," data-operator="EqualTo" data-scope="row1" data-tablealias="" id="StudentSelectionStatus" name="StudentSelectionStatus">
+                                    <option value="">-- All --</option>
+                                    <option value="0">NotSelected</option>
+                                    <option value="3">Provisional</option>
+                                    <option value="6">CollegePreferenceUpdated</option>
+                                    <option value="5">Verified_MakePayment</option>
+                                    <option value="1">Joined</option>
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="form-group" title="Preference Order">
+                            <label>Pref</label><br />
+                            <div class="jsDDLContainer">
+                                <select class="chosen-select form-control jsfilterelement" data-column="PreferenceOrder" data-operator="EqualTo" data-scope="row1">
+                                    <option value="">All</option>
+                                    <option value="1">Ist</option>
+                                    <option value="2">2nd</option>
+                                    <option value="3">3rd</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Choose Course</label><br />
+                            <div class="jsDDLContainer  wd-200">
+                                @Html.DropDownList("Course", new SelectList(ViewBag.Courses, "Value", "Text", (short)CUSrinagar.Enums.Programme.UG), " -- All Courses --",
+                                           new
+                                           {
+                                               @class = "form-control chosen-select jsCourseDDL jsfilterelement",
+                                               @data_column = "Course_ID",
+                                               @data_operator = "EqualTo",
+                                               @data_tablealias = "ADMCourseMaster",
+                                               @data_defaulttextvalue = " -- All Courses --,",
+                                               @data_scope="row1"
+                                           })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Form/Entrance No/Full Name</label><br />
+                            <input type="text" placeholder="Entrance Roll No/Form Number/Name" class="form-control jsfilterelement" data-column="EntranceRollNo,StudentFormNo,FullName" data-operator="Contains" data-scope="row1" />
+                        </div>
+                        <div class="form-group">
+                            <label class="invisible">for styling purpose</label><br />
+                            <button type="button" class="btn btn-primary btn-sm fa-search-btn js-search"><i class="fa fa-search"></i>&nbsp;Search</button>
+                            <div class="btn-group">
+                                <button data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle">
+                                    Action
+                                    <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-default dropdown-info">
+                                    <li class="divider"></li>
+                                    <li><a href="javascript:void(0)" data-url="@Url.Action("CollegePreferenceCSV", "Admission", new { area = "CUSrinagarAdminPanel" })" id="" class="js-exportToCSV" data-otherparam1="printProgramme=@CUSrinagar.Enums.PrintProgramme.IH" style="width:100%">Download Excel</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="javascript:void(0)" id="jsShowBatchUpdateSelectionStatusDailog" title="update selection status">Update Status</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="js-table-content" data-url='@Url.Action("CollegePreferenceListPartial","Admission",new { area = "CUSrinagarAdminPanel"})' data-DefaultOrderByColumn="Student_ID" data-otherparam1="printProgramme=@CUSrinagar.Enums.PrintProgramme.IH">
+            </div>
+            @{Html.RenderPartial("_JSPagerTableFooter");}
+        </div>
+    </div>
+</div>
+
+@*MODAL DIALOG START*@
+<div class="modal" id="BatchUpdateSelectionStatusDailog" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered wd-650">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Batch Update Student Status</h4>
+            </div>
+            <div class="modal-body padding-0-10">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <td class="wd-35">
+                                <input class="ace checkbox checkbox-inline jsBatchChkBox" type="checkbox"><span class="lbl"></span>
+                            </td>
+                            <td class="wd-200">
+                                Status
+                            </td>
+                            <td>
+                                <div class="wd-400 jsDDLContainer">
+                                    <select class="jsfilterelement chosen-select" id="jsSelectionStatus">
+                                        <option value="">-- choose selection status --</option>
+                                        <option value="5">Verified/MakePayment</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="jsBatchUpdateSelectionStatusDailogBtn">Update</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*MODAL DIALOG END*@
+
+
+@section PageSpecificJS{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#CollegeDDL").change(function () {
+                var collegeFullName = $(this).find("option:selected").val();
+                GetStudentCount(collegeFullName);
+            });
+            $('#jsShowBatchUpdateSelectionStatusDailog').click(function () {
+                var validateMessage = validateBatchFilters();
+                if (!isNullOrEmpty(validateMessage)) {
+                    showErrorMessage(validateMessage);
+                    return;
+                }
+                var $batchDialog = $("#BatchUpdateSelectionStatusDailog");
+                $("#BatchUpdateSelectionStatusDailog").modal('show');
+            });
+
+            $('#jsBatchUpdateSelectionStatusDailogBtn').click(function () {
+                var $batchDialog = $("#BatchUpdateSelectionStatusDailog");
+
+                if (isNullOrEmpty($("#jsSelectionStatus").find('option:selected').val())) {
+                    showAlertDialog('Please choose selection status');
+                    return false;
+                }
+                $batchDialog.modal('hide');
+                var studentlist = getEntityList();
+                var msg = '<h4>Are you sure you want to update status of selected students</h4>';
+                msg += '<h5>Number of students:  <b>' + studentlist.length + '</b></h6>';
+                showConfirmationDialog(msg);
+                $('#confirmationDialog').off('click.confirmation', 'button').on('click.confirmation', 'button', function () {
+                    var $btn = $(this);
+                    hideConfirmationDialog();
+                    if ($btn.data('response') == 'yes') {
+                        var BatchUpdateObj = {};
+                        BatchUpdateObj.Student_ID = studentlist;
+                        BatchUpdateObj.StudentSelectionStatus = $("#jsSelectionStatus").find('option:selected').val();
+                        BatchUpdateObj.College_ID = $("#CollegeDDL").find('option:selected').val();
+                        BatchUpdateObj.Course_ID = $(".jsCourseDDL").find('option:selected').val();
+                        BatchUpdate(BatchUpdateObj);
+                    } else if ($btn.data('response') == 'no') {
+
+                    } else {
+
+                    }
+                });
+            });
+
+        });
+
+        function BatchUpdate(BatchUpdateObj) {
+            var _url = getBaseUrlAdmin() + "Admission/BatchUpdateStudentSelectionStatus";
+            var model = JSON.parse(JSON.stringify(BatchUpdateObj));
+            $.ajax({
+                url: _url,
+                type: "POST",
+                contentType: 'application/json; charset=UTF-8',
+                data: JSON.stringify(BatchUpdateObj),
+                dataType: "json",
+                success: function (data) {
+                    if (data.IsSuccess)
+                        showSuccessMessage(data.NumberOfRecordsEffected + " " + data.SuccessMessage);
+                    showErrorMessage(data.ErrorMessage, 10000);
+                    $(".js-search").click();
+                },
+                beforeSend: function () { showLoader(); },
+                complete: function () {
+                    hideLoader();
+                },
+                error: function (xhr, error, msg) {
+                }
+            });
+        }
+
+        function validateBatchFilters() {
+            var entitylist = getEntityList();
+            if (entitylist.length == 0)
+                return 'Please choose atleast one record...';
+
+            var _course_id = $(".js-pager-table .jsCourseDDL").find('option:selected').val();
+            if (isNullOrEmpty(_course_id))
+                return ("Please choose course");
+
+            var _col = $(".js-pager-table #CollegeDDL").find('option:selected').val();
+            if (isNullOrEmpty(_col))
+                return ("Please choose college");
+            return null;
+        }
+        function GetStudentCount(college) {
+            var _url = getBaseUrlAdmin() + "Admission/StudentCollegeCourseCount";
+            $.ajax({
+                url: _url,
+                type: "POST",
+                datatype: "Json",
+                data: { College_ID: college },
+                success: function (list) {
+                    var $container = $(".infobox-container");
+                    var html = "";
+                    for (var i = 0; i < list.length; i++) {
+                        var item = list[i];
+                        html += '<div class="infobox">'
+                        if (!isNullOrEmpty(item.CollegeFullName)) {
+                            html += `<div class="infobox-icon">
+                                                                            <span style="font-size:20px !important;color:#337ab7;">${item.CollegeCode}</span>
+                                                                        </div>`;
+                        }
+                        html += `<div class="infobox-data" title="Total number of students updated college preferences">
+                                                                            <span class="infobox-data-number">${item.Count}</span>
+                                                                            <div class="infobox-content"><b>${item.CourseFullName}</b></div>
+                                                                        </div>
+                                                                        <div class="badge badge-success" style="height:25px;line-height:25px;font-size:18px;" title="Total Intake Capacity">
+                                                                            <b>${item.IntakeCapacity}</b>
+                                                                            <i class="ace-icon glyphicon glyphicon-signal"></i>
+                                                                        </div>`;
+                        html += '</div>';
+                    }
+                    $container.html(html);
+                },
+                error: function (xhr, error, msg) {
+                    showErrorMessage(msg);
+                }
+            });
+        }
+    </script>
+}
+
+
+
+

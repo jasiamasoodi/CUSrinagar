@@ -1,0 +1,90 @@
+﻿
+@model  CUSrinagar.Models.Questionaire
+@{
+    var routeValues = HttpContext.Current.Request.RequestContext.RouteData.Values;
+    string actionName = "";
+    if (routeValues != null)
+    {
+        if (routeValues.ContainsKey("controller"))
+        {
+            actionName = routeValues["action"].ToString();
+        }
+    }
+    bool IsEdit = false;
+    if (actionName == "Edit")
+    { IsEdit = true; }
+    int Count = Model.QuestionOptions == null ? 1 : Model.QuestionOptions.Count();
+    int i;
+}
+@Html.AntiForgeryToken()
+
+@if (!ViewData.ModelState.IsValidField("ErrorMessage"))
+{
+    <div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong>@Html.ValidationMessage("ErrorMessage", "", new { @class = "red " })</strong></div>
+}
+<div class="jsDDLContainer">
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+        </label>
+        <div class="col-sm-6 ">
+            @Html.ValidationMessage("Questionaire", "", new { @class = "label label-sm label-danger arrowed-in-right " })
+
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+            <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Question)
+
+        </label>
+        <div class="col-sm-6 ">
+
+            @Html.TextBoxFor(model => model.Question, new { @class = "width-100" })
+
+        </div>
+        <div class="col-sm-2">
+            @Html.ValidationMessageFor(model => model.Question, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+        </div>
+    </div>
+    <div class="col-sm-12"><a class=" AddOption btn-sm btn-primary  align-left" href="#">Add Option</a></div>
+
+    @for (i = 0; i < Count; i++)
+    {
+        @Html.Partial("_OptionsView", Model, new ViewDataDictionary { { "Count", i } })
+    }
+    <div id="AppendRow"></div>
+    @Html.Hidden("Count", i)
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right"></label>
+        <div class="col-sm-8">
+            <button type="submit" class="btn btn-sm btn-primary save-button">
+                <i class="ace-icon fa fa-check"></i>
+                Save
+            </button>
+
+            <a id="cData1" href="/CUSrinagarAdminPanel/Questionaire/QuestionaireList" class="fm-button ui-state-default ui-corner-all fm-button-icon-left btn btn-sm btn-danger">
+                <i class="ace-icon fa fa-times"></i>Cancel
+            </a>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).on("click", ".AddOption", function () {
+        var cnt = $("#Count").val();
+        $("<div id='option_" + cnt + "'></div>").insertBefore($("#AppendRow"));
+        $.ajax({
+            url: "/CUSrinagarAdminPanel/Questionaire/_OptionsView", data: { Count: cnt }, success: function (result) {
+                $("#option_" + cnt).html(result);
+            }
+        });
+        $("#Count").val(parseInt(cnt) + 1);
+    });
+</script>
+
+
+
+

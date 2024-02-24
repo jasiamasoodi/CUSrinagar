@@ -1,0 +1,183 @@
+﻿
+@using CUSrinagar.Extensions;
+@using System.Globalization
+
+@model  List<CUSrinagar.Models.GrievanceWidgetSummary>
+
+@{
+    ViewBag.Title = "Awards Statistics";
+}
+
+@section CUSSitemap
+{
+
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index", "Dashboard", new { area = "CUCollegeAdminPanel" })">Home</a>
+            </li>
+            <li class="active"> Award Statistics</li>
+        </ul><!-- /.breadcrumb -->
+    </div>
+}
+<div class="row">
+    <div>
+        <div class="search-box">
+            <div class="col-sm-10">
+
+                <div class="form-inline col-sm-12">
+                    <strong>Filters </strong>
+                    <div class="form-group">
+                        <div class="form-group">
+                            @Html.DropDownList("Programme", new SelectList(ViewBag.Programme, "Value", "Text", ViewBag.Programme), null, new { @class = "" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.DropDownList("semester", new SelectList(ViewBag.Semesters, "Value", "Text", ViewBag.Sem), null,
+                      new
+                      {
+                          @class = "",
+                          @data_column = "semester",
+                          @data_operator = "EqualTo"
+                      })
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-group">
+                            @Html.DropDownList("batch", new SelectList(ViewBag.Batchs, "Value", "Text", ViewBag.ExamYear), null,
+                      new
+                      {
+                          @class = "",
+                          @data_column = "Year",
+                          @data_operator = "EqualTo",
+                          @required = "required"
+                      })
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <hr />
+</div>
+
+
+<div class="row" id="ValidationMessage">
+
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <h3 class="header">
+            <i class="ace-icon fa fa-list smaller-90"></i>
+            Click on any college to check the details.
+        </h3>
+        <div id="accordion" class="accordion-style1 panel-group">
+            <hr />
+            <h3 class="center jsApplicableFilterText"> Graduation - Semester I - Batch : 2018 </h3>
+            <hr />
+            @foreach (var CollegeListItem in (List<SelectListItem>)ViewBag.Colleges)
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="heading-title">
+                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#@CollegeListItem.Value" aria-expanded="false" data-value="@CollegeListItem.Value">
+                                <i class="bigger-110 ace-icon fa fa-angle-right" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                <strong>@CollegeListItem.Text</strong>
+                            </a>
+                        </h3>
+                    </div>
+                    <div class="panel-collapse collapse" id="@CollegeListItem.Value" aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body" id="AccordionContent-@CollegeListItem.Value">
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script>
+        $(document).ready(function () {
+            $("#Programme,#semester,#batch").change(function () {
+                var txt = `${$("#Programme option:selected").text()} , Semester : ${$("#semester").val()} , Batch:${$("#batch").val()} `;
+                $(".jsApplicableFilterText").html(txt);
+            });
+
+            $(document).on('click',
+                '.accordion-toggle',
+                function () {
+                    var value = $(this).data('value');
+                    var printProgramme = $('#Programme').find(":selected").val();
+                    var semester = $('#semester').find(":selected").val();
+                    var batch = $('#batch').find(":selected").val();
+
+                    var _url = getBaseUrlAdmin() +
+                        "Statistics/GetCoursesForCollege?college_ID=" +
+                        value +
+                        "&printProgramme=" +
+                        printProgramme +
+                        "&Batch=" +
+                        batch +
+                        "&Semester=" +
+                        semester;
+                    $.ajax({
+                        url: _url,
+                        dataType: "html",
+                        success: function (html) {
+                            $("#AccordionContent-" + value).html(html);
+                        }
+                    });
+                });
+
+            $(document).on('click',
+                '.jsGetSubjects',
+                function () {
+                    var college_ID = $(this).closest('.panel').find('.accordion-toggle').data('value');
+
+                    //var college_id = $(this).closest('.accordion-toggle').data('value');
+                    var course_ID = $(this).closest('td').data("value");
+                    var semester = $('#semester').find(":selected").val();
+                    var batch = $('#batch').find(":selected").val();
+                    var printProgramme = $('#Programme').find(":selected").val();
+                    var _url =
+                        `/CUSrinagarAdminPanel/Statistics/GetSubjectsForCourse?college_ID=${college_ID}&course_ID=${course_ID}&semester=${semester}&printProgramme=${printProgramme}&batch=${batch}`;
+
+                    window.open(_url, '_blank');
+                    $(this).attr('href', _url);
+                    return;
+                    $('#printProgrammeDisplay').text($("#Programme option:selected").text());
+                    $('#SemesterDisplay').text(semester);
+                    $('#BatchDisplay').text(batch);
+                    $('#CourseDisplay').text($.trim($(this).closest('td').find("a").text()));
+                    var _url = getBaseUrlAdmin() +
+                        "Statistics/GetSubjectsForCourse?college_ID=" +
+                        college_ID +
+                        "&course_ID=" +
+                        course_ID +
+                        "&semester=" +
+                        semester +
+                        "&printProgramme=" +
+                        printProgramme +
+                        "&batch=" +
+                        batch;
+
+                    $.ajax({
+                        url: _url,
+                        type: "POST",
+                        dataType: "Json",
+                        success: function (data) {
+
+                        }
+
+                    });
+                });
+        });
+
+
+    </script>
+}
+

@@ -1,0 +1,119 @@
+﻿
+
+@{
+    ViewBag.Title = "Paper Setters - CUS";
+}
+
+<div class="page-wrapper pager-table-text">
+
+    <div class="page-header">
+        <div style="padding-bottom: 30px;">
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <h1 class="heading-title pull-left">
+                        Paper Setters
+                        <small>
+                            <i class="ace-icon fa fa-angle-double-right"></i>
+                            List of users
+                        </small>
+                    </h1>
+                </div>
+
+                <div class="col-sm-6">
+
+                </div>
+
+
+                <div class="col-sm-6 align-right">
+
+                    @Html.ActionLink("Add Setter", "CreateSetter", "Bill", new { area = "CUSrinagarAdminPanel", @class = "btn btn-sm btn-primary white" })
+                    @Html.ActionLink("Evaluator List", "EvaluatorSearch", "Bill", new { area = "CUSrinagarAdminPanel", @class = "btn btn-sm btn-primary white" })
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Paper Setters
+                            <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                            </span>
+
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="col-sm-12 search-box">
+                            <label class="col-sm-12">Advance Search</label>
+
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                User Name
+                                <div id="Course">
+                                    @Html.TextBox("UserName", "", new { @class = "form-control jsfilterelement", @data_column = "UserName", @data_operator = "Contains" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                Email
+                                <div id="Course">
+                                    @Html.TextBox("Email", "", new { @class = "form-control jsfilterelement", @data_column = "Email", @data_operator = "Contains" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                Full Name
+                                <div>
+                                    @Html.TextBox("FullName", "", new { @class = " form-control jsfilterelement", @data_column = "FullName", @data_operator = "Contains" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 " style="padding-top: 17px;">
+                                <button type="button" class="btn btn-primary fa-search-btn"><i class="fa fa-search"></i>&nbsp;Search</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="js-table-content" data-url="@Url.Action("SetterList", "Bill", new { area = "CUSrinagarAdminPanel" })" data-DefaultOrderByColumn="CreatedOn">
+
+                    </div>
+                    @{Html.RenderPartial("_JSPagerTableFooter");}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJSFiles{
+    <script src="~/Content/ThemeAdmin/Content/Scripts/JSUsers/UserList.js"></script>
+    <script src="~/Scripts/JSBilling/BillBankAccount.js"></script>
+}
+
+@section PageSpecificJS{
+    <script>
+          var DeletePath = '@Url.Action("DeleteSetter", "Bill", new { area = "CUSrinagarAdminPanel"})';
+          var _ChangeStatus = "@Url.Action("ChangeStatus", "Bill", new { area = "CUSrinagarAdminPanel"})";
+          var RemoveRolePath = "@Url.Action("RemoveRole", "Bill", new { area = "CUSrinagarAdminPanel" })";
+           var AddRolePath = "@Url.Action("AddRole", "Bill", new { area = "CUSrinagarAdminPanel" })";
+        $(document).ready(function () {
+            var $pagertable = $(".js-pager-table");
+            loadpagertable();
+        });
+    </script>
+}
+
+@section PageSpecificStyle{
+    <style>
+        .filter-btn a {
+            color: white !important
+        }
+    </style>
+}
+
+

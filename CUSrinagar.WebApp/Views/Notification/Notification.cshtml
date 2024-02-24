@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewBag.Title = "Notification";
+}
+
+<div class="page-wrapper pager-table-text">
+    <header class="page-heading clearfix">
+        <h1 class="heading-title pull-left">
+            Notification
+            <small>
+                <i class="ace-icon fa fa-angle-double-right"></i>
+                List of notifications
+            </small>
+        </h1>
+    </header>
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+            <div class="col-md-12 jsTableContent">
+                <div class="panel panel-primary js-pager-table">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Notifications
+                            <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                            </span>
+
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        @*<div class="col-sm-12" style="padding-bottom:10px">
+                                <label class="col-sm-12 no-padding">Quick Search</label>
+                                <div class="col-sm-12 lbl bigger-120 no-padding">
+                                    @Html.TextBox("Quicksearch", "", new { @class = "form-control", @data_action = "table-filter", @data_filters = ".js-table-content", placeholder = "Filter Developers" })
+                                </div>
+                            </div>
+                            <br />*@
+                        <div class="col-sm-12 search-box no-padding">
+                            <label class="col-sm-12">Advance Search</label>
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                Notification Type
+                                <div id="Course">
+                                    @Html.DropDownList("NotificationType", new SelectList(ViewBag.NotificationTypeList, "Value", "Text", ViewBag.NotificationTypeParam),
+                                           "--Select--", new { @class = "form-control jsfilterelement", @data_column = "NotificationType", @data_operator = "EqualTo" })
+                                    @*@Html.DropDownListFor(item => currentCollegeSelectedCombinations[i].Course_ID, new SelectList((IEnumerable<SelectListItem>)ViewBag.Courses, "Value", "Text", currentCollegeSelectedCombinations[i].Course_ID), "--Select--", new { @class = "form-control chosen-select js-courses" })*@
+                                </div>
+                            </div>
+                            <div class="col-sm-3 lbl bigger-120 no-padding-right">
+                                Description
+                                <div id="Course">
+                                    @Html.TextBox("Description", "", new { @class = "form-control jsfilterelement", @data_column = "Description", @data_operator = "Contains" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                From
+                                <div>
+                                    @Html.TextBox("StartDate", "", "{0:mm/dd/yyyy}", new { @type = "date", @class = "form-control jsfilterelement", @data_column = "StartDate", @data_operator = "GreaterThanEqualTo" })
+                                </div>
+                            </div>
+                            <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                To
+                                <div>
+                                    @Html.TextBox("StartDateTo", "", "{0:mm/dd/yyyy}", new { @type = "date", @class = "form-control jsfilterelement", @data_column = "StartDateTo", @data_operator = "LessThanEqualTo" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2" style="padding-top: 17px;">
+                                <button type="button" class="btn btn-theme fa-search-btn pull-right"><i class="fa fa-search"></i>&nbsp;Search</button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="js-table-content" data-url='@Url.Action("NotificationListPartial","Notification",new { area = string.Empty})' data-DefaultOrderByColumn="CreatedOn">
+
+                    </div>
+                    @{Html.RenderPartial("_JSPagerTableFooter");}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificJS{
+    <script>
+        $(document).ready(function () {
+
+            var $pagertable = $(".js-pager-table");
+            var notificationtype = $pagertable.find(':input[data-column = "NotificationType"] option:selected').val();
+            if (notificationtype.length > 0) {
+                var _param = getpagertableparameter($pagertable);
+                _param.Filters.push({ Column: "NotificationType", Operator: "EqualTo", Value: notificationtype, GroupOperation: "AND" });
+            }
+            loadpagertable();
+        });
+        $('.date-picker').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            dateFormat: 'mm/dd/yyyy',
+            format: 'mm/dd/yyyy'
+        });
+    </script>
+}
+
+
+
+

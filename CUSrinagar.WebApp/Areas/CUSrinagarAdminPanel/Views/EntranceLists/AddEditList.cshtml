@@ -1,0 +1,135 @@
+﻿@model CUSrinagar.Models.ADMEntranceLists
+
+@{
+    ViewBag.Title = $"Entrance Lists {DateTime.UtcNow.Year} - CUSrinagar";
+}
+<div class="page-wrapper pager-table-text">
+    <div class="page-header">
+        <div style="padding-bottom: 30px;">
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <h1 class="heading-title pull-left">
+                        Add Or Edit Lists
+                    </h1>
+                </div>
+                <div class="col-sm-6 align-right">
+                    <a href="@Url.Action("Index", "EntranceLists", new { area = "CUSrinagarAdminPanel" })" class="btn btn-sm btn-primary white">Back to lists</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <div class="row page-row">
+            <div class="content-wrapper col-md-10 col-sm-8"></div>
+            <div class="col-sm-12">
+                <div class="panel panel-primary">
+                    @if (TempData["response"] != null)
+                    {
+                        @Html.Raw(TempData["response"])
+                    }
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <i class="fa fa-save"></i> Entrance Lists @DateTime.UtcNow.Year - Upload Answer Keys / Points / Lists
+                        </h3>
+                    </div>
+                    @using (Html.BeginForm("AddEditList", "EntranceLists", FormMethod.Post, new { @enctype = "multipart/form-data", @id = "JSfrmEntranceLists", @class = "form-horizontal" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Programme)
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(x => x.Programme, (IEnumerable<SelectListItem>)ViewBag.Programme, string.Empty)
+                                    @Html.ValidationMessageFor(x => x.Programme)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Course_ID)
+                                </label>
+                                <div class="col-sm-8">
+                                    <span class="CourseID">
+                                        @Html.DropDownListFor(x => x.Course_ID, (IEnumerable<SelectListItem>)ViewBag.Courses, new { })
+                                    </span>
+                                    @Html.ValidationMessageFor(x => x.Course_ID)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.File)
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.File, new { @type = "file", @onchange = "return valFile('#File',1,100000,'KB','PDF','.erMsg');", title = "Only PDF file is allowed." })
+                                    @Html.ValidationMessageFor(x => x.File)
+                                    <span class="red erMsg"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.ListType)
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(x => x.ListType, (IEnumerable<SelectListItem>)ViewBag.ListType, string.Empty, new { })
+                                    @Html.ValidationMessageFor(x => x.ListType)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">
+                                </label>
+                                <div class="col-sm-6 ">
+                                    <div class="col-sm-1" style="padding-top: 17px;">
+                                        <button type="submit" class="btn btn-primary JSSave"><i class="fa fa-save"></i>&nbsp; Upload &amp; Save</button>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageSpecificStyle{
+    <style>
+        .filter-btn a {
+            color: white !important
+        }
+
+        .required {
+            color: black;
+        }
+
+        .field-validation-error {
+            color: red !important;
+        }
+
+        input[type='text'] {
+            width: 300px !important;
+        }
+
+        .multiselect-container {
+            max-height: 300px !important;
+        }
+
+        @@media screen and (max-width: 600px) {
+            .multiselect-container {
+                max-width: 200% !important;
+            }
+        }
+    </style>
+}
+@section PageSpecificJS
+{
+    @Scripts.Render("~/bundles/Libraries/jqueryval")
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSEntranceLists/JSEntranceLists.js")"></script>
+}

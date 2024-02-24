@@ -1,0 +1,218 @@
+﻿@using CUSrinagar.Models
+
+@model ARGReprint
+
+@{
+    HttpContext.Current.Response.Redirect("/NEP/");
+
+    ViewBag.Title = $"Admission-{DateTime.UtcNow.Year} ";
+    var currentTab = ViewBag.CurrentTab != null ? ViewBag.CurrentTab : "";
+    var errorMessagePrint = TempData["error"] != null ? TempData["error"] : "";
+    string selectedtab = Convert.ToString(ViewBag.SelectedTab).ToLower();
+    string mail = $"admission{DateTime.UtcNow.Year}@cusrinagar.edu.in";
+}
+<div id="printalert" class="hidden">
+    <div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong id="ErrorMessagePrint"></strong></div>
+</div>
+
+<div class="tabbed-info page-row">
+    @if (TempData["error2"] != null)
+    {
+        @Html.Raw(TempData["error2"])
+    }
+    <ul class="nav nav-tabs">
+        <li class='@(string.IsNullOrEmpty(selectedtab) ? "active" : "")'><a href="#tab1" data-toggle="tab" style="color: black !important;">Instructions</a></li>
+        <li class='@(selectedtab == "reprint" ? "active" : "")'><a href="#PrintTab" id="#PrintTabLink" data-toggle="tab" style="color: black !important;">Re-print Form</a></li>
+        <li><a href="#tab3" data-toggle="tab" style="color: black !important;">Notifications</a></li>
+        @*<li class='@(selectedtab == "syllabus" ? "active" : "")'><a href="#tab4" data-toggle="tab" style="color: black !important;">Entrance Syllabus</a></li>*@
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane @( string.IsNullOrEmpty(selectedtab) ? "active" : "")" id="tab1" style="font-size:1.1em;">
+            @if (ViewBag.showProceed != null && !((bool)(ViewBag.showProceed)))
+            {
+                <div style="text-align:center;">
+                    <span class="quadraText"><i class="fa fa-arrow-rigcht" aria-hidden="true"></i><strong style="font-size:x-large;">Admission process has been closed.</strong></span>
+                </div>
+            }
+
+            <h4 class="font-medium nospace">
+                <i class="fa fa-university" aria-hidden="true"></i>
+                Important instructions For Online Registration @DateTime.UtcNow.Year
+            </h4>
+            @*<p>
+                    For any issues / queries you can drop an email at <a href="mailto:@mail">@mail</a>
+                    or Call us on <a href="0194-2311340">0194-2311340</a> during office Hours (10:00am - 4:00pm)
+                </p>*@
+            <hr />
+
+            <p style="font-weight:bold;">
+                <i class="fa fa-arrow-rigcht" aria-hidden="true"></i>
+                Please read and follow the instructions, shown below carefully before filling-up
+                the relevant fields/columns of the application form :
+            </p>
+            @{Html.RenderPartial("_InstructionsPartial", (bool)(ViewBag.showProceed != null && ViewBag.showProceed));}
+
+            @if (ViewBag.showProceed != null && (bool)(ViewBag.showProceed))
+            {
+                { Html.RenderPartial("_Proceed", (ProceedOptions)ViewBag.ProceedProgrammeOption); }
+            }
+        </div>
+
+        <div class="tab-pane  @( selectedtab=="reprint"?"active":"")" id="PrintTab">
+
+            @using (Html.BeginForm("Instructions", "Registration", FormMethod.Post, new { @enctype = "multipart/form-data", @class = "rnd5" }))
+            {
+                @Html.AntiForgeryToken()
+
+                @*------------------------------------Print Section-----------------------------------*@
+                <div class="col-lg-4">    </div>
+                <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                    <div class="content-wrapper">
+
+                        <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                            @Html.LabelFor(model => model.FormNo)
+                            <span class="required">
+                                *
+                                @Html.ValidationMessageFor(model => model.FormNo)
+                            </span><br />
+                            @Html.TextBoxFor(model => model.FormNo, new { @class = "form-control jsfilterelement", @maxlength = "150", @autocomplete = "off", @onkeypress = "return forAdmissionRollNo(event);" })
+                        </label>
+
+                    </div>
+                </div>
+
+
+                <div class="col-lg-4">    </div>
+                <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                    <div class="content-wrapper">
+                        <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                            @Html.LabelFor(model => Model.EnteredDOB, new { @class = "small-70" })
+                            <span class="required">
+                                *
+                                @Html.ValidationMessageFor(model => model.EnteredDOB)
+                            </span><br />
+                            @Html.TextBoxFor(model => model.EnteredDOB, new { @class = "form-control dateDDMMYYY", @maxlength = "10", placeholder = "dd-mm-yyyy" })
+                        </label>
+                    </div>
+                </div>
+                @Html.Hidden(nameof(Model.Batch), "2017")
+                <div class="col-lg-4">    </div>
+                <div class="row page-row" style="background-color:white;padding-bottom: 10px">
+                    <div class="content-wrapper">
+                        <label class="col-sm-4 lbl bigger-120 no-padding-right">
+                            @Html.LabelFor(model => Model.PrintProgrammeOption, new { @class = "small-70" })
+                            <span class="required">
+                                *
+                                @Html.ValidationMessageFor(model => model.PrintProgrammeOption)
+                            </span><br />
+                            @Html.DropDownListFor(model => model.PrintProgrammeOption, (IEnumerable<SelectListItem>)ViewBag.PrintProgrammeOption, string.Empty, new { @class = "form-control" })
+                        </label>
+                    </div>
+                </div>
+
+                <br />
+                <p style="text-align:center;">
+                    <span id="hideButtons6">
+                        <input type="submit" id="jsReprint" value=" Re-Print " class="btn btn-theme" />
+                    </span>
+                </p>
+
+                @*------------------------------------End Print Section-----------------------------------*@
+
+            }
+
+        </div>
+
+        <div class="tab-pane" id="tab3">
+            <h4 class="font-medium nospace">
+                <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp; Admission Notifications
+            </h4><hr />
+
+            @*------------------------ default instructions --------------------*@
+            <ol>
+                @if (ViewBag.ADMNotifications != null)
+                    {
+                        foreach (var item in (List<Notification>)ViewBag.ADMNotifications)
+                        {
+                            <li>
+                                <span style="font-size:20px">
+                                    @if (item.IsLink)
+                                    {
+                                        <a href="http://@item.Link.ToLower().Replace("http://","").Replace("https://","")" target="_blank">@item.Description</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Content("~" + item.Link)" target="_blank">@item.Description</a>
+                                    }
+                                </span>
+                            </li>
+                        }
+                    }
+
+                @*<li>
+                    <span style="font-size:20px">
+                        <a href="/foldermanager/notification/adm.notificationno3.pdf">
+                            ADMISSION NOTIFICATION–3 Session 2021-22 I) 3-Year Integrated B.Ed+M.Ed Programme & II) 2-Year PG Programmes (M.Ed & M.A Education)
+                        </a>
+                    </span>
+                </li>*@
+            </ol>
+        </div>
+
+        <div class="tab-pane  @( selectedtab=="syllabus"?"active":"")" style="font-size:17px;" id="tab4">
+            <h4 class="font-medium nospace">
+                <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;Entrance Syllabus
+            </h4><hr />
+
+            @*------------------------ Entrance Syllabus --------------------*@
+            @{Html.RenderPartial("_EntranceSyllabus");}
+        </div>
+
+        <div class="tab-pane  @( selectedtab=="papers"?"active":"")" style="font-size:17px;overflow:auto !important" id="tab5">
+            <h4 class="font-medium nospace">
+                <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;Previous Entrance Papers
+            </h4><hr />
+
+            @*------------------------ Previous Entrance Papers --------------------*@
+            @{Html.RenderPartial("_IGEntrancePapers");}
+            @*@{Html.RenderPartial("_PGEntrancePapers");}*@
+        </div>
+
+        <div class="tab-pane  @( selectedtab=="combinationslist"?"active":"")" style="font-size:17px;" id="tab6">
+            <h4 class="font-medium nospace">
+                <i class="fa fa-university"></i>&nbsp;&nbsp;College Subject Combinations - @DateTime.Now.Year
+            </h4>
+            @*------------------------ UG Combinations --------------------*@
+            @*@{Html.RenderPartial("_CombinationsList");}*@
+        </div>
+
+        <div class="tab-pane" id="tab7">
+            <h4 class="font-medium nospace">
+                <i class="fa fa-university"></i>&nbsp;&nbsp;Selection Procedure
+            </h4>
+            @{Html.RenderPartial("_SelectionProdcedure");}
+        </div>
+    </div>
+</div>
+
+@section PageSpecificCSS{
+    <style>
+        .tabbed-info li {
+            padding: 5px;
+        }
+    </style>
+}
+@section PageSpecificJS{
+    @Scripts.Render("~/bundles/Libraries/jqueryval")
+    <script src="@Url.Content("~/Content/ThemePublic/Libraries/disableBack.js")"></script>
+    <script type="text/javascript">
+    if ('@currentTab' != '') {
+        $('.nav-tabs a[href="#@currentTab"]').trigger('click');
+        }
+        if ('@errorMessagePrint' != '') {
+            $("#ErrorMessagePrint").html('@errorMessagePrint');
+        $('#printalert').removeClass('hidden');
+        }
+        window.oncontextmenu = function () { return false; }
+    </script>
+}

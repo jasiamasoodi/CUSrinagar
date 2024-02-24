@@ -1,0 +1,136 @@
+﻿@model  CUSrinagar.Models.AppUsers
+@{
+    ViewBag.Title = "CUS :: Edit Paper Setter";
+
+
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header">
+                <h4 class="widget-title"><i class='menu-icon fa fa-pencil-square-o'></i> Edit </h4>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+
+                    @using (Html.BeginForm("EditSetter", "Bill", FormMethod.Post, new { enctype = "multipart/form-data", @name = "validation-form", @id = "validation-form", @class = "form-horizontal", @role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(model => model.User_ID)
+                        @Html.HiddenFor(model => model.Password)
+                        if (!ViewData.ModelState.IsValidField("ErrorMessage"))
+                        {
+                            <div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong>@Html.ValidationMessage("ErrorMessage", "", new { @class = "red " })</strong></div>
+                        }
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">
+                                <span class="red bigger-110">*</span> @Html.LabelFor(model => model.UserName)
+
+                            </label>
+                            <div class="col-sm-6 ">
+                                @Html.TextBoxFor(model => model.UserName, new { @class = "width-100", @maxlength = "35" })
+                            </div>
+                            <div class="col-sm-2">
+                                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">
+                                <span class="red bigger-110">*</span> @Html.LabelFor(model => model.FullName)
+
+                            </label>
+                            <div class="col-sm-6 ">
+                                @Html.TextBoxFor(model => model.FullName, new { @class = "width-100", @maxlength = "150", @onkeypress = "return forNameOnly(event);" })
+                            </div>
+                            <div class="col-sm-2">
+                                @Html.ValidationMessageFor(model => model.FullName, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">
+                                <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Email)
+
+                            </label>
+                            <div class="col-sm-6 ">
+                                @Html.TextBoxFor(model => model.Email, new { @class = "width-100", @maxlength = "150" })
+                            </div>
+                            <div class="col-sm-2">
+                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">
+                                <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Institute)
+
+                            </label>
+                            <div class="col-sm-6 ">
+                                @Html.TextBoxFor(model => model.Institute, new { @class = "width-100 required", @maxlength = "150", required = "required" })
+                            </div>
+                            <div class="col-sm-2">
+                                @Html.ValidationMessageFor(model => model.Institute, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">
+                                <span class="red bigger-110">*</span> @Html.LabelFor(model => model.PhoneNumber)
+
+                            </label>
+                            <div class="col-sm-6 ">
+                                @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "width-100", @maxlength = "10", @onkeypress = "return numbersOnly(event);" })
+                            </div>
+                            <div class="col-sm-2">
+                                @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">
+                                <span class="red bigger-110">*</span> @Html.LabelFor(model => model.UserRoles)
+
+                            </label>
+                            <div class="col-sm-6 ">
+                                @{ int i = 0;}
+                                @foreach (var role in ViewBag.Roles)
+                                {
+                                    i++;
+
+                                    <div class="col-sm-6">
+                                        <input checked disabled type="checkbox" value="@role.Value" name="UserRoles_IDs" />
+                                        @role.Text
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-sm-2">
+                                @Html.ValidationMessageFor(model => model.UserRoles, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right"></label>
+                            <div class="col-sm-8">
+                                <button type="submit" class="btn btn-sm btn-primary save-button">
+                                    <i class="ace-icon fa fa-check"></i>
+                                    Save
+                                </button>
+
+                                <a id="cData1" href="/CUSrinagarAdminPanel/Bill/SetterSearch/" class="fm-button ui-state-default ui-corner-all fm-button-icon-left btn btn-sm btn-danger">
+                                    <i class="ace-icon fa fa-times"></i>Cancel
+                                </a>
+
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

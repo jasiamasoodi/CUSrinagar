@@ -1,0 +1,180 @@
+﻿@model CUSrinagar.Models.ResultCompact
+@using CUSrinagar.Extensions;
+@using CUSrinagar.Enums
+@{
+    Layout = null;
+    var resultNotification = (CUSrinagar.Models.ResultNotification)ViewBag.ResultNotification;
+}
+<div class="page-row">
+    <div class="jobs-wrapper">
+        <div class="panel panel-default page-row">
+            @if (Model != null && resultNotification != null && Model.SubjectResults.IsNotNullOrEmpty())
+            {
+                var hasAnyNotification = Model.SubjectResults.Any(x => x.ParentNotification_ID != null && x.ParentNotification_ID != Guid.Empty);
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <a>Result of @CUSrinagar.Extensions.Helper.GetEnumDescription(resultNotification.PrintProgramme) Semester - @resultNotification.Semester</a>
+
+                        @if (Model.TranscriptPrinted == false)
+                        {
+                            <a target="_blank" href="@Url.Action("SemesterMarksCards", "MarksCard", new { PrintProgramme = resultNotification.PrintProgramme, Semester = resultNotification.Semester, Student_ID = Model.Student_ID })" class="label label-primary pull-right cursor-ponter hidden-print"><i class="fa fa-print"> View Sem </i> </a>
+
+                        }
+
+                        @if (resultNotification.ShowPrintMarksCard && Model.TranscriptPrinted == false)
+                        {
+                            <a target="_blank" class="label label-primary pull-right cursor-ponter hidden-print margin-Rt-20-top-10"
+                               href="@Url.Action("PrintMarksSheet", "MarksCard", new { PrintProgramme = resultNotification.PrintProgramme, Student_ID = Model.Student_ID,ResultNotification_ID=resultNotification.ResultNotification_ID})"><i class="fa fa-print"> View MarksSheet</i></a>
+                        }
+
+                        @if (resultNotification.ShowPrintTranscript)
+                        {
+                            <a title="Transcript" target="_blank" class="label label-primary pull-right cursor-ponter hidden-print margin-Rt-20-top-10"
+                               href="@Url.Action("PrintTranscript", "MarksCard", new {PrintProgramme = resultNotification.PrintProgramme,Student_ID = Model.Student_ID,ResultNotification_ID=resultNotification.ResultNotification_ID })">
+                                <i class="fa fa-print">View Provisional Transcript</i>
+                            </a>
+                        }
+                        @if (resultNotification.ShowPrintDegreeCertificate)
+                        {
+                            <a title="Transcript" target="_blank" class="label label-primary pull-right cursor-ponter hidden-print margin-Rt-20-top-10"
+                               href="@Url.Action("PrintDegreeCertificate", "MarksCard", new {PrintProgramme = resultNotification.PrintProgramme,Student_ID = Model.Student_ID,ResultNotification_ID=resultNotification.ResultNotification_ID })">
+                                <i class="fa fa-print">Download Sample Degree Certificate</i>
+                            </a>
+                        }
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table id="simple-table" class="table  table-bordered table-hover">
+                        <tbody>
+                            <tr><td colspan="5" style="text-align:center"><strong>Semester - @resultNotification.Semester  </strong></td> </tr>
+                            <tr>
+                                <td class="col-md-3"><b>Course:</b></td>
+                                <td colspan="6">@Model.CourseFullName</td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-3"><b>Name:</b></td>
+                                <td colspan="6">@Model.FullName</td>
+                            </tr>
+                            <tr>
+                                <td><b>Registration No:</b></td>
+                                <td colspan="6">@Model.CUSRegistrationNo</td>
+                            </tr>
+                            <tr>
+                                <td><b>Exam Roll No:</b></td>
+                                <td colspan="6">@Model.ExamRollNumber</td>
+                            </tr>
+                            <tr>
+                                <th>Subject Name</th>
+                                <th title="Internal/practical marks">Internal</th>
+                                <th title="External/theory marks">External</th>
+                                @if (hasAnyNotification)
+                                {
+                                    <th>Notification no</th>
+                                }
+                            </tr>
+                            @if (Model.TranscriptPrinted)
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center text-danger">
+                                        <h2>Transcript has been already handed over to the student.</h2>
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                foreach (var item in Model.SubjectResults.ToList())
+                                {
+                                    <tr>
+                                        <th>@item.SubjectFullName (@item.SubjectType.ToString())</th>
+                                        <td title="">
+                                            @if (item.HasInternalComponent)
+                                            {
+                                                if ((item.InternalStatus == ResultStatus.P || item.InternalStatus == ResultStatus.F))
+                                                {
+                                                    <span>@item.TotalInternalMarksObtained.Value.ToString("f0")</span>
+                                                    <sup>@item.InternalStatus.ToString()</sup>
+                                                }
+                                                else
+                                                {
+                                                    <span>@item.InternalStatus.ToString()</span>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <span>-</span>
+                                            }
+                                        </td>
+                                        <td title="">
+                                            @if (item.HasExternalComponent)
+                                            {
+                                                if (item.HasInternalComponent)
+                                                {
+                                                    if (item.InternalStatus == ResultStatus.P)
+                                                    {
+                                                        if (item.TotalExternalMarksObtained.HasValue && (item.ExternalStatus == ResultStatus.P || item.ExternalStatus == ResultStatus.F))
+                                                        {
+                                                            <span>@item.TotalExternalMarksObtained.Value.ToString("f0")</span>
+                                                            <sup>@item.ExternalStatus.ToString()</sup>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>@item.ExternalStatus.ToString()</span>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <sup>F</sup>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (item.TotalExternalMarksObtained.HasValue && (item.ExternalStatus == ResultStatus.P || item.ExternalStatus == ResultStatus.F))
+                                                    {
+                                                        <span>@item.TotalExternalMarksObtained.Value.ToString("f0")</span>
+                                                        <sup>@item.ExternalStatus.ToString()</sup>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>@item.ExternalStatus.ToString()</span>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <span>-</span>
+                                            }
+                                        </td>
+                                        @if (hasAnyNotification)
+                                        {
+                                            <td>
+                                                @if (item.ParentNotification_ID.HasValue)
+                                                {
+                                                    <a href="#" data-toggle="tooltip" title="@item.NotificationDate.ToString("dd-MMM-yyyy")">@item.NotificationNo.ToUpper()</a>
+                                                }
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <ul class="list-inline col-sm-12" style="color:white;">
+                            <li><h5 class="quadraText">@resultNotification.Remark</h5> </li>
+                        </ul>
+                        <div class="meta col-md-6 col-sm-6 col-xs-6">
+                            <span class="no-margins no-padding pull-right">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <h1>Result not found</h1>
+            }
+        </div><!--//panel-->
+    </div>
+</div>

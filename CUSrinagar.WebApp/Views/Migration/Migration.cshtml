@@ -1,0 +1,127 @@
+﻿@using CUSrinagar.Extensions;
+@using CUSrinagar.Enums
+
+
+@model CUSrinagar.Models.MigrationPI
+@{
+    ViewBag.Title = "Migration Form";
+    string programme = ViewBag.PrintProgrammeIs + "";
+    var FormType = Helper.GetEnumDescription<MigrationE>(ViewBag.FormTypeIs);
+}
+
+
+<div id="response">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+</div>
+<div class="col-md-1 col-sm-1"></div>
+<div class="col-md-10 col-sm-10 ">
+    <div class="panel panel-default">
+
+        <div class="panel-body">
+
+            @using (Html.BeginForm("MakePayment", "Migration", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.Programme, programme)
+                @Html.HiddenFor(model => model.TotalFeeM, "500")
+                <div class="page-content">
+
+                    <div class="panel-body">
+                        <table width="100%">
+                            <tbody>
+                                <tr>
+                                    <td align="center">
+                                        <font size="6">
+                                            <b>
+                                                <span style="font-family:Arial;font-size:x-large">
+                                                    Cluster University of Srinagar
+                                                </span><br />
+                                                <span style="font-family:Arial;font-size:medium">  Application Form @FormType  Certificate</span>
+                                            </b>
+                                        </font>
+                                        <br />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br />
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="form-group col-sm-8">
+                                    <label class="col-sm-8 control-label no-padding-right">
+                                        <span class="red bigger-110">*</span>CUS Registration Number
+
+                                    </label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.CUSRegistrationNo, new { @class = "" })<span id="CUSRegistrationNoVal" class="red hidden">Required</span>
+                                    </div>
+
+
+                                </div>
+                                <div class="form-group col-sm-8">
+                                    <label class="col-sm-8 control-label no-padding-right">
+                                        <span class="red bigger-110">*</span>DOB
+
+                                    </label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.DOB, new { @class = "datetime", @type = "date" })<span id="DOBVal" class="red hidden">Required</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <button id="SearchDetail" class="btn btn-theme" value="Search" type="button" style="color:white !important" data-type="@ViewBag.FormTypeIs">Search</button>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                                <div class="col-lg-12 col-md-12" id="SubDiv">
+                                    @if (Model != null)
+                                    {@Html.Partial("_SubViewMigration", Model)}
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .width100 {
+        width: 100% !important;
+    }
+
+    .page-header h1 {
+        margin: 28px;
+    }
+
+    .panel {
+        background-color: #f5f5f56b !important;
+    }
+
+    .red {
+        color: red !important;
+    }
+
+    .space-10 {
+        margin-top: 28px;
+    }
+</style>
+
+
+@section PageSpecificJS{
+    <script src="@Url.Content("~/Content/ThemePublic/Migration/JSMigration.js")"></script>
+
+    <script src="~/Content/ThemeAdmin/Content/Scripts/JSGeneral/GeneralJS.js"></script>
+}

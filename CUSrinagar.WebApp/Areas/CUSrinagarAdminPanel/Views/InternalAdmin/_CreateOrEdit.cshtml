@@ -1,0 +1,206 @@
+﻿
+@model  CUSrinagar.Models.InternalExam
+@{
+    var routeValues = HttpContext.Current.Request.RequestContext.RouteData.Values;
+    string actionName = "";
+    if (routeValues != null)
+    {
+        if (routeValues.ContainsKey("controller"))
+        {
+            actionName = routeValues["action"].ToString();
+        }
+    }
+    bool IsEdit = false;
+    if (actionName == "Edit")
+    { IsEdit = true; }
+}
+@Html.AntiForgeryToken()
+<style>
+    .disableDDL {
+        pointer-events: none;
+    }
+</style>
+@if (!ViewData.ModelState.IsValidField("ErrorMessage"))
+{
+    <div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong>@Html.ValidationMessage("ErrorMessage", "", new { @class = "red " })</strong></div>
+}
+<div class="jsDDLContainer">
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+            <span class="red bigger-110">*</span> @Html.LabelFor(model => model.ExamName)
+        </label>
+        <div class="col-sm-6 ">
+            @Html.TextBoxFor(model => model.ExamName, new { @class = "width-100", @maxlength = "150" })
+        </div>
+        <div class="col-sm-2">
+            @Html.ValidationMessageFor(model => model.ExamName, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+            <span class="red bigger-110">*</span> @Html.LabelFor(model => model.ExamDate)
+
+        </label>
+        <div class="col-sm-6 ">
+
+            @Html.TextBoxFor(model => model.ExamDate, new { @class = "width-100", @maxlength = "150" })
+        </div>
+        <div class="col-sm-2">
+            @Html.ValidationMessageFor(model => model.ExamDate, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+            <span class="red bigger-110">*</span> @Html.LabelFor(model => model.NoOfQuestions)
+
+        </label>
+        <div class="col-sm-6 ">
+
+            @Html.TextBoxFor(model => model.NoOfQuestions, new { @class = "width-100", @maxlength = "150" })
+
+        </div>
+        <div class="col-sm-2">
+            @Html.ValidationMessageFor(model => model.NoOfQuestions, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+            <span class="red bigger-110">*</span> @Html.LabelFor(model => model.TimeLimit)
+
+        </label>
+        <div class="col-sm-6">
+
+            @Html.TextBoxFor(model => model.TimeLimit, new { @class = "width-100", @maxlength = "150" })
+
+        </div>
+        <div class="col-sm-2">
+            @Html.ValidationMessageFor(model => model.TimeLimit, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+            <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Batch)
+
+        </label>
+        <div class="col-sm-6 ">
+
+            @Html.TextBoxFor(model => model.Batch, new { @class = "width-100", @maxlength = "150" })
+
+            <div class="col-sm-2">
+                @Html.ValidationMessageFor(model => model.Batch, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+            <span class="red bigger-110">*</span> @Html.LabelFor(model => model.College_Id)
+
+        </label>
+        <div class="col-sm-6 ">
+
+            @Html.DropDownListFor(model => model.College_Id, new SelectList(ViewBag.College, "Value", "Text"), "-- All Colleges --",
+                                              new
+                                              {
+                                                  @class = "form-control chosen-select  ",
+                                               })
+
+            <div class="col-sm-2">
+                @Html.ValidationMessageFor(model => model.College_Id, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+            <span class="red bigger-110">*</span> @Html.Label("Programme")
+
+        </label>
+        <div class="col-sm-6">
+            @Html.DropDownList("ProgrammeDDL", new SelectList(ViewBag.Programmes, "Value", "Text", (short)CUSrinagar.Enums.Programme.UG), "-- All Programmes --",
+                       new
+                       {
+                           @class = "form-control chosen-select jsProgrammeDDL ",
+
+                           @data_scope = "row1"
+                       })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+            <span class="red bigger-110">*</span> @Html.Label("Course")
+
+        </label>
+        <div class="col-sm-6 jsDDLContainer">
+            @Html.DropDownListFor(model=>model.Course_Id, new SelectList(ViewBag.Courses, "Value", "Text", (short)CUSrinagar.Enums.Programme.UG), " -- All Courses --",
+                       new
+                       {
+                           @class = "form-control chosen-select jsCourseDDL ",
+
+                           @data_scope="row1"
+                       })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+            <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Semester)
+
+        </label>
+        <div class="col-sm-6 jsDDLContainer">
+
+            @Html.DropDownListFor(model => model.Semester, new SelectList(ViewBag.Semesters, "Value", "Text"), "-- All Semesters --",
+                                              new
+                                              {
+                                                  @class = "form-control chosen-select jsSemesterDDL ",
+                                                  @data_scope = "row1"
+                                              })
+
+            <div class="col-sm-2">
+                @Html.ValidationMessageFor(model => model.Semester, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+            <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Subject_ID)
+
+        </label>
+        <div class="col-sm-6 jsDDLContainer">
+
+            @Html.DropDownListFor(model => model.Subject_ID, new SelectList(ViewBag.Subjects, "Value", "Text"), "-- All Subjects --",
+                                              new
+                                              {
+                                                  @class = "form-control chosen-select jsSubjectDDL ",
+                                                    @data_scope = "row1"
+                                              })
+
+            <div class="col-sm-2">
+                @Html.ValidationMessageFor(model => model.Subject_ID, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right"></label>
+        <div class="col-sm-8">
+            <button type="submit" class="btn btn-sm btn-primary save-button" id="sub">
+                <i class="ace-icon fa fa-check"></i>
+                Save
+            </button>
+
+            <a id="cData1" href="/CUSrinagarAdminPanel/InternalAdmin/InternalExam/" class="fm-button ui-state-default ui-corner-all fm-button-icon-left btn btn-sm btn-danger">
+                <i class="ace-icon fa fa-times"></i>Cancel
+            </a>
+
+        </div>
+    </div>
+

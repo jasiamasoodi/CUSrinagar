@@ -1,0 +1,357 @@
+﻿@model  CUSrinagar.Models.SalaryBill
+@{
+    ViewBag.Title = "CUS :: Edit Salary";
+
+}
+<div class="row">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header" style="margin-bottom: 19px;">
+                <h4 class="widget-title"><i class='menu-icon fa fa-pencil-square-o'></i>Edit Salary</h4>
+
+
+            </div>
+            <div class="widget-body">
+                <div class="row">
+
+                    @using (Html.BeginForm("AddOrEditEmployeeSalary", "Salary", FormMethod.Post, new { enctype = "multipart/form-data", @name = "validation-form", @id = "validation-form", @class = "form-horizontal", @role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        @Html.HiddenFor(model => model.SalaryBill_ID);
+                        @Html.HiddenFor(model => model.Emp_ID);
+                        @Html.HiddenFor(model => model.ISNPS);
+                        @Html.HiddenFor(model => model.EmployeeType);
+                        if (!ViewData.ModelState.IsValidField("ErrorMessage"))
+                        {
+                            <div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong>@Html.ValidationMessage("ErrorMessage", "", new { @class = "red " })</strong></div>
+                        }
+                        <style>
+                            .disableDDL {
+                                pointer-events: none;
+                            }
+                        </style>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">
+                                    Employee Name
+                                </label>
+                                <div class="col-sm-4 ">
+                                    @Html.DisplayFor(x => x.EmployeeFullName)
+                                    @Html.HiddenFor(model => model.EmployeeFullName)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">
+                                    Employee Type
+                                </label>
+                                <div class="col-sm-4 ">
+                                    @Html.DisplayFor(x => x.EmployeeType)
+                                    @Html.HiddenFor(model => model.EmployeeType)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">
+                                    Designation
+                                </label>
+                                <div class="col-sm-4 ">
+                                    @Html.DisplayFor(x => x.Designation)
+                                    @Html.HiddenFor(model => model.Designation)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.PayScale)
+
+                                </label>
+                                <div class="col-sm-4 ">
+                                    @Html.TextBoxFor(model => model.PayScale)
+                                </div>
+                                <div class="col-sm-5">
+                                    @Html.ValidationMessageFor(model => model.PayScale, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.BasicPay)
+
+                                </label>
+                                <div class="col-sm-4 ">
+                                    @Html.TextBoxFor(model => model.BasicPay, new { @class = "form-control width100", @onkeypress = "return numbersOnly(event);" })
+                                </div>
+                                <div class="col-sm-5">
+                                    @Html.ValidationMessageFor(model => model.BasicPay, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+                            <h4>Allowances</h4>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.DA)
+
+                                </label>
+                                <div class="col-sm-4 ">
+                                    @Html.TextBoxFor(model => model.DA, new { @class = "form-control width100", @onkeypress = "return numbersOnly(event);" })
+                                </div>
+                                <div class="col-sm-5">
+                                    @Html.ValidationMessageFor(model => model.DA, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.HRA)
+
+                                </label>
+                                <div class="col-sm-4 ">
+                                    @Html.TextBoxFor(model => model.HRA, new { @class = "form-control width100", @onkeypress = "return numbersOnly(event);" })
+                                </div>
+                                <div class="col-sm-5">
+                                    @Html.ValidationMessageFor(model => model.HRA, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.MA)
+
+                                </label>
+                                <div class="col-sm-4 ">
+                                    @Html.TextBoxFor(model => model.MA, new { @class = "form-control width100", @onkeypress = "return numbersOnly(event);" })
+                                </div>
+                                <div class="col-sm-5">
+                                    @Html.ValidationMessageFor(model => model.MA, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.CCA)
+
+                                </label>
+                                <div class="col-sm-4 ">
+                                    @Html.TextBoxFor(model => model.CCA, new { @class = "form-control width100", @onkeypress = "return numbersOnly(event);" })
+                                </div>
+                                <div class="col-sm-5">
+                                    @Html.ValidationMessageFor(model => model.CCA, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.SPL_PAY)
+
+                                </label>
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(model => model.SPL_PAY, new { @class = "form-control width100", @onkeypress = "return numbersOnly(event);" })
+                                </div>
+                                <div class="col-sm-5">
+                                    @Html.ValidationMessageFor(model => model.SPL_PAY, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.ChargeAllow)
+
+                                </label>
+                                <div class="col-sm-4 ">
+                                    @Html.TextBoxFor(model => model.ChargeAllow, new { @class = "form-control width100", @onkeypress = "return numbersOnly(event);" })
+                                </div>
+                                <div class="col-sm-5">
+                                    @Html.ValidationMessageFor(model => model.ChargeAllow, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.OtherAllowances)
+
+                                </label>
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(model => model.OtherAllowances, new { @class = "form-control width100", @onkeypress = "return numbersOnly(event);" })
+                                </div>
+                                <div class="col-sm-5">
+                                    @Html.ValidationMessageFor(model => model.OtherAllowances, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.OtherAllowancesRemark)
+
+                                </label>
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(model => model.OtherAllowancesRemark, new { @class = "form-control width100" })
+                                </div>
+                                <div class="col-sm-5">
+                                    @Html.ValidationMessageFor(model => model.OtherAllowancesRemark, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+
+                            <h4>Deductions</h4>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.GPF_Sub)
+
+                                </label>
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(model => model.GPF_Sub, new { @class = "form-control width100", @onkeypress = "return numbersOnly(event);" })
+                                </div>
+                                <div class="col-sm-5">
+                                    @Html.ValidationMessageFor(model => model.GPF_Sub, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.GPF_ref)
+
+                                </label>
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(model => model.GPF_ref, new { @class = "form-control width100", @onkeypress = "return numbersOnly(event);" })
+                                </div>
+                                <div class="col-sm-5">
+                                    @Html.ValidationMessageFor(model => model.GPF_ref, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.GroupIns)
+
+                                </label>
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(model => model.GroupIns, new { @class = "form-control width100", @onkeypress = "return numbersOnly(event);" })
+                                </div>
+                                <div class="col-sm-5">
+                                    @Html.ValidationMessageFor(model => model.GroupIns, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.SLI_I)
+
+                                </label>
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(model => model.SLI_I, new { @class = "form-control width100", @onkeypress = "return numbersOnly(event);" })
+                                </div>
+                                <div class="col-sm-5">
+                                    @Html.ValidationMessageFor(model => model.SLI_I, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.SLI_II)
+
+                                </label>
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(model => model.SLI_II, new { @class = "form-control width100", @onkeypress = "return numbersOnly(event);" })
+                                </div>
+                                <div class="col-sm-5">
+                                    @Html.ValidationMessageFor(model => model.SLI_II, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.I_Tax)
+
+                                </label>
+                                <div class="col-sm-4 ">
+                                    @Html.TextBoxFor(model => model.I_Tax, new { @class = "form-control width100", @onkeypress = "return numbersOnly(event);" })
+                                </div>
+                                <div class="col-sm-5">
+                                    @Html.ValidationMessageFor(model => model.I_Tax, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.RecoveryExcess)
+
+                                </label>
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(model => model.RecoveryExcess, new { @class = "form-control width100", @onkeypress = "return numbersOnly(event);" })
+                                </div>
+                                <div class="col-sm-5">
+                                    @Html.ValidationMessageFor(model => model.RecoveryExcess, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.NPSShare)
+
+                                </label>
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(model => model.NPSShare, new { @class = "form-control width100", @onkeypress = "return numbersOnly(event);" })
+                                </div>
+                                <div class="col-sm-5">
+                                    @Html.ValidationMessageFor(model => model.NPSShare, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.OtherDeductions)
+
+                                </label>
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(model => model.OtherDeductions, new { @class = "form-control width100", @onkeypress = "return numbersOnly(event);" })
+                                </div>
+                                <div class="col-sm-5">
+                                    @Html.ValidationMessageFor(model => model.OtherDeductions, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">
+                                    <span class="red bigger-110">*</span> @Html.LabelFor(model => model.OtherDeductionsRemark)
+
+                                </label>
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(model => model.OtherDeductionsRemark, new { @class = "form-control width100" })
+                                </div>
+                                <div class="col-sm-5">
+                                    @Html.ValidationMessageFor(model => model.OtherDeductionsRemark, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right"></label>
+                                <div class="col-sm-8">
+                                    <button type="submit" class="btn btn-sm btn-primary save-button">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        Save
+                                    </button>
+
+                                    <a id="cData1" href="/CUSrinagarAdminPanel/Salary/EmployeeList/" class="fm-button ui-state-default ui-corner-all fm-button-icon-left btn btn-sm btn-danger">
+                                        <i class="ace-icon fa fa-times"></i>Cancel
+                                    </a>
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/JSalary/Salary.js"></script>
+<script>
+    var contractual = "@CUSrinagar.Enums.EmployeeType.Contractual";
+    var needbasis =  "@CUSrinagar.Enums.EmployeeType.Need_Basis";
+</script>

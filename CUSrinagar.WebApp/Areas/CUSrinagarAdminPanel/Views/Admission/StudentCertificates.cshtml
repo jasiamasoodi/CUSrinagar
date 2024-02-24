@@ -1,0 +1,47 @@
+﻿@model IEnumerable<CUSrinagar.Models.StudentAdmissionCertificate>
+@using CUSrinagar.Extensions
+
+<hr />
+<div id="JSPhotos" style="max-height:600px;overflow-x:auto">
+    @if (Model.IsNotNullOrEmpty())
+    {
+        foreach (var item in Model)
+        {
+            if (File.Exists(Server.MapPath(item.CertificateUrl)))
+            {
+                <div class="thumbnail col-sm-4 text-center">
+                    <strong style="color:red">@item.CertificateType.GetEnumDescription()</strong>
+                    <br />
+                    <img class="img-responsive" src="@Url.Content(item.CertificateUrl)" style="max-height:210px;" />
+                    <strong>@item.StudentFormNo</strong>
+                    <br />
+                    <strong>@item.FullName</strong>
+                    <br />
+                    <strong>@item.Mobile</strong>
+                    <br />
+                    <a href="@Url.Content(item.CertificateUrl)" target="_blank" class="btn btn-success btn-sm">Zoom</a>
+                </div>
+            }
+            else
+            {
+                <div class="thumbnail col-sm-2" style="text-align:center">
+                    <strong class="">
+                        <strong style="color:red">Certificate not available for</strong>
+                        <br />
+                        <br />
+                        <strong>@item.StudentFormNo</strong>
+                        <br />
+                        <strong>@item.FullName</strong>
+                        <br />
+                        <strong>@item.Mobile</strong>
+                        <br />
+                    </strong>
+                </div>
+            }
+        }
+    }
+    else
+    {
+        <p class="text-center red" style="font-weight:bold">No details found.</p>
+    }
+</div>

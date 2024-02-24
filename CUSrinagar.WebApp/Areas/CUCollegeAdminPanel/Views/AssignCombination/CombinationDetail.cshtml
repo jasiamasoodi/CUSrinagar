@@ -1,0 +1,177 @@
+﻿@model CUSrinagar.Models.PersonalInformationCompact
+@{
+    ViewBag.Title = "Student Detail";
+    Layout = "~/Areas/CUCollegeAdminPanel/Views/Shared/_CUCollegeAdminPanelLayout.cshtml";
+}
+<div class="panel panel-primary">
+    <div class="panel-heading lead no-margin-bottom">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12"><i class="fa fa-users"></i> 3rd Sem Combination</div>
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                <form method="post" action='@Url.Action("CombinationDetail","AssignCombination",new { area = "CUCollegeAdminPanel"})' role="form" class="form-inline js-search-form">
+                    @Html.DropDownList("printProgramme", new SelectList(ViewBag.PrintProgrammeList, "Value", "Text", (short)CUSrinagar.Enums.PrintProgramme.UG),
+                                    null, new
+                                    {
+                                        @class = " form-control",
+                                        @required = "required"
+                                    })
+                    <select class=" form-control" name="semester" id="semester">
+                        <option value="3">Semester-III</option>
+                    </select>
+                    <input type="text" class="form-control js-search-formnumber" name="CUSRegistrationNo" placeholder="CUS Registration No" value="@(ViewBag.CUSRegistrationNo==null?"CUS-17-"+(string)ViewBag.CollegeCode+"-":ViewBag.CUSRegistrationNo)" required autofocus onfocus="this.selectionStart=11;this.selectionEnd=20;" />
+
+                    <button type="button" class="btn btn-default btn-lg js-search-formdetail">
+                        <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>Search
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-body">
+        @if (Model != null)
+        {
+            var coreSubjects = (List<CUSrinagar.Models.ADMSubjectMaster>)ViewBag.CoreSubjects;
+            var skillEnhancementSubjects = (List<CUSrinagar.Models.ADMSubjectMaster>)ViewBag.SkillEnhanceSubjects;
+            var selectedSubjects = (List<CUSrinagar.Models.ADMSubjectMaster>)ViewBag.SelectedStudentSubjects;
+
+            <form id="frmStudentSubjectCombination" method="post" enctype="application/x-www-form-urlencoded">
+                @Html.Hidden("Student_ID", Model.Student_ID)
+                @Html.Hidden("Course_ID", Model.Course_ID)
+                @Html.Hidden("CourseCode", Model.CourseCode)
+                @Html.HiddenFor(model => model.AcceptCollege_ID)
+                <div class="row ">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <h3 class="no-margin ">Set Combination</h3>
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th>Core Subjects</th>
+                                    <td>
+                                        @if (coreSubjects != null)
+                                        {
+                                            var subjects = String.Join(", ", coreSubjects.Select(x => x.SubjectFullName).ToList());
+                                            <b>@subjects</b>
+                                        }
+                                        else
+                                        {
+                                            <h4 class="text-danger">Core subjects not available ....</h4>
+                                            <h4 class="text-danger">Please visit Cluster University for correction ....</h4>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Skill Enhancement Subject 1</th>
+                                    <td>
+                                        <select id="SkillEnhanceSubject1" name="SkillEnhanceSubject1" class="form-control chosen-select" tabindex="2">
+                                            <option value=""> - Select -</option>
+                                            @if (skillEnhancementSubjects != null)
+                                            {
+                                                Guid firstSubject_ID = selectedSubjects != null && selectedSubjects.Count > 0 ? selectedSubjects[0].Subject_ID : Guid.Empty;
+                                                foreach (var subject in skillEnhancementSubjects)
+                                                {
+                                                    <option @(firstSubject_ID == subject.Subject_ID ? "selected='selected'" : "") value="@subject.Subject_ID" data-credit="@subject.Credit">@subject.SubjectFullName (@subject.Credit Credits)</option>
+                                                }
+                                            }
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Skill Enhancement Subject 2</th>
+                                    <td>
+                                        <select id="SkillEnhanceSubject2" name="SkillEnhanceSubject2" class="form-control chosen-select" tabindex="3">
+                                            <option value=""> - Select -</option>
+                                            @if (skillEnhancementSubjects != null)
+                                            {
+                                                Guid secondndSubject_ID = selectedSubjects != null && selectedSubjects.Count > 1 ? selectedSubjects[1].Subject_ID : Guid.Empty;
+                                                foreach (var subject in skillEnhancementSubjects)
+                                                {
+                                                    <option @(secondndSubject_ID == subject.Subject_ID ? "selected='selected'" : "") value="@subject.Subject_ID" data-credit="@subject.Credit">@subject.SubjectFullName (@subject.Credit Credits)</option>
+                                                }
+                                            }
+                                        </select>
+                                    </td>
+                                </tr>
+                                @*<tr>
+                                        <th>Skill Enhancement Subject 2</th>
+                                        <td>
+                                            @Html.DropDownList("SkillEnhanceSubject2", new SelectList(ViewBag.SkillEnhanceSubjects, "Value", "Text"), " Select Subject 2 ",
+                                               new
+                                               {
+                                                   @class = "form-control chosen-select"
+                                               })
+                                        </td>
+                                    </tr>*@
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row js-form-detail">
+
+                    <div class="col-lg-9 col-md-9">
+                        <div class="table-responsive col-lg-6 col-md-6">
+                            <h3 class="no-margins">Student Info</h3>
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td class="text-success to-uppercase">Name</td>
+                                        <td class="to-uppercase"><b>@Model.FullName</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-success to-uppercase">Course</td>
+                                        <td class="to-uppercase"><b>@Model.CourseFullName</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-success to-uppercase">Semster</td>
+                                        <td class="to-uppercase"><b>@Model.CurrentSemesterOrYear</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-success to-uppercase">Accepted By College</td>
+                                        <td class="to-uppercase"><b>@Model.CollegeFullName</b></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-2 col-sm-6  col-xs-12"></div>
+                        <div class="col-md-2 col-sm-6  col-xs-12">
+                            @if (Model.AcceptCollege_ID.HasValue)
+                            {
+                                @*<button type="button" class="btn btn-danger btn-sm js-release-student"><i class="glyphicon glyphicon-ok"></i><b>&nbsp;Delete Student</b> </button>*@
+                            }
+                        </div>
+                        <div class="col-md-2 col-sm-6  col-xs-12"></div>
+                        <div class="col-md-2 col-sm-6  col-xs-12">
+                            @if (coreSubjects != null && skillEnhancementSubjects != null)
+                            {
+                                <button tabindex="4" type="button" class="btn btn-success jsSaveStudentComb"><i class="glyphicon glyphicon-ok"></i><b> Save Combination</b> </button>
+                            }
+                        </div>
+                        <div class="col-md-2 col-sm-6  col-xs-12"></div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+
+                    </div>
+                </div>
+            </form>
+        }
+        else
+        {
+            <h1>Form Not Found</h1>
+        }
+    </div>
+</div>
+
+@section PageSpecificJSFiles{
+    <script src="@Url.Content("~/Scripts/JSChosen.js")"></script>
+    <script src="~/Content/ThemeAdmin/Content/Scripts/Pages/assign-combination.js"></script>
+}
+@section PageSpecificJS{
+    <script>
+        $(document).ready(function () {
+            $("#item-comb-3rd-sem").addClass("active");
+            $(".dts").addClass("active open");
+        });
+    </script>
+}

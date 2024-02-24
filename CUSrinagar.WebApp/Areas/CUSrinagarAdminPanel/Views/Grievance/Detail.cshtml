@@ -1,0 +1,330 @@
+﻿@model CUSrinagar.Models.Grievance
+@{
+    ViewBag.Title = "Feedback/Grievance Detail";
+    Guid LoggedInUser = ViewBag.LoggedInUser;
+}
+
+
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action("Index","Dashboard",new { area="CUSrinagarAdminPanel"})">Home</a>
+        </li>
+        <li>
+            <a href="@Url.Action("Grievance","Grievance",new { area="CUSrinagarAdminPanel"})">Feedback/Grievance</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+@Html.Hidden("IsAdmin", (bool?)ViewBag.IsAdmin)
+<div class="page-header">
+    <h1>
+        <a href="@Url.Action("Grievance","Grievance",new { area="CUSrinagarAdminPanel"})">Feedback/Grievance</a>
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            Work flow
+        </small>
+    </h1>
+</div><!-- /.page-header -->
+@if (Model != null)
+{
+    <div id="timeline-main-line">
+        @Html.HiddenFor(item => item.Grievance_ID, new { @class = "jsDetailViewGrievance_ID" })
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+                <div class="timeline-container">
+                    <div class="timeline-label">
+                        <span class="label label-primary arrowed-in-right label-lg" title="Issue raised on date">
+                            @*<b>@Model.Date.ToString("dd-MMMM-yyyy")</b>*@
+                            <b>@CUSrinagar.Extensions.Helper.GetEnumDescription(Model.Category) </b>
+                        </span>
+                    </div>
+
+                    <div class="timeline-items">
+                        <div class="timeline-item clearfix">
+                            <div class="timeline-info">
+                                <img src="~/Content/ThemePublic/Libraries/images/student-dp-sm.jpg" alt="@Model.FullName" />
+                                <span class="label label-info label-sm" title="@Model.FullName">@Model.FullName.Substring(0, Model.FullName.Length < 6 ? Model.FullName.Length : 6).ToUpper()</span>
+                            </div>
+                            <div class="widget-box  widget-color-red2">
+                                <div class="widget-header widget-header-small">
+                                    <h4 class="widget-title smaller">
+                                        @Model.FullName &nbsp;&nbsp;<span class="">:&nbsp;&nbsp; @Model.Subject</span>
+                                    </h4>
+                                    <span class="widget-toolbar no-border" title="replied on">
+                                        <i class="ace-icon fa fa-clock-o bigger-110"></i>
+                                        @Model.Date.ToString("dd-MMMM-yyyy")
+                                    </span>
+
+                                    <span class="widget-toolbar">
+                                        <a href="#" data-action="collapse">
+                                            <i class="ace-icon fa fa-chevron-up"></i>
+                                        </a>
+                                    </span>
+                                </div>
+
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        @Model.Message.
+                                        <div class="space-6"></div>
+                                        <div class="widget-toolbox clearfix">
+                                            <div class="pull-right action-buttons">
+                                                @if (Model.Status != CUSrinagar.Enums.GrievanceStatus.Resolved)
+                                                {
+                                                    <a class="btn btn-success btn-sm" href="@Url.Action("AssignToMe", "Grievance", new { @area = "CUSrinagarAdminPanel", @id = Model.Grievance_ID })">Assign To Me</a>
+                                                    <button class="btn btn-success btn-sm jsShowBatchUpdateDialog" type="button">Forward</button>
+                                                }
+                                                @*<a class="btn btn-success btn-sm" href="@Url.Action("Discard", "Grievance", new { @area = "CUSrinagarAdminPanel", @id = Model.Grievance_ID })">Discard</a>*@
+                                                @*<a href="#">
+                                                        <i class="ace-icon fa fa-check green bigger-130"></i>
+                                                    </a>
+                                                    <a href="#">
+                                                        <i class="ace-icon fa fa-pencil blue bigger-125"></i>
+                                                    </a>
+                                                    <a href="#" title="delete query">
+                                                        <i class="ace-icon fa fa-times red bigger-125"></i>
+                                                    </a>*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /.timeline-items -->
+                </div><!-- /.timeline-container -->
+            </div>
+        </div>
+    </div>
+
+    <div id="timeline-list">
+        <div class="row">
+            <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+                <div class="timeline-container">
+                    <div class="timeline-label">
+                        <span class="label label-primary arrowed-in-right label-lg" title="Issue raised on date">
+                            <b>Process Flow</b>
+                        </span>
+                    </div>
+
+                    <div class="timeline-items">
+                        @if (Model.GrievanceReplies != null)
+                        {
+                            foreach (var reply in Model.GrievanceReplies)
+                            {
+                                if (reply.UserAssigned_ID.HasValue && reply.UserAssigned_ID.Value != Guid.Empty)
+                                {
+                                    <div class="timeline-item clearfix">
+                                        <div class="timeline-info">
+                                            <img src="~/Content/ThemePublic/Libraries/images/prof-dp-sm.jpg" alt="Malik junaid" />
+                                        </div>
+                                        <div class="widget-box transparent">
+                                            <div class="widget-header widget-header-small">
+                                                <h5 class="widget-title smaller">
+                                                    <a href="#" class="blue">@reply.FullName</a>
+                                                </h5>
+                                                <span class="widget-toolbar no-border" title="replied on">
+                                                    <i class="ace-icon fa fa-clock-o bigger-110"></i>
+                                                    @reply.Date.ToString("dd-MMMM-yyyy")
+                                                </span>
+                                                <span class="widget-toolbar">
+                                                    <a href="#" data-action="collapse">
+                                                        <i class="ace-icon fa fa-chevron-up"></i>
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <div class="widget-body">
+                                                <div class="widget-main">
+                                                    @reply.Message
+                                                    <div class="space-6"></div>
+                                                    @*<div class="widget-toolbox clearfix">
+                                                            <div class="pull-right action-buttons">
+                                                                <a href="#">
+                                                                    <i class="ace-icon fa fa-check green bigger-130"></i>
+                                                                </a>
+                                                                <a href="#">
+                                                                    <i class="ace-icon fa fa-pencil blue bigger-125"></i>
+                                                                </a>
+                                                                <a href="#">
+                                                                    <i class="ace-icon fa fa-times red bigger-125"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>*@
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="timeline-item clearfix">
+                                        <div class="timeline-info">
+                                            <img src="~/Content/ThemePublic/Libraries/images/student-dp-sm.jpg" />
+                                        </div>
+                                        <div class="widget-box transparent">
+                                            <div class="widget-header widget-header-small">
+                                                <h5 class="widget-title smaller">@(reply.FullName)</h5>
+
+                                                <span class="widget-toolbar no-border">
+                                                    <i class="ace-icon fa fa-clock-o bigger-110"></i>
+                                                    @reply.Date.ToString("dd-MMMM-yyyy")
+                                                </span>
+
+                                                <span class="widget-toolbar">
+                                                    <a href="#" data-action="collapse">
+                                                        <i class="ace-icon fa fa-chevron-up"></i>
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <div class="widget-body">
+                                                <div class="widget-main">
+                                                    @reply.Message
+                                                    <div class="space-6"></div>
+                                                    @*<div class="widget-toolbox clearfix">
+                                                            <div class="pull-right action-buttons">
+                                                                <div class="space-4"></div>
+                                                                <div>
+                                                                    <a href="#">
+                                                                        <i class="ace-icon fa fa-heart red bigger-125"></i>
+                                                                    </a>
+                                                                    <a href="#">
+                                                                        <i class="ace-icon fa fa-facebook blue bigger-125"></i>
+                                                                    </a>
+                                                                    <a href="#">
+                                                                        <i class="ace-icon fa fa-check light-green bigger-130"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>*@
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        }
+
+
+                        @if (Model.Status != CUSrinagar.Enums.GrievanceStatus.Resolved && Model.UserAssigned_ID == LoggedInUser)
+                        {
+                            <div class="timeline-item clearfix">
+                                <div class="timeline-info">
+                                    <img src="~/Content/ThemePublic/Libraries/images/prof-dp-sm.jpg" />
+                                </div>
+                                <div class="widget-box transparent">
+                                    <div class="widget-body">
+                                        <div class="widget-main">
+                                            <textarea class="form-control" name="Message" id="Message" required></textarea>
+                                            <div class="space-6"></div>
+                                            <div class="widget-toolbox clearfix">
+                                                <div class="pull-right action-buttons">                                                    
+                                                    <label class="middle">
+                                                        <input class="ace" type="checkbox" id="AllowViewPublic">
+                                                        <label for="AllowViewPublic" class="lbl" > Allow Public View</label>
+                                                    </label>
+
+
+                                                    <button class="btn btn-success btn-sm jsPostReply" type="button">Post</button>
+                                                    <button class="btn btn-danger btn-sm jsDiscardQuery" type="button">Discard</button>
+                                                    @*<a href="#">
+            <i class="ace-icon fa fa-check green bigger-130"></i>
+        </a>
+        <a href="#">
+                <i class="ace-icon fa fa-pencil blue bigger-125"></i>
+            </a>
+    <a href="#" title="delete query">
+        <i class="ace-icon fa fa-times red bigger-125"></i>
+    </a>*@
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            @*<form>
+                                    <div class="form-actions">
+                                        <div class="input-group">
+                                            <input placeholder="Type your message here ..." type="text" class="form-control" name="message" />
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-sm btn-info no-radius" type="button">
+                                                    <i class="ace-icon fa fa-share"></i>
+                                                    Send
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </form>*@
+
+
+
+
+
+
+                        }
+
+                    </div><!-- /.timeline-items -->
+                </div><!-- /.timeline-container -->
+            </div>
+        </div>
+    </div>
+
+}
+else
+{
+    <div id="timeline-main-line">
+        <div class="row">
+            <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+
+            </div>
+        </div>
+    </div>
+
+}
+@*MODAL DIALOG START*@
+<!-- Modal -->
+<div class="modal" id="BatchUpdateGrievanceDailog" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered wd-650">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Batch Update</h4>
+            </div>
+            <div class="modal-body padding-0-10">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <td class="wd-35">
+                                <input class="ace checkbox checkbox-inline jsBatchChkBox" type="checkbox"><span class="lbl"></span>
+                            </td>
+                            <td class="wd-200">
+                                User
+                            </td>
+                            <td id="jstdUsers">
+                                <div class="wd-400 jsDDLContainer">
+                                    <select class="chosen-select form-control" id="cusUsers">
+                                        <option value="">     --    Select    --    </option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary jsBatchUpdate">Update</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section PageSpecificJSFiles{
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/Pages/admin-grievance.js")"></script>
+
+}

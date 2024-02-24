@@ -1,0 +1,8 @@
+﻿
+@{
+    string Type = "Subject";
+    string typeName =("CombinationSubjects");
+     var ValuesDDL = ViewBag.ChildList != null ? ViewBag.ChildList : new List<SelectListItem>();
+}
+@Html.DropDownList(typeName, new SelectList(ValuesDDL, "Value", "Text"),
+                                     "--Select--", new { @class = "chosen-select tag-input-style SearchDDL  form-control jsfilterelement required ", @data_column = @typeName, @data_operator = "Like", style = "width: 100%; !important" })

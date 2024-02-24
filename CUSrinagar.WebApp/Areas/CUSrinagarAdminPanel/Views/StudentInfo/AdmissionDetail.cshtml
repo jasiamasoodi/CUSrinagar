@@ -1,0 +1,65 @@
+﻿@model List<CUSrinagar.Models.AdmissionForm>
+@{
+    ViewBag.Title = "Student Info ";
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+
+        <li>
+            <a href="#" class="active">Admission Forms</a>
+        </li>
+    </ul>
+}
+<div class="page-content">
+    <div class="row panel panel-success ">
+        <div class="col-lg-12 col-md-12">
+            <div class="tab-pane ">
+                @{ int i = 1;}
+                <div class="table-responsive panel">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td class="text-success"> S.No</td>
+                                <td class="text-success"> Semester</td>
+                                <td class="text-success"> Applied_On</td>
+                                <td class="text-success"> Subjects Offered</td>
+                                <td class="text-success"> Type</td>
+                                <td class="text-success"> Amount</td>
+                                <td class="text-success"> Payment Date</td>
+                                <td class="text-success"> Semester Batch</td>
+                            </tr>
+                            @foreach (var admissionForm in Model)
+                            {
+                                <tr>
+                                    <td>@i</td>
+                                    <td> @admissionForm.Semester</td>
+                                    <td> @admissionForm.AppliedOn.ToLongDateString()</td>
+                                    <td>
+                                        @Html.Raw(String.Join(",<br/>", (admissionForm.Subjects == null) ? new List<string>() : admissionForm.Subjects))
+                                    </td>
+                                    <td> @{string mtype = ((CUSrinagar.Enums.PaymentModuleType)admissionForm.ModuleType).ToString();} @mtype</td>
+                                    <td> @admissionForm.Amount</td>
+                                    <td> @admissionForm.PaymentOn</td>
+                                    <td> @admissionForm.SemesterBatch</td>
+                                </tr>
+                                i++;
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+
+</div>
+
+
+
+
+

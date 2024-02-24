@@ -1,0 +1,131 @@
+﻿@using CUSrinagar.Models
+@model  CUSrinagar.Models.CentersAllotmentMaster
+
+@{
+    ViewBag.Title = "Assign Center";
+    ARGPersonalInformation aRGPersonalInformation = (ARGPersonalInformation)(ViewBag.FormDetail ?? new ARGPersonalInformation());
+}
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h2 class="panel-title">
+            <i class="fa fa-users"></i> Assign Entrance Center to Individual
+            <a class="btn btn-sm btn-danger pull-right" href="/CUSrinagarAdminPanel/Entrance/EntranceCenters"> <i class="fa fa-arrow-left"></i> Back to Entrance Centers</a>
+        </h2>
+    </div>
+    <div class="panel-heading lead no-margin-bottom">
+        <div class="row">
+            @if (TempData["response"] != null)
+            {
+                @Html.Raw(TempData["response"])
+            }
+            <div class="col-sm-12 center">
+                <form method="post" action='@Url.Action("AdmitCardStatus","Entrance",new { area = "CUSrinagarAdminPanel"})' role="form" class="js-search-form">
+                    <div class="input-group align-center">
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control search-query js-search-formnumber" name="formOrRegNumber" style="width:300px;" placeholder="Enter Form OR Registration Number" value="@ViewBag.FormNumber" required autofocus />
+
+                            @Html.DropDownList("PrintProgramme", ((IEnumerable<SelectListItem>)ViewBag.PirntProgramme), new { @class = "form-control", required = "required", style = "width:300px;" })
+
+                            <button type="submit" class="btn btn-sm btn-default js-search-formdetail">
+                                <span class="ace-icon fa fa-search icon-on-right"></span>
+                                Search
+                            </button>
+                            <button type="submit" class="btn btn-danger js-Delete-Center" style="margin-left:15px;">
+                                <span class="ace-icon fa fa-trash icon-on-right bigger-110"></span>
+                                Delete Centers of Individual
+                            </button>
+                            <input type="hidden" name="command" value="" id="JsClicked" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @if (Model != null)
+    {
+        <div class="panel-body" style="overflow:auto !important">
+            <table class="table table-bordered table-hover col-sm-12">
+                <tbody>
+                    <tr>
+                        <th>Name</th>
+                        <th>DOB (dd-MM-yyyy)</th>
+                        <th>Form Status</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            @aRGPersonalInformation.FullName
+                        </td>
+                        <td>
+                            @aRGPersonalInformation.DOB.ToString("dd-MM-yyyy")
+                        </td>
+                        <td>
+                            @aRGPersonalInformation.FormStatus
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            @if (aRGPersonalInformation.FormStatus != CUSrinagar.Enums.FormStatus.Submitted)
+            {
+                <h2>Course List</h2>
+                <form method="post" action="@Url.Action("AssignCenters", "Entrance", new { area = "CUSrinagarAdminPanel" })" role="form" class="js-search-form">
+                    @Html.AntiForgeryToken()
+                    <table class="table table-bordered table-hover col-sm-12">
+                        <tbody>
+                            <tr>
+                                <th>Course</th>
+                                <th style="width:200px;">Date (dd-MM-yyyy)</th>
+                                <th style="width:50px;">Time</th>
+                                <th>Center</th>
+                            </tr>
+                            @for (int i = 0; i < Model.CenterAllotmentMaster.Count(); i++)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(model => model.CenterAllotmentMaster[i].DisplayCourseName)
+                                        @Html.HiddenFor(model => model.CenterAllotmentMaster[i].Entity_ID)
+                                        @Html.HiddenFor(model => model.CenterAllotmentMaster[i].Course_ID)
+                                        @Html.HiddenFor(model => model.CenterAllotmentMaster[i].Programme)
+                                    </td>
+                                    <td>
+                                        @Html.ValidationMessageFor(model => model.CenterAllotmentMaster[i].EnteredEntranceDate)
+                                        @Html.TextBoxFor(model => model.CenterAllotmentMaster[i].EnteredEntranceDate, new { @maxlength = "10" })
+                                    </td>
+                                    <td>
+                                        @Html.ValidationMessageFor(model => model.CenterAllotmentMaster[i].Time)
+                                        @Html.TextBoxFor(model => model.CenterAllotmentMaster[i].Time, new { @maxlength = "8" })
+                                    </td>
+                                    <td>
+                                        @Html.ValidationMessageFor(model => model.CenterAllotmentMaster[i].Center_ID)
+                                        @Html.DropDownListFor(model => model.CenterAllotmentMaster[i].Center_ID, (IEnumerable<SelectListItem>)ViewBag.CenterList, string.Empty, new { @style = "width:100%" })
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <button class="btn-primary align-center" type="submit">Save</button>
+                </form>
+            }
+        </div>
+    }
+</div>
+@section PageSpecificJS{
+    <style>
+        .field-validation-error, .required {
+            color: red;
+            width: 100%;
+        }
+    </style>
+    @Scripts.Render("~/bundles/Libraries/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function ($) {
+            $(".js-search-formdetail").click(function () {
+                $("#JsClicked").val("search");
+            });
+
+            $(".js-Delete-Center").click(function () {
+                $("#JsClicked").val("delete");
+            });
+        });
+    </script>
+}

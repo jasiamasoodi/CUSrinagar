@@ -1,0 +1,46 @@
+﻿@model IEnumerable<CUSrinagar.Models.ResultList>
+@using CUSrinagar.Enums
+@using CUSrinagar.Extensions
+@using CUSrinagar.Models
+<table class="table table-hover table-bordered ">
+    <thead>
+        <tr>
+            <th>S.No</th>
+            <th data-property="CourseFullName">Course</th>
+            <th data-property="SubjectFullName">Subject</th>
+            <th data-property="SubjectType">Type</th>
+            <th title="Total">Total</th>
+            <th title="Overall result status">Passed</th>
+            <th title="Overall result status">Failed</th>
+
+            <th title="Internal">Internal</th>
+            <th title="External">External</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            var _ListOfSubjects = Model.Where(x => x.HasResult).GroupBy(x => x.Subject_ID).ToList();
+            foreach (IEnumerable<ResultList> item in _ListOfSubjects)
+            {
+                <tr>
+                    <td class="js-sno"></td>
+                    <td>@item.First().CourseFullName</td>
+                    <td>@item.First().SubjectFullName</td>
+                    <td>@item.First().SubjectType.ToString()</td>
+                    <td title="Total number of students">@item.Count()</td>
+                    <td title="Overall pass number of students">@item.Where(x => x.OverallResultStatus == ResultStatus.P).Count()</td>
+                    <td title="Overall failed number of students">@item.Where(x => x.OverallResultStatus != ResultStatus.P).Count()</td>
+
+                    <td title="Internal pass/fail count">
+                        <span>@item.Where(x => x.InternalStatus == ResultStatus.P).Count()</span><sup>P</sup>|<span>@item.Where(x => x.InternalStatus != ResultStatus.P).Count()</span><sup>F</sup>
+                    </td>
+
+                    <td title="Internal pass/fail count">
+                        <span>@item.Where(x => x.ExternalStatus == ResultStatus.P).Count()</span><sup>P</sup>|<span>@item.Where(x => x.ExternalStatus != ResultStatus.P).Count()</span><sup>F</sup>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

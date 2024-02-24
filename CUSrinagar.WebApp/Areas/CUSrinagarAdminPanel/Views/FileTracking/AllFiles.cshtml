@@ -1,0 +1,467 @@
+﻿@model CUSrinagar.Models.FTFileTracking
+
+@{
+    ViewBag.Title = "File Tracking ";
+}
+<div id="Jspleasewait" style="display:none;position:fixed;background-color:rgba(0, 0, 0, 0.70);left:0;top:0;z-index:200;width:100%;height:100%">
+    <p style="font-size:30px;font-weight:bold;color:white;margin-top:14%;text-align:center">
+        Working on it...
+    </p>
+</div>
+
+<div class="page-wrapper pager-table-text">
+    <div class="page-header">
+        <div style="padding-bottom: 30px;">
+            <div class="col-sm-12">
+                <div class="col-sm-5">
+                    <h1 class="heading-title pull-left">
+                        File Tracking
+                        <small>
+                            <i class="ace-icon fa fa-angle-double-right"></i>
+                            Lists
+                        </small>
+                    </h1>
+                </div>
+                <div class="col-sm-7">
+                    <button type="button" href="#ModalCreateNewFile" data-toggle="modal" class="btn btn-sm btn-purple pull-right"> <i class="fa fa-file-pdf-o"></i>&nbsp;Create New File</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="response" style="width:80%;margin:0 auto">
+    @if (TempData["response"] != null)
+    {
+        @Html.Raw(TempData["response"])
+    }
+</div>
+<div class="page-content">
+    <div class="row page-row">
+        <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+        <div class="col-md-12 jsTableContent">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        &nbsp;Search File
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    @using (Html.BeginForm("", "", FormMethod.Post, new { @id = "frmSearchFilter" }))
+                    {
+                        <div class="search-box">
+                            <div class="form-inline">
+                                <div class="form-group col-sm-5">
+                                    @Html.LabelFor(m => m.Filters.SearchQuery)
+                                    <span class="red">
+                                        @Html.ValidationMessageFor(m => m.Filters.SearchQuery)
+                                        <br />
+                                    </span>
+                                    @Html.TextBoxFor(m => m.Filters.SearchQuery, new { @maxlength = "200", style = "width:100%", @class = "form-control" })
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.Filters.From)
+                                    <br />
+                                    <span class="red"> @Html.ValidationMessageFor(m => m.Filters.From)</span>
+                                    @Html.TextBoxFor(m => m.Filters.From, new { @maxlength = "10", @type = "date", @class = "form-control" })
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.Filters.To)
+                                    <br />
+                                    <span class="red"> @Html.ValidationMessageFor(m => m.Filters.To)</span>
+                                    @Html.TextBoxFor(m => m.Filters.To, new { @maxlength = "10", @type = "date", @class = "form-control" })
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="invisible">for styling purpose</label><br />
+                                    <button type="submit" class="btn btn-sm btn-primary JSSearch"><i class="fa fa-search"></i>&nbsp;Search</button>
+                                    <a href="/CUSrinagarAdminPanel/FileTracking/AllFiles" class="btn btn-sm btn-primary"><i class="fa fa-refresh"></i>&nbsp;Refresh</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                @*------------- search result ------------*@
+
+                <div class="row page-row">
+                    <div class="col-md-12 jsTableContent">
+                        <div class="col-lg-12 col-md-12">
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a data-toggle="tab" href="#JSActiveFiles" id="default-tab" class="text-success tab-click">
+                                        <i class="fa fa-home"></i> Active Files
+                                        &nbsp; <span class="pull-right badge badge-success"><b class="JsACount"></b></span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a data-toggle="tab" href="#JSFilesForwardedToYou" class="text-success tab-click">
+                                        <i class="fa fa-bookmark-o"></i> Files forwarded to you&nbsp;
+                                        <span class="pull-right badge badge-danger jsbadge"><b class="JsForwardCount"></b></span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a data-toggle="tab" href="#JSFileClosedByYou" class="text-success tab-click">
+                                        <i class="fa fa-home"></i> Files closed by you
+                                        &nbsp; <span class="pull-right badge badge-success"><b class="JsCCount"></b></span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a data-toggle="tab" href="#JSTrackAllYourFiles" class="text-success tab-click">
+                                        <i class="fa fa-home"></i> Track all your files
+                                        &nbsp; <span class="pull-right badge badge-success"><b class="JsTCount"></b></span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="tab-content JSFileTrackingDetails no-padding">
+                                @{ Html.RenderPartial("GetFiles", (IEnumerable<CUSrinagar.Models.FTFileTracking>)ViewBag.Files);}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*------------------ Create New File model -------------------------*@
+<div id="ModalCreateNewFile" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter no-margin"><i class="fa fa-file-pdf-o"></i>&nbsp;Create New File</h3>
+            </div>
+
+            <div class="modal-body JSCreateNewFile">
+                <div class="msg1"></div>
+                @using (Html.BeginForm("#", "#", FormMethod.Post, new { id = "frmCreateNewFile" }))
+                {
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <label class="control-label no-padding-right">
+                                @Html.LabelFor(sc => sc.FileNo) <span class="red">*</span>
+                            </label>
+                            <span class="red">@Html.ValidationMessageFor(sc => sc.FileNo)</span>
+                            @Html.TextBoxFor(sc => sc.FileNo, new { @maxlength = "80", @onkeypress = "return forAdmissionRollNo(event);", @class = "form-control" })
+                        </div>
+                        <br />
+                        <br />
+                        <div class="col-sm-12">
+                            <label class=" control-label no-padding-right">
+                                @Html.LabelFor(sc => sc.Subject) <span class="red">*</span>
+                            </label>
+                            <span class="red">@Html.ValidationMessageFor(sc => sc.Subject)</span>
+                            @Html.TextBoxFor(sc => sc.Subject, new { @maxlength = "500", @class = "form-control" })
+                        </div>
+                        <br />
+                        <br />
+                        <div class="col-sm-12">
+                            <label class=" control-label no-padding-right">
+                                @Html.LabelFor(sc => sc.Description) <span class="red"></span>
+                            </label>
+                            <span class="red">@Html.ValidationMessageFor(sc => sc.Description)</span>
+                            @Html.TextAreaFor(sc => sc.Description, new { @maxlength = "500", @rows = "5", @class = "form-control" })
+                        </div>
+                        <br />
+                        <br />
+                        <div class="col-sm-12"></div>
+                        <br />
+                        <br />
+                        <div class="col-sm-12 text-center">
+                            <button type="submit" class="btn btn-sm btn-success JSCreateFile">
+                                <i class="ace-icon fa fa-check"></i>
+                                Create File
+                            </button>
+                        </div>
+                        <br />
+                    </div>
+                }
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times"></i>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*------------------ Revert File model -------------------------*@
+<div id="ModalRevertFile" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter no-margin"><i class="fa fa-backward"></i>&nbsp;Revert File</h3>
+            </div>
+
+            <div class="modal-body JSRevertFile">
+                <div class="msg4"></div>
+                @using (Html.BeginForm("#", "#", FormMethod.Post, new { id = "frmRevertFiles" }))
+                {
+                    <div class="form-group">
+                        @Html.HiddenFor(sc => sc.FileTrackingHistory.File_ID)
+
+                        <div class="col-sm-12">
+                            <label class=" control-label no-padding-right">
+                                @Html.LabelFor(sc => sc.FileTrackingHistory.Remarks) <span class="red"></span>
+                            </label>
+                            <span class="red">@Html.ValidationMessageFor(sc => sc.FileTrackingHistory.Remarks)</span>
+                            @Html.TextAreaFor(sc => sc.FileTrackingHistory.Remarks, new { @maxlength = "500", @rows = "5", @class = "form-control" })
+                        </div>
+                        <br />
+                        <br />
+                        <div class="col-sm-12"></div>
+                        <br />
+                        <br />
+                        <div class="col-sm-12 text-center">
+                            <button type="submit" class="btn btn-sm btn-success JSBtnRevertFile">
+                                <i class="ace-icon fa fa-backward"></i>
+                                Revert File
+                            </button>
+                        </div>
+                        <br />
+                    </div>
+                }
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times"></i>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*------------------ Close File model -------------------------*@
+<div id="ModalCloseFile" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter no-margin"><i class="fa fa-trash"></i>&nbsp;Close File</h3>
+            </div>
+
+            <div class="modal-body JSCloseFile">
+                <div class="msg3"></div>
+                @using (Html.BeginForm("#", "#", FormMethod.Post, new { id = "frmCloseFiles" }))
+                {
+                    <div class="form-group">
+                        @Html.HiddenFor(sc => sc.FileTrackingHistory.File_ID)
+
+                        <div class="col-sm-12">
+                            <label class=" control-label no-padding-right">
+                                @Html.LabelFor(sc => sc.FileTrackingHistory.Remarks) <span class="red"></span>
+                            </label>
+                            <span class="red">@Html.ValidationMessageFor(sc => sc.FileTrackingHistory.Remarks)</span>
+                            @Html.TextAreaFor(sc => sc.FileTrackingHistory.Remarks, new { @maxlength = "500", @rows = "5", @class = "form-control" })
+                        </div>
+                        <br />
+                        <br />
+                        <div class="col-sm-12"></div>
+                        <br />
+                        <br />
+                        <div class="col-sm-12 text-center">
+                            <button type="submit" class="btn btn-sm btn-success JSBtnCloseFile">
+                                <i class="ace-icon fa fa-shopping-basket"></i>
+                                Close File
+                            </button>
+                        </div>
+                        <br />
+                    </div>
+                }
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times"></i>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*------------------ Re-Open File model -----------------------*@
+<div id="ModalReOpenFile" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter no-margin"><i class="fa fa-trash"></i>&nbsp;ReOpen File</h3>
+            </div>
+
+            <div class="modal-body JSReOpenFile">
+                <div class="msg5"></div>
+                @using (Html.BeginForm("#", "#", FormMethod.Post, new { id = "frmReOpenFiles" }))
+                {
+                    <div class="form-group">
+                        @Html.HiddenFor(sc => sc.FileTrackingHistory.File_ID)
+
+                        <div class="col-sm-12">
+                            <label class=" control-label no-padding-right">
+                                @Html.LabelFor(sc => sc.FileTrackingHistory.Remarks) <span class="red"></span>
+                            </label>
+                            <span class="red">@Html.ValidationMessageFor(sc => sc.FileTrackingHistory.Remarks)</span>
+                            @Html.TextAreaFor(sc => sc.FileTrackingHistory.Remarks, new { @maxlength = "500", @rows = "5", @class = "form-control" })
+                        </div>
+                        <br />
+                        <br />
+                        <div class="col-sm-12"></div>
+                        <br />
+                        <br />
+                        <div class="col-sm-12 text-center">
+                            <button type="submit" class="btn btn-sm btn-success JSBtnReOpenFile">
+                                <i class="ace-icon fa fa-shopping-basket"></i>
+                                Re-Open File
+                            </button>
+                        </div>
+                        <br />
+                    </div>
+                }
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times"></i>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*------------------ Forward File model -------------------------*@
+<div id="ModalForwardFile" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter no-margin"><i class="fa fa-forward"></i>&nbsp;Forward File</h3>
+            </div>
+
+            <div class="modal-body JSForwardFile">
+                <div class="msg6"></div>
+                @using (Html.BeginForm("#", "#", FormMethod.Post, new { id = "frmForwardFiles" }))
+                {
+                    <div class="form-group">
+                        @Html.HiddenFor(sc => sc.FileTrackingHistory.File_ID)
+
+                        <div class="col-sm-12">
+                            <label class=" control-label no-padding-right">
+                                @Html.LabelFor(sc => sc.FileTrackingHistory.User_ID) <span class="red">*</span>
+                            </label>
+                            <span class="red">@Html.ValidationMessageFor(sc => sc.FileTrackingHistory.User_ID)</span>
+                            @Html.DropDownListFor(sc => sc.FileTrackingHistory.User_ID, (IEnumerable<SelectListItem>)ViewBag.FileTrackingUsers, string.Empty, new { @class = "form-control" })
+                        </div>
+                        <br />
+                        <br />
+                        <div class="col-sm-12">
+                            <label class=" control-label no-padding-right">
+                                @Html.LabelFor(sc => sc.FileTrackingHistory.Remarks) <span class="red"></span>
+                            </label>
+                            <span class="red">@Html.ValidationMessageFor(sc => sc.FileTrackingHistory.Remarks)</span>
+                            @Html.TextAreaFor(sc => sc.FileTrackingHistory.Remarks, new { @maxlength = "500", @rows = "5", @class = "form-control" })
+                        </div>
+                        <br />
+                        <br />
+                        <div class="col-sm-12"></div>
+                        <br />
+                        <br />
+                        <div class="col-sm-12 text-center">
+                            <button type="submit" class="btn btn-sm btn-success JSBtnForwardFile">
+                                <i class="ace-icon fa fa-forward"></i>
+                                Forward File
+                            </button>
+                        </div>
+                        <br />
+                    </div>
+                }
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times"></i>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*------------------ Accept File model -------------------------*@
+<div id="ModalAcceptFile" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter no-margin"><i class="fa fa-backward"></i>&nbsp;Accept File</h3>
+            </div>
+
+            <div class="modal-body JSAcceptFile">
+                <div class="msg4"></div>
+                @using (Html.BeginForm("#", "#", FormMethod.Post, new { id = "frmAcceptFiles" }))
+                {
+                    <div class="form-group">
+                        @Html.HiddenFor(sc => sc.FileTrackingHistory.File_ID)
+
+                        <div class="col-sm-12">
+                            <label class=" control-label no-padding-right">
+                                @Html.LabelFor(sc => sc.FileTrackingHistory.Remarks) <span class="red"></span>
+                            </label>
+                            <span class="red">@Html.ValidationMessageFor(sc => sc.FileTrackingHistory.Remarks)</span>
+                            @Html.TextAreaFor(sc => sc.FileTrackingHistory.Remarks, new { @maxlength = "500", @rows = "5", @class = "form-control" })
+                        </div>
+                        <br />
+                        <br />
+                        <div class="col-sm-12"></div>
+                        <br />
+                        <br />
+                        <div class="col-sm-12 text-center">
+                            <button type="submit" class="btn btn-sm btn-success JSBtnAcceptFile">
+                                <i class="ace-icon fa fa-backward"></i>
+                                Accept File
+                            </button>
+                        </div>
+                        <br />
+                    </div>
+                }
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times"></i>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*------------------ Track File Details model -------------------------*@
+<div id="ModalDisplayTrackingDetail" class="modal fade" tabindex="-1">
+    <div class="modal-dialog" style="min-width:65%;overflow:auto;">
+        <div class="modal-content JSDisplayTrackingDetails">
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJSFiles{
+    @Scripts.Render("~/bundles/Libraries/jqueryval")
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSFileTracking/FileTracking.js")"></script>
+
+}
+
+@section PageSpecificStyle{
+}

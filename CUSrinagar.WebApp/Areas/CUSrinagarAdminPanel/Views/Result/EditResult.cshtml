@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "CUS :: Edit Result";
+}
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index","Dashboard",new { area="CUSrinagarAdminPanel"})">Home</a>
+            </li>
+            <li class="active">Edit Student Result</li>
+        </ul><!-- /.breadcrumb -->
+    </div>
+    <div class="col-md-7">
+        @*<h2 class="no-margins">
+                Result Reports
+            </h2>*@
+    </div>
+    <div class="col-md-4">
+    </div>
+}
+
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-md-12 jsTableContent">
+            <div class="panel panel-primary js-pager-table">
+                <div class="panel-body">
+                    <div class="search-box">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                @Html.TextBox("Search-RegistrationNumber", "CUS-17-ASC-11132", new { @class = "form-control search-query required jsfilterelement", @data_column = "RegistrationNumber", @data_operator = "EqualTo", @autofocus = "autofocus" })
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default btn-sm js-search-student-result fa-search-btn">
+                                        <span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
+                                        Search
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4"></div>
+                    </div>
+                </div>
+                <div class="js-table-content" data-url=@Url.Action("EditResultPartial", "Result", new { area = "CUSrinagarAdminPanel" }) data-DefaultOrderByColumn="Name">
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section PageSpecificJS{
+    <script>
+        $(document).ready(function () {
+
+
+        });
+    </script>
+}

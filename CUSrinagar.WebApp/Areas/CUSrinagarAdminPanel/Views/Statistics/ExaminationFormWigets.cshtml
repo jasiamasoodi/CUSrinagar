@@ -1,0 +1,244 @@
+﻿@model CUSrinagar.Models.ExaminationFormWidget
+
+@{
+    ViewBag.Title = "Examination Form Statistics";
+}
+
+@using System.Globalization;
+
+@section CUSSitemap{
+    <div class="col-md-5">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="@Url.Action("Index", "Dashboard", new { area = "CUSrinagarAdminPanel" })">Home</a>
+            </li>
+            <li class="active">Reports</li>
+        </ul><!-- /.breadcrumb -->
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12 jsTableContent ">
+        <div class="panel panel-primary js-pager-table hidden-print" data-otherparam1="@CUSrinagar.Enums.PrintProgramme.UG">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Statistics
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        Statistics for Examination Forms
+                    </small>
+                    <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                        <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                    </span>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="search-box">
+                    @using (
+                    Html.BeginForm("ExaminationFormWigets", "Statistics", FormMethod.Post))
+                    {
+                        <div class="col-sm-10">
+                            <div class="form-inline col-sm-3">
+                                <div class="form-group">
+                                    <label>Program</label><br />
+                                    @Html.DropDownList("programme", new SelectList(ViewBag.PrintProgrammes, "Value", "Text", (short)CUSrinagar.Enums.PrintProgramme.UG), null,
+                                         new
+                                         {
+                                             @class = "",
+                                             @style = "width:100%!important",
+                                             @data_column = "Programme",
+                                             @data_operator = "EqualTo"
+                                         })
+                                </div>
+                            </div>
+                            <div class="form-inline col-sm-2">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label>Semester</label><br />
+                                        @Html.DropDownList("semester", new SelectList(ViewBag.Semesters, "Value", "Text", ViewBag.Sem), null,
+                                         new
+                                         {
+                                             @class = "",
+                                             @data_column = "semester",
+                                             @data_operator = "EqualTo"
+                                         })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-inline col-sm-2">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label>Batch</label><br />
+                                        @Html.DropDownList("batch", new SelectList(ViewBag.Batches, "Value", "Text", ViewBag.SelectedBatch), null,
+                                         new
+                                         {
+                                             @class = "",
+                                             @data_column = "batch",
+                                             @data_operator = "EqualTo"
+                                         })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-inline col-sm-1">
+                                <div class="form-group">
+                                    <br />
+                                    <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-search"></i>&nbsp;Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        @{
+            if (Model != null)
+            {   
+                <div class="col-sm-12 btn-app center">
+                    <hr />
+                    <div>
+                        <a href="#" class="btn btn-danger">
+                            @{
+                                string amount = @Model.TotalAmount.ToString();
+                                decimal parsedAmount = decimal.Parse(amount, CultureInfo.InvariantCulture);
+                                CultureInfo hindi = new CultureInfo("hi-IN");
+                                string FinalAmount = string.Format(hindi, "{0:c}", parsedAmount);
+                            }
+                            Total Amount = @String.Format("{0:n}", FinalAmount)
+                        </a>
+
+                        <a href="#" class="btn btn-primary" style="min-width: 90px">
+                            Total Students = @Model.TotalNumberOfStudents
+                        </a>
+
+                        <a href="#" class="btn btn-danger" style="min-width: 90px">
+                            Total Applications = @Model.TotalForms
+                        </a>
+
+                        <a href="#" class="btn btn-primary" style="min-width: 90px">
+                            Applications with Payments = @Model.TotalSuccessfullPayments
+                        </a>
+
+                        <a href="#" class="btn btn-danger" style="min-width: 90px">
+                            Regular = @Model.TotalRegularStudents
+                        </a>
+
+                        <a href="#" class="btn btn-primary" style="min-width: 90px">
+                            Backlog = @Model.TotalBacklogStudents
+                        </a>
+
+                        <a href="#" class="btn btn-danger" style="min-width: 90px">
+                            Late Fee Amount = @Model.LateFeeAmount
+                        </a>
+                    </div>
+                    <hr />
+                </div>
+
+                foreach (var item in Model.CourseWidgets ?? new List<CUSrinagar.Models.CourseWiseWidget>())
+                {
+                    int index = 0;
+
+                    <div class="col-xs-12 col-sm-4 widget-container-col ui-sortable" id="widget-container-col-6">
+                        <div class="widget-box widget-color-dark light-border ui-sortable-handle" id="widget-box-6">
+                            <div class="widget-header">
+                                <div class="widget-toolbar pull-left">
+                                    <h4 class="badge badge-danger">@item.CourseFullName</h4>
+                                </div>
+                            </div>
+
+                            <div class="widget-body">
+                                <div class="widget-main padding-6">
+                                    <table class="table table-striped table-dark">
+                                        <tr style="border-bottom:solid 1px black">
+                                            <td>
+                                                Total Students
+                                            </td>
+                                            <td><strong>@item.TotalNumberOfStudentsPerCourse</strong></td>
+                                        </tr>
+
+                                        <tr style="border-bottom:solid 1px black">
+                                            <td>
+                                                Regular Student Applications
+                                            </td>
+                                            <td>
+                                                <strong>@item.NoOfRegularStudents</strong>
+                                            </td>
+                                        </tr>
+                                        <tr style="border-bottom:solid 1px black">
+                                            <td>
+                                                Backlog Student Applications
+                                            </td>
+                                            <td>
+                                                <strong>@item.NoOfBacklogStudents</strong>
+                                            </td>
+                                        </tr>
+                                        <tr style="border-bottom:solid 1px black">
+                                            <td>
+                                                Backlog Applications Late Fee Amount
+                                            </td>
+                                            <td>
+                                                <strong>@item.LateFeeAmountForBackLogStudents</strong>
+                                            </td>
+                                        </tr>
+
+                                        <tr style="border-bottom:solid 1px black">
+                                            <td>
+                                                Regular Applications Late Fee Amount
+                                            </td>
+                                            <td>
+                                                <strong>@item.LateFeeAmountForRegularStudents</strong>
+                                            </td>
+                                        </tr>
+                                        <tr style="border-top:inset 2px black;border-bottom:ridge 2px black">
+                                            <td style="width:70%">
+                                                Total Amount
+                                            </td>
+                                            <td>
+                                                <strong>
+
+                                                    @{
+                                                        string totalAmount = @item.TotalAmountReceived.ToString();
+                                                        decimal parsedToalAmount = decimal.Parse(totalAmount, CultureInfo.InvariantCulture);
+                                                        CultureInfo hindiFomat = new CultureInfo("hi-IN");
+                                                        string FinalTotalAmount = string.Format(hindiFomat, "{0:c}", parsedToalAmount);
+                                                    }
+
+                                                    @FinalTotalAmount
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        @if (index % 3 == 0)
+                        {
+                            <hr />
+                        }
+                        else
+                        {
+
+                        }
+
+
+                    </div>
+
+                    index++;
+                }
+            }
+            else
+            {
+                <hr />
+                <h1 style="text-align:center"> <strong><i>No data found for the given filters. Please try again with different filter combinations.</i></strong></h1>
+                <hr />
+            }
+        }
+    </div>
+</div>
+
+
+

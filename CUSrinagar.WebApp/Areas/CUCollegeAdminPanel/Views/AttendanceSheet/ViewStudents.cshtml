@@ -1,0 +1,123 @@
+﻿@model List<CUSrinagar.Models.AttendanceSheetForm>
+@{
+    ViewBag.Title = "Attendance Sheet List ";
+    string currentYear = DateTime.Now.Year + "";
+}
+<style>
+    .required {
+        color: black;
+    }
+</style>
+@if (ViewBag.PrintProgrammeOption != null)
+{
+    <div class="page-wrapper pager-table-text">
+        <div class="page-content">
+            <div class="row page-row">
+                <div class="content-wrapper col-md-10 col-sm-8 jsSingleContent"></div>
+                <div class="col-md-12 jsTableContent">
+                    <div class="panel panel-primary js-pager-table">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Attendance Sheets
+                                <span class="clickable filter-btn pull-right" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                    <a href="#"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+                                </span>
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-sm-12 search-box">
+                                <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span>Exam Year
+                                    <div>
+                                        @Html.TextBox("Year", DateTime.Now.Year.ToString(), new { @class = " required form-control jsfilterelement", @data_column = "Year", @data_operator = "EqualTo" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span>Programme<span id="ProgrammeIdValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                    <div>
+                                        @Html.DropDownList("ProgrammeId", new SelectList(ViewBag.PrintProgrammeOption, "Value", "Text"),
+           "--Select--", new { @class = "form-control SearchDDL  required", @data_column = "ProgrammeId", @data_operator = "EqualTo", data_ddltype = "Course", @data_ddlchildtype = "Semester" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span>Course<span id="CourseIDValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                    <div id="Course">
+                                        @Html.DropDownList("CourseID", new SelectList(ViewBag.CourseList, "Value", "Text"),
+                "--Select--", new { @class = "form-control SearchDDL jsfilterelement required ", @data_column = "printProgramme", @data_operator = "EqualTo", @data_ddltype = "Semester" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span>Semester<span id="SemesterValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                    <div id="Semester">
+                                        @Html.DropDownList("Semester", new SelectList(ViewBag.SemesterList, "Value", "Text"),
+                 "--Select--", new { @class = "required jsfilterelement chosen-select tag-input-style ", @data_column = "Semester", @data_operator = "EqualTo" })
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                    <span style="color:red">*</span>Center Code<span id="" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                    <div id="Center_IDs">
+                                        @Html.DropDownList("Center_ID", new SelectList(ViewBag.Centers, "Value", "Text"),
+                 "--All--", new { @class = "jsfilterelement chosen-select tag-input-style ", @data_column = "Center_ID", @data_operator = "EqualTo" })
+
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2 lbl bigger-120 no-padding-right">
+                                    Exam RollNo
+                                    <span id="SemesterValidator" class="label label-sm label-danger arrowed-in-right arrowed"></span>
+                                    <div>
+                                        @Html.TextBox("ExamRollNo")
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-12 search-box center">
+                                <div class="col-sm-12" style="padding-top: 17px;">
+                                    <a href="button" class="btn btn-primary JSDownloadBtn"><i class="fa fa-eye"></i>&nbsp;Download Attendance Sheets</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="js-table-content" data-url=@Url.Action("DownloadSheets", "AttendanceSheet", new { area = "CUCollegeAdminPanel" }) data-DefaultOrderByColumn="FullName">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <h1 class="quadraText">
+        The process of downloading Attendance Sheets is either closed or will be allowed soon.
+    </h1>
+}
+
+@section PageSpecificJS{
+    <script>
+        var CenterListPath = '@Url.Action("_GetCenterList", "AttendanceSheet", new {area = "CUCollegeAdminPanel" })';
+        var chilDDLPath = '@Url.Action("_GetChildDDL", "AttendanceSheet", new {area = "CUCollegeAdminPanel" })';
+         var gridPathWithParam= '@Url.Action("DownloadSheets", "AttendanceSheet", new {area = "CUCollegeAdminPanel" })';
+         var controllerName = "AttendanceSheet";
+    </script>
+
+    <script src="@Url.Content("~/Scripts/JSChosen.js")"></script>
+    <script src="@Url.Content("~/Content/ThemeAdmin/Content/Scripts/JSLibrary/Students.js")"></script>
+    <script>
+        $(document).ready(function () {
+            $(".e3").addClass("active");
+            $(".exmlt").addClass("active open");
+        });
+    </script>
+}
+@section PageSpecificStyle{
+    <style>
+        .filter-btn a {
+            color: white !important
+        }
+    </style>
+}
+
+
+
+

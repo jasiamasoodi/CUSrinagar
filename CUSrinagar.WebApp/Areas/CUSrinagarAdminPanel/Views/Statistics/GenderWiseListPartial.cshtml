@@ -1,0 +1,35 @@
+﻿@model  List<CUSrinagar.Models.StatisticsGenderWise>
+<table class="table table-bordered table-hover">
+    @if (Model != null)
+    {
+        <thead style="">
+            <tr class="center">
+                <th>Serial No</th>
+                <th>Batch</th>
+                <th>Male</th>
+                <th>Female</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><span class="js-sno"></span> </td>
+                    <td>@item.Batch</td>
+                    <td>@item.Male</td>
+                    <td>@item.Female</td>
+                    <td>@(item.Male + item.Female)</td>
+                </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        <tr>
+            <td>
+                No Record Found
+            </td>
+        </tr>
+    }
+</table>

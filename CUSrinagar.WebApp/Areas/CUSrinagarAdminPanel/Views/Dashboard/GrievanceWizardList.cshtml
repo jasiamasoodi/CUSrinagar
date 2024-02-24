@@ -1,0 +1,158 @@
+﻿@model IEnumerable<CUSrinagar.Models.GrievanceList>
+
+
+<div class="col-sm-12">
+    <hr />
+</div>
+
+<div class="col-sm-6 jswidget">
+
+    <div class="widget-box" style="page-break-after:always;">
+        <div class="widget-header">
+            <h4 class="widget-title lighter smaller">
+                <i class="ace-icon fa fa-comment blue"></i>
+                Feedback/Grievance
+                <h6 class="pull-right padding-right-10 hidden-print">
+                    <a href="@Url.Action("Grievance", "Grievance", new { @area = "CUSrinagarAdminPanel" })">
+                        View All
+                    </a>
+                </h6>
+            </h4>
+        </div>
+
+        <div class="widget-body">
+            <div class="widget-main no-padding">
+                <div class="dialogs jsGrievanceList">
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <div class="itemdiv dialogdiv">
+                                <div class="user">
+                                    <img alt="Alexa's Avatar" src="~/Content/ThemePublic/Libraries/images/student-dp-sm.jpg" />
+                                </div>
+                                <div class="body">
+                                    <div class="time">
+                                        <i class="ace-icon fa fa-clock-o"></i>
+                                        <span class="blue">@item.Date.ToString("dd-MMMM-yy")  </span>
+                                    </div>
+
+                                    <div class="name">
+                                        <a href="#" title="Category">@CUSrinagar.Extensions.Helper.GetEnumDescription(item.Category)</a>: <b title="Subject">@item.Subject</b>
+                                    </div>
+                                    <div class="text overflow-hidden-ht">@item.Message.</div>
+
+                                    <div class="tools">
+                                        <a href="@Url.Action("Detail","Grievance",new {@area="CUSrinagarAdminPanel", @id=item.Grievance_ID})" class="btn btn-minier btn-info" target="_blank">
+                                            <i class="icon-only ace-icon fa fa-share"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+
+
+                    @*<div class="itemdiv dialogdiv">
+                            <div class="user">
+                                <img alt="John's Avatar" src="~/Content/ThemePublic/Libraries/images/student-dp-sm.jpg" />
+                            </div>
+
+                            <div class="body">
+                                <div class="time">
+                                    <i class="ace-icon fa fa-clock-o"></i>
+                                    <span class="blue">38 sec</span>
+                                </div>
+
+                                <div class="name">
+                                    <a href="#">John</a>
+                                </div>
+                                <div class="text">Raw denim you probably haven&#39;t heard of them jean shorts Austin.</div>
+
+                                <div class="tools">
+                                    <a href="#" class="btn btn-minier btn-info">
+                                        <i class="icon-only ace-icon fa fa-share"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="itemdiv dialogdiv">
+                            <div class="user">
+                                <img alt="Bob's Avatar" src="~/Content/ThemePublic/Libraries/images/student-dp-sm.jpg" />
+                            </div>
+
+                            <div class="body">
+                                <div class="time">
+                                    <i class="ace-icon fa fa-clock-o"></i>
+                                    <span class="orange">2 min</span>
+                                </div>
+
+                                <div class="name">
+                                    <a href="#">Bob</a>
+                                    <span class="label label-info arrowed arrowed-in-right">admin</span>
+                                </div>
+                                <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque commodo massa sed ipsum porttitor facilisis.</div>
+
+                                <div class="tools">
+                                    <a href="#" class="btn btn-minier btn-info">
+                                        <i class="icon-only ace-icon fa fa-share"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="itemdiv dialogdiv">
+                            <div class="user">
+                                <img alt="Jim's Avatar" src="~/Content/ThemePublic/Libraries/images/student-dp-sm.jpg" />
+                            </div>
+
+                            <div class="body">
+                                <div class="time">
+                                    <i class="ace-icon fa fa-clock-o"></i>
+                                    <span class="grey">3 min</span>
+                                </div>
+
+                                <div class="name">
+                                    <a href="#">Jim</a>
+                                </div>
+                                <div class="text">Raw denim you probably haven&#39;t heard of them jean shorts Austin.</div>
+
+                                <div class="tools">
+                                    <a href="#" class="btn btn-minier btn-info">
+                                        <i class="icon-only ace-icon fa fa-share"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="itemdiv dialogdiv">
+                            <div class="user">
+                                <img alt="Alexa's Avatar" src="~/Content/ThemePublic/Libraries/images/student-dp-sm.jpg" />
+                            </div>
+
+                            <div class="body">
+                                <div class="time">
+                                    <i class="ace-icon fa fa-clock-o"></i>
+                                    <span class="green">4 min</span>
+                                </div>
+
+                                <div class="name">
+                                    <a href="#">Alexa</a>
+                                </div>
+                                <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+
+                                <div class="tools">
+                                    <a href="#" class="btn btn-minier btn-info">
+                                        <i class="icon-only ace-icon fa fa-share"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>*@
+                </div>
+
+            </div><!-- /.widget-main -->
+        </div><!-- /.widget-body -->
+    </div>
+    <!-- /.widget-box -->
+</div>

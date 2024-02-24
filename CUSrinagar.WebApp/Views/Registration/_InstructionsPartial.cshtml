@@ -1,0 +1,74 @@
+﻿@model bool
+
+<!--<fieldset>
+    <legend>Important Instructions</legend>
+    <ol>-->
+@*<li style="font-size:17px;">
+        <i class="fa fa-arrow-rigcht" aria-hidden="true" style="font-size:17px;"></i>
+        A candidate has to upload Transcript/Grade Card of 1st, 2nd & 3rd Years of Bachelor’s degree revealing cumulative grade point average (CGPA)/ percentage.
+    </li>*@
+<!--<li style="font-size:20px;color:red;font-weight:bold">
+            <i class="fa fa-arrow-rigcht" aria-hidden="true" style="font-size:17px;"></i>
+            Mere submission of application form by the candidate does not confer his/her any right to admission in any programme of the university.
+            Admission of candidates shall be governed by the admission policy of the university.
+        </li>
+        <li>
+            The candidates desirous of seeking admission under Lateral Entry Scheme must have passed 3-Year Diploma Examination ,
+            were in he/she is seeking admission, from an AICTE approved institutions with at least 50% marks
+            (40% in case of candidates belonging to reserved categories) in appropriate branch of Engineering/Technology.
+        </li>
+    </ol>
+</fieldset>-->
+<fieldset>
+    <legend>General Instructions</legend>
+    <ol>
+        <li style="font-size:20px;">
+            <i class="fa fa-arrow-rigcht" aria-hidden="true"></i>
+            Applicants are advised to check the eligibility criteria thoroughly before
+            applying for any Course.
+        </li>
+        <li>
+            <i class="fa fa-arrow-rigcht" aria-hidden="true"></i>
+            Applicants are required to have a valid email ID and personal/guardian mobile
+            number which should be working during the admission process, to enable
+            University to send alerts, important communications etc.
+        </li>
+        <li>
+            <i class="fa fa-arrow-rigcht" aria-hidden="true"></i>
+            <span>No change is allowed after form is successfully submitted</span>
+        </li>
+        <li>
+            <i class="fa fa-arrow-rigcht" aria-hidden="true"></i>
+            <span>Detailed notification(s) can be found or downloaded in the Notifications tab shown above.</span>
+        </li>
+        <br />
+        <li>
+            <strong class="">
+                <i class="fa fa-arrow-rigcht" aria-hidden="true"></i>
+                Application Fee has to be Paid Online.<br /> Note : Inorder to pay later , Signin into student account (<a href="/Account/StudentZone"><i class="fa fa-graduation-cap"></i> <strong>Student SignIn</strong></a>) then look for Make Payment (Entrance Fee) option.
+            </strong>
+        </li>
+        <br />
+        <li><i class="fa fa-arrow-rigcht" aria-hidden="true"></i><span>The Preview of the Form "Filled Online" can be viewed in new browser tab, if all details are correct, Click on <span style="font-size:20px;color:red;">Final Submit button</span>. If there is still any correction / updation in the Form details; please return to the previous browser tab and make corrections (if requried) then click <span style="font-size:20px;color:red;">Final Submit button</span>. The Form No. should be noted for future reference / use.</span></li>
+        <li><i class="fa fa-arrow-rigcht" aria-hidden="true"></i>Keep ready a digital passport size photograph (<strong>Must have font view, full face, both ears visible, simple background</strong>) ".jpg", ".bmp" , ".jpeg" or ".png" format of size between 20-70KB, for uploading in prescribed space in the application form.</li>
+
+        @if (Model)
+        {
+            <li>
+                @*<div class="col-sm-6">
+                        <a class="btn btn-primary btn-block btn-link-breaked" href="/Account/StudentZone" target="_blank">Add or Remove Courses in Admission-@DateTime.Now.Year Form</a>
+                    </div>*@
+                <div class="col-sm-6">
+                    <a class="btn btn-primary btn-block btn-link-breaked" href="/Account/StudentZone?R=/CUStudentZone/RegnCourses/AddEditQualificationDetails" target="_blank">Add or Edit Previous Academic details in Admission-@DateTime.Now.Year Form</a>
+                </div>
+
+                @*<div class="col-sm-6">
+                        <a class="btn btn-primary btn-block btn-link-breaked" href="/Account/StudentZone?R=/CUStudentZone/RegnCourses/UpdateCertificates" target="_blank">Edit Certificates &amp; Points in Admission-@DateTime.Now.Year Form</a>
+                    </div>*@
+                <div class="col-sm-12">
+                    <br />
+                </div>
+            </li>
+        }
+    </ol>
+</fieldset>

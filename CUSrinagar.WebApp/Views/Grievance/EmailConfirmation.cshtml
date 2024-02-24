@@ -1,0 +1,42 @@
+﻿@model CUSrinagar.Models.Grievance
+
+@{
+    ViewBag.Title = "Confirmation - ";
+}
+
+<div class="page-content">
+    <div class="row">
+        <div class="col-sm-12">
+            @if (ViewBag.IsVerified)
+            {
+                <h2 class="text-success">Confirmation</h2>
+                <hr />
+            }
+            else
+            {
+                <h2 class="text-danger">Error</h2>
+                <hr />
+            }
+            <div class="well well-sm">
+                <div class="row">
+                    <div class="col-sm-8">
+                        @if (ViewBag.IsVerified)
+                        {
+                            <h4>Your request has been received.</h4>
+                                <h4>We will try to resolve query within 3-4 working days</h4>
+                        }
+                        else
+                        {
+                            <h2 class="text-danger">@ViewBag.ErrorMessage</h2>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section PageSpecificJS{
+
+}

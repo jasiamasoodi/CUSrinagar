@@ -1,0 +1,227 @@
+﻿
+@model  CUSrinagar.Models.SelectedStudentDetail
+@{ Layout = null;
+    int OMSeats = ViewBag.OMSeats;
+    int ListNo = ViewBag.CurrentListNo;
+    List<CUSrinagar.Models.SelectedStudentInfo> catList = new List<CUSrinagar.Models.SelectedStudentInfo>();
+    catList.AddRange(Model.selectedStudentInfo);
+    if (catList.Count() > 0 && catList.Count() > OMSeats)
+    { catList.RemoveRange(0, OMSeats); }
+    else
+    { catList.RemoveRange(0, catList.Count()); }
+    int serialno = 1;
+    int currentlistno = ViewBag.CurrentListNo ?? 1;
+    currentlistno = currentlistno - 1;
+}
+
+@*Begin Selection List*@
+<input type="text" id="CurrentListNo" class="hidden" value="@currentlistno" />
+<div id="selectionlist">
+    <div id="confirm" class="modal hide fade">
+        <div class="modal-body">
+            Are you sure?
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-primary" id="release">Ok</button>
+            <button type="button" data-dismiss="modal" class="btn">Cancel</button>
+        </div>
+    </div>
+    @*<div class="align-right  padding-0">Category: OM&nbsp;</div>*@
+    <table class="table table-hover table-bordered js-table">
+        <thead style="white-space: nowrap;">
+            <tr>
+                <th>S.No.</th>
+                <th>CUS FORM NO</th>
+                @if (Model.selectedStudentInfo.All(x => x.CUETApplicationNo != null))
+                {
+                    <th>CUET Application No.</th>
+                    <th>CUET Entrance RollNo.</th>
+                }
+                <th>Name</th>
+                <th>Father's Name</th>
+                @if (Model.selectedStudentInfo != null && Model.selectedStudentInfo.Count > 0 && Model.selectedStudentInfo.FirstOrDefault().CollegeFullName != null)
+                {
+                    <th>
+                        College Assigned
+                    </th>
+                }
+                <th>Category</th>
+                <th>Assigned Category</th>
+                <th>Entrance Points</th>
+                <th>Academic Merit</th>
+                <th>Board</th>
+                <th>Prefr</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model.selectedStudentInfo != null && Model.SeatCountAgainstCourseList != null)
+            {
+                int serialall = 0;
+                int count = 1;
+                string cat = "OM";
+                foreach (var row in Model.selectedStudentInfo)
+                {
+                    serialall++;
+                    string classIS = "";
+                    string classHigh = "";
+                    if (row.SelectionAgaintListNo != ListNo)
+                    { classIS = "hiddens"; }
+                    if (row.Percentage < 45)
+                    { classHigh = "Highlight"; }
+                    @*if (count > Model.SeatCountAgainstCourseList.Where(x => x.Category == "OM").FirstOrDefault().AllocatedSeats)
+                        {
+                            if (row.Category != cat || count == (Model.SeatCountAgainstCourseList.Where(x => x.Category == "OM").FirstOrDefault().AllocatedSeats + 1))
+                            {
+                                <tr>
+                                    <td colspan="10">
+                                        Category @row.Category
+                                    </td>
+                                </tr>
+                            }
+                        }*@
+                    <tr class="@classIS @classHigh">
+                        <td class="js-sno"></td>
+                        <td>
+                            @row.StudentFormNo
+
+                        </td>
+                        @if (row.CUETApplicationNo != null)
+                        {
+                            <td>@row.CUETApplicationNo</td>
+                            <td>@row.CUETEntranceRollNo</td>
+                        }
+                        <td>
+                            @row.FullName
+                        </td>
+                        <td>
+                            @row.FathersName
+                        </td>
+                        @if (row.CollegeFullName != null)
+                        {
+                            <td class="center">
+                                @row.CollegeFullName
+
+                            </td>
+                        }
+                        <td class="center">
+                            @row.Category
+
+                        </td>
+                        @if (row.AssignedUnderCategory)
+                        {
+                            <td class="center">
+                                @row.Category
+                            </td>
+                        }
+                        else
+                        {
+                            <td class="center">
+                                OM
+                            </td>
+
+                        }
+                        <td>
+                            @row.SubjectEntrancePoints
+
+                        </td>
+
+                        <td>
+                            @row.Percentage.ToString("F2")
+
+                        </td>
+                        <td>@row.ExamBody</td>
+                        <td>
+                            @row.Preference
+                        </td>
+
+                        <td>
+                            @if (row.ISFinallySelected)
+                            {
+                                <span class="green">Joined</span>
+                                if (currentlistno == row.SelectionAgaintListNo)
+                                {<span class="red"> /Upgraded</span>}
+                            }
+                            else
+                            {
+                                <button class="hidden-print btn btn-sm jsIsSelected" value="@row.Student_ID">Select</button>
+                            }
+                        </td>
+                    </tr>
+                    cat = row.Category;
+                    count++;
+                    if (row.SelectionAgaintListNo == ListNo)
+                    { serialno++; }
+                }
+
+            }
+        </tbody>
+    </table>
+
+    <br />
+    <table width="100%" class="visible-print">
+        <tr>
+            <td><small>Asstt. Registrar</small></td>
+            <td><small>Contr. of Exam</small></td>
+            <td class="align-right"><small>Dean Academic Affairs</small></td>
+        </tr>
+    </table>
+</div>
+@*end Selection List*@
+
+
+@*Begin Matrix*@
+<div id="matrixlist" class="hidden">
+    <table class="table table-hover table-bordered js-table">
+        <thead style="white-space: nowrap;">
+            <tr>
+                <th>Category</th>
+                <th>Percentage</th>
+                <th>Seats to be Alloted</th>
+                <th>Seats Alloted</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @{
+                decimal sums = 0m;
+                decimal sumsseattobealloted = 0m;
+            }
+            @foreach (var SeatCountGroup in Model.seatCount.GroupBy(x => x.CategoryCode))
+            {
+                sums = 0m;
+                sumsseattobealloted = 0m;
+                foreach (var SeatCount in SeatCountGroup)
+                {
+                    sums += SeatCount.SeatsAssigned;
+                    sumsseattobealloted += SeatCount.SeatsAvailable;
+                    @*<tr>
+                            <td>@SeatCount.CategoryCode</td>
+                            <td>@SeatCount.Percentage.ToString("F2") %</td>
+                            <td>@SeatCount.SeatsAvailable </td>
+                            <td>@SeatCount.SeatsAssigned</td>
+                        </tr>*@
+                }
+                <tr>
+                    <td>@SeatCountGroup.FirstOrDefault().CategoryCode</td>
+                    <td>@SeatCountGroup.FirstOrDefault().Percentage</td>
+                    <td>@sumsseattobealloted</td>
+                    <td>@sums</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+@*end Matrix*@
+
+<style>
+    .Highlight {
+        background-color: #a9e2a8;
+    }
+</style>
+
+<script>
+
+</script>

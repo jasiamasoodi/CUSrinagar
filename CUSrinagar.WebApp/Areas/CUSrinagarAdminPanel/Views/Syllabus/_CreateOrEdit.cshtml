@@ -1,0 +1,183 @@
+﻿@model  CUSrinagar.Models.Syllabus
+@{
+                /**/
+
+                var routeValues = HttpContext.Current.Request.RequestContext.RouteData.Values;
+                string actionName = "";
+                if (routeValues != null)
+                {
+                    if (routeValues.ContainsKey("controller"))
+                    {
+                        actionName = routeValues["action"].ToString();
+                    }
+                }
+                bool IsEdit = false;
+                if (actionName == "Edit")
+                { IsEdit = true; }
+                var AllowedTypes = System.Web.Configuration.WebConfigurationManager.AppSettings["SyllabusFileAllowedTypes"];
+                AllowedTypes = (AllowedTypes != null) ? AllowedTypes : ".pdf";
+                var MaxUploadLimitInKB = Convert.ToInt64(System.Web.Configuration.WebConfigurationManager.AppSettings["SyllabusFileSizeInKB"]);
+                MaxUploadLimitInKB = (MaxUploadLimitInKB > 1000) ? MaxUploadLimitInKB : 700000;
+                var MaxUploadLimitInBytes = MaxUploadLimitInKB * 1024;
+                var MaxUploadLimitInMB = MaxUploadLimitInKB / 1024;
+}
+@Html.AntiForgeryToken()
+<style>
+    .disableDDL {
+        pointer-events: none;
+    }
+</style>
+@if (!ViewData.ModelState.IsValidField("ErrorMessage"))
+{
+    <div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong>@Html.ValidationMessage("ErrorMessage", "", new { @class = "red " })</strong></div>
+}
+<div class="jsDDLContainer">
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+        </label>
+        <div class="col-sm-6 ">
+            @Html.ValidationMessage("Syllabus", "", new { @class = "label label-sm label-danger arrowed-in-right " })
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+            <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Session)
+        </label>
+        <div class="col-sm-6 ">
+            @if (IsEdit)
+            {
+                @Html.DisplayFor(model => model.Session)}
+            else
+            {
+                @Html.TextBoxFor(model => model.Session, new { @class = "width-100", @maxlength = "150" })
+
+            }
+        </div>
+        <div class="col-sm-2">
+            @Html.ValidationMessageFor(model => model.Session, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+            <span class="red bigger-110">*</span> @Html.LabelFor(model => model.ProgrammeId)
+
+        </label>
+        <div class="col-sm-6 ">
+            @if (IsEdit)
+            {
+                @Html.DisplayFor(model => model.ProgrammeId)}
+            else
+            {
+                @Html.DropDownListFor(model => model.ProgrammeId, new SelectList(ViewBag.ProgrammeDDLList, "Value", "Text"),
+                                      "--Select--", new { @class = "chosen-select tag-input-style ParentDDL", data_ddltype = "Course", @data_ddlchildtype = "Semester", @data_ddlsubchildtype = "Subject" })
+            }
+        </div>
+        <div class="col-sm-2">
+            @Html.ValidationMessageFor(model => model.ProgrammeId, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+            <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Course_ID)
+
+        </label>
+        <div class="col-sm-6 " id="Course">
+            @if (IsEdit)
+            {
+                @Html.DisplayFor(model => model.Course_ID)}
+            else
+            { @Html.DropDownListFor(model => model.Course_ID, new SelectList(ViewBag.CourseDDLList, "Value", "Text"),
+                                        "--Select--", new { @class = "chosen-select tag-input-style ParentDDL", data_ddltype = "Semster", @data_ddlchildtype = "Subject", @data_ddlsubchildtype = "" })
+        }
+        </div>
+        <div class="col-sm-2">
+            @Html.ValidationMessageFor(model => model.Course_ID, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+            <span class="red bigger-110">*</span> @Html.LabelFor(model => model.SemesterName)
+
+        </label>
+        <div class="col-sm-6" id="Semester">
+            @if (IsEdit)
+            {
+                @Html.DisplayFor(model => model.SemesterName)}
+            else
+            { @Html.DropDownListFor(model => model.SemesterName, new SelectList(ViewBag.SemesterDDLList, "Value", "Text"),
+                                          "--Select--", new { @class = "chosen-select tag-input-style ParentDDL", @data_ddltype = "Subject", @data_ddlchildtype = "", @data_ddlsubchildtype = "" })
+        }
+        </div>
+        <div class="col-sm-2">
+            @Html.ValidationMessageFor(model => model.SemesterName, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+            <span class="red bigger-110">*</span> @Html.LabelFor(model => model.Subject_ID)
+
+        </label>
+        <div class="col-sm-6 " id="Subject">
+            @if (IsEdit)
+            {
+                @Html.DisplayFor(model => model.Subject_ID)}
+            else
+            {
+                @Html.DropDownListFor(model => model.Subject_ID, new SelectList(ViewBag.SubjectDDLList, "Value", "Text"),
+                                     "--Select--", new { @class = "chosen-select tag-input-style", @data_ddltype = "", @data_ddlchildtype = "", @data_ddlsubchildtype = "" })
+            }
+        </div>
+        <div class="col-sm-2">
+            @Html.ValidationMessageFor(model => model.Subject_ID, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">
+            <span class="red bigger-110">*</span>  Syllabus
+        </label>
+        <div class="col-sm-6">
+
+            <input type="file" id="Files" name="Files" />
+
+
+        </div>
+        <div class="col-sm-2">
+            @Html.ValidationMessageFor(model => model.Files, "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right"></label>
+        <div class="col-sm-8">
+            <button type="submit" class="btn btn-sm btn-primary save-button" onclick=" uploadFile()" id="sub">
+                <i class="ace-icon fa fa-check"></i>
+                Save
+            </button>
+
+            <a id="cData1" href="/CUSrinagarAdminPanel/Syllabus/Index/" class="fm-button ui-state-default ui-corner-all fm-button-icon-left btn btn-sm btn-danger">
+                <i class="ace-icon fa fa-times"></i>Cancel
+            </a>
+
+        </div>
+    </div>
+</div>
+<input type="text" hidden="hidden" style="width: 329px!important" />
+<iframe id="myframe" name="myframe" hidden="hidden"></iframe>
+
+@*@section PageSpecificJS{*@
+<script>
+     var _AllowedTypes = "@AllowedTypes";
+     var _MaxUploadLimitInBytes = "@MaxUploadLimitInBytes"
+     var _MaxUploadLimitInMB = "@MaxUploadLimitInMB";
+</script>
+<script src="@Url.Content("~/Scripts/JSChosen.js")"></script>
+<script src="@Url.Content("~/Scripts/JSSyllabus/SyllabusCreateOrEdit.js")"></script>
+
+@*  }*@

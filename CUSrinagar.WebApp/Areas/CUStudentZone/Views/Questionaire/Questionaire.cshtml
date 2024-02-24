@@ -1,0 +1,115 @@
+﻿
+@using CUSrinagar.Models
+@model List<Questionaire>
+@{
+    ViewBag.Title = "CUS :: Questionaire";
+    int sno = 1;
+    int ssno = 1;
+
+}
+@section CUSSitemap{
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="@Url.Action(" Index","Dashboard",new { area="CUSrinagarAdminPanel" })">Home</a>
+        </li>
+        <li>
+            <a href="@Url.Action("Examination","Examination",new { area="CUSrinagarAdminPanel" })" class="">Examination Form</a>
+        </li>
+        <li>
+            <a href="#" class="active">Questionaire</a>
+        </li>
+    </ul><!-- /.breadcrumb -->
+}
+
+@section PageSpecificStyle{
+    <style>
+        p {
+            font-family: auto !important;
+            font-size: 20px !important;
+        }
+
+        form {
+            font-family: auto !important;
+        }
+
+        .question {
+            font-size: 18px;
+        }
+    </style>
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="col-sm-12">
+            <br />
+            <p>
+                NAAC (National Assessment and accreditation council) is conducting a Student Satisfaction Survey regarding Teaching – Learning and Evaluation, which will help to upgrade the quality in higher education. A student will have to respond to all the questions given in the following format with her/his sincere effort and thought. Her/his identity will not be revealed.
+            </p>
+            <hr />
+        </div>
+        <div class="col-sm-12">
+            <h4 class="center  no-padding"><i class='menu-icon fa fa-pencil-square-o'></i>Please answer below questions before proceeding to examination form.</h4>
+            <hr />
+        </div>
+
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                @using (Html.BeginForm("SaveQuestionaire", "Questionaire", FormMethod.Post, new { enctype = "multipart/form-data", @name = "validation-form", @id = "validation-form", @class = "form-horizontal", @role = "form" }))
+                {
+                    <label class="red"> @Html.ValidationMessage("AllQuestions", "", new { @class = "label label-sm label-danger arrowed-in-right arrowed" })</label>
+                    foreach (Questionaire question in Model)
+                    {
+                        @Html.HiddenFor(model => model[sno - 1].Question)
+                        @Html.HiddenFor(model => model[sno - 1].Semester)
+                        @Html.HiddenFor(model => model[sno - 1].Question_Id)
+                        ssno = 1;
+                        <div class="col-sm-12">
+                            <label class="question">@sno)&nbsp;&nbsp; @question.Question</label>
+                            <div class="col-sm-12">
+                                @foreach (QuestionOptions option in question.QuestionOptions)
+                                {
+                                    <div class="col-sm-2">
+                                        @Html.HiddenFor(model => model[sno - 1].QuestionOptions[ssno - 1].OptionLabel)
+                                        @Html.HiddenFor(model => model[sno - 1].QuestionOptions[ssno - 1].Option_Id)
+                                        @Html.HiddenFor(model => model[sno - 1].QuestionOptions[ssno - 1].Question_Id, question.Question_Id)
+
+                                        @*<span>@option.OptionLabel</span> @Html.RadioButtonFor(model => model[sno - 1].IsCheckedOption, option.Option_Id)*@
+
+                                        <div class="radio">
+                                            @ssno.
+                                            <label>
+                                                @Html.RadioButtonFor(model => model[sno - 1].IsCheckedOption, option.Option_Id, new { @class = "ace" })
+                                                <span class="lbl">@option.OptionLabel</span>
+                                            </label>
+                                        </div>
+
+
+
+                                        @{ssno++;}
+                                    </div>
+                                }
+
+                            </div>
+                            @{sno++;}
+                        </div>
+                        <div class="col-sm-12">        <hr class="margin-top-5 margin-bottom-15" /></div>
+
+                    }
+                    <div class="col-sm-12 align-center">
+                        <button type="submit" class="btn btn-sm btn-primary save-button " id="sub">
+                            <i class="ace-icon fa fa-check"></i>
+                            Submit
+                        </button>
+                    </div>
+                }
+            </div>
+
+        </div>
+
+
+
+
+    </div>
+</div>

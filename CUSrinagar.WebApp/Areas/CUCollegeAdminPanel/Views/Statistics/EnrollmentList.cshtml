@@ -1,0 +1,1123 @@
+﻿@model List<CUSrinagar.Models.StudentsCourseWiseStatistics>
+@using CUSrinagar.Extensions
+@{
+    Layout = null;
+}
+@section PageSpecificStyle{
+
+}
+
+
+@if (Model != null)
+{
+    var ListOfProgrammes = Model.Select(x => x.Programme).OrderBy(x => x).Distinct().ToList();
+    List<CUSrinagar.Models.StudentsCourseWiseStatistics> _list = null;
+    List<CUSrinagar.Models.StudentsCourseWiseStatistics> _sublist = null;
+    List<CUSrinagar.Models.StudentsCourseWiseStatistics> _subsublist = null;
+    var batches = Model.Select(x => x.SemesterBatch).Distinct().OrderBy(x => x).ToList();
+    var ListOfColleges = Model.Select(x => x.CollegeFullName).Distinct();
+    var count = 1;
+
+    <div id="accordion" class="accordion-style1 panel-group">
+        <div class=" panel panel-default">
+            <div class="panel-heading hidden-print">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                        <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                        &nbsp;Student enrollment: Program wise
+                    </a>
+                </h4>
+            </div>
+
+            <div class="panel-collapse collapse" id="collapse1" style="page-break-after:always;">
+                <div class="panel-body">
+                    <div class="col-sm-12">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="6">
+                                        <b>Student enrollment: Program wise</b>
+                                        <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>Programme</th>
+                                    <th>Semester</th>
+                                    <th>Total</th>
+                                    <th>Male</th>
+                                    <th>Female</th>
+                                    <th>Other</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    count = 1;
+                                    foreach (var item in ListOfProgrammes)
+                                    {
+                                        if (item == CUSrinagar.Enums.Programme.UG)
+                                        {
+                                            _list = Model.Where(x => x.PrintProgramme == CUSrinagar.Enums.PrintProgramme.UG && x.Programme == CUSrinagar.Enums.Programme.UG)?.ToList();
+                                            if (_list.IsNotNullOrEmpty())
+                                            {
+                                                <tr>
+                                                    <td>@(count++).&emsp;&emsp;Graduation</td>
+                                                    <td>@_list.First().Semester</td>
+                                                    <td>@(_list?.Sum(x => x.NoOfStudents))</td>
+                                                    <td>@(_list?.Sum(x => x.Male))</td>
+                                                    <td>@(_list?.Sum(x => x.Female))</td>
+                                                    <td>@(_list?.Sum(x => x.Other))</td>
+                                                </tr>
+                                            }
+                                            _list = Model.Where(x => x.PrintProgramme == CUSrinagar.Enums.PrintProgramme.BED && x.Programme == CUSrinagar.Enums.Programme.UG)?.ToList();
+                                            if (_list.IsNotNullOrEmpty())
+                                            {
+                                                <tr>
+                                                    <td>@(count++).&emsp;&emsp;BED</td>
+                                                    <td>@_list.First().Semester</td>
+                                                    <td>@(_list?.Sum(x => x.NoOfStudents))</td>
+                                                    <td>@(_list?.Sum(x => x.Male))</td>
+                                                    <td>@(_list?.Sum(x => x.Female))</td>
+                                                    <td>@(_list?.Sum(x => x.Other))</td>
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            _list = Model.Where(x => x.Programme == item)?.ToList();
+                                            <tr>
+                                                <td>@(count++).&emsp;&emsp;@(CUSrinagar.Extensions.Helper.GetEnumDescription(item))</td>
+                                                <td>@Model.First().Semester</td>
+                                                <td>@(_list?.Sum(x => x.NoOfStudents))</td>
+                                                <td>@(_list?.Sum(x => x.Male))</td>
+                                                <td>@(_list?.Sum(x => x.Female))</td>
+                                                <td>@(_list?.Sum(x => x.Other))</td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                                <tr>
+                                    <td colspan="2" class="text-center">
+                                        <strong>Total</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@Model.Sum(i => i.NoOfStudents)</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Male))</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Female))</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Other))</strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading hidden-print">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+                        <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                        &nbsp;Student enrollment: : Program batch wise
+                    </a>
+                </h4>
+            </div>
+
+            <div class="panel-collapse collapse" id="collapse2" style="page-break-after:always;">
+                <div class="panel-body">
+                    <div class="col-sm-12">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="7">
+                                        <b>Student enrollment: Program batch wise</b>
+                                        <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>Batch</td>
+                                    <th>Programme</th>
+                                    <th>Semester</th>
+                                    <th>Total</th>
+                                    <th>Male</th>
+                                    <th>Female</th>
+                                    <th>Other</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var batch in batches)
+                                {
+                                    count = 1;
+                                    _list = Model.Where(x => x.SemesterBatch == batch)?.ToList();
+                                    if (_list.IsNotNullOrEmpty())
+                                    {
+                                        foreach (var item in ListOfProgrammes)
+                                        {
+                                            if (item == CUSrinagar.Enums.Programme.UG)
+                                            {
+                                                _sublist = _list.Where(x => x.PrintProgramme == CUSrinagar.Enums.PrintProgramme.UG && x.Programme == CUSrinagar.Enums.Programme.UG)?.ToList();
+                                                if (_sublist.IsNotNullOrEmpty())
+                                                {
+                                                    if (_sublist.IsNotNullOrEmpty())
+                                                    {
+                                                        <tr>
+                                                            <td>@(count++).&emsp;@batch</td>
+                                                            <td>Graduation</td>
+                                                            <td>@_sublist.First().Semester</td>
+                                                            <td>@(_sublist?.Sum(x => x.NoOfStudents))</td>
+                                                            <td>@(_sublist?.Sum(x => x.Male))</td>
+                                                            <td>@(_sublist?.Sum(x => x.Female))</td>
+                                                            <td>@(_sublist?.Sum(x => x.Other))</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                                _sublist = _list.Where(x => x.PrintProgramme == CUSrinagar.Enums.PrintProgramme.BED && x.Programme == CUSrinagar.Enums.Programme.UG)?.ToList();
+                                                if (_list.IsNotNullOrEmpty())
+                                                {
+                                                    if (_sublist.IsNotNullOrEmpty())
+                                                    {
+                                                        <tr>
+                                                            <td>@(count++).&emsp;@batch</td>
+                                                            <td>BED</td>
+                                                            <td>@_sublist.First().Semester</td>
+                                                            <td>@(_sublist?.Sum(x => x.NoOfStudents))</td>
+                                                            <td>@(_sublist?.Sum(x => x.Male))</td>
+                                                            <td>@(_sublist?.Sum(x => x.Female))</td>
+                                                            <td>@(_sublist?.Sum(x => x.Other))</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                _sublist = _list.Where(x => x.Programme == item)?.ToList();
+                                                if (_sublist.IsNotNullOrEmpty())
+                                                {
+                                                    <tr>
+                                                        <td>@(count++).&emsp;@batch</td>
+                                                        <td>@CUSrinagar.Extensions.Helper.GetEnumDescription(item)</td>
+                                                        <td>@_sublist.First().Semester</td>
+                                                        <td>@(_sublist?.Sum(x => x.NoOfStudents))</td>
+                                                        <td>@(_sublist?.Sum(x => x.Male))</td>
+                                                        <td>@(_sublist?.Sum(x => x.Female))</td>
+                                                        <td>@(_sublist?.Sum(x => x.Other))</td>
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                        <tr class="bold">
+                                            <td colspan="2" class="text-center">Total in @batch</td>
+                                            <td>@_list.First().Semester</td>
+                                            <td>@(_list?.Sum(x => x.NoOfStudents))</td>
+                                            <td>@(_list?.Sum(x => x.Male))</td>
+                                            <td>@(_list?.Sum(x => x.Female))</td>
+                                            <td>@(_list?.Sum(x => x.Other))</td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td colspan="6" style="color:white;">| </td>
+                                        </tr>
+                                    }
+                                }
+                                <tr>
+                                    <td colspan="2" class="text-center">
+                                        <strong>Grand Total</strong>
+                                    </td>
+                                    <td>@(Model.First().Semester)</td>
+                                    <td>
+                                        <strong>@Model.Sum(i => i.NoOfStudents)</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Male))</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Female))</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Other))</strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading hidden-print">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+                        <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                        &nbsp;Student enrollment: batch wise
+                    </a>
+                </h4>
+            </div>
+
+            <div class="panel-collapse collapse" id="collapse3" style="page-break-after:always;">
+                <div class="panel-body">
+                    <div class="col-sm-12">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="6">
+                                        <b>Student enrollment: batch wise</b>
+                                        <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>batch</th>
+                                    <th>Semester</th>
+                                    <th>Total</th>
+                                    <th>Male</th>
+                                    <th>Female</th>
+                                    <th>Other</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    count = 1;
+                                    foreach (var batch in batches)
+                                    {
+                                        _list = Model.Where(x => x.SemesterBatch == batch)?.ToList();
+                                        <tr>
+                                            <td>@(count++).&emsp;@batch</td>
+                                            <td>@Model.First().Semester</td>
+                                            <td>@(_list?.Sum(x => x.NoOfStudents))</td>
+                                            <td>@(_list?.Sum(x => x.Male))</td>
+                                            <td>@(_list?.Sum(x => x.Female))</td>
+                                            <td>@(_list?.Sum(x => x.Other))</td>
+                                        </tr>
+                                    }
+                                }
+                                <tr>
+                                    <td colspan="2" class="text-center">
+                                        <strong>Total</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@Model.Sum(i => i.NoOfStudents)</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Male))</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Female))</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Other))</strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading hidden-print">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse4">
+                        <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                        &nbsp;Student enrollment: College wise
+                    </a>
+                </h4>
+            </div>
+
+            <div class="panel-collapse collapse" id="collapse4" style="page-break-after:always;">
+                <div class="panel-body">
+                    <div class="col-sm-12">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="7">
+                                        <b>Student enrollment: College wise</b>
+                                        <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>College</th>
+                                    <th>Semester</th>
+                                    <th>Total</th>
+                                    <th>Male</th>
+                                    <th>Female</th>
+                                    <th>Other</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    count = 1;
+                                    foreach (var college in ListOfColleges)
+                                    {
+                                        _list = Model.Where(x => x.CollegeFullName == college)?.ToList();
+                                        if (_list.IsNotNullOrEmpty())
+                                        {
+                                            <tr>
+                                                <td>@(count++).&emsp;@college</td>
+                                                <td>@Model.First().Semester</td>
+                                                <td>@(_list?.Sum(x => x.NoOfStudents))</td>
+                                                <td>@(_list?.Sum(x => x.Male))</td>
+                                                <td>@(_list?.Sum(x => x.Female))</td>
+                                                <td>@(_list?.Sum(x => x.Other))</td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                                <tr>
+                                    <td colspan="2" class="text-center">
+                                        <strong>Total</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@Model.Sum(i => i.NoOfStudents)</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Male))</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Female))</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Other))</strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading hidden-print">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse5">
+                        <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                        &nbsp;Student enrollment: College batch wise
+                    </a>
+                </h4>
+            </div>
+
+            <div class="panel-collapse collapse" id="collapse5" style="page-break-after:always;">
+                <div class="panel-body">
+
+
+                    <div class="col-sm-12">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="7">
+                                        <b>Student enrollment: College batch wise</b>
+                                        <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>batch</th>
+                                    <th>College</th>
+                                    <th>Semester</th>
+                                    <th>Total</th>
+                                    <th>Male</th>
+                                    <th>Female</th>
+                                    <th>Other</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    count = 1;
+                                    foreach (var batch in batches)
+                                    {
+                                        _list = Model.Where(x => x.SemesterBatch == batch)?.ToList();
+                                        if (_list.IsNotNullOrEmpty())
+                                        {
+
+                                            foreach (var college in ListOfColleges)
+                                            {
+                                                _sublist = _list.Where(x => x.CollegeFullName == college)?.ToList();
+                                                if (_sublist.IsNotNullOrEmpty())
+                                                {
+                                                    <tr>
+                                                        <td>@(count++).&emsp;@batch</td>
+                                                        <td>@college</td>
+                                                        <td>@_sublist.First().Semester</td>
+                                                        <td>@(_sublist?.Sum(x => x.NoOfStudents))</td>
+                                                        <td>@(_sublist?.Sum(x => x.Male))</td>
+                                                        <td>@(_sublist?.Sum(x => x.Female))</td>
+                                                        <td>@(_sublist?.Sum(x => x.Other))</td>
+                                                    </tr>
+                                                }
+                                            }
+
+                                            <tr>
+                                                <td colspan="2" class="text-center">
+                                                    <strong>Total in batch:@batch</strong>
+                                                </td>
+                                                <td>@_list.First().Semester</td>
+                                                <td>
+                                                    <strong>@_list.Sum(i => i.NoOfStudents)</strong>
+                                                </td>
+                                                <td>
+                                                    <strong>@(_list?.Sum(i => i.Male))</strong>
+                                                </td>
+                                                <td>
+                                                    <strong>@(_list?.Sum(i => i.Female))</strong>
+                                                </td>
+                                                <td>
+                                                    <strong>@(_list?.Sum(i => i.Other))</strong>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td colspan="7" style="color:white;">| </td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                                <tr>
+                                    <td colspan="2" class="text-center">
+                                        <strong>Grand Total</strong>
+                                    </td>
+                                    <td>@Model.First().Semester</td>
+                                    <td>
+                                        <strong>@Model.Sum(i => i.NoOfStudents)</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Male))</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Female))</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Other))</strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading hidden-print">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse6">
+                        <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                        &nbsp;Student enrollment: College program wise
+                    </a>
+                </h4>
+            </div>
+
+            <div class="panel-collapse collapse" id="collapse6" style="page-break-after:always;">
+                <div class="panel-body">
+                    <div class="col-sm-12">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="7">
+                                        <b>Student enrollment: College program wise</b>
+                                        <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>College</th>
+                                    <th>Programme</th>
+                                    <th>Semester</th>
+                                    <th>Total</th>
+                                    <th>Male</th>
+                                    <th>Female</th>
+                                    <th>Other</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    count = 1;
+                                    foreach (var college in ListOfColleges)
+                                    {
+                                        _list = Model.Where(x => x.CollegeFullName == college)?.ToList();
+                                        foreach (var item in ListOfProgrammes)
+                                        {
+                                            if (item == CUSrinagar.Enums.Programme.UG)
+                                            {
+                                                _sublist = _list.Where(x => x.PrintProgramme == CUSrinagar.Enums.PrintProgramme.UG && x.Programme == CUSrinagar.Enums.Programme.UG)?.ToList();
+                                                if (_sublist.IsNotNullOrEmpty())
+                                                {
+                                                    <tr>
+                                                        <td>@(count++).&emsp;@college</td>
+                                                        <td>Graduation</td>
+                                                        <td>@_sublist.First().Semester</td>
+                                                        <td>@(_sublist?.Sum(x => x.NoOfStudents))</td>
+                                                        <td>@(_sublist?.Sum(x => x.Male))</td>
+                                                        <td>@(_sublist?.Sum(x => x.Female))</td>
+                                                        <td>@(_sublist?.Sum(x => x.Other))</td>
+                                                    </tr>
+                                                }
+                                                _sublist = _list.Where(x => x.PrintProgramme == CUSrinagar.Enums.PrintProgramme.BED && x.Programme == CUSrinagar.Enums.Programme.UG)?.ToList();
+                                                if (_sublist.IsNotNullOrEmpty())
+                                                {
+                                                    <tr>
+                                                        <td>@(count++).&emsp;@college</td>
+                                                        <td>BED</td>
+                                                        <td>@_sublist.First().Semester</td>
+                                                        <td>@(_sublist?.Sum(x => x.NoOfStudents))</td>
+                                                        <td>@(_sublist?.Sum(x => x.Male))</td>
+                                                        <td>@(_sublist?.Sum(x => x.Female))</td>
+                                                        <td>@(_sublist?.Sum(x => x.Other))</td>
+                                                    </tr>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                _sublist = _list.Where(x => x.Programme == item)?.ToList();
+                                                if (_sublist.IsNotNullOrEmpty())
+                                                {
+                                                    <tr>
+                                                        <td>@(count++).&emsp;@college</td>
+                                                        <td>@(CUSrinagar.Extensions.Helper.GetEnumDescription(item))</td>
+                                                        <td>@Model.First().Semester</td>
+                                                        <td>@(_sublist?.Sum(x => x.NoOfStudents))</td>
+                                                        <td>@(_sublist?.Sum(x => x.Male))</td>
+                                                        <td>@(_sublist?.Sum(x => x.Female))</td>
+                                                        <td>@(_sublist?.Sum(x => x.Other))</td>
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                        <tr class="bold">
+                                            <td colspan="2" class="text-center">Total</td>
+                                            <td>@Model.First().Semester</td>
+                                            <td>@(_list?.Sum(x => x.NoOfStudents))</td>
+                                            <td>@(_list?.Sum(x => x.Male))</td>
+                                            <td>@(_list?.Sum(x => x.Female))</td>
+                                            <td>@(_list?.Sum(x => x.Other))</td>
+                                        </tr>
+                                    }
+                                }
+                                <tr>
+                                    <td colspan="3" class="text-center">
+                                        <strong>Grand Total</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@Model.Sum(i => i.NoOfStudents)</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Male))</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Female))</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Other))</strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading hidden-print">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse7">
+                        <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                        &nbsp;Student enrollment: College course wise
+                    </a>
+                </h4>
+            </div>
+
+            <div class="panel-collapse collapse" id="collapse7" style="page-break-after:always;">
+                <div class="panel-body">
+                    <div class="col-sm-12">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="6">
+                                        <b>Student enrollment: College course wise</b>
+                                        <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>CollegeFullName</th>
+                                    <th>CourseFullName</th>
+                                    <th>Total</th>
+                                    <th>Male</th>
+                                    <th>Female</th>
+                                    <th>Other</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var college in ListOfColleges)
+                                    {
+                                        count = 1;
+                                        _list = Model.Where(x => x.CollegeFullName == college).ToList();
+                                        var ListOfCourses = _list.Select(x => new { x.Programme, x.CourseFullName }).OrderBy(x => x.CourseFullName).OrderBy(x => x.Programme).Select(x => x.CourseFullName).Distinct().ToList();
+                                        foreach (var course in ListOfCourses)
+                                        {
+                                            _sublist = _list.Where(x => x.CourseFullName == course).ToList();
+                                            if (_sublist.IsNotNullOrEmpty())
+                                            {
+                                                <tr>
+                                                    <td>@(count++).&emsp;@college</td>
+                                                    <td>@course</td>
+                                                    <td>@_sublist.Sum(x => x.NoOfStudents)</td>
+                                                    <td>@_sublist.Sum(x => x.Male)</td>
+                                                    <td>@_sublist.Sum(x => x.Female)</td>
+                                                    <td>@_sublist.Sum(x => x.Other)</td>
+                                                </tr>
+                                            }
+                                        }
+                                        <tr class="bold">
+                                            <td colspan="2" class="text-center">Total @college</td>
+                                            <td>@_list.Sum(x => x.NoOfStudents)</td>
+                                            <td>@_list.Sum(x => x.Male)</td>
+                                            <td>@_list.Sum(x => x.Female)</td>
+                                            <td>@_list.Sum(x => x.Other)</td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td colspan="6" style="color:white;">| </td>
+                                        </tr>
+                                    }
+                                    <tr class="bold">
+                                        <td colspan="2" class="text-center">Grand total</td>
+                                        <td>@Model.Sum(x => x.NoOfStudents)</td>
+                                        <td>@Model.Sum(x => x.Male)</td>
+                                        <td>@Model.Sum(x => x.Female)</td>
+                                        <td>@Model.Sum(x => x.Other)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading hidden-print">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse8">
+                        <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                        &nbsp;Student enrollment: College batch course wise
+                    </a>
+                </h4>
+            </div>
+
+            <div class="panel-collapse collapse" id="collapse8" style="page-break-after:always;">
+                <div class="panel-body">
+                    <div class="col-sm-12">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="7">
+                                        <b>Student enrollment: College batch course wise</b>
+                                        <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>CollegeFullName</th>
+                                    <th>batch</th>
+                                    <th>CourseFullName</th>
+                                    <th>Total</th>
+                                    <th>Male</th>
+                                    <th>Female</th>
+                                    <th>Other</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var college in ListOfColleges)
+                                    {
+                                        count = 1;
+                                        _list = Model.Where(x => x.CollegeFullName == college).ToList();
+                                        var ListOfCourses = _list.Select(x => new { x.Programme, x.CourseFullName }).OrderBy(x => x.CourseFullName).OrderBy(x => x.Programme).Select(x => x.CourseFullName).Distinct().ToList();
+                                        foreach (var batch in batches)
+                                        {
+                                            _sublist = _list.Where(x => x.SemesterBatch == batch).ToList();
+                                            if (_sublist.IsNotNullOrEmpty())
+                                            {
+                                                foreach (var course in ListOfCourses)
+                                                {
+                                                    _subsublist = _sublist.Where(x => x.CourseFullName == course).ToList();
+                                                    if (_subsublist.IsNotNullOrEmpty())
+                                                    {
+                                                        <tr>
+                                                            <td>@(count++).&emsp;@college</td>
+                                                            <td>@batch</td>
+                                                            <td>@course</td>
+                                                            <td>@_subsublist.Sum(x => x.NoOfStudents)</td>
+                                                            <td>@_subsublist.Sum(x => x.Male)</td>
+                                                            <td>@_subsublist.Sum(x => x.Female)</td>
+                                                            <td>@_subsublist.Sum(x => x.Other)</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            }
+                                            <tr class="bold">
+                                                <td colspan="3" class="text-center">Total in batch : @batch</td>
+                                                <td>@_sublist.Sum(x => x.NoOfStudents)</td>
+                                                <td>@_sublist.Sum(x => x.Male)</td>
+                                                <td>@_sublist.Sum(x => x.Female)</td>
+                                                <td>@_sublist.Sum(x => x.Other)</td>
+                                            </tr>
+                                        }
+
+                                        <tr class="bold">
+                                            <td colspan="3" class="text-center">Total @college</td>
+                                            <td>@_list.Sum(x => x.NoOfStudents)</td>
+                                            <td>@_list.Sum(x => x.Male)</td>
+                                            <td>@_list.Sum(x => x.Female)</td>
+                                            <td>@_list.Sum(x => x.Other)</td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td colspan="7" style="color:white;">| </td>
+                                        </tr>
+                                    }
+                                    <tr class="bold">
+                                        <td colspan="2" class="text-center">Grand total</td>
+                                        <td>@Model.Sum(x => x.NoOfStudents)</td>
+                                        <td>@Model.Sum(x => x.Male)</td>
+                                        <td>@Model.Sum(x => x.Female)</td>
+                                        <td>@Model.Sum(x => x.Other)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading hidden-print">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse9">
+                        <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                        &nbsp;Student enrollment: Course wise
+                    </a>
+                </h4>
+            </div>
+
+            <div class="panel-collapse collapse" id="collapse9" style="page-break-after:always;">
+                <div class="panel-body">
+                    <div class="col-sm-12">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="5">
+                                        <b>Student enrollment: Course wise</b>
+                                        <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>Course</th>
+                                    <th>Total</th>
+                                    <th>Male</th>
+                                    <th>Female</th>
+                                    <th>Other</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in ListOfProgrammes)
+                                {
+                                    if (item == CUSrinagar.Enums.Programme.UG)
+                                    {
+                                        _list = Model.Where(x => x.PrintProgramme == CUSrinagar.Enums.PrintProgramme.UG && x.Programme == CUSrinagar.Enums.Programme.UG)?.ToList();
+                                        if (_list.IsNotNullOrEmpty())
+                                        {
+                                            var ListOfCourses = _list.Select(x => new { x.Programme, x.CourseFullName }).OrderBy(x => x.CourseFullName).OrderBy(x => x.Programme).Select(x => x.CourseFullName).Distinct().ToList();
+                                            for (int i = 0; i < ListOfCourses.Count(); i++)
+                                            {
+                                                _sublist = _list.Where(x => x.CourseFullName == ListOfCourses[i])?.ToList();
+                                                <tr>
+                                                    <td>@(i + 1).&emsp;@ListOfCourses[i]</td>
+                                                    <td>@(_sublist?.Sum(x => x.NoOfStudents))</td>
+                                                    <td>@(_sublist?.Sum(x => x.Male))</td>
+                                                    <td>@(_sublist?.Sum(x => x.Female))</td>
+                                                    <td>@(_sublist?.Sum(x => x.Other))</td>
+                                                </tr>
+                                            }
+                                            <tr class="bold text-center">
+                                                <td>Total Graduates</td>
+                                                <td>
+                                                    @(_list?.Sum(x => x.NoOfStudents))
+                                                </td>
+                                                <td>@(_list?.Sum(x => x.Male))</td>
+                                                <td>@(_list?.Sum(x => x.Female))</td>
+                                                <td>@(_list?.Sum(x => x.Other))</td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td colspan="5" style="color:white;">| </td>
+                                            </tr>
+                                        }
+                                        _list = Model.Where(x => x.PrintProgramme == CUSrinagar.Enums.PrintProgramme.BED && x.Programme == CUSrinagar.Enums.Programme.UG)?.ToList();
+                                        if (_list.IsNotNullOrEmpty())
+                                        {
+                                            var ListOfCourses = _list.Select(x => new { x.Programme, x.CourseFullName }).OrderBy(x => x.CourseFullName).OrderBy(x => x.Programme).Select(x => x.CourseFullName).Distinct().ToList();
+                                            for (int i = 0; i < ListOfCourses.Count(); i++)
+                                            {
+                                                _sublist = _list.Where(x => x.CourseFullName == ListOfCourses[i])?.ToList();
+                                                <tr>
+                                                    <td>@(i + 1).&emsp;@ListOfCourses[i]</td>
+                                                    <td>@(_sublist?.Sum(x => x.NoOfStudents))</td>
+                                                    <td>@(_sublist?.Sum(x => x.Male))</td>
+                                                    <td>@(_sublist?.Sum(x => x.Female))</td>
+                                                    <td>@(_sublist?.Sum(x => x.Other))</td>
+                                                </tr>
+                                            }
+                                            <tr class="bold">
+                                                <td class="text-center bold">Total BED</td>
+                                                <td>
+                                                    @(_list?.Sum(x => x.NoOfStudents))
+                                                </td>
+                                                <td>@(_list?.Sum(x => x.Male))</td>
+                                                <td>@(_list?.Sum(x => x.Female))</td>
+                                                <td>@(_list?.Sum(x => x.Other))</td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td colspan="5" style="color:white;">| </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        _list = Model.Where(x => x.Programme == item)?.ToList();
+                                        if (_list.IsNotNullOrEmpty())
+                                        {
+                                            var ListOfCourses = _list.Select(x => new { x.Programme, x.CourseFullName }).OrderBy(x => x.CourseFullName).OrderBy(x => x.Programme).Select(x => x.CourseFullName).Distinct().ToList();
+                                            for (int i = 0; i < ListOfCourses.Count(); i++)
+                                            {
+                                                _sublist = _list.Where(x => x.CourseFullName == ListOfCourses[i])?.ToList();
+                                                <tr>
+                                                    <td>@(i + 1).&emsp;@ListOfCourses[i]</td>
+                                                    <td>@(_sublist?.Sum(x => x.NoOfStudents))</td>
+                                                    <td>@(_sublist?.Sum(x => x.Male))</td>
+                                                    <td>@(_sublist?.Sum(x => x.Female))</td>
+                                                    <td>@(_sublist?.Sum(x => x.Other))</td>
+                                                </tr>
+                                            }
+                                            <tr class="bold">
+                                                <td>Total @(CUSrinagar.Extensions.Helper.GetEnumDescription(item))</td>
+                                                <td>
+                                                    @(_list?.Sum(x => x.NoOfStudents))
+                                                </td>
+                                                <td>@(_list?.Sum(x => x.Male))</td>
+                                                <td>@(_list?.Sum(x => x.Female))</td>
+                                                <td>@(_list?.Sum(x => x.Other))</td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td colspan="5" style="color:white;">| </td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                                <tr>
+                                    <td>
+                                        <strong>Total</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@Model.Sum(i => i.NoOfStudents)</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Male))</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Female))</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Other))</strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading hidden-print">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse10">
+                        <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                        &nbsp;Student enrollment: course & batch wise
+                    </a>
+                </h4>
+            </div>
+
+            <div class="panel-collapse collapse" id="collapse10" style="page-break-after:always;">
+                <div class="panel-body">
+                    <div class="col-sm-12">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="6">
+                                        <b>Student enrollment: course & batch wise</b>
+                                        <a class="pull-right jsPrintTable" style="cursor:pointer;"><i class="fa fa-print"></i></a>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>batch</th>
+                                    <th>Course</th>
+                                    <th>Total</th>
+                                    <th>Male</th>
+                                    <th>Female</th>
+                                    <th>Other</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var batch in batches)
+                                {
+                                    count = 1;
+                                    _list = Model.Where(x => x.SemesterBatch == batch)?.ToList();
+                                    foreach (var item in ListOfProgrammes)
+                                    {
+                                        if (item == CUSrinagar.Enums.Programme.UG)
+                                        {
+                                            _sublist = _list.Where(x => x.PrintProgramme == CUSrinagar.Enums.PrintProgramme.UG && x.Programme == CUSrinagar.Enums.Programme.UG)?.ToList();
+                                            if (_sublist.IsNotNullOrEmpty())
+                                            {
+                                                var ListOfCourses = _sublist.Select(x => new { x.Programme, x.CourseFullName }).OrderBy(x => x.CourseFullName).OrderBy(x => x.Programme).Select(x => x.CourseFullName).Distinct().ToList();
+                                                for (int i = 0; i < ListOfCourses.Count(); i++)
+                                                {
+                                                    _subsublist = _sublist.Where(x => x.CourseFullName == ListOfCourses[i])?.ToList();
+                                                    <tr>
+                                                        <td>@(i + 1).&emsp;@batch</td>
+                                                        <td>@ListOfCourses[i]</td>
+                                                        <td>@(_subsublist?.Sum(x => x.NoOfStudents))</td>
+                                                        <td>@(_subsublist?.Sum(x => x.Male))</td>
+                                                        <td>@(_subsublist?.Sum(x => x.Female))</td>
+                                                        <td>@(_subsublist?.Sum(x => x.Other))</td>
+                                                    </tr>
+                                                }
+                                                <tr class="bold">
+                                                    <td colspan="2">Total Graduates</td>
+                                                    <td>@(_sublist?.Sum(x => x.NoOfStudents))</td>
+                                                    <td>@(_sublist?.Sum(x => x.Male))</td>
+                                                    <td>@(_sublist?.Sum(x => x.Female))</td>
+                                                    <td>@(_sublist?.Sum(x => x.Other))</td>
+                                                </tr>
+                                                <tr class="text-center">
+                                                    <td colspan="6" style="color:white;">| </td>
+                                                </tr>
+                                            }
+                                            _sublist = _list.Where(x => x.PrintProgramme == CUSrinagar.Enums.PrintProgramme.BED && x.Programme == CUSrinagar.Enums.Programme.UG)?.ToList();
+                                            if (_sublist.IsNotNullOrEmpty())
+                                            {
+                                                var ListOfCourses = _sublist.Select(x => new { x.Programme, x.CourseFullName }).OrderBy(x => x.CourseFullName).OrderBy(x => x.Programme).Select(x => x.CourseFullName).Distinct().ToList();
+                                                for (int i = 0; i < ListOfCourses.Count(); i++)
+                                                {
+                                                    _subsublist = _sublist.Where(x => x.CourseFullName == ListOfCourses[i])?.ToList();
+                                                    <tr>
+                                                        <td>@(i + 1).&emsp;@batch</td>
+                                                        <td>@ListOfCourses[i]</td>
+                                                        <td>@(_subsublist?.Sum(x => x.NoOfStudents))</td>
+                                                        <td>@(_subsublist?.Sum(x => x.Male))</td>
+                                                        <td>@(_subsublist?.Sum(x => x.Female))</td>
+                                                        <td>@(_subsublist?.Sum(x => x.Other))</td>
+                                                    </tr>
+                                                }
+                                                <tr class="bold">
+                                                    <td colspan="2">Total BED</td>
+                                                    <td>@(_sublist?.Sum(x => x.NoOfStudents))</td>
+                                                    <td>@(_sublist?.Sum(x => x.Male))</td>
+                                                    <td>@(_sublist?.Sum(x => x.Female))</td>
+                                                    <td>@(_sublist?.Sum(x => x.Other))</td>
+                                                </tr>
+                                                <tr class="text-center">
+                                                    <td colspan="6" style="color:white;">| </td>
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            _sublist = _list.Where(x => x.Programme == item)?.ToList();
+                                            if (_sublist.IsNotNullOrEmpty())
+                                            {
+                                                var ListOfCourses = _sublist.Select(x => new { x.Programme, x.CourseFullName }).OrderBy(x => x.CourseFullName).OrderBy(x => x.Programme).Select(x => x.CourseFullName).Distinct().ToList();
+                                                for (int i = 0; i < ListOfCourses.Count(); i++)
+                                                {
+                                                    _subsublist = _sublist.Where(x => x.CourseFullName == ListOfCourses[i])?.ToList();
+                                                    <tr>
+                                                        <td>@(i + 1).&emsp;@batch</td>
+                                                        <td>@ListOfCourses[i]</td>
+                                                        <td>@(_subsublist?.Sum(x => x.NoOfStudents))</td>
+                                                        <td>@(_subsublist?.Sum(x => x.Male))</td>
+                                                        <td>@(_subsublist?.Sum(x => x.Female))</td>
+                                                        <td>@(_subsublist?.Sum(x => x.Other))</td>
+                                                    </tr>
+                                                }
+                                                <tr class="bold">
+                                                    <td colspan="2">Total @(CUSrinagar.Extensions.Helper.GetEnumDescription(item))</td>
+                                                    <td>@(_sublist?.Sum(x => x.NoOfStudents))</td>
+                                                    <td>@(_sublist?.Sum(x => x.Male))</td>
+                                                    <td>@(_sublist?.Sum(x => x.Female))</td>
+                                                    <td>@(_sublist?.Sum(x => x.Other))</td>
+                                                </tr>
+                                                <tr class="text-center">
+                                                    <td colspan="6" style="color:white;">| </td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                    <tr class="bold">
+                                        <td colspan="2">Grand Total: @batch</td>
+                                        <td>@(_list?.Sum(x => x.NoOfStudents))</td>
+                                        <td>@(_list?.Sum(x => x.Male))</td>
+                                        <td>@(_list?.Sum(x => x.Female))</td>
+                                        <td>@(_list?.Sum(x => x.Other))</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6" style="color:white;">|</td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td>
+                                        <strong>Total</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@Model.Sum(i => i.NoOfStudents)</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Male))</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Female))</strong>
+                                    </td>
+                                    <td>
+                                        <strong>@(Model?.Sum(i => i.Other))</strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+}
+else
+{
+    <div class="col-md-12">
+        <div id="blocks-container">
+            <hr />
+            <h2 class="center" style="font-style:italic">No data available for the selected filters.Please try again with different combination of filters.</h2>
+            <hr />
+        </div>
+    </div>
+}
+
+
